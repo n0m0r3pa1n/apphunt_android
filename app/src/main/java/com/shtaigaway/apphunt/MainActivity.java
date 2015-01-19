@@ -17,11 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.shtaigaway.apphunt.api.AppHuntApiClient;
+import com.shtaigaway.apphunt.api.EmptyCallback;
+import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.app.TrendingAppsFragment;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
+import retrofit.client.Response;
 
 
 public class MainActivity extends ActionBarActivity
@@ -54,6 +58,8 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        AppHuntApiClient.getClient().createUser(new User("test"), new EmptyCallback<Response>());
     }
 
     @Override
