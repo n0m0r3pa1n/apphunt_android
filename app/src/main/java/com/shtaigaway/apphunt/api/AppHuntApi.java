@@ -2,11 +2,13 @@ package com.shtaigaway.apphunt.api;
 
 import com.shtaigaway.apphunt.api.models.AppsList;
 import com.shtaigaway.apphunt.api.models.User;
+import com.shtaigaway.apphunt.api.models.Vote;
 
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 
@@ -16,4 +18,7 @@ public interface AppHuntApi {
 
     @GET("/apps")
     void getApps(@Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, Callback<AppsList> cb);
+
+    @POST("/apps/{appId}/votes")
+    void vote(@Path("appId") String appId, @Body Vote user, Callback<Vote> cb);
 }

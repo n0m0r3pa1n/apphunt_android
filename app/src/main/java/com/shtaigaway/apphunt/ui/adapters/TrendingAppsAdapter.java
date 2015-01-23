@@ -13,7 +13,11 @@ import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
 import com.shtaigaway.apphunt.R;
+import com.shtaigaway.apphunt.api.AppHuntApiClient;
+import com.shtaigaway.apphunt.api.Callback;
+import com.shtaigaway.apphunt.api.EmptyCallback;
 import com.shtaigaway.apphunt.api.models.App;
+import com.shtaigaway.apphunt.api.models.Vote;
 import com.shtaigaway.apphunt.app.AppItem;
 import com.shtaigaway.apphunt.app.Item;
 import com.shtaigaway.apphunt.app.SeparatorItem;
@@ -21,11 +25,15 @@ import com.shtaigaway.apphunt.utils.Constants;
 
 import java.util.ArrayList;
 
+import retrofit.client.Response;
+
 public class TrendingAppsAdapter extends BaseAdapter {
 
     private Context ctx;
     private ListView listView;
     private ArrayList<Item> items = new ArrayList<>();
+
+    private int selectedPosition;
 
     public TrendingAppsAdapter(Context ctx, ListView listView) {
         this.ctx = ctx;
@@ -33,7 +41,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         ViewHolderItem viewHolderItem = null;
         ViewHolderSeparator viewHolderSeparator = null;
@@ -68,7 +76,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         }
 
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-            App app = ((AppItem) getItem(position)).getData();
+            final App app = ((AppItem) getItem(position)).getData();
 
             Ion.with(viewHolderItem.icon)
                     .load(app.getIcon());
@@ -76,6 +84,26 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.title.setText(app.getName());
             viewHolderItem.description.setText(app.getDescription());
             viewHolderItem.vote.setText(app.getVotesCount());
+
+            viewHolderItem.vote.setOnClickListener(null);
+            viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    AppHuntApiClient.getClient().vote(app.getId(), new Vote("54be5d68e4b0d3cacca686c5"), new Callback<Vote>() {
+                        @Override
+                        public void success(Vote vote, Response response) {
+                            if (response != null && response.getStatus() == 200) {
+                                app.setVotesCount(vote.getVotes());
+
+                                ((Button) v).setText(vote.getVotes());
+                                v.setClickable(false);
+                            } else {
+                                // TODO: Possibly notify the user that he cannot vote twice for the same app
+                            }
+                        }
+                    });
+                }
+            });
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
         }
@@ -130,5 +158,4 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private static class ViewHolderSeparator {
         TextView header;
     }
-
 }
