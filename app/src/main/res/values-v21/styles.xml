@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/ab_primary</item>
         <item name="colorPrimaryDark">@color/ab_primary</item>
-        <item name="elevation">@dimen/ab_elevation</item>
+        <item name="android:navigationBarColor">@color/ab_primary</item>
+        <item name="android:elevation">@dimen/ab_elevation</item>
     </style>
 </resources>

@@ -1,238 +1,165 @@
 package com.shtaigaway.apphunt;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
+import com.shamanland.fab.FloatingActionButton;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
-import com.shtaigaway.apphunt.api.EmptyCallback;
-import com.shtaigaway.apphunt.api.models.User;
-import com.shtaigaway.apphunt.app.TrendingAppsFragment;
+import com.shtaigaway.apphunt.api.Callback;
+import com.shtaigaway.apphunt.api.models.App;
+import com.shtaigaway.apphunt.api.models.AppsList;
+import com.shtaigaway.apphunt.app.AppItem;
+import com.shtaigaway.apphunt.app.Item;
+import com.shtaigaway.apphunt.app.SeparatorItem;
+import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
+import com.shtaigaway.apphunt.utils.Constants;
+import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
-import it.neokree.materialtabs.MaterialTab;
-import it.neokree.materialtabs.MaterialTabHost;
-import it.neokree.materialtabs.MaterialTabListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import retrofit.client.Response;
 
+public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener {
 
-public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    private ListView trendingAppsList;
+    private FloatingActionButton addAppButton;
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private TrendingAppsAdapter trendingAppsAdapter;
+    private boolean endOfList = false;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private Calendar calendar = Calendar.getInstance();
+    private Calendar today = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3f51b5")));
-        getSupportActionBar().setElevation(0);
+        initUI();
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        AppHuntApiClient.getClient().createUser(new User("test"), new EmptyCallback<Response>());
+//        AppHuntApiClient.getClient().createUser(new User("test"), new EmptyCallback<Response>());
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+    private void initUI() {
+        addAppButton = (FloatingActionButton) findViewById(R.id.add);
+
+        trendingAppsList = (ListView) findViewById(R.id.trending_list);
+
+        trendingAppsAdapter = new TrendingAppsAdapter(MainActivity.this, trendingAppsList);
+
+        getAppsForTodayAndYesterday();
+        trendingAppsList.setOnScrollListener(MainActivity.this);
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
+    private void getAppsForTodayAndYesterday() {
+        AppHuntApiClient.getClient().getApps(dateFormat.format(today.getTime()), 1, 5, new Callback<AppsList>() {
+            @Override
+            public void success(AppsList appsList, Response response) {
+                final ArrayList<Item> items = new ArrayList<>();
+
+                if (appsList.getTotalCount() > 0) {
+                    items.add(new SeparatorItem("Today"));
+
+                    for (App app : appsList.getApps()) {
+                        items.add(new AppItem(app));
+                    }
+
+                    calendar.add(Calendar.DATE, -1);
+
+                    AppHuntApiClient.getClient().getApps(dateFormat.format(calendar.getTime()), 1, 5, new Callback<AppsList>() {
+                        @Override
+                        public void success(AppsList appsList, Response response) {
+                            items.add(new SeparatorItem("Yesterday"));
+
+                            for (App app : appsList.getApps()) {
+                                items.add(new AppItem(app));
+                            }
+
+                            trendingAppsAdapter.addItems(items);
+                            trendingAppsList.setAdapter(trendingAppsAdapter);
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
+    private void getAppsForDate(final String date, int page, int pageSize) {
+        AppHuntApiClient.getClient().getApps(date, page, pageSize, new Callback<AppsList>() {
+            @Override
+            public void success(AppsList appsList, Response response) {
+                ArrayList<Item> items = new ArrayList<>();
 
+                if (appsList.getTotalCount() > 0) {
+                    try {
+                        if (dateFormat.format(today.getTime()).equals(date)) {
+                            items.add(new SeparatorItem("Today"));
+                        } else {
+                            items.add(new SeparatorItem(date));
+                        }
+                    } catch (Exception e) {
+                        Log.e("Exception", e.getMessage());
+                    }
+
+                    for (App app : appsList.getApps()) {
+                        items.add(new AppItem(app));
+                    }
+
+                    trendingAppsAdapter.addItems(items);
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
+        MenuInflater inflater = getMenuInflater();
+
+        if (SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_LOGGED_IN)) {
+            inflater.inflate(R.menu.logged_in_menu, menu);
+        } else {
+            inflater.inflate(R.menu.menu, menu);
         }
-        return super.onCreateOptionsMenu(menu);
+
+        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
+            endOfList = true;
+        } else {
+            endOfList = false;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment implements MaterialTabListener {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private MaterialTabHost tabHost;
-        private ViewPager pager;
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            Animation slideInBottom = AnimationUtils.loadAnimation(MainActivity.this, R.anim.abc_slide_in_bottom);
+            addAppButton.startAnimation(slideInBottom);
+            addAppButton.setVisibility(View.VISIBLE);
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-            tabHost = (MaterialTabHost) rootView.findViewById(R.id.materialTabHost);
-            pager = (ViewPager) rootView.findViewById(R.id.pager);
-
-            ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-
-            pager.setAdapter(pagerAdapter);
-            pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-                @Override
-                public void onPageSelected(int position) {
-                    // when user do a swipe the selected tab change
-                    tabHost.setSelectedNavigationItem(position);
-                }
-            });
-
-            tabHost.addTab(
-                    tabHost.newTab().setText("Hunt").setTabListener(this));
-
-            tabHost.addTab(
-                    tabHost.newTab().setText("Friends Apps").setTabListener(this));
-
-            return rootView;
-        }
-
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-
-        @Override
-        public void onTabSelected(MaterialTab materialTab) {
-            pager.setCurrentItem(materialTab.getPosition());
-
-        }
-
-        @Override
-        public void onTabReselected(MaterialTab materialTab) {
-
-        }
-
-        @Override
-        public void onTabUnselected(MaterialTab materialTab) {
-
-        }
-
-        private class ViewPagerAdapter extends FragmentStatePagerAdapter {
-            public ViewPagerAdapter(FragmentManager fm) {
-                super(fm);
+            if (endOfList) {
+                calendar.add(Calendar.DATE, -1);
+                getAppsForDate(dateFormat.format(calendar.getTime()), 1, 5);
             }
-
-            public Fragment getItem(int num) {
-                if(num == 0) {
-                    return new TrendingAppsFragment();
-                }
-                return new FragmentText();
-            }
-
-            @Override
-            public int getCount() {
-                return 3;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                switch (position) {
-                    case 0:
-                        return "tab 1";
-                    case 1:
-                        return "tab 2";
-                    case 2:
-                        return "tab 3";
-                    default:
-                        return null;
-                }
-            }
+        } else {
+            Animation slideOutBottom = AnimationUtils.loadAnimation(MainActivity.this, R.anim.abc_slide_out_bottom);
+            addAppButton.startAnimation(slideOutBottom);
+            addAppButton.setVisibility(View.INVISIBLE);
         }
-
-
     }
-
 }
