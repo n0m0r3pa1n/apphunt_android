@@ -6,6 +6,8 @@ public class Constants {
 
     public static final String PLATFORM = "Android";
 
+    public static final String IS_DAILY_NOTIFICATION_SETUP_KEY = "isDisplayNotificationServiceSetup";
+
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);
 

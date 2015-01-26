@@ -1,5 +1,8 @@
 package com.shtaigaway.apphunt;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -20,6 +23,7 @@ import com.shtaigaway.apphunt.app.AppItem;
 import com.shtaigaway.apphunt.app.Item;
 import com.shtaigaway.apphunt.app.MoreAppsItem;
 import com.shtaigaway.apphunt.app.SeparatorItem;
+import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
@@ -45,6 +49,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
 
         initUI();
+        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY)) {
+            SharedPreferencesHelper.setPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY, true);
+            setupDailyNotificationService();
+        }
+
     }
 
     private void initUI() {
@@ -95,4 +104,24 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             addAppButton.setVisibility(View.INVISIBLE);
         }
     }
+
+    public void setupDailyNotificationService() {
+        Intent intent = new Intent(this, DailyNotificationService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, 0);
+
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if(alarmMgr == null || alarmIntent == null) {
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 0);
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
 }

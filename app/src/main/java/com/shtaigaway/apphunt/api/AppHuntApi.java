@@ -1,6 +1,7 @@
 package com.shtaigaway.apphunt.api;
 
 import com.shtaigaway.apphunt.api.models.AppsList;
+import com.shtaigaway.apphunt.api.models.Notification;
 import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.api.models.Vote;
 
@@ -21,4 +22,7 @@ public interface AppHuntApi {
 
     @POST("/apps/{appId}/votes")
     void vote(@Path("appId") String appId, @Body Vote user, Callback<Vote> cb);
+
+    @GET("/notifications")
+    void getNotification(@Query("type") String type, Callback<Notification> cb);
 }
