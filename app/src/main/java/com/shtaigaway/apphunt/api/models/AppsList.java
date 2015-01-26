@@ -50,6 +50,10 @@ public class AppsList {
         this.date = date;
     }
 
+    public boolean haveMoreApps() {
+        return (page <= totalPages);
+    }
+
     @Override
     public String toString() {
         return "AppsList{" +

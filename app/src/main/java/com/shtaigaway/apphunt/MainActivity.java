@@ -18,6 +18,7 @@ import com.shtaigaway.apphunt.api.models.App;
 import com.shtaigaway.apphunt.api.models.AppsList;
 import com.shtaigaway.apphunt.app.AppItem;
 import com.shtaigaway.apphunt.app.Item;
+import com.shtaigaway.apphunt.app.MoreAppsItem;
 import com.shtaigaway.apphunt.app.SeparatorItem;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.utils.Constants;
@@ -38,18 +39,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Calendar calendar = Calendar.getInstance();
-    private Calendar today = Calendar.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initUI();
-
-//        AppHuntApiClient.getClient().createUser(new User("test"), new EmptyCallback<Response>());
     }
 
     private void initUI() {
@@ -58,69 +53,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         trendingAppsList = (ListView) findViewById(R.id.trending_list);
 
         trendingAppsAdapter = new TrendingAppsAdapter(MainActivity.this, trendingAppsList);
-
-        getAppsForTodayAndYesterday();
+        trendingAppsList.setAdapter(trendingAppsAdapter);
         trendingAppsList.setOnScrollListener(MainActivity.this);
-    }
-
-    private void getAppsForTodayAndYesterday() {
-        AppHuntApiClient.getClient().getApps(dateFormat.format(today.getTime()), 1, 5, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                final ArrayList<Item> items = new ArrayList<>();
-
-                if (appsList.getTotalCount() > 0) {
-                    items.add(new SeparatorItem("Today"));
-
-                    for (App app : appsList.getApps()) {
-                        items.add(new AppItem(app));
-                    }
-
-                    calendar.add(Calendar.DATE, -1);
-
-                    AppHuntApiClient.getClient().getApps(dateFormat.format(calendar.getTime()), 1, 5, new Callback<AppsList>() {
-                        @Override
-                        public void success(AppsList appsList, Response response) {
-                            items.add(new SeparatorItem("Yesterday"));
-
-                            for (App app : appsList.getApps()) {
-                                items.add(new AppItem(app));
-                            }
-
-                            trendingAppsAdapter.addItems(items);
-                            trendingAppsList.setAdapter(trendingAppsAdapter);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    private void getAppsForDate(final String date, int page, int pageSize) {
-        AppHuntApiClient.getClient().getApps(date, page, pageSize, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                ArrayList<Item> items = new ArrayList<>();
-
-                if (appsList.getTotalCount() > 0) {
-                    try {
-                        if (dateFormat.format(today.getTime()).equals(date)) {
-                            items.add(new SeparatorItem("Today"));
-                        } else {
-                            items.add(new SeparatorItem(date));
-                        }
-                    } catch (Exception e) {
-                        Log.e("Exception", e.getMessage());
-                    }
-
-                    for (App app : appsList.getApps()) {
-                        items.add(new AppItem(app));
-                    }
-
-                    trendingAppsAdapter.addItems(items);
-                }
-            }
-        });
     }
 
     @Override
@@ -153,8 +87,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             addAppButton.setVisibility(View.VISIBLE);
 
             if (endOfList) {
-                calendar.add(Calendar.DATE, -1);
-                getAppsForDate(dateFormat.format(calendar.getTime()), 1, 5);
+                trendingAppsAdapter.getAppsForNextDate();
             }
         } else {
             Animation slideOutBottom = AnimationUtils.loadAnimation(MainActivity.this, R.anim.abc_slide_out_bottom);

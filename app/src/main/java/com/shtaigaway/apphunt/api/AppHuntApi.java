@@ -17,7 +17,7 @@ public interface AppHuntApi {
     void createUser(@Body User user, Callback<Response> cb);
 
     @GET("/apps")
-    void getApps(@Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, Callback<AppsList> cb);
+    void getApps(@Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
 
     @POST("/apps/{appId}/votes")
     void vote(@Path("appId") String appId, @Body Vote user, Callback<Vote> cb);

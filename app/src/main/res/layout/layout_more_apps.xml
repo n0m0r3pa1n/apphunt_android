@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_more_apps_item_height">
+
+    <ImageButton
+        android:id="@+id/more_apps"
+        android:layout_width="@dimen/list_more_apps_button_width"
+        android:layout_height="@dimen/list_more_apps_button_height"
+        android:background="@drawable/btn_more_apps"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

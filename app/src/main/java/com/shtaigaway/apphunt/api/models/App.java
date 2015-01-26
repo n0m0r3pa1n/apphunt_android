@@ -11,6 +11,8 @@ public class App {
     @SerializedName("package")
     private String packageName;
     private String votesCount;
+    private String shortUrl;
+    private String url;
 
     public String getId() {
         return id;
@@ -60,14 +62,19 @@ public class App {
         this.votesCount = votesCount;
     }
 
-    @Override
-    public String toString() {
-        return "App{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", icon='" + icon + '\'' +
-                ", packageName='" + packageName + '\'' +
-                '}';
+    public String getShortUrl() {
+        return shortUrl;
+    }
+
+    public void setShortUrl(String shortUrl) {
+        this.shortUrl = shortUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
