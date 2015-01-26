@@ -3,6 +3,8 @@ package com.shtaigaway.apphunt.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.android.Facebook;
 import com.koushikdutta.ion.Ion;
 import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
@@ -26,6 +30,7 @@ import com.shtaigaway.apphunt.app.AppItem;
 import com.shtaigaway.apphunt.app.Item;
 import com.shtaigaway.apphunt.app.MoreAppsItem;
 import com.shtaigaway.apphunt.app.SeparatorItem;
+import com.shtaigaway.apphunt.ui.LoginFragment;
 import com.shtaigaway.apphunt.utils.Constants;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +52,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public TrendingAppsAdapter(Context ctx, ListView listView) {
         this.ctx = ctx;
         this.listView = listView;
+
+        // TODO: To be removed!!! For TEST reasons
+        today.add(Calendar.DATE, -3);
+        calendar.add(Calendar.DATE, -3);
+        // TODO: To be removed!!! For TEST reasons
 
         getAppsForTodayAndYesterday();
     }
@@ -111,19 +121,31 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    AppHuntApiClient.getClient().vote(app.getId(), new Vote("54be5d68e4b0d3cacca686c5"), new Callback<Vote>() {
-                        @Override
-                        public void success(Vote vote, Response response) {
-                            if (response != null && response.getStatus() == 200) {
-                                app.setVotesCount(vote.getVotes());
 
-                                ((Button) v).setText(vote.getVotes());
-                                v.setClickable(false);
-                            } else {
-                                // TODO: Possibly notify the user that he cannot vote twice for the same app
+                    Session session = Session.getActiveSession();
+
+                    if (session != null && session.isOpened()) {
+                        AppHuntApiClient.getClient().vote(app.getId(), new Vote("54be5d68e4b0d3cacca686c5"), new Callback<Vote>() {
+                            @Override
+                            public void success(Vote vote, Response response) {
+                                if (response != null && response.getStatus() == 200) {
+                                    app.setVotesCount(vote.getVotes());
+
+                                    ((Button) v).setText(vote.getVotes());
+                                    v.setClickable(false);
+                                } else {
+                                    // TODO: Possibly notify the user that he cannot vote twice for the same app
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        Fragment loginFragment = new LoginFragment();
+                        ((ActionBarActivity) ctx).getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                                .replace(R.id.container, loginFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
 

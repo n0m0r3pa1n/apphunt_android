@@ -51,7 +51,13 @@ public class AppsList {
     }
 
     public boolean haveMoreApps() {
-        return (page <= totalPages);
+        if (page < totalPages) {
+            return true;
+        } else if (page == totalPages || page > totalPages) {
+            return false;
+        }
+
+        return false;
     }
 
     @Override

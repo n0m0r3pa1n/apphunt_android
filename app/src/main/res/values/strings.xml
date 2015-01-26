@@ -6,4 +6,6 @@
     <string name="action_profile">Profile</string>
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
+
+    <string name="app_id">874212442599315</string>
 </resources>

@@ -1,35 +1,23 @@
 package com.shtaigaway.apphunt;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.facebook.Session;
 import com.shamanland.fab.FloatingActionButton;
-import com.shtaigaway.apphunt.api.AppHuntApiClient;
-import com.shtaigaway.apphunt.api.Callback;
-import com.shtaigaway.apphunt.api.models.App;
-import com.shtaigaway.apphunt.api.models.AppsList;
-import com.shtaigaway.apphunt.app.AppItem;
-import com.shtaigaway.apphunt.app.Item;
-import com.shtaigaway.apphunt.app.MoreAppsItem;
-import com.shtaigaway.apphunt.app.SeparatorItem;
+import com.shtaigaway.apphunt.ui.LoginFragment;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener {
 
@@ -61,10 +49,37 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        if (SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_LOGGED_IN)) {
+        Session session = Session.getActiveSession();
+
+        if (session != null && session.isOpened()) {
             inflater.inflate(R.menu.logged_in_menu, menu);
         } else {
             inflater.inflate(R.menu.menu, menu);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_login:
+                Fragment loginFragment = new LoginFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                        .replace(R.id.container, loginFragment)
+                        .addToBackStack(null)
+                        .commit();
+                break;
+
+            case R.id.action_logout:
+                Session session = Session.getActiveSession();
+
+                if (session != null && session.isOpened()) {
+                    session.close();
+                }
+                break;
         }
 
         return true;
@@ -94,5 +109,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             addAppButton.startAnimation(slideOutBottom);
             addAppButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+//        Fragment fragment = getSupportFragmentManager().findFragmentByTag("login_fragment");
+
     }
 }
