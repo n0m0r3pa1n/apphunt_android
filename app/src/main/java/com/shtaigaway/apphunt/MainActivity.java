@@ -1,5 +1,8 @@
 package com.shtaigaway.apphunt;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -14,10 +17,13 @@ import android.widget.ListView;
 
 import com.facebook.Session;
 import com.shamanland.fab.FloatingActionButton;
+import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.LoginFragment;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
+
+import java.util.Calendar;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener {
 
@@ -33,6 +39,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
 
         initUI();
+        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY)) {
+            SharedPreferencesHelper.setPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY, true);
+            setupDailyNotificationService();
+        }
+
     }
 
     private void initUI() {
@@ -118,4 +129,24 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 //        Fragment fragment = getSupportFragmentManager().findFragmentByTag("login_fragment");
 
     }
+
+    public void setupDailyNotificationService() {
+        Intent intent = new Intent(this, DailyNotificationService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, 0);
+
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if(alarmMgr == null || alarmIntent == null) {
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 0);
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
 }
