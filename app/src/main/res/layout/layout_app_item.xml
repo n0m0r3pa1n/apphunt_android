@@ -27,13 +27,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/list_item_name"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_desc"/>
+            android:textSize="@dimen/list_item_desc"
+            android:maxLines="3"/>
         </LinearLayout>
 
     <Button
@@ -44,9 +46,17 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/list_item_vote_margin"
         android:layout_marginLeft="@dimen/list_item_vote_margin"
-        android:gravity="center_horizontal|bottom"
-        android:paddingBottom="@dimen/list_item_vote_padding"
+        android:gravity="center"
         android:textSize="@dimen/list_item_vote_text"
         android:textColor="@android:color/white"
         android:background="@drawable/btn_vote"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#c7c7c7"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:layout_alignParentBottom="true"
+        android:elevation="0dp" />
 </RelativeLayout>

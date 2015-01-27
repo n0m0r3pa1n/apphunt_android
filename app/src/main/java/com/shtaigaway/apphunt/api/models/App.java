@@ -13,6 +13,7 @@ public class App {
     private String votesCount;
     private String shortUrl;
     private String url;
+    private boolean hasVoted;
 
     public String getId() {
         return id;
@@ -76,5 +77,13 @@ public class App {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isHasVoted() {
+        return hasVoted;
+    }
+
+    public void setHasVoted(boolean hasVoted) {
+        this.hasVoted = hasVoted;
     }
 }

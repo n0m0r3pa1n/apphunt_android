@@ -4,28 +4,29 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.facebook.Session;
 import com.shamanland.fab.FloatingActionButton;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
-import com.shtaigaway.apphunt.ui.LoginFragment;
+import com.shtaigaway.apphunt.ui.AddAppFragment;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.utils.Constants;
+import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import java.util.Calendar;
 
-public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener {
+public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener {
 
     private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
@@ -47,22 +48,38 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     private void initUI() {
-        addAppButton = (FloatingActionButton) findViewById(R.id.add);
+        addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
+        addAppButton.setOnClickListener(this);
 
         trendingAppsList = (ListView) findViewById(R.id.trending_list);
 
-        trendingAppsAdapter = new TrendingAppsAdapter(MainActivity.this, trendingAppsList);
+        trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
-        trendingAppsList.setOnScrollListener(MainActivity.this);
+        trendingAppsList.setOnScrollListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_app:
+                if (FacebookUtils.isSessionOpen()) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                            .replace(R.id.container, new AddAppFragment(), Constants.TAG_ADD_APP_FRAGMENT)
+                            .addToBackStack(Constants.TAG_ADD_APP_FRAGMENT)
+                            .commit();
+                } else {
+                    FacebookUtils.getInstance().showLoginFragment(this);
+                }
+                break;
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        Session session = Session.getActiveSession();
-
-        if (session != null && session.isOpened()) {
+       if (FacebookUtils.isSessionOpen()) {
             inflater.inflate(R.menu.logged_in_menu, menu);
         } else {
             inflater.inflate(R.menu.menu, menu);
@@ -76,19 +93,22 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         switch (item.getItemId()) {
             case R.id.action_login:
-                Fragment loginFragment = new LoginFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                        .replace(R.id.container, loginFragment)
-                        .addToBackStack(null)
-                        .commit();
+                FacebookUtils.getInstance().showLoginFragment(this);
                 break;
 
             case R.id.action_logout:
-                Session session = Session.getActiveSession();
+                if (FacebookUtils.isSessionOpen()) {
+                    FacebookUtils.closeSession();
 
-                if (session != null && session.isOpened()) {
-                    session.close();
+                    supportInvalidateOptionsMenu();
+                    FacebookUtils.getInstance().hideLoginFragment(this);
+                }
+                break;
+
+            case android.R.id.home:
+                String fragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+                if (fragmentTag != null) {
+                    getSupportFragmentManager().popBackStack(fragmentTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
                 break;
         }
@@ -108,7 +128,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            Animation slideInBottom = AnimationUtils.loadAnimation(MainActivity.this, R.anim.abc_slide_in_bottom);
+            Animation slideInBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
             addAppButton.startAnimation(slideInBottom);
             addAppButton.setVisibility(View.VISIBLE);
 
@@ -116,18 +136,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 trendingAppsAdapter.getAppsForNextDate();
             }
         } else {
-            Animation slideOutBottom = AnimationUtils.loadAnimation(MainActivity.this, R.anim.abc_slide_out_bottom);
+            Animation slideOutBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
             addAppButton.startAnimation(slideOutBottom);
             addAppButton.setVisibility(View.INVISIBLE);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-//        Fragment fragment = getSupportFragmentManager().findFragmentByTag("login_fragment");
-
     }
 
     public void setupDailyNotificationService() {
