@@ -1,11 +1,8 @@
-package com.shtaigaway.apphunt.ui;
+package com.shtaigaway.apphunt.ui.fragments;
 
 import android.content.Intent;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,27 +12,23 @@ import android.view.animation.AnimationUtils;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
-import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphObject;
 import com.facebook.widget.LoginButton;
 import com.shtaigaway.apphunt.R;
-import com.shtaigaway.apphunt.api.AppHuntApi;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.utils.Constants;
-import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends BaseFragment {
 
     private static final String TAG = "LoginFragment";
 
@@ -46,11 +39,11 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(R.string.login);
+
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
-
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
@@ -145,14 +138,6 @@ public class LoginFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.facebook.Session;
 import com.shtaigaway.apphunt.R;
-import com.shtaigaway.apphunt.ui.LoginFragment;
+import com.shtaigaway.apphunt.ui.fragments.LoginFragment;
 
 public class FacebookUtils {
 
@@ -29,7 +29,7 @@ public class FacebookUtils {
         Fragment loginFragment = new LoginFragment();
         ((ActionBarActivity) ctx).getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                .replace(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
+                .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
                 .commit();
     }
@@ -39,7 +39,7 @@ public class FacebookUtils {
         LoginFragment loginFragment = (LoginFragment) fragmentManager.findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
 
         if (loginFragment != null) {
-            fragmentManager.popBackStack(Constants.TAG_LOGIN_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.popBackStack();
         }
     }
 

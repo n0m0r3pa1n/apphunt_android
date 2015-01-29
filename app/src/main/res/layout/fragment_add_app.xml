@@ -5,5 +5,10 @@
     android:clickable="true"
     android:background="@color/ab_primary">
 
-
+    <GridView
+        android:id="@+id/gv_apps_list"
+        android:numColumns="2"
+        android:elevation="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

@@ -3,10 +3,7 @@ package com.shtaigaway.apphunt.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +15,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.android.Facebook;
 import com.koushikdutta.ion.Ion;
 import com.shtaigaway.apphunt.R;
-import com.shtaigaway.apphunt.api.AppHuntApi;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.App;
@@ -32,7 +26,6 @@ import com.shtaigaway.apphunt.app.AppItem;
 import com.shtaigaway.apphunt.app.Item;
 import com.shtaigaway.apphunt.app.MoreAppsItem;
 import com.shtaigaway.apphunt.app.SeparatorItem;
-import com.shtaigaway.apphunt.ui.LoginFragment;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
@@ -66,8 +59,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         this.userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
 
         // TODO: To be removed!!! For TEST reasons
-        today.add(Calendar.DATE, -1);
-        calendar.add(Calendar.DATE, -1);
+//        today.add(Calendar.DATE, -1);
+//        calendar.add(Calendar.DATE, -1);
         // TODO: To be removed!!! For TEST reasons
 
         getAppsForTodayAndYesterday();

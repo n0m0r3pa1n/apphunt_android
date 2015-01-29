@@ -1,9 +1,7 @@
-package com.shtaigaway.apphunt.ui;
+package com.shtaigaway.apphunt.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import android.view.animation.AnimationUtils;
 
 import com.shtaigaway.apphunt.R;
 
-public class AddAppFragment extends Fragment {
+public class SettingsFragment extends BaseFragment {
 
     private View view;
 
@@ -20,17 +18,18 @@ public class AddAppFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        setTitle(R.string.settings);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_app, container, false);
+
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         initUI();
 
         return view;
+
     }
 
     private void initUI() {
@@ -44,13 +43,5 @@ public class AddAppFragment extends Fragment {
         }
 
         return super.onCreateAnimation(transit, enter, nextAnim);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
     }
 }

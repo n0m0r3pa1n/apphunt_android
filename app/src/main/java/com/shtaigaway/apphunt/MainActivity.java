@@ -3,6 +3,7 @@ package com.shtaigaway.apphunt;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -18,19 +19,21 @@ import android.widget.ListView;
 
 import com.shamanland.fab.FloatingActionButton;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
-import com.shtaigaway.apphunt.ui.AddAppFragment;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
+import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
+import com.shtaigaway.apphunt.ui.fragments.SelectAppFragment;
+import com.shtaigaway.apphunt.ui.fragments.SettingsFragment;
+import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
+import com.shtaigaway.apphunt.utils.ActionBarUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import java.util.Calendar;
 
-public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener {
+public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener, OnAppSelectedListener {
 
-    private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
-
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
 
@@ -51,11 +54,18 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
         addAppButton.setOnClickListener(this);
 
-        trendingAppsList = (ListView) findViewById(R.id.trending_list);
+        ListView trendingAppsList = (ListView) findViewById(R.id.trending_list);
 
         trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
         trendingAppsList.setOnScrollListener(this);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                ActionBarUtils.getInstance().configActionBar(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -65,9 +75,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 if (FacebookUtils.isSessionOpen()) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                            .replace(R.id.container, new AddAppFragment(), Constants.TAG_ADD_APP_FRAGMENT)
+                            .add(R.id.container, new SelectAppFragment(), Constants.TAG_ADD_APP_FRAGMENT)
                             .addToBackStack(Constants.TAG_ADD_APP_FRAGMENT)
                             .commit();
+
+                    getSupportFragmentManager().executePendingTransactions();
                 } else {
                     FacebookUtils.getInstance().showLoginFragment(this);
                 }
@@ -105,11 +117,16 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 }
                 break;
 
+            case R.id.action_settings:
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.abc_slide_in_top, R.anim.slide_out_top)
+                        .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
+                        .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
+                        .commit();
+                break;
+
             case android.R.id.home:
-                String fragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
-                if (fragmentTag != null) {
-                    getSupportFragmentManager().popBackStack(fragmentTag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
+                getSupportFragmentManager().popBackStack();
                 break;
         }
 
@@ -161,4 +178,18 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
+    @Override
+    public void onAppSelected(ApplicationInfo data) {
+        Bundle extras = new Bundle();
+        extras.putParcelable(Constants.KEY_DATA, data);
+
+        SaveAppFragment saveAppFragment = new SaveAppFragment();
+        saveAppFragment.setArguments(extras);
+
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
+                .commit();
+    }
 }

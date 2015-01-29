@@ -6,6 +6,7 @@ public class Constants {
     public static final String KEY_NAME = "name";
     public static final String KEY_PROFILE_PICTURE = "profile_picture";
     public static final String KEY_EMAIL = "profile_email";
+    public static final String KEY_DATA = "data";
 
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
@@ -15,6 +16,8 @@ public class Constants {
     // Fragment TAGs
     public static final String TAG_LOGIN_FRAGMENT = "login_fragment";
     public static final String TAG_ADD_APP_FRAGMENT = "add_app_fragment";
+    public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
+    public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);

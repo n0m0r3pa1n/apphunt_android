@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">App Hunt</string>
+    <string name="select_app">Select App</string>
+    <string name="save_app">Save App</string>
+    <string name="login">Login</string>
+    <string name="settings">Settings</string>
 
     <!-- Menu -->
     <string name="action_settings">Settings</string>
@@ -8,4 +12,7 @@
     <string name="action_logout">Logout</string>
 
     <string name="app_id">874212442599315</string>
+
+    <string name="desc_hint">Enter short description (max 100)</string>
+    <string name="save">Save</string>
 </resources>

@@ -31,4 +31,18 @@
     <dimen name="list_more_apps_item_height">48dp</dimen>
     <dimen name="list_more_apps_button_width">60dp</dimen>
     <dimen name="list_more_apps_button_height">15dp</dimen>
+
+    <dimen name="save_box_margin">30dp</dimen>
+    <dimen name="save_box_title_margin_bottom">20dp</dimen>
+    <dimen name="save_box_title_text">25sp</dimen>
+    <dimen name="save_box_icon_size">80dp</dimen>
+    <dimen name="save_box_icon_margin_bottom">40dp</dimen>
+    <dimen name="save_box_desc_height">100dp</dimen>
+    <dimen name="save_box_desc_padding">15dp</dimen>
+    <dimen name="save_box_desc_elevation">0dp</dimen>
+    <dimen name="save_box_desc_text">14sp</dimen>
+    <dimen name="save_btn_height">60dp</dimen>
+    <dimen name="save_btn_margin_bottom">25dp</dimen>
+    <dimen name="save_btn_text">20sp</dimen>
+
 </resources>
