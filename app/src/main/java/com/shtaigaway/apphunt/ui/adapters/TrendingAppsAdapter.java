@@ -66,8 +66,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         this.userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
 
         // TODO: To be removed!!! For TEST reasons
-//        today.add(Calendar.DATE, -1);
-//        calendar.add(Calendar.DATE, -1);
+        today.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -1);
         // TODO: To be removed!!! For TEST reasons
 
         getAppsForTodayAndYesterday();
