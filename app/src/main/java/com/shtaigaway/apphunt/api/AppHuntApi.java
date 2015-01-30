@@ -1,8 +1,8 @@
 package com.shtaigaway.apphunt.api;
 
-import com.shtaigaway.apphunt.api.models.App;
 import com.shtaigaway.apphunt.api.models.AppsList;
 import com.shtaigaway.apphunt.api.models.Notification;
+import com.shtaigaway.apphunt.api.models.Packages;
 import com.shtaigaway.apphunt.api.models.SaveApp;
 import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.api.models.Vote;
@@ -20,6 +20,9 @@ public interface AppHuntApi {
 
     @GET("/apps")
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
+
+    @POST("/apps/actions/filter")
+    void filterApps(@Body Packages packages, Callback<Packages> cb);
 
     @POST("/apps/votes")
     void vote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb);

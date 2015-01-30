@@ -1,5 +1,6 @@
 package com.shtaigaway.apphunt.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +22,10 @@ import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.User;
+import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
+import com.shtaigaway.apphunt.ui.interfaces.OnUserAuthListener;
 import com.shtaigaway.apphunt.utils.Constants;
+import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
@@ -34,6 +38,7 @@ public class LoginFragment extends BaseFragment {
 
     private View view;
 
+    private OnUserAuthListener authCallback;
     private UiLifecycleHelper uiHelper;
 
     @Override
@@ -89,10 +94,7 @@ public class LoginFragment extends BaseFragment {
                                 @Override
                                 public void success(User user, retrofit.client.Response response) {
                                     if (user != null) {
-                                        SharedPreferencesHelper.setPreference(getActivity(), Constants.KEY_USER_ID, user.getId());
-                                        SharedPreferencesHelper.setPreference(getActivity(), Constants.KEY_EMAIL, user.getEmail());
-                                        SharedPreferencesHelper.setPreference(getActivity(), Constants.KEY_PROFILE_PICTURE, user.getProfilePicture());
-                                        SharedPreferencesHelper.setPreference(getActivity(), Constants.KEY_NAME, user.getName());
+                                        FacebookUtils.onLogin(getActivity(), user);
                                     }
                                 }
                             });
@@ -104,6 +106,8 @@ public class LoginFragment extends BaseFragment {
             }).executeAsync();
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
+            FacebookUtils.onLogout(getActivity());
+            authCallback.onUserLogout();
         }
 
         getActivity().supportInvalidateOptionsMenu();
@@ -115,6 +119,18 @@ public class LoginFragment extends BaseFragment {
             onSessionStateChange(session, state, exception);
         }
     };
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            authCallback = (OnUserAuthListener) activity;
+        } catch (ClassCastException e) {
+            Log.e("TAG", e.getMessage());
+        }
+    }
+
 
     @Override
     public void onResume() {

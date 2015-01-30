@@ -1,6 +1,7 @@
 package com.shtaigaway.apphunt.ui.fragments;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,16 +14,27 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.shtaigaway.apphunt.R;
+import com.shtaigaway.apphunt.api.AppHuntApiClient;
+import com.shtaigaway.apphunt.api.Callback;
+import com.shtaigaway.apphunt.api.models.Packages;
 import com.shtaigaway.apphunt.ui.adapters.UserAppsAdapter;
 import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
 import com.shtaigaway.apphunt.utils.InstalledPackagesUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit.client.Response;
+
 public class SelectAppFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private View view;
+    private GridView gridView;
     private UserAppsAdapter userAppsAdapter;
 
     private OnAppSelectedListener callback;
+
+    private List<ApplicationInfo> data;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,11 +53,35 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initUI() {
-        GridView gridView = (GridView) view.findViewById(R.id.gv_apps_list);
+        gridView = (GridView) view.findViewById(R.id.gv_apps_list);
         gridView.setOnItemClickListener(this);
 
-        userAppsAdapter = new UserAppsAdapter(getActivity(), InstalledPackagesUtils.installedPackages(getActivity().getPackageManager()));
-        gridView.setAdapter(userAppsAdapter);
+        Packages packages = new Packages();
+        data = InstalledPackagesUtils.installedPackages(getActivity().getPackageManager());
+        for (ApplicationInfo info : data) {
+            packages.getPackages().add(info.packageName);
+        }
+
+        AppHuntApiClient.getClient().filterApps(packages, new Callback<Packages>() {
+            @Override
+            public void success(Packages packages, Response response) {
+
+                if (response.getStatus() == 200 && packages != null) {
+                    List<ApplicationInfo> tempData = new ArrayList<>();
+
+                    for (ApplicationInfo info : data) {
+                        for (String packageName : packages.getAvailablePackages()) {
+                            if (info.packageName.equals(packageName)) {
+                                tempData.add(info);
+                            }
+                        }
+                    }
+
+                    userAppsAdapter = new UserAppsAdapter(getActivity(), tempData);
+                    gridView.setAdapter(userAppsAdapter);
+                }
+            }
+        });
     }
 
     @Override

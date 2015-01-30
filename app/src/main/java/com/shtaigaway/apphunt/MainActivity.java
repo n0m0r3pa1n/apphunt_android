@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.facebook.Session;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.android.Facebook;
+import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
@@ -24,6 +29,7 @@ import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SelectAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SettingsFragment;
 import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
+import com.shtaigaway.apphunt.ui.interfaces.OnUserAuthListener;
 import com.shtaigaway.apphunt.utils.ActionBarUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
@@ -31,30 +37,39 @@ import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import java.util.Calendar;
 
-public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener, OnAppSelectedListener {
+public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
+        OnAppSelectedListener, OnUserAuthListener {
 
+    private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
+
+    private UiLifecycleHelper uiHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FacebookUtils.onStart(this);
+
+        uiHelper = new UiLifecycleHelper(this, null);
+        uiHelper.onCreate(savedInstanceState);
+
         initUI();
+
         if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY)) {
             SharedPreferencesHelper.setPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY, true);
             setupDailyNotificationService();
         }
-
     }
 
     private void initUI() {
         addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
         addAppButton.setOnClickListener(this);
 
-        ListView trendingAppsList = (ListView) findViewById(R.id.trending_list);
+        trendingAppsList = (ListView) findViewById(R.id.trending_list);
 
         trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
@@ -81,7 +96,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
                     getSupportFragmentManager().executePendingTransactions();
                 } else {
-                    FacebookUtils.getInstance().showLoginFragment(this);
+                    FacebookUtils.showLoginFragment(this);
                 }
                 break;
         }
@@ -89,10 +104,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+       MenuInflater inflater = getMenuInflater();
 
        if (FacebookUtils.isSessionOpen()) {
-            inflater.inflate(R.menu.logged_in_menu, menu);
+           inflater.inflate(R.menu.logged_in_menu, menu);
         } else {
             inflater.inflate(R.menu.menu, menu);
         }
@@ -105,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         switch (item.getItemId()) {
             case R.id.action_login:
-                FacebookUtils.getInstance().showLoginFragment(this);
+                FacebookUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_logout:
@@ -113,7 +128,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                     FacebookUtils.closeSession();
 
                     supportInvalidateOptionsMenu();
-                    FacebookUtils.getInstance().hideLoginFragment(this);
+                    FacebookUtils.hideLoginFragment(this);
+                    FacebookUtils.onLogout(this);
+
+                    for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                        getSupportFragmentManager().popBackStack();
+                    }
                 }
                 break;
 
@@ -125,12 +145,41 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                         .commit();
                 break;
 
+            case R.id.action_share:
+                if (FacebookDialog.canPresentShareDialog (getApplicationContext(),
+                        FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+                    FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+                            .setName("AppHunt")
+                            .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
+                            .setLink("http://theapphunt.com").build();
+                    uiHelper.trackPendingDialogCall(shareDialog.present());
+                } else {
+                }
+                break;
+
             case android.R.id.home:
                 getSupportFragmentManager().popBackStack();
                 break;
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+            @Override
+            public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+                Log.e("Activity", String.format("Error: %s", error.toString()));
+            }
+
+            @Override
+            public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+                Log.i("Activity", "Success!");
+            }
+        });
     }
 
     @Override
@@ -191,5 +240,39 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
                 .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
                 .commit();
+    }
+
+    @Override
+    public void onUserLogin() {
+        trendingAppsAdapter.resetAdapter();
+    }
+
+    @Override
+    public void onUserLogout() {
+        trendingAppsAdapter.resetAdapter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
     }
 }
