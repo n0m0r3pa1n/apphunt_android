@@ -7,6 +7,8 @@ public class Constants {
     public static final String KEY_PROFILE_PICTURE = "profile_picture";
     public static final String KEY_EMAIL = "profile_email";
     public static final String KEY_DATA = "data";
+    public static final String KEY_NOTIFICATION = "notification";
+    public static final String KEY_SHOW_SETTINGS = "show_settings";
 
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
@@ -18,6 +20,10 @@ public class Constants {
     public static final String TAG_ADD_APP_FRAGMENT = "add_app_fragment";
     public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
     public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
+    public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
+
+    // RequestCodes
+    public static final int REQUEST_NETWORK_SETTINGS = 3;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);

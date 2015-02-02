@@ -2,10 +2,16 @@ package com.shtaigaway.apphunt;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,27 +24,38 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.android.Facebook;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
+import com.shtaigaway.apphunt.api.AppHuntApiClient;
+import com.shtaigaway.apphunt.api.Callback;
+import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
+import com.shtaigaway.apphunt.ui.fragments.NotificationFragment;
 import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SelectAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SettingsFragment;
 import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
+import com.shtaigaway.apphunt.ui.interfaces.OnNetworkStateChange;
 import com.shtaigaway.apphunt.ui.interfaces.OnUserAuthListener;
 import com.shtaigaway.apphunt.utils.ActionBarUtils;
+import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
-        OnAppSelectedListener, OnUserAuthListener {
+        OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
 
     private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
@@ -52,10 +69,23 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FacebookUtils.onStart(this);
-
-        uiHelper = new UiLifecycleHelper(this, null);
+        uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
+
+        if (!ConnectivityUtils.isNetworkAvailable(this)) {
+            Bundle extras = new Bundle();
+            extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.notification_no_internet));
+            NotificationFragment notificationFragment = new NotificationFragment();
+            notificationFragment.setArguments(extras);
+
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                    .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                    .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                    .commit();
+        }
+
+        FacebookUtils.onStart(this);
 
         initUI();
 
@@ -63,6 +93,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             SharedPreferencesHelper.setPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY, true);
             setupDailyNotificationService();
         }
+
+
     }
 
     private void initUI() {
@@ -82,6 +114,35 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             }
         });
     }
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
+
+            if (!ConnectivityUtils.isNetworkAvailable(context)) {
+                if (fragment == null)  {
+                    Bundle extras = new Bundle();
+                    extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.notification_no_internet));
+                    NotificationFragment notificationFragment = new NotificationFragment();
+                    extras.putBoolean(Constants.KEY_SHOW_SETTINGS, true);
+                    notificationFragment.setArguments(extras);
+
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                            .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                            .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                            .commit();
+                }
+            } else {
+                if (fragment != null) {
+                    getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
+                onNetworkAvailable();
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -139,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
             case R.id.action_settings:
                 getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_slide_in_top, R.anim.slide_out_top)
+                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
                         .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
                         .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
                         .commit();
@@ -165,10 +226,33 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         return true;
     }
 
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (state.isClosed()) {
+            FacebookUtils.onLogout(MainActivity.this);
+            onUserLogout();
+        } else if (state.isOpened()) {
+            onUserLogin();
+        }
+
+        this.supportInvalidateOptionsMenu();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (uiHelper == null) {
+            return;
+        }
+
+        uiHelper.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
             @Override
             public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
@@ -253,26 +337,45 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     @Override
+    public void onNetworkAvailable() {
+        trendingAppsAdapter.resetAdapter();
+
+        while (getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        uiHelper.onResume();
+        if (uiHelper != null)
+            uiHelper.onResume();
+
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
+
+        if (uiHelper != null) {
+            uiHelper.onSaveInstanceState(outState);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        uiHelper.onPause();
+        if (uiHelper != null)
+            uiHelper.onPause();
+
+        unregisterReceiver(networkChangeReceiver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        uiHelper.onDestroy();
+        if (uiHelper != null)
+            uiHelper.onDestroy();
     }
 }

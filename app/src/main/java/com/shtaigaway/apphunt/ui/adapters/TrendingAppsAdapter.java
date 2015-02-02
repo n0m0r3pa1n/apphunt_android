@@ -55,8 +55,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         this.listView = listView;
 
         // TODO: To be removed!!! For TEST reasons
-//        today.add(Calendar.DATE, -1);
-//        calendar.add(Calendar.DATE, -1);
+        today.add(Calendar.DATE, -3);
+        calendar.add(Calendar.DATE, -3);
         // TODO: To be removed!!! For TEST reasons
 
         getAppsForTodayAndYesterday();
@@ -115,6 +115,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.description.setText(app.getDescription());
             viewHolderItem.vote.setText(app.getVotesCount());
 
+            viewHolderItem.vote.setOnClickListener(null);
             viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -290,8 +291,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         calendar = Calendar.getInstance();
 
         // TODO: To be removed!!! For TEST reasons
-//        today.add(Calendar.DATE, -1);
-//        calendar.add(Calendar.DATE, -1);
+        today.add(Calendar.DATE, -3);
+        calendar.add(Calendar.DATE, -3);
         // TODO: To be removed!!! For TEST reasons
 
         getAppsForTodayAndYesterday();

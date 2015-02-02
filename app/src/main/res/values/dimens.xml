@@ -24,9 +24,10 @@
     <dimen name="list_item_icon_size">50dp</dimen>
     <dimen name="list_item_name">14sp</dimen>
     <dimen name="list_item_desc">13sp</dimen>
+    <dimen name="list_item_vote_size">50dp</dimen>
     <dimen name="list_item_vote_margin">16dp</dimen>
     <dimen name="list_item_vote_padding">5dp</dimen>
-    <dimen name="list_item_vote_text">18sp</dimen>
+    <dimen name="list_item_vote_text">15sp</dimen>
 
     <dimen name="list_more_apps_item_height">48dp</dimen>
     <dimen name="list_more_apps_button_width">60dp</dimen>

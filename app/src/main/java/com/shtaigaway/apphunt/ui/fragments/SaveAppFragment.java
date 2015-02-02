@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.shtaigaway.apphunt.api.models.SaveApp;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class SaveAppFragment extends BaseFragment implements OnClickListener {
@@ -88,10 +90,37 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                     public void success(Object o, Response response) {
                         if (response.getStatus() == 200) {
                             getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            Toast.makeText(getActivity(), "The app was successfully saved! :)", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Ops! The app wasn't saved! :(", Toast.LENGTH_LONG).show();
+
+                            Bundle extras = new Bundle();
+                            extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.saved_successfully));
+                            extras.putBoolean(Constants.KEY_SHOW_SETTINGS, false);
+                            NotificationFragment notificationFragment = new NotificationFragment();
+                            notificationFragment.setArguments(extras);
+
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                                    .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                                    .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                                    .commit();
                         }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+
+                        Bundle extras = new Bundle();
+                        extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.not_available_in_the_store));
+                        extras.putBoolean(Constants.KEY_SHOW_SETTINGS, false);
+                        NotificationFragment notificationFragment = new NotificationFragment();
+                        notificationFragment.setArguments(extras);
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                                .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                                .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                                .commit();
+
                     }
                 });
 

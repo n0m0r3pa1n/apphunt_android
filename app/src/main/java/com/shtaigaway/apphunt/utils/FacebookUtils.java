@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.facebook.Session;
 import com.shtaigaway.apphunt.MainActivity;
@@ -38,7 +39,7 @@ public class FacebookUtils {
 
     public static void closeSession() {
         Session session = Session.getActiveSession();
-        session.close();
+        session.closeAndClearTokenInformation();
     }
 
     public static void onLogin(Context ctx, User user) {
@@ -53,20 +54,24 @@ public class FacebookUtils {
     }
 
     public static void onLogout(Context ctx) {
-        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_USER_ID);
-        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_EMAIL);
-        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_PROFILE_PICTURE);
-        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_NAME);
+        removeSharedPreferences(ctx);
+        closeSession();
 
         ((MainActivity) ctx).onUserLogout();
     }
 
     public static void onStart(Context ctx) {
+        Session.openActiveSessionFromCache(ctx);
+
         if (!isSessionOpen()) {
-            SharedPreferencesHelper.removePreference(ctx, Constants.KEY_USER_ID);
-            SharedPreferencesHelper.removePreference(ctx, Constants.KEY_EMAIL);
-            SharedPreferencesHelper.removePreference(ctx, Constants.KEY_PROFILE_PICTURE);
-            SharedPreferencesHelper.removePreference(ctx, Constants.KEY_NAME);
+            removeSharedPreferences(ctx);
         }
+    }
+
+    private static void removeSharedPreferences(Context ctx) {
+        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_USER_ID);
+        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_EMAIL);
+        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_PROFILE_PICTURE);
+        SharedPreferencesHelper.removePreference(ctx, Constants.KEY_NAME);
     }
 }
