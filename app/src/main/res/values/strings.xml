@@ -19,7 +19,7 @@
     <string name="save">Save</string>
 
     <!-- Notifications -->
-    <string name="notification_no_internet">No internet connectivity.\nPlease enable Internet access on your phone.</string>
-    <string name="not_available_in_the_store">Ops! The app isn\'t available in the PlayStore! :(</string>
-    <string name="saved_successfully">The app was successfully saved! :)</string>
+    <string name="notification_no_internet">Enable your Internet connection to continue</string>
+    <string name="not_available_in_the_store">App is unvailable on Google Play</string>
+    <string name="saved_successfully">App added successfully</string>
 </resources>
