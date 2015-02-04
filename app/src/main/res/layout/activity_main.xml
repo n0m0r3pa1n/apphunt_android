@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     tools:ctx=".MainActivity">
 
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/bottom_shadow"/>
+
     <ListView
         android:id="@+id/trending_list"
         android:layout_width="match_parent"

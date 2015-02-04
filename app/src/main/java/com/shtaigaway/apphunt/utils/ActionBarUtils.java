@@ -2,8 +2,10 @@ package com.shtaigaway.apphunt.utils;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 
 import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.ui.fragments.BaseFragment;
@@ -22,6 +24,14 @@ public class ActionBarUtils {
 
     private ActionBarUtils() {
 
+    }
+
+    public void init(ActionBarActivity activity) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+        } else {
+            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+        }
     }
 
     public void configActionBar(Context activity) {

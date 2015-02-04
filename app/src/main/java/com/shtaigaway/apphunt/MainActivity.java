@@ -64,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     private void initUI() {
+        ActionBarUtils.getInstance().init(this);
+
         addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
         addAppButton.setOnClickListener(this);
 
