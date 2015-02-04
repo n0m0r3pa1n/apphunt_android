@@ -18,7 +18,7 @@ public class Constants {
 
     // Fragment TAGs
     public static final String TAG_LOGIN_FRAGMENT = "login_fragment";
-    public static final String TAG_ADD_APP_FRAGMENT = "add_app_fragment";
+    public static final String TAG_SELECT_APP_FRAGMENT = "add_app_fragment";
     public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
     public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";

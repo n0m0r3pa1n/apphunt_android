@@ -119,8 +119,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 if (FacebookUtils.isSessionOpen()) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                            .add(R.id.container, new SelectAppFragment(), Constants.TAG_ADD_APP_FRAGMENT)
-                            .addToBackStack(Constants.TAG_ADD_APP_FRAGMENT)
+                            .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
+                            .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
                             .commit();
 
                     getSupportFragmentManager().executePendingTransactions();
