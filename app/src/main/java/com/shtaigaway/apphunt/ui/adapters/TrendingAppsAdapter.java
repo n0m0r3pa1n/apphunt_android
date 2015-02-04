@@ -33,8 +33,6 @@ import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -49,9 +47,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private Calendar calendar = Calendar.getInstance();
+    private Calendar today = Calendar.getInstance();
 
-    private int resultsCounter = 0;
-    private ArrayList<AppsList> tempList = new ArrayList<>();
+    private boolean success = false;
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -60,9 +58,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public TrendingAppsAdapter(Context ctx, ListView listView) {
         this.ctx = ctx;
         this.listView = listView;
-
-//        getApps();
-        getAppsForNextDate();
+        getApps();
     }
 
     @Override
@@ -122,7 +118,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Log.e("btn", "bla");
                     if (FacebookUtils.isSessionOpen()) {
                         if (app.isHasVoted()) {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
@@ -182,80 +177,54 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     private void getApps() {
-        calendar = Calendar.getInstance();
-
-//        resultsCounter = 0;
         String userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
-
-        for (int i = 0; i < 5; i++) {
-
-            AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-                @Override
-                public void success(AppsList appsList, Response response) {
-                    resultsCounter += 1;
-
-                    if (appsList.getTotalCount() > 0 && !tempList.contains(appsList)) {
-                        tempList.add(appsList);
-
-                        Log.e("date", appsList.getDate());
-                        Log.e("success", "success");
+        AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
+            @Override
+            public void success(AppsList appsList, Response response) {
+                calendar.add(Calendar.DATE, -1);
+                if (appsList.getTotalCount() > 0) {
+                    Log.e(TAG, appsList.getDate());
+                    notifyAdapter(appsList);
+                    if(!success) {
+                        getApps();
+                        success = true;
                     }
-
-                    if (resultsCounter == 5) {
-                        notifyAdapter();
-                    }
+                } else {
+                    getApps();
                 }
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("failure", "failure");
-                }
-            });
-
-            calendar.add(Calendar.DATE, -1);
-        }
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("failure", "failure");
+            }
+        });
     }
 
-    private void notifyAdapter() {
-        Collections.sort(tempList, new ComparatorApps());
-
-        Calendar today = Calendar.getInstance();
-
-//        Log.e("resultCounter", "" + resultsCounter);
-//        Log.e("listSize", "" + tempList.size());
-
-        for (AppsList appsList : tempList) {
-//            Log.e("list_date", appsList.getDate());
-            if (dateFormat.format(today.getTime()).equals(appsList.getDate())) {
-                items.add(new SeparatorItem("Today"));
-            } else {
-                items.add(new SeparatorItem(appsList.getDate()));
-            }
-
-            for (App app : appsList.getApps()) {
-                items.add(new AppItem(app));
-            }
-
-            if (appsList.haveMoreApps())
-                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
+    private void notifyAdapter(AppsList appsList) {
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.setTime(today.getTime());
+        yesterday.add(Calendar.DATE, -1);
+        if (dateFormat.format(today.getTime()).equals(appsList.getDate())) {
+            items.add(new SeparatorItem(ctx.getString(R.string.today)));
+        } else if(dateFormat.format(yesterday.getTime()).equals(appsList.getDate())) {
+            items.add(new SeparatorItem(ctx.getString(R.string.yesterday)));
+        } else {
+            items.add(new SeparatorItem(appsList.getDate()));
         }
+
+        for (App app : appsList.getApps()) {
+            items.add(new AppItem(app));
+        }
+
+        if (appsList.haveMoreApps())
+            items.add(new MoreAppsItem(1, 5, appsList.getDate()));
 
         notifyDataSetChanged();
     }
 
-    private class ComparatorApps implements Comparator<AppsList> {
-        @Override
-        public int compare(AppsList first, AppsList second) {
-            if (first.getDateAsCalendar() != null && second.getDateAsCalendar() != null) {
-                return (second.getDateAsCalendar().compareTo(first.getDateAsCalendar()));
-            }
-
-            return -1;
-        }
-    }
-
     public void getAppsForNextDate() {
-//        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -1);
 
         String date = dateFormat.format(calendar.getTime());
 
@@ -315,19 +284,14 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter() {
+        success = false;
         items.clear();
-        tempList.clear();
-        resultsCounter = 0;
-        notifyDataSetInvalidated();
+        notifyDataSetChanged();
 
         calendar = Calendar.getInstance();
+        today = Calendar.getInstance();
 
-//        Log.e("temp", "" + tempList.size());
-//        Log.e("items", "" + items.size());
-//        Log.e("date", dateFormat.format(calendar.getTime()));
-//        Log.e("resultCounter", "" + resultsCounter);
-
-//        getApps();
+        getApps();
     }
 
     @Override

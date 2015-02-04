@@ -22,4 +22,6 @@
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
     <string name="saved_successfully">App added successfully</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
 </resources>

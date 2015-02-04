@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,17 +23,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
-import com.shtaigaway.apphunt.api.AppHuntApiClient;
-import com.shtaigaway.apphunt.api.Callback;
-import com.shtaigaway.apphunt.api.models.User;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.ui.fragments.NotificationFragment;
@@ -49,8 +40,6 @@ import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
-
-import org.json.JSONObject;
 
 import java.util.Calendar;
 
@@ -298,7 +287,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-        trendingAppsAdapter.resetAdapter();
+        if(firstTime) {
+            firstTime = false;
+        } else {
+            Log.e("Network", " RESET ADAPTER");
+            trendingAppsAdapter.resetAdapter();
+        }
+
 
         while (getSupportFragmentManager().getBackStackEntryCount() > 0){
             getSupportFragmentManager().popBackStackImmediate();
