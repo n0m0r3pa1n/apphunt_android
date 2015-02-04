@@ -183,7 +183,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
             public void success(AppsList appsList, Response response) {
                 calendar.add(Calendar.DATE, -1);
                 if (appsList.getTotalCount() > 0) {
-                    Log.e(TAG, appsList.getDate());
                     notifyAdapter(appsList);
                     if(!success) {
                         getApps();

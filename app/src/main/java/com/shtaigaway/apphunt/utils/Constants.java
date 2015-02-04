@@ -14,6 +14,7 @@ public class Constants {
     public static final String PLATFORM = "Android";
 
     public static final String IS_DAILY_NOTIFICATION_SETUP_KEY = "isDisplayNotificationServiceSetup";
+    public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
 
     // Fragment TAGs
     public static final String TAG_LOGIN_FRAGMENT = "login_fragment";

@@ -11,8 +11,39 @@
         android:layout_height="150dp"
         android:background="@color/ab_primary"
         android:visibility="invisible"
-        android:padding="5dp">
-
+        android:padding="15dp">
+        <RelativeLayout
+            android:layout_above="@+id/dismiss"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/notification_label"
+                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/notification_toggle"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:text="Enable notifications"
+                android:gravity="center_vertical"
+                android:layout_height="50dp" />
+            <ToggleButton
+                android:id="@+id/notification_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"/>
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="DISMISS"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

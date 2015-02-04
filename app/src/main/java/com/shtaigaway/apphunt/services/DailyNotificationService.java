@@ -11,28 +11,16 @@ import android.util.Log;
 
 import com.shtaigaway.apphunt.MainActivity;
 import com.shtaigaway.apphunt.R;
-import com.shtaigaway.apphunt.api.AppHuntApi;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
-import com.shtaigaway.apphunt.api.models.App;
-import com.shtaigaway.apphunt.api.models.AppsList;
-import com.shtaigaway.apphunt.app.AppItem;
-import com.shtaigaway.apphunt.app.Item;
-import com.shtaigaway.apphunt.app.MoreAppsItem;
-import com.shtaigaway.apphunt.app.SeparatorItem;
 import com.shtaigaway.apphunt.utils.ConnectivityUtils;
-import com.shtaigaway.apphunt.utils.Constants;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import retrofit.client.Response;
 
 
-/**
- * Created by nmp on 12/23/14.
- */
 public class DailyNotificationService extends IntentService {
     private static final String TAG = DailyNotificationService.class.getSimpleName();
 

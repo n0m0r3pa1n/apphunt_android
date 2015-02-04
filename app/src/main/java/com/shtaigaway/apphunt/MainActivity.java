@@ -1,7 +1,5 @@
 package com.shtaigaway.apphunt;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +24,6 @@ import android.widget.ListView;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
-import com.shtaigaway.apphunt.services.DailyNotificationService;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.ui.fragments.NotificationFragment;
 import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
@@ -39,9 +36,6 @@ import com.shtaigaway.apphunt.utils.ActionBarUtils;
 import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
-import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
-
-import java.util.Calendar;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
@@ -66,12 +60,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         initUI();
 
-        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY)) {
-            SharedPreferencesHelper.setPreference(this, Constants.IS_DAILY_NOTIFICATION_SETUP_KEY, true);
-            setupDailyNotificationService();
-        }
-
-
+        sendBroadcast(new Intent("com.shtaigaway.apphunt.action.ENABLE_NOTIFICATIONS"));
     }
 
     private void initUI() {
@@ -143,11 +132,14 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        MenuInflater inflater = getMenuInflater();
+       inflater.inflate(R.menu.menu, menu);
 
-       if (FacebookUtils.isSessionOpen()) {
-           inflater.inflate(R.menu.logged_in_menu, menu);
+        if (FacebookUtils.isSessionOpen()) {
+            menu.findItem(R.id.action_login).setVisible(false);
+            menu.findItem(R.id.action_logout).setVisible(true);
         } else {
-            inflater.inflate(R.menu.menu, menu);
+            menu.findItem(R.id.action_login).setVisible(true);
+            menu.findItem(R.id.action_logout).setVisible(false);
         }
 
         return true;
@@ -241,25 +233,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
     }
 
-    public void setupDailyNotificationService() {
-        Intent intent = new Intent(this, DailyNotificationService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, 0);
-
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        if(alarmMgr == null || alarmIntent == null) {
-            return;
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 0);
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-    }
-
     @Override
     public void onAppSelected(ApplicationInfo data) {
         Bundle extras = new Bundle();
@@ -290,7 +263,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         if(firstTime) {
             firstTime = false;
         } else {
-            Log.e("Network", " RESET ADAPTER");
             trendingAppsAdapter.resetAdapter();
         }
 
