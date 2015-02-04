@@ -1,7 +1,9 @@
 package com.shtaigaway.apphunt.api.models;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AppsList {
     private ArrayList<App> apps = new ArrayList<>();
@@ -44,6 +46,20 @@ public class AppsList {
 
     public String getDate() {
         return date;
+    }
+
+    public Calendar getDateAsCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            calendar.setTime(format.parse(getDate()));
+            return calendar;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public void setDate(String date) {

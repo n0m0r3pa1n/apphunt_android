@@ -31,7 +31,7 @@
 
     <dimen name="list_more_apps_item_height">48dp</dimen>
     <dimen name="list_more_apps_button_width">60dp</dimen>
-    <dimen name="list_more_apps_button_height">15dp</dimen>
+    <dimen name="list_more_apps_button_height">16dp</dimen>
 
     <dimen name="save_box_margin">30dp</dimen>
     <dimen name="save_box_title_margin_bottom">20dp</dimen>

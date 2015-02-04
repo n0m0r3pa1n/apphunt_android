@@ -61,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private FloatingActionButton addAppButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
+    private boolean firstTime = true;
 
     private UiLifecycleHelper uiHelper;
 
@@ -69,21 +70,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
-
-        if (!ConnectivityUtils.isNetworkAvailable(this)) {
-            Bundle extras = new Bundle();
-            extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.notification_no_internet));
-            NotificationFragment notificationFragment = new NotificationFragment();
-            notificationFragment.setArguments(extras);
-
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
-                    .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
-                    .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
-                    .commit();
-        }
 
         FacebookUtils.onStart(this);
 
@@ -185,17 +173,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_logout:
-                if (FacebookUtils.isSessionOpen()) {
-                    FacebookUtils.closeSession();
-
-                    supportInvalidateOptionsMenu();
-                    FacebookUtils.hideLoginFragment(this);
-                    FacebookUtils.onLogout(this);
-
-                    for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-                        getSupportFragmentManager().popBackStack();
-                    }
-                }
+                FacebookUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_settings:
@@ -224,24 +202,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
 
         return true;
-    }
-
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
-
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (state.isClosed()) {
-            FacebookUtils.onLogout(MainActivity.this);
-            onUserLogout();
-        } else if (state.isOpened()) {
-            onUserLogin();
-        }
-
-        this.supportInvalidateOptionsMenu();
     }
 
     @Override

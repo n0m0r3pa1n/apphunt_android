@@ -41,6 +41,8 @@ public class LoginFragment extends BaseFragment {
     private OnUserAuthListener authCallback;
     private UiLifecycleHelper uiHelper;
 
+    private Activity activity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +75,6 @@ public class LoginFragment extends BaseFragment {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            Log.i(TAG, "Logged in...");
-
             Bundle params = new Bundle();
             params.putString("fields", "name,email,picture");
 
@@ -94,7 +94,7 @@ public class LoginFragment extends BaseFragment {
                                 @Override
                                 public void success(User user, retrofit.client.Response response) {
                                     if (user != null) {
-                                        FacebookUtils.onLogin(getActivity(), user);
+                                        FacebookUtils.onLogin(activity, user);
                                     }
                                 }
                             });
@@ -105,9 +105,7 @@ public class LoginFragment extends BaseFragment {
                 }
             }).executeAsync();
         } else if (state.isClosed()) {
-            Log.i(TAG, "Logged out...");
-            FacebookUtils.onLogout(getActivity());
-            authCallback.onUserLogout();
+            FacebookUtils.onLogout(activity);
         }
 
         getActivity().supportInvalidateOptionsMenu();
@@ -123,6 +121,8 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        this.activity = activity;
 
         try {
             authCallback = (OnUserAuthListener) activity;

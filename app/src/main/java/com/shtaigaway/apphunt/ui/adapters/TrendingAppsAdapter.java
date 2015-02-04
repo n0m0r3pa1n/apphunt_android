@@ -33,18 +33,25 @@ import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
+
+    private static final String TAG = TrendingAppsAdapter.class.getName();
 
     private Context ctx;
     private ListView listView;
     private ArrayList<Item> items = new ArrayList<>();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private Calendar calendar = Calendar.getInstance();
-    private Calendar today = Calendar.getInstance();
+
+    private int resultsCounter = 0;
+    private ArrayList<AppsList> tempList = new ArrayList<>();
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -54,12 +61,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         this.ctx = ctx;
         this.listView = listView;
 
-        // TODO: To be removed!!! For TEST reasons
-        today.add(Calendar.DATE, -3);
-        calendar.add(Calendar.DATE, -3);
-        // TODO: To be removed!!! For TEST reasons
-
-        getAppsForTodayAndYesterday();
+//        getApps();
+        getAppsForNextDate();
     }
 
     @Override
@@ -119,7 +122,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-
+                    Log.e("btn", "bla");
                     if (FacebookUtils.isSessionOpen()) {
                         if (app.isHasVoted()) {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
@@ -153,9 +156,14 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(((AppItem) getItem(position)).getData().getShortUrl()));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    ctx.startActivity(intent);
+                    try {
+                        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(((AppItem) getItem(position)).getData().getShortUrl()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctx.startActivity(intent);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Couldn't get the shortUrl");
+                    }
+
                 }
             });
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue() && viewHolderSeparator != null) {
@@ -173,48 +181,83 @@ public class TrendingAppsAdapter extends BaseAdapter {
         return view;
     }
 
-    private void getAppsForTodayAndYesterday() {
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
-                dateFormat.format(today.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                if (appsList.getTotalCount() > 0) {
-                    items.add(new SeparatorItem("Today"));
+    private void getApps() {
+        calendar = Calendar.getInstance();
 
-                    for (App app : appsList.getApps()) {
-                        items.add(new AppItem(app));
+//        resultsCounter = 0;
+        String userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
+
+        for (int i = 0; i < 5; i++) {
+
+            AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
+                @Override
+                public void success(AppsList appsList, Response response) {
+                    resultsCounter += 1;
+
+                    if (appsList.getTotalCount() > 0 && !tempList.contains(appsList)) {
+                        tempList.add(appsList);
+
+                        Log.e("date", appsList.getDate());
+                        Log.e("success", "success");
                     }
 
-                    if (appsList.haveMoreApps())
-                        items.add(new MoreAppsItem(1, 5, dateFormat.format(today.getTime())));
-
-                    calendar.add(Calendar.DATE, -1);
-
-                    AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
-                            dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-                        @Override
-                        public void success(AppsList appsList, Response response) {
-                            items.add(new SeparatorItem("Yesterday"));
-
-                            for (App app : appsList.getApps()) {
-                                items.add(new AppItem(app));
-                            }
-
-                            if (appsList.haveMoreApps())
-                                items.add(new MoreAppsItem(1, 5, dateFormat.format(calendar.getTime())));
-
-                            notifyDataSetChanged();
-                        }
-                    });
+                    if (resultsCounter == 5) {
+                        notifyAdapter();
+                    }
                 }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("failure", "failure");
+                }
+            });
+
+            calendar.add(Calendar.DATE, -1);
+        }
+    }
+
+    private void notifyAdapter() {
+        Collections.sort(tempList, new ComparatorApps());
+
+        Calendar today = Calendar.getInstance();
+
+//        Log.e("resultCounter", "" + resultsCounter);
+//        Log.e("listSize", "" + tempList.size());
+
+        for (AppsList appsList : tempList) {
+//            Log.e("list_date", appsList.getDate());
+            if (dateFormat.format(today.getTime()).equals(appsList.getDate())) {
+                items.add(new SeparatorItem("Today"));
+            } else {
+                items.add(new SeparatorItem(appsList.getDate()));
             }
-        });
+
+            for (App app : appsList.getApps()) {
+                items.add(new AppItem(app));
+            }
+
+            if (appsList.haveMoreApps())
+                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
+        }
+
+        notifyDataSetChanged();
+    }
+
+    private class ComparatorApps implements Comparator<AppsList> {
+        @Override
+        public int compare(AppsList first, AppsList second) {
+            if (first.getDateAsCalendar() != null && second.getDateAsCalendar() != null) {
+                return (second.getDateAsCalendar().compareTo(first.getDateAsCalendar()));
+            }
+
+            return -1;
+        }
     }
 
     public void getAppsForNextDate() {
-        calendar.add(Calendar.DATE, -1);
+//        calendar.add(Calendar.DATE, -1);
 
-        final String date = dateFormat.format(calendar.getTime());
+        String date = dateFormat.format(calendar.getTime());
 
         AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
                 date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
@@ -223,22 +266,14 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 ArrayList<Item> items = new ArrayList<>();
 
                 if (appsList.getTotalCount() > 0) {
-                    try {
-                        if (dateFormat.format(today.getTime()).equals(date)) {
-                            items.add(new SeparatorItem("Today"));
-                        } else {
-                            items.add(new SeparatorItem(date));
-                        }
-                    } catch (Exception e) {
-                        Log.e("Exception", e.getMessage());
-                    }
+                    items.add(new SeparatorItem(appsList.getDate()));
 
                     for (App app : appsList.getApps()) {
                         items.add(new AppItem(app));
                     }
 
                     if (appsList.haveMoreApps())
-                        items.add(new MoreAppsItem(1, 5, date));
+                        items.add(new MoreAppsItem(1, 5, appsList.getDate()));
 
                     addItems(items);
                 }
@@ -247,14 +282,10 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void addItems(ArrayList<Item> items) {
-        if (items.size() == 0) {
-            this.items = items;
-        } else {
-            this.items.addAll(items);
-            notifyDataSetChanged();
+        this.items.addAll(items);
+        notifyDataSetChanged();
 
-            listView.smoothScrollToPosition(this.items.size() - 3);
-        }
+        listView.smoothScrollToPosition(this.items.size() - 3);
     }
 
     private void loadMoreApps(final int position) {
@@ -285,17 +316,18 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     public void resetAdapter() {
         items.clear();
+        tempList.clear();
+        resultsCounter = 0;
         notifyDataSetInvalidated();
 
-        today = Calendar.getInstance();
         calendar = Calendar.getInstance();
 
-        // TODO: To be removed!!! For TEST reasons
-        today.add(Calendar.DATE, -3);
-        calendar.add(Calendar.DATE, -3);
-        // TODO: To be removed!!! For TEST reasons
+//        Log.e("temp", "" + tempList.size());
+//        Log.e("items", "" + items.size());
+//        Log.e("date", dateFormat.format(calendar.getTime()));
+//        Log.e("resultCounter", "" + resultsCounter);
 
-        getAppsForTodayAndYesterday();
+//        getApps();
     }
 
     @Override

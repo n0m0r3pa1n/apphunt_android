@@ -39,13 +39,6 @@
             android:maxLines="3"/>
         </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/info"
-        android:layout_alignParentRight="true"
-        android:clickable="true"
-        />
     <Button
         android:id="@+id/vote"
         android:layout_width="@dimen/list_item_vote_size"

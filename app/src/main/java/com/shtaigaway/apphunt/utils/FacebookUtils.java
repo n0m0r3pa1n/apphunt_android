@@ -1,5 +1,6 @@
 package com.shtaigaway.apphunt.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,21 +43,21 @@ public class FacebookUtils {
         session.closeAndClearTokenInformation();
     }
 
-    public static void onLogin(Context ctx, User user) {
-        SharedPreferencesHelper.setPreference(ctx, Constants.KEY_USER_ID, user.getId());
-        SharedPreferencesHelper.setPreference(ctx, Constants.KEY_EMAIL, user.getEmail());
-        SharedPreferencesHelper.setPreference(ctx, Constants.KEY_PROFILE_PICTURE, user.getProfilePicture());
-        SharedPreferencesHelper.setPreference(ctx, Constants.KEY_NAME, user.getName());
+    public static void onLogin(Activity activity, User user) {
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_USER_ID, user.getId());
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_EMAIL, user.getEmail());
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_PROFILE_PICTURE, user.getProfilePicture());
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_NAME, user.getName());
 
-        ((MainActivity) ctx).onUserLogin();
-        hideLoginFragment(ctx);
-
+        ((MainActivity) activity).onUserLogin();
+        hideLoginFragment(activity);
     }
 
     public static void onLogout(Context ctx) {
         removeSharedPreferences(ctx);
         closeSession();
 
+        hideLoginFragment(ctx);
         ((MainActivity) ctx).onUserLogout();
     }
 
