@@ -8,7 +8,7 @@
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="@dimen/ab_shadow_height"
         android:background="@drawable/bottom_shadow"/>
 
     <ListView
@@ -18,7 +18,7 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/list_divider_height"
         android:layoutAnimation="@anim/list_view_entry"
-        android:elevation="0dp"
+        android:elevation="@dimen/listview_elevation"
         />
 
     <com.shamanland.fab.FloatingActionButton
@@ -31,7 +31,7 @@
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:src="@drawable/ic_add_white"
-        app:floatingActionButtonColor="@color/primary"
+        app:floatingActionButtonColor="@color/bg_fab"
         app:floatingActionButtonSize="normal"
         android:elevation="@dimen/add_btn_elevation"
         />

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@color/ab_primary">
+    android:background="@color/bg_primary">
 
     <GridView
         android:id="@+id/gv_apps_list"

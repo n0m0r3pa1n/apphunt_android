@@ -1,4 +1,4 @@
-package com.shtaigaway.apphunt.app;
+package com.shtaigaway.apphunt.ui.listview_items;
 
 import com.shtaigaway.apphunt.utils.Constants;
 

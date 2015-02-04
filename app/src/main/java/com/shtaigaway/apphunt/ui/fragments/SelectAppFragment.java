@@ -40,7 +40,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.select_app);
+        setTitle(R.string.title_select_app);
     }
 
     @Override

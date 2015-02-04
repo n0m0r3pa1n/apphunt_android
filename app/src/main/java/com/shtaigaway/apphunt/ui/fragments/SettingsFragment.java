@@ -31,7 +31,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.settings);
+        setTitle(R.string.title_settings);
     }
 
     @Override

@@ -22,11 +22,8 @@ import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.User;
-import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
-import com.shtaigaway.apphunt.ui.interfaces.OnUserAuthListener;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
-import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import org.json.JSONObject;
 
@@ -38,7 +35,6 @@ public class LoginFragment extends BaseFragment {
 
     private View view;
 
-    private OnUserAuthListener authCallback;
     private UiLifecycleHelper uiHelper;
 
     private Activity activity;
@@ -47,7 +43,11 @@ public class LoginFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.login);
+        if (FacebookUtils.isSessionOpen()) {
+            setTitle(R.string.title_logout);
+        } else {
+            setTitle(R.string.title_login);
+        }
 
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
@@ -123,12 +123,6 @@ public class LoginFragment extends BaseFragment {
         super.onAttach(activity);
 
         this.activity = activity;
-
-        try {
-            authCallback = (OnUserAuthListener) activity;
-        } catch (ClassCastException e) {
-            Log.e("TAG", e.getMessage());
-        }
     }
 
 

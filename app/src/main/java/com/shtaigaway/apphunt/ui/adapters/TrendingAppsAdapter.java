@@ -22,10 +22,10 @@ import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.App;
 import com.shtaigaway.apphunt.api.models.AppsList;
 import com.shtaigaway.apphunt.api.models.Vote;
-import com.shtaigaway.apphunt.app.AppItem;
-import com.shtaigaway.apphunt.app.Item;
-import com.shtaigaway.apphunt.app.MoreAppsItem;
-import com.shtaigaway.apphunt.app.SeparatorItem;
+import com.shtaigaway.apphunt.ui.listview_items.AppItem;
+import com.shtaigaway.apphunt.ui.listview_items.Item;
+import com.shtaigaway.apphunt.ui.listview_items.MoreAppsItem;
+import com.shtaigaway.apphunt.ui.listview_items.SeparatorItem;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
@@ -73,8 +73,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
                 view = inflater.inflate(R.layout.layout_app_item, parent, false);
                 viewHolderItem.layout = (RelativeLayout) view.findViewById(R.id.item);
-                viewHolderItem.icon = (ImageView) view.findViewById(R.id.icon);
-                viewHolderItem.title = (TextView) view.findViewById(R.id.name);
+                viewHolderItem.icon = (ImageView) view.findViewById(R.id.app_icon);
+                viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
                 viewHolderItem.description = (TextView) view.findViewById(R.id.description);
                 viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
 
@@ -205,9 +205,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);
         if (dateFormat.format(today.getTime()).equals(appsList.getDate())) {
-            items.add(new SeparatorItem(ctx.getString(R.string.today)));
+            items.add(new SeparatorItem(ctx.getString(R.string.list_view_header_today)));
         } else if(dateFormat.format(yesterday.getTime()).equals(appsList.getDate())) {
-            items.add(new SeparatorItem(ctx.getString(R.string.yesterday)));
+            items.add(new SeparatorItem(ctx.getString(R.string.list_view_header_yesterday)));
         } else {
             items.add(new SeparatorItem(appsList.getDate()));
         }

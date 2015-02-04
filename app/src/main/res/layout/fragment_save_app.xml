@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ab_primary"
+    android:background="@color/bg_primary"
     android:clickable="true">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:textSize="@dimen/save_box_title_text"/>
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/app_icon"
             android:layout_width="@dimen/save_box_icon_size"
             android:layout_height="@dimen/save_box_icon_size"
             android:layout_below="@+id/title"
@@ -33,14 +33,14 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="@dimen/save_box_desc_height"
-            android:layout_below="@+id/icon"
+            android:layout_below="@+id/app_icon"
             android:gravity="top|start"
             android:background="@color/desc_bg"
             android:singleLine="false"
             android:maxLength="100"
             android:padding="@dimen/save_box_desc_padding"
             android:elevation="@dimen/save_box_desc_elevation"
-            android:hint="@string/desc_hint"
+            android:hint="@string/hint_description"
             android:textSize="@dimen/save_box_desc_text"
             android:textColor="@android:color/white"
             android:textColorHint="@color/desc_hint"/>

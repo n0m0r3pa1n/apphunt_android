@@ -4,10 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -17,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
@@ -39,7 +35,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.save_app);
+        setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
     }
 
@@ -56,7 +52,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(data.loadLabel(getActivity().getPackageManager()));
 
-        ImageView icon = (ImageView) view.findViewById(R.id.icon);
+        ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
         icon.setImageDrawable(data.loadIcon(getActivity().getPackageManager()));
 
         desc = (EditText) view.findViewById(R.id.description);

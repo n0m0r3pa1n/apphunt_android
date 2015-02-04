@@ -2,9 +2,9 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/ab_primary</item>
-        <item name="colorPrimaryDark">@color/ab_primary</item>
-        <item name="android:navigationBarColor">@color/ab_primary</item>
+        <item name="colorPrimary">@color/bg_primary</item>
+        <item name="colorPrimaryDark">@color/bg_primary</item>
+        <item name="android:navigationBarColor">@color/bg_primary</item>
         <item name="android:elevation">@dimen/ab_elevation</item>
     </style>
 </resources>

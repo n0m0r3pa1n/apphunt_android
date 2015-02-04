@@ -5,7 +5,7 @@
     android:layout_height="@dimen/list_item_height">
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/app_icon"
         android:layout_width="@dimen/list_item_icon_size"
         android:layout_height="@dimen/list_item_icon_size"
         android:layout_centerVertical="true"
@@ -18,13 +18,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/icon"
-        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/app_icon"
+        android:layout_toRightOf="@+id/app_icon"
         android:layout_toStartOf="@+id/vote"
         android:layout_toLeftOf="@+id/vote">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/app_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/list_item_name"
@@ -54,10 +54,10 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#c7c7c7"
-        android:layout_toRightOf="@+id/icon"
-        android:layout_toEndOf="@+id/icon"
+        android:layout_height="@dimen/list_view_divider_height"
+        android:background="@color/bg_divider"
+        android:layout_toRightOf="@+id/app_icon"
+        android:layout_toEndOf="@+id/app_icon"
         android:layout_alignParentBottom="true"
-        android:elevation="0dp" />
+        android:elevation="@dimen/list_view_elevation" />
 </RelativeLayout>

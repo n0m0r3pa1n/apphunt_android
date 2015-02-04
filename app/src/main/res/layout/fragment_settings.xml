@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B4000000"
+    android:background="@color/bg_semi_fragment"
     android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@color/ab_primary"
+        android:layout_height="@dimen/semi_fragment_layout_height"
+        android:background="@color/bg_primary"
         android:visibility="invisible"
-        android:padding="15dp">
+        android:padding="@dimen/settings_notification_padding">
         <RelativeLayout
             android:layout_above="@+id/dismiss"
             android:layout_width="match_parent"
@@ -23,18 +23,18 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/notification_toggle"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
+                android:textSize="@dimen/settings_notification_label_text"
                 android:text="Enable notifications"
                 android:gravity="center_vertical"
-                android:layout_height="50dp" />
+                android:layout_height="@dimen/settings_notification_label_height" />
 
             <ToggleButton
                 android:id="@+id/notification_toggle"
-                android:layout_width="90dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/settings_notifications_toggle_width"
+                android:layout_height="@dimen/settings_notifications_toggle_height"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/selector_toggle"
+                android:background="@drawable/selector_toggle_button"
                 android:textOn=""
                 android:textOff="" />
         </RelativeLayout>
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:text="DISMISS"
+            android:text="@string/dismiss"
             android:textColor="@android:color/white"
             android:background="@android:color/transparent"/>
 

@@ -40,8 +40,8 @@ public class UserAppsAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.layout_user_app_item, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.icon = (ImageView) view.findViewById(R.id.icon);
-            viewHolder.name = (TextView) view.findViewById(R.id.name);
+            viewHolder.icon = (ImageView) view.findViewById(R.id.app_icon);
+            viewHolder.name = (TextView) view.findViewById(R.id.app_name);
 
             view.setTag(viewHolder);
         } else {
