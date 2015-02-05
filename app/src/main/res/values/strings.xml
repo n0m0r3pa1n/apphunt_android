@@ -17,6 +17,7 @@
     <string name="facebook_app_id">874212442599315</string>
 
     <string name="hint_description">Enter short description (max 100)</string>
+    <string name="hint_please_enter_description">Please enter a short description...</string>
     <string name="save">Save</string>
 
     <!-- Notifications -->
@@ -27,4 +28,15 @@
     <string name="list_view_header_today">Today</string>
     <string name="dismiss">DISMISS</string>
     <string name="settings">SETTINGS</string>
+
+    <!-- SmartRate -->
+    <string name="smartrate_yes">YES</string>
+    <string name="smartrate_no">NO</string>
+    <string name="smartrate_rate_dialog_message">Would you like to rate %s\non Google Play?</string>
+    <string name="smartrate_do_you_love">Do you love %s?</string>
+    <string name="smartrate_feedback_input_hint">Tell us what you think</string>
+    <string name="smartrate_feedback_title">Feedback</string>
+    <string name="smartrate_send">SEND</string>
+    <string name="smartrate_rate_dialog_title">Rate</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter a feedback...</string>
 </resources>

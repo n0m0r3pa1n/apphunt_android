@@ -11,6 +11,7 @@ public class Constants {
     public static final String KEY_DATA = "data";
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
+    public static final String KEY_SHOW_RATING = "show_rating";
 
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";

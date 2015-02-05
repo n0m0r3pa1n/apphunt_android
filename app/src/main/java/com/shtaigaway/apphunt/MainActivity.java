@@ -24,6 +24,7 @@ import android.widget.ListView;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
+import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SelectAppFragment;
@@ -63,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+
+        SmartRate.init(this, "", "");
     }
 
     private void initUI() {
@@ -92,13 +95,15 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
             if (!ConnectivityUtils.isNetworkAvailable(context)) {
                 if (fragment == null)  {
-                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true);
+                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
+                addAppButton.setVisibility(View.INVISIBLE);
             } else {
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
 
+                addAppButton.setVisibility(View.VISIBLE);
                 onNetworkAvailable();
             }
         }
@@ -212,18 +217,21 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            Animation slideInBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
-            addAppButton.startAnimation(slideInBottom);
-            addAppButton.setVisibility(View.VISIBLE);
+        if (ConnectivityUtils.isNetworkAvailable(this)) {
+            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                Animation slideInBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
 
-            if (endOfList) {
-                trendingAppsAdapter.getAppsForNextDate();
+                addAppButton.startAnimation(slideInBottom);
+                addAppButton.setVisibility(View.VISIBLE);
+
+                if (endOfList) {
+                    trendingAppsAdapter.getAppsForNextDate();
+                }
+            } else {
+                Animation slideOutBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
+                addAppButton.startAnimation(slideOutBottom);
+                addAppButton.setVisibility(View.INVISIBLE);
             }
-        } else {
-            Animation slideOutBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
-            addAppButton.startAnimation(slideOutBottom);
-            addAppButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -259,7 +267,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         } else {
             trendingAppsAdapter.resetAdapter();
         }
-
 
         while (getSupportFragmentManager().getBackStackEntryCount() > 0){
             getSupportFragmentManager().popBackStackImmediate();

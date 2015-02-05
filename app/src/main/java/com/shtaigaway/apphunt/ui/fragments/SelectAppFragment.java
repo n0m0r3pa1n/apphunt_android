@@ -18,6 +18,7 @@ import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.Packages;
+import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.adapters.UserAppsAdapter;
 import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
 import com.shtaigaway.apphunt.utils.InstalledPackagesUtils;
@@ -52,6 +53,8 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         view = inflater.inflate(R.layout.fragment_add_app, container, false);
 
         initUI();
+
+        SmartRate.show("MainActivity#onCreate");
 
         return view;
     }

@@ -80,32 +80,36 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.save:
+                if (desc.getText() != null && desc.getText().length() > 0) {
 
-                SaveApp app = new SaveApp();
-                app.setDescription(desc.getText().toString());
-                app.setPackageName(data.packageName);
-                app.setPlatform(Constants.PLATFORM);
-                app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                    SaveApp app = new SaveApp();
+                    app.setDescription(desc.getText().toString());
+                    app.setPackageName(data.packageName);
+                    app.setPlatform(Constants.PLATFORM);
+                    app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
 
-                AppHuntApiClient.getClient().saveApp(app, new Callback() {
-                    @Override
-                    public void success(Object o, Response response) {
-                        if (response.getStatus() == 200) {
-                            activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    AppHuntApiClient.getClient().saveApp(app, new Callback() {
+                        @Override
+                        public void success(Object o, Response response) {
+                            if (response.getStatus() == 200) {
+                                activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false);
+                                NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        activity.getSupportFragmentManager().popBackStack();
+                        @Override
+                        public void failure(RetrofitError error) {
+                            activity.getSupportFragmentManager().popBackStack();
 
-                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false);
+                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, true);
 
-                    }
-                });
-
+                        }
+                    });
+                } else {
+                    desc.setHint(R.string.hint_please_enter_description);
+                    desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+                }
                 break;
         }
     }

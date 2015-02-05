@@ -55,10 +55,11 @@ public class NotificationsUtils {
         SharedPreferencesHelper.setPreference(ctx, Constants.IS_DAILY_NOTIFICATION_ENABLED, false);
     }
 
-    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction) {
+    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
         Bundle extras = new Bundle();
         extras.putString(Constants.KEY_NOTIFICATION, message);
         extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
+        extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
         NotificationFragment notificationFragment = new NotificationFragment();
         notificationFragment.setArguments(extras);
 

@@ -6,34 +6,39 @@
     android:clickable="true">
 
     <RelativeLayout
-        android:id="@+id/notification"
+        android:id="@+id/smartrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/semi_fragment_layout_height"
         android:background="@color/bg_primary"
         android:visibility="invisible"
         android:padding="@dimen/semi_fragment_layout_padding">
 
-        <TextView
-            android:id="@+id/notification_text"
+        <EditText
+            android:id="@+id/smartrate_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/dismiss"
-            android:gravity="center"
+            android:layout_above="@+id/send"
+            android:gravity="top|start"
+            android:background="@color/desc_bg"
+            android:singleLine="false"
+            android:maxLength="100"
+            android:padding="@dimen/save_box_desc_padding"
+            android:elevation="@dimen/save_box_desc_elevation"
+            android:hint="@string/smartrate_feedback_input_hint"
+            android:textSize="@dimen/save_box_desc_text"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_text"
-            android:layout_margin="@dimen/notification_text_margin"/>
+            android:textColorHint="@color/desc_hint"/>
 
         <Button
-            android:id="@+id/open_settings"
+            android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/dismiss"
-            android:text="@string/settings"
+            android:text="@string/smartrate_send"
             android:textColor="@android:color/white"
             android:textSize="@dimen/notification_button_text"
-            android:background="@android:color/transparent"
-            android:visibility="gone"/>
+            android:background="@android:color/transparent"/>
 
         <Button
             android:id="@+id/dismiss"

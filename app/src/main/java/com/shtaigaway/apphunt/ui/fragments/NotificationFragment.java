@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shtaigaway.apphunt.R;
+import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.interfaces.OnNetworkStateChange;
 import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
@@ -37,6 +38,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
     private OnNetworkStateChange networkStateCallback;
     private ActionBarActivity activity;
+    private boolean showRating;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         setTitle(R.string.title_notification);
         notification = getArguments().getString(Constants.KEY_NOTIFICATION);
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
+        showRating = getArguments().getBoolean(Constants.KEY_SHOW_RATING);
     }
 
     @Override
@@ -111,6 +114,9 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
                     while (activity.getSupportFragmentManager().getBackStackEntryCount() > 0){
                         activity.getSupportFragmentManager().popBackStackImmediate();
                     }
+                } else if (showRating) {
+                    activity.getSupportFragmentManager().popBackStack();
+                    SmartRate.show(String.format("%s#dismiss#onClick", TAG));
                 } else {
                     activity.getSupportFragmentManager().popBackStack();
                 }

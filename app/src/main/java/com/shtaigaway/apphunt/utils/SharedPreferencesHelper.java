@@ -90,7 +90,7 @@ public class SharedPreferencesHelper {
     public static int getIntPreference(Context ctx, String key) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
 
-        return sharedPreferences.getInt(key, -1);
+        return sharedPreferences.getInt(key, 0);
     }
 
     /**

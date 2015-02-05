@@ -48,6 +48,7 @@
             android:layout_alignParentRight="true"
             android:text="@string/dismiss"
             android:textColor="@android:color/white"
+            android:textSize="@dimen/notification_button_text"
             android:background="@android:color/transparent"/>
 
     </RelativeLayout>
