@@ -12,6 +12,8 @@ import com.shtaigaway.apphunt.ui.fragments.BaseFragment;
 
 public class ActionBarUtils {
 
+    private static final String TAG = ActionBarUtils.class.getName();
+
     private static ActionBarUtils instance;
 
     public static ActionBarUtils getInstance() {

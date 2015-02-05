@@ -17,6 +17,8 @@ import java.util.List;
 
 
 public class UserAppsAdapter extends BaseAdapter {
+    private static final String TAG = UserAppsAdapter.class.getName();
+
     private List<ApplicationInfo> appsList = new ArrayList<>();
     private Context ctx;
     private PackageManager packageManager;

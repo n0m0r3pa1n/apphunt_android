@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.shtaigaway.apphunt.utils.Constants;
 
 public class NotificationFragment extends BaseFragment implements OnClickListener {
 
+    private static final String TAG = NotificationFragment.class.getName();
+
     private String notification;
     private boolean showSettingsBtn = false;
 
@@ -33,6 +36,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     private Button settingsBtn;
 
     private OnNetworkStateChange networkStateCallback;
+    private ActionBarActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    Animation notificationEnterAnim = AnimationUtils.loadAnimation(getActivity(),
+                    Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
                             R.anim.slide_in_top_notification);
                     notificationEnterAnim.setFillAfter(true);
                     notificationLayout.startAnimation(notificationEnterAnim);
@@ -90,9 +94,9 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
             return enterAnim;
         } else {
-            Animation outAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out);;
+            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);;
 
-            notificationLayout.startAnimation(AnimationUtils.loadAnimation(getActivity(),
+            notificationLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
 
             return outAnim;
@@ -104,11 +108,11 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         switch (v.getId()) {
             case R.id.dismiss:
                 if(showSettingsBtn) {
-                    while (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0){
-                        getActivity().getSupportFragmentManager().popBackStackImmediate();
+                    while (activity.getSupportFragmentManager().getBackStackEntryCount() > 0){
+                        activity.getSupportFragmentManager().popBackStackImmediate();
                     }
                 } else {
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    activity.getSupportFragmentManager().popBackStack();
                 }
                 break;
 
@@ -122,21 +126,21 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 3 && ConnectivityUtils.isNetworkAvailable(getActivity())) {
+        if (requestCode == 3 && ConnectivityUtils.isNetworkAvailable(activity)) {
             networkStateCallback.onNetworkAvailable();
         }
-
-//        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        this.activity = (ActionBarActivity) activity;
+
         try {
             networkStateCallback = (OnNetworkStateChange) activity;
         } catch (ClassCastException e) {
-            Log.e("TAG", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 }

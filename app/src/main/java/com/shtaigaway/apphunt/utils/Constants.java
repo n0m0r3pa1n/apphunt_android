@@ -2,6 +2,8 @@ package com.shtaigaway.apphunt.utils;
 
 
 public class Constants {
+    public static final String PACKAGE_NAME = "com.shtaigaway.apphunt";
+
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_NAME = "name";
     public static final String KEY_PROFILE_PICTURE = "profile_picture";
@@ -13,7 +15,6 @@ public class Constants {
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
 
-    public static final String IS_DAILY_NOTIFICATION_SETUP_KEY = "isDisplayNotificationServiceSetup";
     public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
 
     // Fragment TAGs
@@ -25,6 +26,9 @@ public class Constants {
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
+
+    // Actions
+    public static final String ACTION_ENABLE_NOTIFICATIONS = "com.shtaigaway.apphunt.action.ENABLE_NOTIFICATIONS";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);

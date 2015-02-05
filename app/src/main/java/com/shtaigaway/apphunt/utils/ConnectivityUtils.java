@@ -6,13 +6,8 @@ import android.net.NetworkInfo;
 
 public class ConnectivityUtils {
 
-    /**
-     * Checks for Internet connection.
-     *
-     * @param context a {@link android.content.Context}
-     * @return true if the device or emulator is connected to the Internet;
-     *         false otherwise.
-     */
+    private static final String TAG = ConnectivityUtils.class.getName();
+
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

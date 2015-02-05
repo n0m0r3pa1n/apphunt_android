@@ -15,6 +15,8 @@ import com.shtaigaway.apphunt.ui.fragments.LoginFragment;
 
 public class FacebookUtils {
 
+    private static final String TAG = FacebookUtils.class.getName();
+
     public static void showLoginFragment(Context ctx) {
         Fragment loginFragment = new LoginFragment();
         ((ActionBarActivity) ctx).getSupportFragmentManager().beginTransaction()

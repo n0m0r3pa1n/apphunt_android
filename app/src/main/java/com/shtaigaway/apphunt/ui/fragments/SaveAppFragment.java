@@ -1,9 +1,11 @@
 package com.shtaigaway.apphunt.ui.fragments;
 
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +22,7 @@ import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.SaveApp;
 import com.shtaigaway.apphunt.utils.Constants;
+import com.shtaigaway.apphunt.utils.NotificationsUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 import retrofit.RetrofitError;
@@ -27,9 +30,12 @@ import retrofit.client.Response;
 
 public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
+    private static final String TAG = SaveAppFragment.class.getName();
+
     private View view;
     private EditText desc;
     private ApplicationInfo data;
+    private ActionBarActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,10 +56,10 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private void initUI() {
         TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(data.loadLabel(getActivity().getPackageManager()));
+        title.setText(data.loadLabel(activity.getPackageManager()));
 
         ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
-        icon.setImageDrawable(data.loadIcon(getActivity().getPackageManager()));
+        icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
 
         desc = (EditText) view.findViewById(R.id.description);
 
@@ -64,7 +70,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (!enter) {
-            return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_right);
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_out_right);
         }
 
         return super.onCreateAnimation(transit, enter, nextAnim);
@@ -79,48 +85,35 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                 app.setDescription(desc.getText().toString());
                 app.setPackageName(data.packageName);
                 app.setPlatform(Constants.PLATFORM);
-                app.setUserId(SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_USER_ID));
+                app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
 
                 AppHuntApiClient.getClient().saveApp(app, new Callback() {
                     @Override
                     public void success(Object o, Response response) {
                         if (response.getStatus() == 200) {
-                            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                            Bundle extras = new Bundle();
-                            extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.saved_successfully));
-                            extras.putBoolean(Constants.KEY_SHOW_SETTINGS, false);
-                            NotificationFragment notificationFragment = new NotificationFragment();
-                            notificationFragment.setArguments(extras);
-
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
-                                    .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
-                                    .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
-                                    .commit();
+                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false);
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        activity.getSupportFragmentManager().popBackStack();
 
-                        Bundle extras = new Bundle();
-                        extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.not_available_in_the_store));
-                        extras.putBoolean(Constants.KEY_SHOW_SETTINGS, false);
-                        NotificationFragment notificationFragment = new NotificationFragment();
-                        notificationFragment.setArguments(extras);
-
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
-                                .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
-                                .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
-                                .commit();
+                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false);
 
                     }
                 });
 
                 break;
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        this.activity = (ActionBarActivity) activity;
     }
 }

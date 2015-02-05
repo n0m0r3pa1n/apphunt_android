@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import retrofit.client.Response;
 
 public class SelectAppFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
+    private static final String TAG = SelectAppFragment.class.getName();
+
     private View view;
     private GridView gridView;
     private UserAppsAdapter userAppsAdapter;
@@ -35,6 +38,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     private OnAppSelectedListener callback;
 
     private List<ApplicationInfo> data;
+    private ActionBarActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         gridView.setOnItemClickListener(this);
 
         Packages packages = new Packages();
-        data = InstalledPackagesUtils.installedPackages(getActivity().getPackageManager());
+        data = InstalledPackagesUtils.installedPackages(activity.getPackageManager());
         for (ApplicationInfo info : data) {
             packages.getPackages().add(info.packageName);
         }
@@ -77,7 +81,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
                         }
                     }
 
-                    userAppsAdapter = new UserAppsAdapter(getActivity(), tempData);
+                    userAppsAdapter = new UserAppsAdapter(activity, tempData);
                     gridView.setAdapter(userAppsAdapter);
                 }
             }
@@ -87,7 +91,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (!enter) {
-            return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_top);
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_out_top);
         }
 
         return super.onCreateAnimation(transit, enter, nextAnim);
@@ -97,10 +101,12 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        this.activity = (ActionBarActivity) activity;
+
         try {
             callback = (OnAppSelectedListener) activity;
         } catch (ClassCastException e) {
-            Log.e("TAG", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 

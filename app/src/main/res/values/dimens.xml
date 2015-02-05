@@ -48,7 +48,7 @@
 
     <dimen name="semi_fragment_layout_height">150dp</dimen>
     <dimen name="semi_fragment_layout_padding">15dp</dimen>
-    <dimen name="settings_notification_padding">5sp</dimen>
+    <dimen name="settings_notification_padding">20sp</dimen>
     <dimen name="settings_notification_label_text">15sp</dimen>
     <dimen name="settings_notification_label_height">50dp</dimen>
     <dimen name="settings_notifications_toggle_width">90dp</dimen>

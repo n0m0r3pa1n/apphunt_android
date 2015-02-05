@@ -25,7 +25,6 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
-import com.shtaigaway.apphunt.ui.fragments.NotificationFragment;
 import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SelectAppFragment;
 import com.shtaigaway.apphunt.ui.fragments.SettingsFragment;
@@ -36,9 +35,12 @@ import com.shtaigaway.apphunt.utils.ActionBarUtils;
 import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
+import com.shtaigaway.apphunt.utils.NotificationsUtils;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
+
+    private static final String TAG = MainActivity.class.getName();
 
     private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
@@ -60,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         initUI();
 
-        sendBroadcast(new Intent("com.shtaigaway.apphunt.action.ENABLE_NOTIFICATIONS"));
+        sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
     }
 
     private void initUI() {
@@ -90,17 +92,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
             if (!ConnectivityUtils.isNetworkAvailable(context)) {
                 if (fragment == null)  {
-                    Bundle extras = new Bundle();
-                    extras.putString(Constants.KEY_NOTIFICATION, getString(R.string.notification_no_internet));
-                    NotificationFragment notificationFragment = new NotificationFragment();
-                    extras.putBoolean(Constants.KEY_SHOW_SETTINGS, true);
-                    notificationFragment.setArguments(extras);
-
-                    getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
-                            .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
-                            .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
-                            .commit();
+                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true);
                 }
             } else {
                 if (fragment != null) {
@@ -199,12 +191,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
             @Override
             public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-                Log.e("Activity", String.format("Error: %s", error.toString()));
+                Log.e(TAG, String.format("Error: %s", error.toString()));
             }
 
             @Override
             public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-                Log.i("Activity", "Success!");
+                Log.i(TAG, "Success!");
             }
         });
     }

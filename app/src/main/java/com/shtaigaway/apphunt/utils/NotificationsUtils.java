@@ -4,12 +4,19 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
+import com.shtaigaway.apphunt.R;
+import com.shtaigaway.apphunt.api.models.Notification;
 import com.shtaigaway.apphunt.services.DailyNotificationService;
+import com.shtaigaway.apphunt.ui.fragments.NotificationFragment;
 
 import java.util.Calendar;
 
 public class NotificationsUtils {
+
+    private static final String TAG = Notification.class.getName();
 
     public static void setupDailyNotificationService(Context ctx) {
         Intent intent = new Intent(ctx, DailyNotificationService.class);
@@ -48,4 +55,17 @@ public class NotificationsUtils {
         SharedPreferencesHelper.setPreference(ctx, Constants.IS_DAILY_NOTIFICATION_ENABLED, false);
     }
 
+    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction) {
+        Bundle extras = new Bundle();
+        extras.putString(Constants.KEY_NOTIFICATION, message);
+        extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
+        NotificationFragment notificationFragment = new NotificationFragment();
+        notificationFragment.setArguments(extras);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                .commit();
+    }
 }

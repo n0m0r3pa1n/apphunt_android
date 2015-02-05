@@ -9,8 +9,7 @@ import java.util.List;
 
 
 public class InstalledPackagesUtils {
-    private static final String TAG =  "InstalledPackages";
-
+    private static final String TAG =  InstalledPackagesUtils.class.getName();
 
     public static List<ApplicationInfo> installedPackages(PackageManager packageManager) {
         List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();
@@ -20,7 +19,8 @@ public class InstalledPackagesUtils {
 
             for (ApplicationInfo applicationInfo : packages) {
                 if (!isSystemPackage(applicationInfo)) {
-                    installedPackages.add(applicationInfo);
+                    if (!applicationInfo.packageName.equals(Constants.PACKAGE_NAME))
+                        installedPackages.add(applicationInfo);
                 }
             }
         } catch (Exception e) {

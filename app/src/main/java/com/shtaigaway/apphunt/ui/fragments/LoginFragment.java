@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +32,13 @@ import java.util.Arrays;
 
 public class LoginFragment extends BaseFragment {
 
-    private static final String TAG = "LoginFragment";
+    private static final String TAG = LoginFragment.class.getName();
 
     private View view;
 
     private UiLifecycleHelper uiHelper;
 
-    private Activity activity;
+    private ActionBarActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class LoginFragment extends BaseFragment {
             setTitle(R.string.title_login);
         }
 
-        uiHelper = new UiLifecycleHelper(getActivity(), callback);
+        uiHelper = new UiLifecycleHelper(activity, callback);
         uiHelper.onCreate(savedInstanceState);
     }
 
@@ -67,7 +68,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (!enter) {
-            return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_top);
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_out_top);
         }
 
         return super.onCreateAnimation(transit, enter, nextAnim);
@@ -108,7 +109,7 @@ public class LoginFragment extends BaseFragment {
             FacebookUtils.onLogout(activity);
         }
 
-        getActivity().supportInvalidateOptionsMenu();
+        activity.supportInvalidateOptionsMenu();
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -122,7 +123,7 @@ public class LoginFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = activity;
+        this.activity = (ActionBarActivity) activity;
     }
 
 

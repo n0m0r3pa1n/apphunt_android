@@ -192,11 +192,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     getApps();
                 }
             }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("failure", "failure");
-            }
         });
     }
 

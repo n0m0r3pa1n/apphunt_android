@@ -3,6 +3,7 @@ package com.shtaigaway.apphunt.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,13 @@ import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
 
 public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
+    private static final String TAG = SettingsFragment.class.getName();
+
     private View view;
     private RelativeLayout settingsLayout;
     private ToggleButton notifications;
-    private Activity activity;
+    private ActionBarActivity activity;
     private Button dismissBtn;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
-            Animation enterAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in);
+            Animation enterAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_in);
             enterAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -78,7 +80,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
             return enterAnim;
         } else {
-            Animation outAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out);;
+            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);;
 
             settingsLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
@@ -90,23 +92,24 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked) {
-            NotificationsUtils.setupDailyNotificationService(getActivity());
+            NotificationsUtils.setupDailyNotificationService(activity);
         } else {
-            NotificationsUtils.disableDailyNotificationsService(getActivity());
+            NotificationsUtils.disableDailyNotificationsService(activity);
         }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
+
+        this.activity = (ActionBarActivity) activity;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dismiss:
-                getActivity().getSupportFragmentManager().popBackStack();
+                activity.getSupportFragmentManager().popBackStack();
                 break;
         }
     }
