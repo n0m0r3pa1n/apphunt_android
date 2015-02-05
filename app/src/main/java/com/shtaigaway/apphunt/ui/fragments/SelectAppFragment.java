@@ -54,8 +54,6 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
         initUI();
 
-        SmartRate.show("MainActivity#onCreate");
-
         return view;
     }
 
