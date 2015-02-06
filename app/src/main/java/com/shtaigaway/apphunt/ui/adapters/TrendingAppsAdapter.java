@@ -24,6 +24,7 @@ import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.App;
 import com.shtaigaway.apphunt.api.models.AppsList;
 import com.shtaigaway.apphunt.api.models.Vote;
+import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.listview_items.AppItem;
 import com.shtaigaway.apphunt.ui.listview_items.Item;
 import com.shtaigaway.apphunt.ui.listview_items.MoreAppsItem;
@@ -144,9 +145,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());
                                     v.setBackgroundResource(R.drawable.btn_down_vote);
+                                    SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
                                 }
                             });
                         }
+
                     } else {
                         FacebookUtils.showLoginFragment(ctx);
                     }
@@ -193,7 +196,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 calendar.add(Calendar.DATE, -1);
                 if (appsList.getTotalCount() > 0) {
                     notifyAdapter(appsList);
-                    if(!success) {
+                    if (!success) {
                         getApps();
                         success = true;
                     }
@@ -210,7 +213,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         yesterday.add(Calendar.DATE, -1);
         if (dateFormat.format(today.getTime()).equals(appsList.getDate())) {
             items.add(new SeparatorItem(ctx.getString(R.string.list_view_header_today)));
-        } else if(dateFormat.format(yesterday.getTime()).equals(appsList.getDate())) {
+        } else if (dateFormat.format(yesterday.getTime()).equals(appsList.getDate())) {
             items.add(new SeparatorItem(ctx.getString(R.string.list_view_header_yesterday)));
         } else {
             items.add(new SeparatorItem(appsList.getDate()));
@@ -236,30 +239,30 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
                 date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                ArrayList<Item> items = new ArrayList<>();
+                    @Override
+                    public void success(AppsList appsList, Response response) {
+                        ArrayList<Item> items = new ArrayList<>();
 
-                if (appsList.getTotalCount() > 0) {
-                    items.add(new SeparatorItem(appsList.getDate()));
+                        if (appsList.getTotalCount() > 0) {
+                            items.add(new SeparatorItem(appsList.getDate()));
 
-                    for (App app : appsList.getApps()) {
-                        items.add(new AppItem(app));
+                            for (App app : appsList.getApps()) {
+                                items.add(new AppItem(app));
+                            }
+
+                            if (appsList.haveMoreApps())
+                                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
+
+                            addItems(items);
+                        } else if (noAppsDays < 5) {
+                            getAppsForNextDate();
+                            ++noAppsDays;
+                        } else {
+                            LoadersUtils.hideBottomLoader((Activity) ctx);
+                            noAppsDays = 0;
+                        }
                     }
-
-                    if (appsList.haveMoreApps())
-                        items.add(new MoreAppsItem(1, 5, appsList.getDate()));
-
-                    addItems(items);
-                } else if (noAppsDays < 5) {
-                    getAppsForNextDate();
-                    ++noAppsDays;
-                } else {
-                    LoadersUtils.hideBottomLoader((Activity) ctx);
-                    noAppsDays = 0;
-                }
-            }
-        });
+                });
     }
 
     public void addItems(ArrayList<Item> items) {
@@ -274,26 +277,26 @@ public class TrendingAppsAdapter extends BaseAdapter {
         final MoreAppsItem item = (MoreAppsItem) getItem(position);
         AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
                 item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                if (!appsList.haveMoreApps()) {
-                    items.remove(position);
-                } else {
-                   item.setPage(item.getNextPage());
-                }
+                    @Override
+                    public void success(AppsList appsList, Response response) {
+                        if (!appsList.haveMoreApps()) {
+                            items.remove(position);
+                        } else {
+                            item.setPage(item.getNextPage());
+                        }
 
-                ArrayList<AppItem> newItems = new ArrayList<>();
+                        ArrayList<AppItem> newItems = new ArrayList<>();
 
-                for (App app : appsList.getApps()) {
-                    newItems.add(new AppItem(app));
-                }
+                        for (App app : appsList.getApps()) {
+                            newItems.add(new AppItem(app));
+                        }
 
-                items.addAll(position, newItems);
+                        items.addAll(position, newItems);
 
-                notifyDataSetChanged();
-                listView.smoothScrollToPosition(position + newItems.size());
-            }
-        });
+                        notifyDataSetChanged();
+                        listView.smoothScrollToPosition(position + newItems.size());
+                    }
+                });
     }
 
     public void resetAdapter() {

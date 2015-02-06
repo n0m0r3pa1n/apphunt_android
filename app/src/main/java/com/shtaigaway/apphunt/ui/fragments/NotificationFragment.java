@@ -122,7 +122,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
                     }
                 } else if (showRating) {
                     activity.getSupportFragmentManager().popBackStack();
-                    SmartRate.show(String.format("%s#dismiss#onClick", TAG));
+                    SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
                 } else {
                     activity.getSupportFragmentManager().popBackStack();
                 }
