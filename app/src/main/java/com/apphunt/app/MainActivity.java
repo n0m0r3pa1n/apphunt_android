@@ -266,11 +266,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-        if(firstTime) {
-            firstTime = false;
-        } else {
+//        if(firstTime) {
+//            firstTime = false;
+//        } else {
             trendingAppsAdapter.resetAdapter();
-        }
+//        }
 
         while (getSupportFragmentManager().getBackStackEntryCount() > 0){
             getSupportFragmentManager().popBackStackImmediate();

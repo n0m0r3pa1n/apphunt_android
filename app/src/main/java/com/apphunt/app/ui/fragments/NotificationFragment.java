@@ -73,6 +73,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
         if (showSettingsBtn) {
             settingsBtn = (Button) view.findViewById(R.id.open_settings);
+            settingsBtn.setVisibility(View.VISIBLE);
             settingsBtn.setOnClickListener(this);
         }
     }
