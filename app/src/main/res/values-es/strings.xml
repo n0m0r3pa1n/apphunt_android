@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_select_app">Seleccionar Aplicaciún</string>
+    <string name="title_save_app">Guardar Aplicaciún</string>
+    <string name="title_login">Iniciar Sesiún</string>
+    <string name="title_logout">Cerrar Sesiúnt</string>
+    <string name="title_settings">Ajustes</string>
+    <string name="title_notification">Notificaciún</string>
+
+    <!-- Menu -->
+    <string name="action_settings">Ajustes</string>
+    <string name="action_login">Iniciar Sesiún</string>
+    <string name="action_logout">Cerrar Sesiún</string>
+    <string name="action_share">Compartir</string>
+
+    <string name="hint_description">Ingresar una descripciún corta (m·x. 100)</string>
+    <string name="hint_please_enter_description">Por favor, introduzca una descripción corta ...</string>
+    <string name="save">Guardar</string>
+
+    <!-- Notifications -->
+    <string name="notification_no_internet">Permitir la conexiún a Internet para continuar</string>
+    <string name="not_available_in_the_store">La aplicaciún no est· disponible en Google Play</string>
+    <string name="saved_successfully">Aplicaciún adicionada exitosamente</string>
+
+    <string name="list_view_header_yesterday">Ayer</string>
+    <string name="list_view_header_today">Hoy</string>
+    <string name="dismiss">DESESTIMAR</string>
+    <string name="settings">AJUSTES</string>
+
+    <!-- SmartRate -->
+    <string name="smartrate_yes">SI</string>
+    <string name="smartrate_no">NO</string>
+    <string name="smartrate_rate_dialog_message">¿Le gustaría calificar en Google Play?</string>
+    <string name="smartrate_do_you_love">¿Le gusta?</string>
+    <string name="smartrate_feedback_input_hint"> Cuéntenos lo que piensa</string>
+    <string name="smartrate_feedback_title">Realimentación</string>
+    <string name="smartrate_send">ENVIAR</string>
+    <string name="smartrate_rate_dialog_title">Calificación</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Por favor introduzca una retroalimentación ...</string>
+
+    <string name="enable_notifications">Activar notificaciones</string>
+    <string name="enable_sounds">Activar sonidos</string>
+</resources>

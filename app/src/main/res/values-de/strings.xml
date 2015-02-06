@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_select_app">App auswählen</string>
+    <string name="title_save_app">App speichern</string>
+    <string name="title_login">Login</string>
+    <string name="title_logout">Logout</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_notification">Benachrichtigung</string>
+
+    <!-- Menu -->
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_login">Login</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_share">Teilen</string>
+
+    <string name="hint_description">Gib eine kurze Beschreibung ein (max 100)</string>
+    <string name="hint_please_enter_description">Bitte geben Sie eine kurze Beschreibung...</string>
+    <string name="save">Speichern</string>
+
+    <!-- Notifications -->
+    <string name="notification_no_internet">Verbinde dich mit dem Internet um fortzufahren</string>
+    <string name="not_available_in_the_store">Diese App ist bei Google Play nicht verfügbar</string>
+    <string name="saved_successfully">App erfolgreich hinzugefügt</string>
+
+    <string name="list_view_header_yesterday">Gestern</string>
+    <string name="list_view_header_today">Heute</string>
+    <string name="dismiss">ENTLASSEN</string>
+    <string name="settings">EINSTELLUNGEN</string>
+
+    <!-- SmartRate -->
+    <string name="smartrate_yes">JA</string>
+    <string name="smartrate_no">NEIN</string>
+    <string name="smartrate_rate_dialog_message">Willst du %s\non Google Play bewerten?</string>
+    <string name="smartrate_do_you_love">Magst du %s?</string>
+    <string name="smartrate_feedback_input_hint">Teile uns mit, was du denkst</string>
+    <string name="smartrate_feedback_title">Rückkopplung</string>
+    <string name="smartrate_send">SENDEN</string>
+    <string name="smartrate_rate_dialog_title">Bewerten</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Bitte geben Sie eine Rückmeldung...</string>
+
+    <string name="enable_notifications">Benachrichtigungen aktivieren</string>
+    <string name="enable_sounds">Geräusche aktivieren</string>
+</resources>
+
