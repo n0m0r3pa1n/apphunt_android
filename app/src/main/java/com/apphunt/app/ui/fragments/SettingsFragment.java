@@ -18,6 +18,9 @@ import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.TrackingEvents;
+
+import it.appspice.android.AppSpice;
 
 public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
@@ -87,7 +90,8 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
             return enterAnim;
         } else {
-            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);;
+            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
+            ;
 
             settingsLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
@@ -100,7 +104,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.notification_toggle:
-                if(isChecked) {
+                if (isChecked) {
                     NotificationsUtils.setupDailyNotificationService(activity);
                 } else {
                     NotificationsUtils.disableDailyNotificationsService(activity);
@@ -108,6 +112,9 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                 break;
 
             case R.id.sounds_toggle:
+                if (!isChecked) {
+                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserDisabledSound);
+                }
                 SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
                 break;
         }

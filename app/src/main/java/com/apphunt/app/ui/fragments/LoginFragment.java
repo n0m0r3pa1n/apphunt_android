@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -29,6 +30,8 @@ import com.apphunt.app.utils.FacebookUtils;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+
+import it.appspice.android.AppSpice;
 
 public class LoginFragment extends BaseFragment {
 
@@ -95,6 +98,7 @@ public class LoginFragment extends BaseFragment {
                                 @Override
                                 public void success(User user, retrofit.client.Response response) {
                                     if (user != null) {
+                                        AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserLoggedIn);
                                         FacebookUtils.onLogin(activity, user);
                                     }
                                 }
@@ -106,6 +110,7 @@ public class LoginFragment extends BaseFragment {
                 }
             }).executeAsync();
         } else if (state.isClosed()) {
+            AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserLoggedOut);
             FacebookUtils.onLogout(activity);
         }
 

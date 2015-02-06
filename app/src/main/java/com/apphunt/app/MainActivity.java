@@ -36,9 +36,12 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
+
+import it.appspice.android.AppSpice;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
@@ -56,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
@@ -66,7 +70,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
-        SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
     }
 
     private void initUI() {
@@ -175,6 +178,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     uiHelper.trackPendingDialogCall(shareDialog.present());
+                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserSharedAppHunt);
                 }
                 break;
 

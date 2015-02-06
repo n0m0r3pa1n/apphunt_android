@@ -33,12 +33,14 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.TrackingEvents;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
@@ -131,6 +133,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
+                                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserDownVoted);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(false);
                                     ((Button) v).setText(vote.getVotes());
@@ -141,6 +144,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
+                                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserVoted);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());

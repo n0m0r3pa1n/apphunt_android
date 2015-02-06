@@ -6,15 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 
-import com.facebook.Session;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.models.User;
 import com.apphunt.app.ui.fragments.LoginFragment;
+import com.facebook.Session;
 
 public class FacebookUtils {
-
-    private static final String TAG = FacebookUtils.class.getName();
 
     public static void showLoginFragment(Context ctx) {
         Fragment loginFragment = new LoginFragment();
