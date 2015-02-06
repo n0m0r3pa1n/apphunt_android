@@ -2,6 +2,7 @@ package com.shtaigaway.apphunt.ui.fragments;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -18,10 +19,10 @@ import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
 import com.shtaigaway.apphunt.api.models.Packages;
-import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.adapters.UserAppsAdapter;
 import com.shtaigaway.apphunt.ui.interfaces.OnAppSelectedListener;
 import com.shtaigaway.apphunt.utils.InstalledPackagesUtils;
+import com.shtaigaway.apphunt.utils.LoadersUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,35 +59,12 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initUI() {
+        LoadersUtils.showCenterLoader(activity, R.drawable.loader_white);
+
         gridView = (GridView) view.findViewById(R.id.gv_apps_list);
         gridView.setOnItemClickListener(this);
 
-        Packages packages = new Packages();
-        data = InstalledPackagesUtils.installedPackages(activity.getPackageManager());
-        for (ApplicationInfo info : data) {
-            packages.getPackages().add(info.packageName);
-        }
-
-        AppHuntApiClient.getClient().filterApps(packages, new Callback<Packages>() {
-            @Override
-            public void success(Packages packages, Response response) {
-
-                if (response.getStatus() == 200 && packages != null) {
-                    List<ApplicationInfo> tempData = new ArrayList<>();
-
-                    for (ApplicationInfo info : data) {
-                        for (String packageName : packages.getAvailablePackages()) {
-                            if (info.packageName.equals(packageName)) {
-                                tempData.add(info);
-                            }
-                        }
-                    }
-
-                    userAppsAdapter = new UserAppsAdapter(activity, tempData);
-                    gridView.setAdapter(userAppsAdapter);
-                }
-            }
-        });
+        new LoadInstalledApps().execute();
     }
 
     @Override
@@ -112,7 +90,58 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         callback.onAppSelected(userAppsAdapter.getItem(position));
+    }
+
+    private class LoadInstalledApps extends AsyncTask<Void, Void, Packages> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Packages doInBackground(Void... params) {
+            Packages packages = new Packages();
+            data = InstalledPackagesUtils.installedPackages(activity.getPackageManager());
+            for (ApplicationInfo info : data) {
+                packages.getPackages().add(info.packageName);
+            }
+
+            return packages;
+        }
+
+        @Override
+        protected void onPostExecute(Packages packages) {
+            super.onPostExecute(packages);
+
+            AppHuntApiClient.getClient().filterApps(packages, new Callback<Packages>() {
+                @Override
+                public void success(Packages packages, Response response) {
+
+                    if (response.getStatus() == 200 && packages != null) {
+                        List<ApplicationInfo> tempData = new ArrayList<>();
+
+                        for (ApplicationInfo info : data) {
+                            for (String packageName : packages.getAvailablePackages()) {
+                                if (info.packageName.equals(packageName)) {
+                                    tempData.add(info);
+                                }
+                            }
+                        }
+
+                        LoadersUtils.hideCenterLoader(activity);
+                        userAppsAdapter = new UserAppsAdapter(activity, tempData);
+                        gridView.setAdapter(userAppsAdapter);
+                    }
+                }
+            });
+        }
     }
 }

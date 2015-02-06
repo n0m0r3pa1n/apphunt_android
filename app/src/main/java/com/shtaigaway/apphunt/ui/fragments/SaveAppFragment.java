@@ -1,8 +1,10 @@
 package com.shtaigaway.apphunt.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -102,13 +104,15 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                         public void failure(RetrofitError error) {
                             activity.getSupportFragmentManager().popBackStack();
 
-                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, true);
+                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
 
                         }
                     });
                 } else {
                     desc.setHint(R.string.hint_please_enter_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(300);
                 }
                 break;
         }

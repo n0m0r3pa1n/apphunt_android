@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.shtaigaway.apphunt"
-        minSdkVersion 10
+        minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -26,7 +26,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'com.koushikdutta.ion:ion:2.0.4'
     compile 'com.shamanland:fab:0.0.5'
     compile 'com.facebook.android:facebook-android-sdk:3.22.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'com.squareup.picasso:picasso:2.4.0'
 }

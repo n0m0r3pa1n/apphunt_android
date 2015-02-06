@@ -1,9 +1,12 @@
 package com.shtaigaway.apphunt.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.koushikdutta.ion.Ion;
 import com.shtaigaway.apphunt.R;
 import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.api.Callback;
@@ -28,13 +30,14 @@ import com.shtaigaway.apphunt.ui.listview_items.MoreAppsItem;
 import com.shtaigaway.apphunt.ui.listview_items.SeparatorItem;
 import com.shtaigaway.apphunt.utils.Constants;
 import com.shtaigaway.apphunt.utils.FacebookUtils;
+import com.shtaigaway.apphunt.utils.LoadersUtils;
 import com.shtaigaway.apphunt.utils.SharedPreferencesHelper;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
@@ -50,6 +53,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private Calendar today = Calendar.getInstance();
 
     private boolean success = false;
+    private int noAppsDays = 0;
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -58,6 +62,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public TrendingAppsAdapter(Context ctx, ListView listView) {
         this.ctx = ctx;
         this.listView = listView;
+
+        LoadersUtils.showCenterLoader((Activity) ctx);
+
         getApps();
     }
 
@@ -107,8 +114,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue() && viewHolderItem != null) {
             final App app = ((AppItem) getItem(position)).getData();
 
-            Ion.with(viewHolderItem.icon)
-                    .load(app.getIcon());
+            int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
+            Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
 
             viewHolderItem.title.setText(app.getName());
             viewHolderItem.description.setText(app.getDescription());
@@ -143,6 +150,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     } else {
                         FacebookUtils.showLoginFragment(ctx);
                     }
+
+                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
             });
             viewHolderItem.vote.setBackgroundResource((app.isHasVoted() ? R.drawable.btn_down_vote : R.drawable.btn_vote));
@@ -215,9 +224,12 @@ public class TrendingAppsAdapter extends BaseAdapter {
             items.add(new MoreAppsItem(1, 5, appsList.getDate()));
 
         notifyDataSetChanged();
+        LoadersUtils.hideCenterLoader((Activity) ctx);
     }
 
     public void getAppsForNextDate() {
+        LoadersUtils.showBottomLoader((Activity) ctx);
+
         calendar.add(Calendar.DATE, -1);
 
         String date = dateFormat.format(calendar.getTime());
@@ -239,6 +251,12 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         items.add(new MoreAppsItem(1, 5, appsList.getDate()));
 
                     addItems(items);
+                } else if (noAppsDays < 5) {
+                    getAppsForNextDate();
+                    ++noAppsDays;
+                } else {
+                    LoadersUtils.hideBottomLoader((Activity) ctx);
+                    noAppsDays = 0;
                 }
             }
         });
@@ -248,6 +266,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         this.items.addAll(items);
         notifyDataSetChanged();
 
+        LoadersUtils.hideBottomLoader((Activity) ctx);
         listView.smoothScrollToPosition(this.items.size() - 3);
     }
 

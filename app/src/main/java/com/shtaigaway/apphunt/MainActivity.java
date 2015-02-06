@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
+import com.shtaigaway.apphunt.api.AppHuntApiClient;
 import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.adapters.TrendingAppsAdapter;
 import com.shtaigaway.apphunt.ui.fragments.SaveAppFragment;
@@ -124,6 +126,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 } else {
                     FacebookUtils.showLoginFragment(this);
                 }
+
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 break;
         }
     }
@@ -305,5 +309,14 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onDestroy();
         if (uiHelper != null)
             uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (AppHuntApiClient.getExecutorService().isShutdown()) {
+            AppHuntApiClient.getExecutorService().shutdown();
+        }
     }
 }

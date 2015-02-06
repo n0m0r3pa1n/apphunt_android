@@ -1,8 +1,10 @@
 package com.shtaigaway.apphunt.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -22,6 +24,7 @@ import com.shtaigaway.apphunt.smart_rate.SmartRate;
 import com.shtaigaway.apphunt.ui.interfaces.OnNetworkStateChange;
 import com.shtaigaway.apphunt.utils.ConnectivityUtils;
 import com.shtaigaway.apphunt.utils.Constants;
+import com.shtaigaway.apphunt.utils.SoundsUtils;
 
 public class NotificationFragment extends BaseFragment implements OnClickListener {
 
@@ -80,6 +83,9 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
             enterAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    SoundsUtils.getInstance(activity).playSound(R.raw.notification_2);
+                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(300);
                 }
 
                 @Override
