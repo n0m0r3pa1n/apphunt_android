@@ -64,6 +64,8 @@
     <dimen name="select_apps_app_name_height">40dp</dimen>
     <dimen name="select_apps_app_name_padding">5dp</dimen>
     <dimen name="select_apps_app_name_text">12sp</dimen>
+    <dimen name="settings_layout_height">180dp</dimen>
+    <dimen name="settings_item_margin">15dp</dimen>
 
 
 </resources>

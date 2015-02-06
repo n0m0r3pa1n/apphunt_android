@@ -101,7 +101,7 @@ public class SharedPreferencesHelper {
      */
     public static Boolean getBooleanPreference(Context ctx, String key) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        if(key.equals(Constants.IS_DAILY_NOTIFICATION_ENABLED)) {
+        if(key.equals(Constants.IS_DAILY_NOTIFICATION_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
             return sharedPreferences.getBoolean(key, true);
         } else {
             return sharedPreferences.getBoolean(key, false);

@@ -83,7 +83,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
             enterAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    SoundsUtils.getInstance(activity).playSound(R.raw.notification_2);
+                    SoundsUtils.playSound(activity, R.raw.notification_2);
                     Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
                 }

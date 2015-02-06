@@ -42,7 +42,7 @@ public class LoadersUtils {
 
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
             bottomLoader.setBackgroundResource(R.drawable.loader_white);
-            SoundsUtils.getInstance(activity).playSound(R.raw.notification_1);
+            SoundsUtils.playSound(activity, R.raw.notification_1);
             bottomLoaderLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -52,7 +52,7 @@ public class LoadersUtils {
         GifImageView bottomLoader = (GifImageView) activity.findViewById(R.id.more_loader);
 
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
-            SoundsUtils.getInstance(activity).playSound(R.raw.notification_1);
+            SoundsUtils.playSound(activity, R.raw.notification_1);
             bottomLoaderLayout.setVisibility(View.VISIBLE);
             bottomLoader.setBackgroundResource(resDrawable);
         }

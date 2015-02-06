@@ -26,6 +26,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     private View view;
     private RelativeLayout settingsLayout;
     private ToggleButton notifications;
+    private ToggleButton sounds;
     private ActionBarActivity activity;
     private Button dismissBtn;
 
@@ -49,9 +50,15 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
     private void initUI() {
         settingsLayout = (RelativeLayout) view.findViewById(R.id.settings);
+
         notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
         notifications.setOnCheckedChangeListener(this);
         notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_DAILY_NOTIFICATION_ENABLED));
+
+        sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
+        sounds.setOnCheckedChangeListener(this);
+        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_SOUNDS_ENABLED));
+
         dismissBtn = (Button) view.findViewById(R.id.dismiss);
         dismissBtn.setOnClickListener(this);
     }
@@ -91,10 +98,18 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked) {
-            NotificationsUtils.setupDailyNotificationService(activity);
-        } else {
-            NotificationsUtils.disableDailyNotificationsService(activity);
+        switch (buttonView.getId()) {
+            case R.id.notification_toggle:
+                if(isChecked) {
+                    NotificationsUtils.setupDailyNotificationService(activity);
+                } else {
+                    NotificationsUtils.disableDailyNotificationsService(activity);
+                }
+                break;
+
+            case R.id.sounds_toggle:
+                SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
+                break;
         }
     }
 

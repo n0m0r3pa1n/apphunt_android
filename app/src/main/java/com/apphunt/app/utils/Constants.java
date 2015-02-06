@@ -16,7 +16,9 @@ public class Constants {
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
 
+    // Settings
     public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
+    public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
 
     // Fragment TAGs
     public static final String TAG_LOGIN_FRAGMENT = "login_fragment";
