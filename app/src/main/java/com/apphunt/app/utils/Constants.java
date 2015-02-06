@@ -32,8 +32,14 @@ public class Constants {
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
+
+    // Smart Rate
     public static final String SMART_RATE_LOCATION_APP_SAVED = "SaveApp#appSaved";
     public static final String SMART_RATE_LOCATION_APP_VOTED = "TrendingApps#appVoted";
+    public static final String APP_SPICE_APP_ID = "54d4a61f6275f00300b032d9";
+
+    // Sharing
+    public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);

@@ -30,4 +30,5 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:3.22.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile project(":appspice")
 }

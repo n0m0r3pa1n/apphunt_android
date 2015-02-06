@@ -22,9 +22,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.FacebookDialog;
-import com.shamanland.fab.FloatingActionButton;
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -39,6 +36,9 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
+import com.shamanland.fab.FloatingActionButton;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
@@ -49,7 +49,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private FloatingActionButton addAppButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
-    private boolean firstTime = true;
 
     private UiLifecycleHelper uiHelper;
 
@@ -67,7 +66,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
-        SmartRate.init(this, "", "");
+        SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
     }
 
     private void initUI() {
@@ -96,7 +95,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
 
             if (!ConnectivityUtils.isNetworkAvailable(context)) {
-                if (fragment == null)  {
+                if (fragment == null) {
                     NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
                 addAppButton.setVisibility(View.INVISIBLE);
@@ -134,8 +133,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       MenuInflater inflater = getMenuInflater();
-       inflater.inflate(R.menu.menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
 
         if (FacebookUtils.isSessionOpen()) {
             menu.findItem(R.id.action_login).setVisible(false);
@@ -169,14 +168,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_share:
-                if (FacebookDialog.canPresentShareDialog (getApplicationContext(),
+                if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
                         FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
                     FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
                             .setName("AppHunt")
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
-                            .setLink("http://theapphunt.com").build();
+                            .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     uiHelper.trackPendingDialogCall(shareDialog.present());
-                } else {
                 }
                 break;
 
@@ -266,13 +264,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-//        if(firstTime) {
-//            firstTime = false;
-//        } else {
-            trendingAppsAdapter.resetAdapter();
-//        }
+        trendingAppsAdapter.resetAdapter();
 
-        while (getSupportFragmentManager().getBackStackEntryCount() > 0){
+        while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStackImmediate();
         }
     }

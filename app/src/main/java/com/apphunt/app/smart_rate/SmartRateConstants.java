@@ -15,4 +15,9 @@ public class SmartRateConstants {
     public static final String TAG_LOVE_FRAGMENT = LoveFragment.class.getName();
     public static final String TAG_RATE_FRAGMENT = RateFragment.class.getName();
     public static final String TAG_FEEDBACK_FRAGMENT = FeedbackFragment.class.getName();
+    public static final String SMART_RATE_DIALOG_VARIABLE = "rateDialog";
+    public static final String SMART_RATE_VARIABLE_APP_RUN_KEY = "smart_rate_variable_app_run";
+    public static final String SMART_RATE_VARIABLE_SHOW_LOCATION_KEY = "smart_rate_variable_show_location";
+    public static final String SMART_RATE_VARIABLE_SHOW_LOCATION = "showLocation";
+    public static final String SMART_RATE_VARIABLE_APP_RUN = "appRun";
 }

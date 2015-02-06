@@ -1,10 +1,13 @@
 package com.apphunt.app.smart_rate;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.apphunt.app.R;
@@ -15,20 +18,37 @@ import com.apphunt.app.smart_rate.fragments.RateFragment;
 import com.apphunt.app.smart_rate.listeners.OnNoClickListener;
 import com.apphunt.app.smart_rate.listeners.OnSendClickListener;
 import com.apphunt.app.smart_rate.listeners.OnYesClickListener;
-import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.smart_rate.variables.RateDialogVariable;
+import com.apphunt.app.utils.Constants;
 
-public class SmartRate {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import it.appspice.android.AppSpice;
+import it.appspice.android.api.models.VariableProperties;
+import it.appspice.android.listeners.OnVariablePropertiesListener;
+import it.appspice.android.listeners.UserTrackingListener;
+
+public class SmartRate implements UserTrackingListener {
     private static SmartRate instance;
+    private final SharedPreferences preferences;
+    private static RateDialogVariable rateDialogVariable;
     private ActionBarActivity activity;
-    private String appName;
-    private int showRun;
-    private String showLocation;
-    private long appRun;
+    private static long appRun;
 
-    public SmartRate(ActionBarActivity activity, String appSpiceId, String appId) {
+    private SmartRate(ActionBarActivity activity, String appSpiceId, String appId) {
         this.activity = activity;
-        this.appName = getApplicationName(activity);
+        this.preferences = activity.getSharedPreferences(SmartRateConstants.SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
         incrementAppRuns();
+        rateDialogVariable = new RateDialogVariable();
+        rateDialogVariable.appRun = preferences.getLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN_KEY, 0);
+        rateDialogVariable.showLocation = preferences.getString(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION_KEY, "");
+
+        if (rateDialogVariable.isUndefined()) {
+            AppSpice.setUserTrackingPreferenceListener(this);
+        }
+        AppSpice.init(activity, appSpiceId, appId);
     }
 
     public static void init(ActionBarActivity activity, String appSpiceId, String appId) {
@@ -36,20 +56,20 @@ public class SmartRate {
     }
 
     private void incrementAppRuns() {
-        appRun = SharedPreferencesHelper.getLongPreference(activity, SmartRateConstants.SMART_RATE_APP_RUNS_KEY);
+        appRun = preferences.getLong(SmartRateConstants.SMART_RATE_APP_RUNS_KEY, 0);
         appRun++;
-        SharedPreferencesHelper.setPreference(activity, SmartRateConstants.SMART_RATE_APP_RUNS_KEY, appRun);
-    }
-
-    private static String getApplicationName(ActionBarActivity activity) {
-        return activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(SmartRateConstants.SMART_RATE_APP_RUNS_KEY, appRun);
+        editor.apply();
     }
 
     public static void show(String showLocation) {
-        instance.showLoveFragment(showLocation);
+        if (appRun == rateDialogVariable.appRun && showLocation.equals(rateDialogVariable.showLocation)) {
+            instance.showLoveFragment();
+        }
     }
 
-    private void showLoveFragment(String showLocation) {
+    private void showLoveFragment() {
         LoveFragment loveFragment = new LoveFragment();
         loveFragment.setOnYesListener(onLoveYesClickListener);
         loveFragment.setOnNoClickListener(onLoveNoClickListener);
@@ -64,6 +84,7 @@ public class SmartRate {
     private OnYesClickListener onLoveYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(BaseRateFragment fragment, View view) {
+            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "love.yes.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             RateFragment rateFragment = new RateFragment();
@@ -81,6 +102,7 @@ public class SmartRate {
     private OnNoClickListener onLoveNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(BaseRateFragment fragment, View view) {
+            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "love.no.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             FeedbackFragment feedbackFragment = new FeedbackFragment();
@@ -97,6 +119,7 @@ public class SmartRate {
     private OnYesClickListener onRateYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(BaseRateFragment fragment, View view) {
+            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "rate.yes.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + activity.getPackageName()));
@@ -108,6 +131,7 @@ public class SmartRate {
     private OnNoClickListener onRateNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(BaseRateFragment fragment, View view) {
+            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "rate.no.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     };
@@ -115,7 +139,37 @@ public class SmartRate {
     private OnSendClickListener onSendClickListener = new OnSendClickListener() {
         @Override
         public void onSendClick(BaseRateFragment fragment, String feedbackMessage) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("message", feedbackMessage);
+            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "feedback.send.click", data);
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     };
+
+    @Override
+    public void onTrackingEnabled() {
+        AppSpice.getVariableProperties(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, new OnVariablePropertiesListener() {
+            @Override
+            public void onPropertiesReady(VariableProperties variableProperties) {
+                rateDialogVariable.appRun = variableProperties.getLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN);
+                rateDialogVariable.showLocation = variableProperties.get(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION);
+                saveRateDialogVariable();
+            }
+        });
+    }
+
+    private void saveRateDialogVariable() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN_KEY, rateDialogVariable.appRun);
+        editor.putString(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION_KEY, rateDialogVariable.showLocation);
+        editor.apply();
+    }
+
+    @Override
+    public void onTrackingDisabled() {
+        Random random = new Random();
+        rateDialogVariable.appRun = random.nextInt(8) + 3;
+        rateDialogVariable.showLocation = Constants.SMART_RATE_LOCATION_APP_SAVED;
+        saveRateDialogVariable();
+    }
 }
