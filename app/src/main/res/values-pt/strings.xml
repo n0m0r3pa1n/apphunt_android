@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">Selecionar Aplicativo</string>
     <string name="title_save_app">Salvar Aplicativo</string>
     <string name="title_login">Login</string>
@@ -16,6 +17,8 @@
     <string name="hint_description">Adicione uma curta descrição(máximo 100)</string>
     <string name="hint_please_enter_description">Por favor, insira uma breve descrição ...</string>
     <string name="save">Salvar</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- Notifications -->
     <string name="notification_no_internet">Ative sua conexão com a Internet para continuar</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">Selecteer App</string>
     <string name="title_save_app">App opslaan</string>
     <string name="title_login">Inloggen</string>
@@ -16,6 +17,8 @@
     <string name="hint_description">Voer korte beschrijving in (max 100)</string>
     <string name="hint_please_enter_description">Geef een korte beschrijving ...</string>
     <string name="save">Opslaan</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- Notifications -->
     <string name="notification_no_internet">Schakel je internetverbinding in om door te gaan</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">एप्प चुनें</string>
     <string name="title_save_app">एप्प सहेजें</string>
     <string name="title_login">लॉग इन</string>
@@ -17,6 +18,8 @@
     <string name="hint_please_enter_description">एक संक्षिप्त विवरण दर्ज करें ...</string>
     <string name="save">सहेजें</string>
 
+    <string name="facebook_app_id">874212442599315</string>
+
     <!-- Notifications -->
     <string name="notification_no_internet">जारी रखने के लिए अपना इंटरनेट कनेक्शन सक्षम करें</string>
     <string name="not_available_in_the_store">एप्प गूगल प्ले पर उपलब्ध नहीं है</string>
@@ -29,6 +32,7 @@
 
     <!-- SmartRate -->
     <string name="smartrate_yes">हाँ</string>
+    <string name="smartrate_no">नहीं</string>
     <string name="smartrate_rate_dialog_message">क्या आप गूगल प्ले पर %s\n को रेट करना चाहेंगे?</string>
     <string name="smartrate_do_you_love">क्या आप %s को प्यार करते हो?</string>
     <string name="smartrate_feedback_input_hint">आप क्या सोचते हैं हमें बतायें</string>

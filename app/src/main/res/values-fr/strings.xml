@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">Sélectionner l\'Appli</string>
     <string name="title_save_app">Enregistrer l\'Appli</string>
     <string name="title_login">Connexion</string>
@@ -25,6 +26,8 @@
     <string name="list_view_header_today">Aujourd\'hui</string>
     <string name="dismiss">REJETER</string>
     <string name="settings">PARAMÈTRES</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- SmartRate -->
     <string name="smartrate_yes">Oui</string>

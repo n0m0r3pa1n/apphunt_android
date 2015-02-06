@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">Seleccionar Aplicaciún</string>
     <string name="title_save_app">Guardar Aplicaciún</string>
     <string name="title_login">Iniciar Sesiún</string>
     <string name="title_logout">Cerrar Sesiúnt</string>
     <string name="title_settings">Ajustes</string>
     <string name="title_notification">Notificaciún</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- Menu -->
     <string name="action_settings">Ajustes</string>

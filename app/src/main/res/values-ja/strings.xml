@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">アプリの選択</string>
     <string name="title_save_app">アプリの保存</string>
     <string name="title_login">ログイン</string>
@@ -16,6 +17,8 @@
     <string name="hint_description">概要を入力（最大100文字）</string>
     <string name="hint_please_enter_description">短い説明を入力してください...</string>
     <string name="save">保存</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- Notifications -->
     <string name="notification_no_internet">インターネット接続を許可して続行</string>

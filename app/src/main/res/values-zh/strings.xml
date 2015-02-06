@@ -28,6 +28,8 @@
     <string name="dismiss">解雇</string>
     <string name="settings">设置</string>
 
+    <string name="facebook_app_id">874212442599315</string>
+
     <!-- SmartRate -->
     <string name="smartrate_yes">是</string>
     <string name="smartrate_no">否</string>

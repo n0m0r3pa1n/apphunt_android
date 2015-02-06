@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">App Hunt</string>
     <string name="title_select_app">앱 선택</string>
     <string name="title_save_app">앱 저장</string>
     <string name="title_login">로그인</string>
@@ -16,6 +17,8 @@
     <string name="hint_description">짧은 설명 (최대 100자)를 입력하세요</string>
     <string name="hint_please_enter_description">간단한 설명을 입력하십시오 ...</string>
     <string name="save">저장</string>
+
+    <string name="facebook_app_id">874212442599315</string>
 
     <!-- Notifications -->
     <string name="notification_no_internet">진행을 위해 인터넷을 연결하세요</string>
