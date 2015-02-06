@@ -30,6 +30,8 @@ public class Constants {
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.shtaigaway.apphunt.action.ENABLE_NOTIFICATIONS";
+    public static final String SMART_RATE_LOCATION_APP_SAVED = "SaveApp#appSaved";
+    public static final String SMART_RATE_LOCATION_APP_VOTED = "TrendingApps#appVoted";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);
