@@ -128,7 +128,7 @@ public class AppSpice {
 
     public static void getVariableProperties(String variable, final OnVariablePropertiesListener onVariablePropertiesListener) {
         if (isUserTrackingEnabled) {
-            AppSpiceApiClient.getClient().getVariable(variable, appId, new Callback<Variable>() {
+            AppSpiceApiClient.getClient().getVariable(variable, advertisingId, appId, new Callback<Variable>() {
                 @Override
                 public void success(Variable variable, Response response) {
                     VariableProperties variableProperties = VariableProperties.fromVariable(variable);

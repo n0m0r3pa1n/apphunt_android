@@ -21,5 +21,5 @@ public interface AppSpiceApi {
     void createEvent(@Body Event event, Callback<Response> cb);
 
     @GET("/variables/{variable}")
-    void getVariable(@Path("variable") String variable, @Query("appId") String appId, Callback<Variable> callback);
+    void getVariable(@Path("variable") String variable, @Query("userId") String userId, @Query("appId") String appId, Callback<Variable> callback);
 }
