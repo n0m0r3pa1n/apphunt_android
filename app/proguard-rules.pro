@@ -94,6 +94,7 @@
 # More additional options from stackoverflow
 # --------------------------------------------------------------------------------------------------
 -keep class com.apphunt.app.**{ *; }
+-keep class it.appspice.android.**{ *; }
 -keep class com.squareup.okhttp.**{ *; }
 -keep class java.nio.**{ *; }
 -keep class com.google.inject.** { *; }
