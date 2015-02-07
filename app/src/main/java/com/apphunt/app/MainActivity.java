@@ -37,6 +37,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.TrackingEvents;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
@@ -58,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 

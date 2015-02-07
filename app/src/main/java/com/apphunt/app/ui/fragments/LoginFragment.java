@@ -63,7 +63,7 @@ public class LoginFragment extends BaseFragment {
 
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
-        authButton.setReadPermissions(Arrays.asList("user_about_me", "email"));
+        authButton.setReadPermissions(Arrays.asList("email"));
 
         return view;
     }

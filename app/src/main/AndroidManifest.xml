@@ -39,6 +39,7 @@
                 <action android:name="com.apphunt.app.action.ENABLE_NOTIFICATIONS" />
             </intent-filter>
         </receiver>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="cc2ee6dbf972b1c1f0b6f70e17ac06b19636cbc0"/>
     </application>
 
 </manifest>
