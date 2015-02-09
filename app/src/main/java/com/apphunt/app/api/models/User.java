@@ -10,6 +10,7 @@ public class User {
     private String email;
     private String profilePicture;
     private String loginType;
+    private String locale;
 
     public String getId() {
         return id;
@@ -51,6 +52,14 @@ public class User {
         this.loginType = loginType;
     }
 
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -59,6 +68,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", profilePicture='" + profilePicture + '\'' +
                 ", loginType='" + loginType + '\'' +
+                ", locale='" + locale + '\'' +
                 '}';
     }
 }

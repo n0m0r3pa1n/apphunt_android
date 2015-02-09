@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.models.Notification;
@@ -56,17 +57,22 @@ public class NotificationsUtils {
     }
 
     public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
-        Bundle extras = new Bundle();
-        extras.putString(Constants.KEY_NOTIFICATION, message);
-        extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
-        extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
-        NotificationFragment notificationFragment = new NotificationFragment();
-        notificationFragment.setArguments(extras);
+        try {
+            Bundle extras = new Bundle();
+            extras.putString(Constants.KEY_NOTIFICATION, message);
+            extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
+            extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
+            NotificationFragment notificationFragment = new NotificationFragment();
+            notificationFragment.setArguments(extras);
 
-        activity.getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
-                .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
-                .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
-                .commit();
+            activity.getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)
+                    .add(R.id.container, notificationFragment, Constants.TAG_NOTIFICATION_FRAGMENT)
+                    .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
+                    .commit();
+        } catch (Exception e) {
+            Log.e(TAG, "Cannot present the notification fragment.\nError: " + e.getMessage());
+        }
+
     }
 }

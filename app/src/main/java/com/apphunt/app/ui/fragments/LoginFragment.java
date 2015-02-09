@@ -30,6 +30,7 @@ import com.apphunt.app.utils.FacebookUtils;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import it.appspice.android.AppSpice;
 
@@ -88,11 +89,14 @@ public class LoginFragment extends BaseFragment {
                     if (response != null) {
                         User user = new User();
                         try {
+                            Locale locale = getResources().getConfiguration().locale;
+
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
                             user.setEmail(jsonObject.getString("email"));
                             user.setName(jsonObject.getString("name"));
                             user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
                             user.setLoginType(Constants.LOGIN_TYPE);
+                            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
 
                             AppHuntApiClient.getClient().createUser(user, new Callback<User>() {
                                 @Override
