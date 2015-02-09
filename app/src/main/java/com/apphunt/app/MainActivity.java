@@ -54,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private FloatingActionButton addAppButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
+    private boolean firstStart = true;
 
     private UiLifecycleHelper uiHelper;
 
@@ -272,7 +273,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-        trendingAppsAdapter.resetAdapter();
+        if (!firstStart) {
+            trendingAppsAdapter.resetAdapter();
+        } else {
+            firstStart = false;
+        }
 
         while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStackImmediate();
