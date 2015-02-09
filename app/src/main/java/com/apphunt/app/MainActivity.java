@@ -25,6 +25,7 @@ import android.widget.ListView;
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
+import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
@@ -72,6 +73,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         FacebookUtils.onStart(this);
 
         initUI();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, new InviteFragment(), "InviteFragment")
+               .commit();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
