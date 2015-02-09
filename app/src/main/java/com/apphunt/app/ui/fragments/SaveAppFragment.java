@@ -84,8 +84,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.save:
-                if (desc.getText() != null && desc.getText().length() > 0) {
-
+                if (desc.getText() != null && desc.getText().length() >=50) {
                     SaveApp app = new SaveApp();
                     app.setDescription(desc.getText().toString());
                     app.setPackageName(data.packageName);
@@ -112,7 +111,13 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                         }
                     });
-                } else {
+                } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
+                    desc.setText(null);
+                    desc.setHint(R.string.hint_short_description);
+                    desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(300);
+                } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
                     desc.setHint(R.string.hint_please_enter_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
                     Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
