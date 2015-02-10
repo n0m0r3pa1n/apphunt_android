@@ -46,8 +46,6 @@ import com.crashlytics.android.Crashlytics;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
-import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.shamanland.fab.FloatingActionButton;
 
@@ -85,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
-        showTutorial();
+//        showTutorial();
     }
 
     private void initUI() {

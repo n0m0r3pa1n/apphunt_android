@@ -2,9 +2,11 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.Constants;
 import com.facebook.widget.FacebookDialog;
+
+import java.io.File;
 
 public class InviteFragment extends BaseFragment implements View.OnClickListener{
     private Activity activity;
@@ -92,6 +97,8 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
             public void onAnimationEnd(Animation animation) {
                 appHuntLogo.setVisibility(View.GONE);
                 showText();
+
+                ActionBarUtils.getInstance().showActionBar((ActionBarActivity) activity);
             }
 
             @Override
@@ -135,6 +142,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+        ActionBarUtils.getInstance().hideActionBar((ActionBarActivity) activity);
     }
 
     @Override
@@ -156,21 +164,22 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
                 .setFragment(this);
 
         // If the Facebook app is installed and we can present the share dialog
-        if (builder.canPresent()) {
-            FacebookDialog dialog = builder.build();
-            dialog.present();
-            // Enable button or other UI to initiate launch of the Message Dialog
-        }  else {
+//        if (builder.canPresent()) {
+//            FacebookDialog dialog = builder.build();
+//            dialog.present();
+//            // Enable button or other UI to initiate launch of the Message Dialog
+//        }  else {
             Log.d("INVITE", "FAILED");
             share();
             // Disable button or other UI for Message Dialog
-        }
+//        }
     }
 
     private void share() {
         Intent sendIntent = new Intent();
         sendIntent.setType("text/plain");
         sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setData(Uri.parse(String.format("android.resource://%s/%d", activity.getPackageName(), R.drawable.ic_launcher)));
         sendIntent.putExtra(android.content.Intent.EXTRA_TITLE, "Om nom nom");
         sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Om nom nom");
         sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");

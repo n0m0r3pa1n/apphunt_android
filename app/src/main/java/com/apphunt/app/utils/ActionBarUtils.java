@@ -52,4 +52,12 @@ public class ActionBarUtils {
             ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(false);
         }
     }
+
+    public void showActionBar(ActionBarActivity activity) {
+        activity.getSupportActionBar().show();
+    }
+
+    public void hideActionBar(ActionBarActivity activity) {
+        activity.getSupportActionBar().hide();
+    }
 }
