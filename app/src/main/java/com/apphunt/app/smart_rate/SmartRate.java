@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.apphunt.app.R;
@@ -26,11 +25,8 @@ import java.util.Map;
 import java.util.Random;
 
 import it.appspice.android.AppSpice;
-import it.appspice.android.api.models.VariableProperties;
-import it.appspice.android.listeners.OnVariablePropertiesListener;
-import it.appspice.android.listeners.UserTrackingListener;
 
-public class SmartRate implements UserTrackingListener {
+public class SmartRate {
     private static SmartRate instance;
     private final SharedPreferences preferences;
     private static RateDialogVariable rateDialogVariable;
@@ -44,15 +40,19 @@ public class SmartRate implements UserTrackingListener {
         rateDialogVariable = new RateDialogVariable();
         rateDialogVariable.appRun = preferences.getLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN_KEY, 0);
         rateDialogVariable.showLocation = preferences.getString(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION_KEY, "");
-
-        if (rateDialogVariable.isUndefined()) {
-            AppSpice.setUserTrackingPreferenceListener(this);
-        }
         AppSpice.init(activity, appSpiceId, appId);
+        if (rateDialogVariable.isUndefined()) {
+            AppSpice.getVariable(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, RateDialogVariable.class);
+        }
     }
 
     public static void init(ActionBarActivity activity, String appSpiceId, String appId) {
         instance = new SmartRate(activity, appSpiceId, appId);
+    }
+
+    public static void setRateDialogVariable(RateDialogVariable rateDialogVariable) {
+        SmartRate.rateDialogVariable = rateDialogVariable;
+        SmartRate.instance.saveRateDialogVariable();
     }
 
     private void incrementAppRuns() {
@@ -146,18 +146,6 @@ public class SmartRate implements UserTrackingListener {
         }
     };
 
-    @Override
-    public void onTrackingEnabled() {
-        AppSpice.getVariableProperties(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, new OnVariablePropertiesListener() {
-            @Override
-            public void onPropertiesReady(VariableProperties variableProperties) {
-                rateDialogVariable.appRun = variableProperties.getLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN);
-                rateDialogVariable.showLocation = variableProperties.get(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION);
-                saveRateDialogVariable();
-            }
-        });
-    }
-
     private void saveRateDialogVariable() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN_KEY, rateDialogVariable.appRun);
@@ -165,11 +153,12 @@ public class SmartRate implements UserTrackingListener {
         editor.apply();
     }
 
-    @Override
-    public void onTrackingDisabled() {
-        Random random = new Random();
-        rateDialogVariable.appRun = random.nextInt(8) + 3;
-        rateDialogVariable.showLocation = Constants.SMART_RATE_LOCATION_APP_SAVED;
-        saveRateDialogVariable();
+    public static void onError() {
+        if (rateDialogVariable.isUndefined()) {
+            Random random = new Random();
+            rateDialogVariable.appRun = random.nextInt(8) + 3;
+            rateDialogVariable.showLocation = Constants.SMART_RATE_LOCATION_APP_SAVED;
+            instance.saveRateDialogVariable();
+        }
     }
 }

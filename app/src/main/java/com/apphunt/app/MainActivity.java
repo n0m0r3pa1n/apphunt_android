@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.smart_rate.SmartRate;
+import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
@@ -48,8 +49,12 @@ import com.facebook.widget.FacebookDialog;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.shamanland.fab.FloatingActionButton;
+import com.squareup.otto.Subscribe;
+
+import java.util.Random;
 
 import it.appspice.android.AppSpice;
+import it.appspice.android.api.errors.AppSpiceError;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
@@ -79,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         initUI();
         getSupportFragmentManager().beginTransaction().add(R.id.container, new InviteFragment(), "InviteFragment")
-               .commit();
+                .commit();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
@@ -321,7 +326,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onResume();
         if (uiHelper != null)
             uiHelper.onResume();
-
+        AppSpice.onResume(this);
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
@@ -339,7 +344,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onPause();
         if (uiHelper != null)
             uiHelper.onPause();
-
+        AppSpice.onPause(this);
         unregisterReceiver(networkChangeReceiver);
     }
 
@@ -357,5 +362,27 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         if (AppHuntApiClient.getExecutorService().isShutdown()) {
             AppHuntApiClient.getExecutorService().shutdown();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppSpice.onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppSpice.onStop(this);
+    }
+
+    @Subscribe
+    public void onRateDialogVariableReady(RateDialogVariable rateDialogVariable) {
+        SmartRate.setRateDialogVariable(rateDialogVariable);
+    }
+
+    @Subscribe
+    public void onAppSpiceError(AppSpiceError error) {
+        SmartRate.onError();
     }
 }

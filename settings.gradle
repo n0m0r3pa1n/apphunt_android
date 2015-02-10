@@ -1,1 +1,1 @@
-include ':app', ':appspice'
+include ':app'
