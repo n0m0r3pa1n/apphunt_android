@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SmartRate -->
+    <string name="smartrate_yes">Да</string>
+    <string name="smartrate_no">Не</string>
+    <string name="smartrate_rate_dialog_message">Искаш ли да рейтнеш %s\nв Google Play?</string>
+    <string name="smartrate_do_you_love">Обичаш ли %s?</string>
+    <string name="smartrate_feedback_input_hint">Кажи ни какво мислиш</string>
+    <string name="smartrate_feedback_title">Мнение</string>
+    <string name="smartrate_send">Изпрати</string>
+    <string name="smartrate_rate_dialog_title">Оцени</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Моля, напишете вашето мнение...</string>
+</resources>
+

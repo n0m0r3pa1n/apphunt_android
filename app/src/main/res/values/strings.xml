@@ -43,4 +43,5 @@
 
     <string name="enable_notifications">Enable notifications</string>
     <string name="enable_sounds">Enable sounds</string>
+    <string name="title_invite">Invite friends</string>
 </resources>
