@@ -40,6 +40,7 @@ public class Constants {
 
     // Sharing
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
+    public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);
