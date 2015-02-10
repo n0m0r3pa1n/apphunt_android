@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ <!-- SmartRate -->
+    <string name="smartrate_yes">हाँ</string>
+    <string name="smartrate_no">नहीं</string>
+    <string name="smartrate_rate_dialog_message">क्या आप गूगल प्ले पर %s\n को रेट करना चाहेंगे?</string>
+    <string name="smartrate_do_you_love">क्या आप %s को प्यार करते हो?</string>
+    <string name="smartrate_feedback_input_hint">आप क्या सोचते हैं हमें बतायें</string>
+    <string name="smartrate_feedback_title">प्रतिक्रिया</string>
+    <string name="smartrate_send">भेजें</string>
+    <string name="smartrate_rate_dialog_title">रेट करे</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">एक राय दर्ज करें ...</string>
+</resources>
+

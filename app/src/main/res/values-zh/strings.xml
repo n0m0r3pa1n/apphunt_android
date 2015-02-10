@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <!-- SmartRate -->
+    <string name="smartrate_yes">是</string>
+    <string name="smartrate_no">否</string>
+    <string name="smartrate_rate_dialog_message">你可以评价%s吗?</string>
+    <string name="smartrate_do_you_love">你喜欢%s吗?</string>
+    <string name="smartrate_feedback_input_hint">请将你的想法告诉我们</string>
+    <string name="smartrate_feedback_title">信息反馈</string>
+    <string name="smartrate_send">发送</string>
+    <string name="smartrate_rate_dialog_title">评价</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">请输入反馈...</string>
+</resources>

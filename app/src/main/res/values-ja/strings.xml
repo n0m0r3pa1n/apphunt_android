@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- SmartRate -->
+    <string name="smartrate_yes">はい</string>
+    <string name="smartrate_no">いいえ</string>
+    <string name="smartrate_rate_dialog_message">Google Playで%s\nを評価しますか？</string>
+    <string name="smartrate_do_you_love">%sを気に入りましたか？</string>
+    <string name="smartrate_feedback_input_hint">ご意見をお聞かせください</string>
+    <string name="smartrate_feedback_title">フィードバック</string>
+    <string name="smartrate_send">送信</string>
+    <string name="smartrate_rate_dialog_title">を評価</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">フィードバックを入力してください...</string>
+</resources>
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SmartRate -->
+    <string name="smartrate_yes">Ja</string>
+    <string name="smartrate_no">Nej</string>
+    <string name="smartrate_rate_dialog_message">Skulle du vilja betygsätta  %s\npå Google Play?</string>
+    <string name="smartrate_do_you_love">Tycker du om %s?</string>
+    <string name="smartrate_feedback_input_hint">Berätta vad du tycker för oss</string>
+    <string name="smartrate_feedback_title">Återkoppling</string>
+    <string name="smartrate_send">Skicka</string>
+    <string name="smartrate_rate_dialog_title">Betygsätt</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Berätta vad du tycker för oss...</string>
+</resources>
+

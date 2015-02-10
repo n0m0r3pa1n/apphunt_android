@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- SmartRate -->
+    <string name="smartrate_yes">네</string>
+    <string name="smartrate_no">아니오</string>
+    <string name="smartrate_rate_dialog_message">구글 플레이에서 %s\n평가하시겠습니까?</string>
+    <string name="smartrate_do_you_love"> %s 좋아하십니까?</string>
+    <string name="smartrate_feedback_input_hint">당신의 생각을 말씀해주세요</string>
+    <string name="smartrate_feedback_title">피드백</string>
+    <string name="smartrate_send">전송</string>
+    <string name="smartrate_rate_dialog_title">평가</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">의견을 입력하십시오 ...</string>
+</resources>
+

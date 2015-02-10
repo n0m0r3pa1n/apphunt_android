@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <!-- SmartRate -->
+    <string name="smartrate_yes">SI</string>
+    <string name="smartrate_no">NO</string>
+    <string name="smartrate_rate_dialog_message">¿Le gustaría calificar en Google Play?</string>
+    <string name="smartrate_do_you_love">¿Le gusta?</string>
+    <string name="smartrate_feedback_input_hint"> Cuéntenos lo que piensa</string>
+    <string name="smartrate_feedback_title">Realimentación</string>
+    <string name="smartrate_send">ENVIAR</string>
+    <string name="smartrate_rate_dialog_title">Calificación</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Por favor introduzca una retroalimentación ...</string>
+</resources>
