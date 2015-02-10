@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
@@ -26,7 +26,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invite, container, false);
-        Button share = (Button) view.findViewById(R.id.share);
+        TextView share = (TextView) view.findViewById(R.id.share);
         share.setOnClickListener(this);
 
         return view;

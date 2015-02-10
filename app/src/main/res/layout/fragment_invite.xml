@@ -4,11 +4,35 @@
     android:background="@color/bg_primary"
     android:clickable="true"
     android:layout_height="match_parent">
-    <Button
-        android:text="Share"
-        android:id="@+id/share"
+    <TextView
+        android:id="@+id/get_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Get Invite"
+        android:layout_marginTop="50dp"
+        android:textSize="28sp"
+        android:textColor="@android:color/white"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_below="@id/get_invite"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/invite_background"/>
+
+    <TextView
+        android:text="SHARE"
+        android:id="@+id/share"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
         />
 
 </RelativeLayout>
