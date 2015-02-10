@@ -6,4 +6,25 @@
         <item name="elevation">@dimen/ab_elevation</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="CustomShowcaseTheme2" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#F523a2eb</item>
+        <item name="sv_showcaseColor">#23a2eb</item>
+        <item name="sv_buttonText">Next</item>
+        <item name="sv_buttonBackgroundColor">#F023a2eb</item>
+        <item name="sv_buttonForegroundColor">#F023a2eb</item>
+        <item name="sv_detailTextColor">#FFFFFF</item>
+        <item name="sv_titleTextAppearance">@style/ShowcaseTitle</item>
+        <item name="sv_detailTextAppearance">@style/ShowCaseDetails</item>
+    </style>
+
+    <style name="ShowcaseTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="ShowCaseDetails" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

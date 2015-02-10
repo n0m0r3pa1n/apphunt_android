@@ -67,5 +67,9 @@
     <dimen name="settings_layout_height">180dp</dimen>
     <dimen name="settings_item_margin">15dp</dimen>
 
+    <!-- ShowcaseView -->
+    <dimen name="showcase_btn_bottom_right_margin_right">20dp</dimen>
+    <dimen name="showcase_btn_bottom_right_margin_bottom">50dp</dimen>
+    <dimen name="showcase_btn_text">15sp</dimen>
 
 </resources>
