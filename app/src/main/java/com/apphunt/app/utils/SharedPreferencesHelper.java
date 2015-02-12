@@ -94,6 +94,19 @@ public class SharedPreferencesHelper {
     }
 
     /**
+     * Extracting an Int value from the SharedPreferences Manager.
+     *
+     * @param ctx application's context.
+     * @param key preference's key.
+     * @param defaultValue default return value
+     */
+    public static int getIntPreference(Context ctx, String key, int defaultValue) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+
+        return sharedPreferences.getInt(key, defaultValue);
+    }
+
+    /**
      * Extracting a Boolean value from the SharedPreferences Manager.
      *
      * @param ctx application's context.

@@ -72,4 +72,7 @@
     <dimen name="showcase_btn_bottom_right_margin_bottom">50dp</dimen>
     <dimen name="showcase_btn_text">15sp</dimen>
 
+    <!-- Invite -->
+    <dimen name="dimen_invite_text">20sp</dimen>
+
 </resources>

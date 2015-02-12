@@ -2,9 +2,7 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -13,148 +11,117 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.facebook.widget.FacebookDialog;
 
-import java.io.File;
-
 public class InviteFragment extends BaseFragment implements View.OnClickListener{
-    private Activity activity;
-    private Animation alphaOut, alphaIn;
+    private static final String TAG = InviteFragment.class.getSimpleName();
+    private static final int REQUEST_CODE_SHARE_INTENT = 5;
 
-    private static final int ANIM_LONG_DURATION = 1400;
-    private static final int ANIM_SHORT_DURATION = 500;
+    private ActionBarActivity activity;
+    private RelativeLayout inviteLayout;
 
-    private ImageView appHuntLogo;
-    private TextView share, getInvite;
+    private Button shareBtn;
+    private TextView inviteText;
+
+    private int sharesLeft;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_invite);
+        activity.setTitle(getString(R.string.title_invite));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invite, container, false);
-        TextView share = (TextView) view.findViewById(R.id.share);
-        share.setOnClickListener(this);
+        inviteLayout = (RelativeLayout) view.findViewById(R.id.invite);
+        shareBtn = (Button) view.findViewById(R.id.share);
+        shareBtn.setOnClickListener(this);
 
-        initUI(view);
-        initAnimations();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                appHuntLogo.startAnimation(alphaIn);
-            }
-        }, 400);
+        sharesLeft = SharedPreferencesHelper.getIntPreference(activity, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT);
+        inviteText = (TextView) view.findViewById(R.id.invite_text);
+        inviteText.setText(String.format(getString(R.string.invite_text), sharesLeft));
 
         return view;
     }
 
-    private void initUI(View view) {
-        appHuntLogo = (ImageView) view.findViewById(R.id.apphunt_background);
-        share = (TextView) view.findViewById(R.id.share);
-        getInvite = (TextView) view.findViewById(R.id.get_invite);
-    }
-
-    private void initAnimations() {
-        alphaIn = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in);
-        alphaIn.setDuration(ANIM_LONG_DURATION);
-        alphaOut = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out);
-        alphaOut.setDuration(ANIM_LONG_DURATION);
-
-        alphaIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                appHuntLogo.setVisibility(View.VISIBLE);
-                appHuntLogo.startAnimation(alphaOut);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        alphaOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                appHuntLogo.setVisibility(View.GONE);
-                showText();
-
-                ActionBarUtils.getInstance().showActionBar((ActionBarActivity) activity);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
-
-    private void showText() {
-        clearAnimations();
-        alphaIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                getInvite.setVisibility(View.VISIBLE);
-                share.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        getInvite.startAnimation(alphaIn);
-        share.startAnimation(alphaIn);
-    }
-
-    private void clearAnimations() {
-        alphaIn.setAnimationListener(null);
-        alphaOut.setAnimationListener(null);
-        alphaIn.setDuration(ANIM_SHORT_DURATION);
-        alphaOut.setDuration(ANIM_SHORT_DURATION);
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
-        ActionBarUtils.getInstance().hideActionBar((ActionBarActivity) activity);
+        this.activity = (ActionBarActivity)activity;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch(v.getId()) {
             case R.id.share:
-                shareWithMessenger();
+                share();
                 break;
         }
     }
 
-    private void shareWithMessenger() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "REQ: " + requestCode);
+        Log.d(TAG, "RES: " + resultCode);
+        if(resultCode == Activity.RESULT_OK || requestCode == REQUEST_CODE_SHARE_INTENT) {
+            updateSharesLeft();
+            if(sharesLeft <= 0) {
+                activity.getSupportFragmentManager().beginTransaction().hide(this).commit();
+                activity.setTitle(getString(R.string.app_name));
+            } else {
+                inviteText.setText(String.format(getString(R.string.invite_text), sharesLeft));
+            }
+        }
+    }
+
+    private void updateSharesLeft() {
+        sharesLeft--;
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_INVITE_SHARE, sharesLeft);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            Animation enterAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_in);
+            enterAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
+                            R.anim.slide_in_top_notification);
+                    notificationEnterAnim.setFillAfter(true);
+                    inviteLayout.startAnimation(notificationEnterAnim);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+
+            return enterAnim;
+        } else {
+            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
+            inviteLayout.startAnimation(AnimationUtils.loadAnimation(activity,
+                    R.anim.slide_out_top));
+
+            return outAnim;
+        }
+    }
+
+    private void share() {
         FacebookDialog.MessageDialogBuilder builder = new FacebookDialog.MessageDialogBuilder(getActivity())
                 .setLink(Constants.GOOGLE_PLAY_APP_URL)
                 .setName("AppHunt")
@@ -163,27 +130,26 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
                 .setDescription("Allow your users to message links from your app using the Android SDK.")
                 .setFragment(this);
 
-        // If the Facebook app is installed and we can present the share dialog
-//        if (builder.canPresent()) {
-//            FacebookDialog dialog = builder.build();
-//            dialog.present();
-//            // Enable button or other UI to initiate launch of the Message Dialog
-//        }  else {
-            Log.d("INVITE", "FAILED");
-            share();
+        // If the Facebook app is installed and we can present the shareWithIntent dialog
+        if (builder.canPresent()) {
+            FacebookDialog dialog = builder.build();
+            dialog.present();
+            // Enable button or other UI to initiate launch of the Message Dialog
+        }  else {
+            shareWithIntent();
             // Disable button or other UI for Message Dialog
-//        }
+       }
     }
 
-    private void share() {
+    private void shareWithIntent() {
         Intent sendIntent = new Intent();
         sendIntent.setType("text/plain");
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.setData(Uri.parse(String.format("android.resource://%s/%d", activity.getPackageName(), R.drawable.ic_launcher)));
-        sendIntent.putExtra(android.content.Intent.EXTRA_TITLE, "Om nom nom");
-        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Om nom nom");
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject_text));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "AppHunt - find the best new apps, every day! \n" + Constants.GOOGLE_PLAY_APP_URL);
 
-        startActivity(Intent.createChooser(sendIntent, "Om nom nom"));
+
+        startActivityForResult(Intent.createChooser(sendIntent, "Share AppHunt"), REQUEST_CODE_SHARE_INTENT);
     }
 }

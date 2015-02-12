@@ -17,13 +17,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.smart_rate.SmartRate;
@@ -40,13 +37,10 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
-import com.appnext.appnextsdk.AppnextTrack;
-import com.crashlytics.android.Crashlytics;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.shamanland.fab.FloatingActionButton;
 
 import it.appspice.android.AppSpice;
@@ -56,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     private static final String TAG = MainActivity.class.getName();
 
-    private ListView trendingAppsList;
+   private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
@@ -67,23 +61,34 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
-        AppnextTrack.track(this);
+        //Crashlytics.start(this);
+        //AppnextTrack.track(this);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
+        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.WAS_SPLASH_SHOWN)) {
+            SharedPreferencesHelper.setPreference(this, Constants.WAS_SPLASH_SHOWN, true);
+
+            Intent splashIntent = new Intent(this, SplashActivity.class);
+            startActivity(splashIntent);
+        }
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
 
         FacebookUtils.onStart(this);
-
         initUI();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new InviteFragment(), "InviteFragment")
-               .commit();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+        if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+            showInviteFragment();
+        }
+    }
 
-//        showTutorial();
+    private void showInviteFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                .add(R.id.container, new InviteFragment(), Constants.TAG_INVITE_FRAGMENT)
+                .commit();
     }
 
     private void initUI() {
@@ -104,29 +109,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 ActionBarUtils.getInstance().configActionBar(MainActivity.this);
             }
         });
-    }
-
-    private void showTutorial() {
-        ViewTarget target = new ViewTarget(R.id.trending_list, this);
-        ShowcaseView showcaseView = new ShowcaseView.Builder(this)
-                .setTarget(target)
-                .setContentTitle("Trending Apps")
-                .setContentText("Very Cool! Mue buen!")
-                .setStyle(R.style.CustomShowcaseTheme2)
-                .hideOnTouchOutside()
-                .build();
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-        int bottomMargin = (int) getResources().getDimension(R.dimen.showcase_btn_bottom_right_margin_bottom);
-        int rightMargin = (int) getResources().getDimension(R.dimen.showcase_btn_bottom_right_margin_right);
-
-        params.setMargins(0, 0, rightMargin, bottomMargin);
-        showcaseView.setButtonPosition(params);
-        Button showCaseButton = (Button) showcaseView.findViewById(R.id.showcase_button);
-        showCaseButton.setBackgroundResource(android.R.color.transparent);
-        showCaseButton.setTextSize(getResources().getDimension(R.dimen.showcase_btn_text));
     }
 
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
@@ -307,12 +289,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public void onNetworkAvailable() {
         if (!firstStart) {
             trendingAppsAdapter.resetAdapter();
+
+            while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
         } else {
             firstStart = false;
-        }
-
-        while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStackImmediate();
         }
     }
 
@@ -354,7 +336,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (AppHuntApiClient.getExecutorService().isShutdown()) {
+        if (AppHuntApiClient.getExecutorService() != null && !AppHuntApiClient.getExecutorService().isShutdown()) {
             AppHuntApiClient.getExecutorService().shutdown();
         }
     }

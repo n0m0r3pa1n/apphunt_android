@@ -12,6 +12,7 @@ public class Constants {
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
     public static final String KEY_SHOW_RATING = "show_rating";
+    public static final String KEY_INVITE_SHARE = "invite_count_left";
 
     public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
@@ -19,6 +20,7 @@ public class Constants {
     // Settings
     public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
+    public static final String WAS_SPLASH_SHOWN = "wasSplashShown";
 
     // Fragment TAGs
     public static final String TAG_LOGIN_FRAGMENT = "login_fragment";
@@ -26,9 +28,11 @@ public class Constants {
     public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
     public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
+    public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
+    public static final int REQUEST_SPLASH = 5;
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
@@ -41,6 +45,9 @@ public class Constants {
     // Sharing
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
+
+    // Invites
+    public static final int INVITE_SHARES_COUNT = 3;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);
