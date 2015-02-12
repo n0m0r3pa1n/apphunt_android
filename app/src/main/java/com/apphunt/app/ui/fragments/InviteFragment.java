@@ -138,19 +138,16 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
         FacebookDialog.MessageDialogBuilder builder = new FacebookDialog.MessageDialogBuilder(getActivity())
                 .setLink(Constants.BIT_LY_GOOGLE_PLAY_URL)
                 .setName("AppHunt")
-                .setCaption("Build great social apps that engage your friends.")
+                .setCaption("Your personal invite for AppHunt")
                 .setPicture(Constants.LAUNCHROCK_ICON)
-                .setDescription("Allow your users to message links from your app using the Android SDK.")
+                .setDescription("Find the best new apps, every day!")
                 .setFragment(this);
 
-        // If the Facebook app is installed and we can present the shareWithIntent dialog
         if (builder.canPresent()) {
             FacebookDialog dialog = builder.build();
             dialog.present();
-            // Enable button or other UI to initiate launch of the Message Dialog
         }  else {
             shareWithIntent();
-            // Disable button or other UI for Message Dialog
        }
     }
 
