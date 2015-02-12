@@ -58,6 +58,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
     private boolean firstStart = true;
+    
+    private Menu menu;
 
     private UiLifecycleHelper uiHelper;
 
@@ -168,7 +170,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             menu.findItem(R.id.action_login).setVisible(true);
             menu.findItem(R.id.action_logout).setVisible(false);
         }
-
+        
         return true;
     }
 

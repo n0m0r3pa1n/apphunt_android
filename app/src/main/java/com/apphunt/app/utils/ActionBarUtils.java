@@ -42,7 +42,7 @@ public class ActionBarUtils {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
             BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
-
+            
             ((ActionBarActivity) activity).getSupportActionBar().setTitle(fragment.getTitle());
             ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(true);
