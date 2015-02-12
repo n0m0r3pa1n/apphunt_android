@@ -9,6 +9,8 @@
 
     <color name="desc_bg">#1b90d4</color>
     <color name="desc_hint">#005c91</color>
+    
+    <color name="text_semi_shadow">#69000000</color>
 
     <color name="bg_semi_fragment">#B4000000</color>
 
