@@ -43,8 +43,9 @@
 
     <string name="enable_notifications">Enable notifications</string>
     <string name="enable_sounds">Enable sounds</string>
-    <string name="title_invite">Get Invite</string>
-    <string name="invite_text">Share AppHunt with %s friends</string>
+    <string name="title_invite">AppHunt is invite only</string>
+    <string name="invite_text">Share with %s friends to\nsign up for invite</string>
+    <string name="invite_one_text">Share with %s friend to\nsign up for invite</string>
     <string name="share_subject_text">Take a look at this great app :)</string>
     <string name="company">AppHunt Inc. 2015</string>
 </resources>

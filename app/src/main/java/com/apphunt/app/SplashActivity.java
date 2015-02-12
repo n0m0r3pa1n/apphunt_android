@@ -8,9 +8,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-/**
- * Created by nmp on 2/10/15.
- */
 public class SplashActivity extends Activity {
     private Animation alphaOut, alphaIn;
 

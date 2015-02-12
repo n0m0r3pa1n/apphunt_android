@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
@@ -84,8 +84,13 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
                 AppSpice.createEvent(TrackingEvents.UserReceivedInvite).track();
                 activity.getSupportFragmentManager().beginTransaction().hide(this).commit();
                 activity.setTitle(getString(R.string.app_name));
+                Toast.makeText(activity, "Sweet! You are now an app hunter :)", Toast.LENGTH_LONG).show();
             } else {
-                inviteText.setText(String.format(getString(R.string.invite_text), sharesLeft));
+                if(sharesLeft == 1) {
+                    inviteText.setText(String.format(getString(R.string.invite_one_text), sharesLeft));
+                } else {
+                    inviteText.setText(String.format(getString(R.string.invite_text), sharesLeft));
+                }
             }
         }
     }
@@ -131,7 +136,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     private void share() {
         AppSpice.createEvent(TrackingEvents.UserSharedForInvite).track();
         FacebookDialog.MessageDialogBuilder builder = new FacebookDialog.MessageDialogBuilder(getActivity())
-                .setLink(Constants.GOOGLE_PLAY_APP_URL)
+                .setLink(Constants.BIT_LY_GOOGLE_PLAY_URL)
                 .setName("AppHunt")
                 .setCaption("Build great social apps that engage your friends.")
                 .setPicture(Constants.LAUNCHROCK_ICON)
@@ -155,7 +160,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject_text));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "AppHunt - find the best new apps, every day! \n" + Constants.GOOGLE_PLAY_APP_URL);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "AppHunt - find the best new apps, every day! \n" + Constants.BIT_LY_GOOGLE_PLAY_URL);
 
 
         startActivityForResult(Intent.createChooser(sendIntent, "Share AppHunt"), REQUEST_CODE_SHARE_INTENT);

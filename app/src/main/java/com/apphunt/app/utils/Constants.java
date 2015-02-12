@@ -44,6 +44,7 @@ public class Constants {
 
     // Sharing
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
+    public static final String BIT_LY_GOOGLE_PLAY_URL = "http://bit.ly/1umy2AV";
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
 
     // Invites

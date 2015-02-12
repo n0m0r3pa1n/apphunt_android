@@ -5,7 +5,6 @@ package com.apphunt.app.utils;
  * on 2/6/15.
  */
 public interface TrackingEvents {
-    static String Namespace = "app.hunt";
     static String UserLoggedIn = "user.logged.in";
     static String UserLoggedOut = "user.logged.out";
     static String UserAddedApp = "user.added.app";

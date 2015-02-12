@@ -22,7 +22,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
-import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -40,6 +39,8 @@ import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.appnext.appnextsdk.AppnextTrack;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
@@ -66,18 +67,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Crashlytics.start(this);
-        //AppnextTrack.track(this);
+        Crashlytics.start(this);
+        AppnextTrack.track(this);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
-//        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.WAS_SPLASH_SHOWN)) {
-            SharedPreferencesHelper.setPreference(this, Constants.WAS_SPLASH_SHOWN, true);
-
-            Intent splashIntent = new Intent(this, SplashActivity.class);
-            startActivity(splashIntent);
-//        }
-        
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
 
@@ -87,6 +81,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         
         if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+            Intent splashIntent = new Intent(this, SplashActivity.class);
+            startActivity(splashIntent);
+
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
             showInviteFragment();
         }
