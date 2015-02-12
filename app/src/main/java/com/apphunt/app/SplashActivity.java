@@ -14,7 +14,7 @@ import android.widget.ImageView;
 public class SplashActivity extends Activity {
     private Animation alphaOut, alphaIn;
 
-    private static final int ANIM_LONG_DURATION = 500;
+    private static final int ANIM_LONG_DURATION = 800;
 
     private ImageView appHuntLogo;
     @Override
@@ -28,7 +28,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 appHuntLogo.startAnimation(alphaIn);
             }
-        }, 400);
+        }, 500);
 
     }
 

@@ -58,6 +58,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
     private boolean firstStart = true;
+    
+    private Menu menu;
 
     private UiLifecycleHelper uiHelper;
 
@@ -69,12 +71,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
-        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.WAS_SPLASH_SHOWN)) {
+//        if(!SharedPreferencesHelper.getBooleanPreference(this, Constants.WAS_SPLASH_SHOWN)) {
             SharedPreferencesHelper.setPreference(this, Constants.WAS_SPLASH_SHOWN, true);
 
             Intent splashIntent = new Intent(this, SplashActivity.class);
             startActivity(splashIntent);
-        }
+//        }
+        
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
 
@@ -82,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+        
         if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
             showInviteFragment();
@@ -169,7 +173,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             menu.findItem(R.id.action_login).setVisible(true);
             menu.findItem(R.id.action_logout).setVisible(false);
         }
-
+        
         return true;
     }
 
@@ -339,10 +343,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        if (AppHuntApiClient.getExecutorService() != null && !AppHuntApiClient.getExecutorService().isShutdown()) {
-            AppHuntApiClient.getExecutorService().shutdown();
-        }
     }
 
     @Override

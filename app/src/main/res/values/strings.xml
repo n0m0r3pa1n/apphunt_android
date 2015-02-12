@@ -46,4 +46,5 @@
     <string name="title_invite">Get Invite</string>
     <string name="invite_text">Share AppHunt with %s friends</string>
     <string name="share_subject_text">Take a look at this great app :)</string>
+    <string name="company">AppHunt Inc. 2015</string>
 </resources>

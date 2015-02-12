@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -39,6 +41,8 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity.setTitle(getString(R.string.title_invite));
+        
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -155,5 +159,11 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
 
 
         startActivityForResult(Intent.createChooser(sendIntent, "Share AppHunt"), REQUEST_CODE_SHARE_INTENT);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
