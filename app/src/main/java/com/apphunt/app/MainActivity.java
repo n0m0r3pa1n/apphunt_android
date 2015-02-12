@@ -340,10 +340,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        if (AppHuntApiClient.getExecutorService() != null && !AppHuntApiClient.getExecutorService().isShutdown()) {
-            AppHuntApiClient.getExecutorService().shutdown();
-        }
     }
 
     @Override
