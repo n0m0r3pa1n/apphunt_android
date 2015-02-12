@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation" >
     <string name="app_name">App Hunt</string>
     <string name="title_select_app">Select App</string>
     <string name="title_save_app">Save App</string>
