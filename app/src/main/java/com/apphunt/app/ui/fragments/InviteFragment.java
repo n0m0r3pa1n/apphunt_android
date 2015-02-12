@@ -18,7 +18,10 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.widget.FacebookDialog;
+
+import it.appspice.android.AppSpice;
 
 public class InviteFragment extends BaseFragment implements View.OnClickListener{
     private static final String TAG = InviteFragment.class.getSimpleName();
@@ -71,11 +74,10 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "REQ: " + requestCode);
-        Log.d(TAG, "RES: " + resultCode);
         if(resultCode == Activity.RESULT_OK || requestCode == REQUEST_CODE_SHARE_INTENT) {
             updateSharesLeft();
             if(sharesLeft <= 0) {
+                AppSpice.createEvent(TrackingEvents.UserReceivedInvite).track();
                 activity.getSupportFragmentManager().beginTransaction().hide(this).commit();
                 activity.setTitle(getString(R.string.app_name));
             } else {
@@ -87,6 +89,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     private void updateSharesLeft() {
         sharesLeft--;
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_INVITE_SHARE, sharesLeft);
+        AppSpice.createEvent(TrackingEvents.UserShareForInviteCountDecremented).track();
     }
 
     @Override
@@ -122,6 +125,7 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void share() {
+        AppSpice.createEvent(TrackingEvents.UserSharedForInvite).track();
         FacebookDialog.MessageDialogBuilder builder = new FacebookDialog.MessageDialogBuilder(getActivity())
                 .setLink(Constants.GOOGLE_PLAY_APP_URL)
                 .setName("AppHunt")

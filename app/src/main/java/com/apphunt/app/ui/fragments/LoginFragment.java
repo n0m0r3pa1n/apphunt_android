@@ -102,7 +102,7 @@ public class LoginFragment extends BaseFragment {
                                 @Override
                                 public void success(User user, retrofit.client.Response response) {
                                     if (user != null) {
-                                        AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserLoggedIn);
+                                        AppSpice.createEvent(TrackingEvents.UserLoggedIn).track();
                                         FacebookUtils.onLogin(activity, user);
                                     }
                                 }
@@ -114,7 +114,7 @@ public class LoginFragment extends BaseFragment {
                 }
             }).executeAsync();
         } else if (state.isClosed()) {
-            AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserLoggedOut);
+            AppSpice.createEvent(TrackingEvents.UserLoggedOut).track();
             FacebookUtils.onLogout(activity);
         }
 

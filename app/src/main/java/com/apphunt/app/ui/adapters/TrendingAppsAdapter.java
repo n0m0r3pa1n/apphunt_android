@@ -133,7 +133,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserDownVoted);
+                                    AppSpice.createEvent(TrackingEvents.UserDownVoted).track();
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(false);
                                     ((Button) v).setText(vote.getVotes());
@@ -144,7 +144,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserVoted);
+                                    AppSpice.createEvent(TrackingEvents.UserVoted).track();
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());

@@ -14,4 +14,8 @@ public interface TrackingEvents {
     static String UserDownVoted = "user.down.voted";
     static String UserSharedAppHunt = "user.shared.app.hunt";
     static String UserDisabledSound = "user.disabled.sound";
+    static String AppShowedInviteScreen = "app.showed.invite.screen";
+    static String UserShareForInviteCountDecremented = "app.share.for.invite.count.decremented";
+    static String UserSharedForInvite = "user.shared.app.hunt.for.invite";
+    static String UserReceivedInvite = "user.received.invite";
 }

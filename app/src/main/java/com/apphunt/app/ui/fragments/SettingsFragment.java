@@ -113,7 +113,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
             case R.id.sounds_toggle:
                 if (!isChecked) {
-                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserDisabledSound);
+                    AppSpice.createEvent(TrackingEvents.UserDisabledSound).track();
                 }
                 SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
                 break;

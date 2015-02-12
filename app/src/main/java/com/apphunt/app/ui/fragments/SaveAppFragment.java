@@ -95,7 +95,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                         @Override
                         public void success(Object o, Response response) {
                             if (response.getStatus() == 200) {
-                                AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserAddedApp);
+                                AppSpice.createEvent(TrackingEvents.UserAddedApp).track();
                                 activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                                 NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
@@ -104,7 +104,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserAddedUnknownApp);
+                            AppSpice.createEvent(TrackingEvents.UserAddedUnknownApp).track();
                             activity.getSupportFragmentManager().popBackStack();
 
                             NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);

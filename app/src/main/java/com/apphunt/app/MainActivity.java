@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
             showInviteFragment();
         }
     }
@@ -200,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     uiHelper.trackPendingDialogCall(shareDialog.present());
-                    AppSpice.track(TrackingEvents.Namespace, TrackingEvents.UserSharedAppHunt);
+                    AppSpice.createEvent(TrackingEvents.UserSharedAppHunt).track();
                 }
                 break;
 

@@ -42,7 +42,7 @@ public class SmartRate {
         rateDialogVariable.showLocation = preferences.getString(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION_KEY, "");
         AppSpice.init(activity, appSpiceId, appId);
         if (rateDialogVariable.isUndefined()) {
-            AppSpice.getVariable(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, RateDialogVariable.class);
+            AppSpice.requestVariable(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, RateDialogVariable.class);
         }
     }
 
