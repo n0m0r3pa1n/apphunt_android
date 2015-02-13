@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import it.appspice.android.AppSpice;
+import retrofit.RetrofitError;
 
 public class LoginFragment extends BaseFragment {
 
@@ -107,10 +109,18 @@ public class LoginFragment extends BaseFragment {
                                         FacebookUtils.onLogin(activity, user);
                                     }
                                 }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login) , false, false);
+                                }
                             });
                         } catch (Exception e) {
+                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login) , false, false);
                             Log.e(TAG, e.getMessage());
                         }
+                    } else {
+                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login) , false, false);
                     }
                 }
             }).executeAsync();

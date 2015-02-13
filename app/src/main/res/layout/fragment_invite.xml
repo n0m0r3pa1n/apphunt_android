@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:padding="@dimen/notification_button_padding"
             android:text="@string/action_share"
             android:textColor="@android:color/white"
             android:textSize="@dimen/notification_button_text"
