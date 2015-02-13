@@ -81,7 +81,7 @@ public class LoginFragment extends BaseFragment {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
             Bundle params = new Bundle();
-            params.putString("fields", "name,email,picture");
+            params.putString("fields", "id,name,email,picture");
 
             new Request(session, "/me", params, HttpMethod.GET, new Request.Callback() {
                 @Override
@@ -92,6 +92,7 @@ public class LoginFragment extends BaseFragment {
                             Locale locale = getResources().getConfiguration().locale;
 
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
+                            user.setLoginId(jsonObject.getString("id"));
                             user.setEmail(jsonObject.getString("email"));
                             user.setName(jsonObject.getString("name"));
                             user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
