@@ -128,7 +128,6 @@ public class LoginFragment extends BaseFragment {
             activity.supportInvalidateOptionsMenu();
         }
 
-
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {

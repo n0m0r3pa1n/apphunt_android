@@ -37,6 +37,7 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.appnext.appnextsdk.AppnextTrack;
 import com.crashlytics.android.Crashlytics;
@@ -77,14 +78,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
+        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+            Intent splashIntent = new Intent(this, SplashActivity.class);
+            startActivity(splashIntent);
 
-//        if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
-//            Intent splashIntent = new Intent(this, SplashActivity.class);
-//            startActivity(splashIntent);
-//
-//            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-//            showInviteFragment();
-//        }
+            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
+            showInviteFragment();
+        }
     }
 
     private void showInviteFragment() {
