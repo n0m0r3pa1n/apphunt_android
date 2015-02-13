@@ -1,10 +1,12 @@
 package com.apphunt.app.ui.fragments;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,15 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.apphunt.app.R;
+import com.apphunt.app.api.models.User;
+import com.apphunt.app.auth.CustomLoginProvider;
+import com.apphunt.app.auth.FacebookLoginProvider;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.errors.NoUserEmailAddressException;
+import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -20,12 +30,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
-import com.apphunt.app.R;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
-import com.apphunt.app.api.models.User;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.google.android.gms.common.AccountPicker;
 
 import org.json.JSONObject;
 
@@ -48,7 +53,7 @@ public class LoginFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (FacebookUtils.isSessionOpen()) {
+        if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
             setTitle(R.string.title_logout);
         } else {
             setTitle(R.string.title_login);
@@ -93,32 +98,37 @@ public class LoginFragment extends BaseFragment {
 
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
                             user.setEmail(jsonObject.getString("email"));
+                            if (TextUtils.isEmpty(user.getEmail())) {
+                                throw new NoUserEmailAddressException();
+                            }
                             user.setName(jsonObject.getString("name"));
                             user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
-                            user.setLoginType(Constants.LOGIN_TYPE);
+                            user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
 
-                            AppHuntApiClient.getClient().createUser(user, new Callback<User>() {
-                                @Override
-                                public void success(User user, retrofit.client.Response response) {
-                                    if (user != null) {
-                                        AppSpice.createEvent(TrackingEvents.UserLoggedIn).track();
-                                        FacebookUtils.onLogin(activity, user);
-                                    }
-                                }
-                            });
+                            LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
+                            LoginProviderFactory.get(activity).login(user);
+
                         } catch (Exception e) {
-                            Log.e(TAG, e.getMessage());
+                            Crashlytics.logException(e);
+                            LoginProviderFactory.setLoginProvider(activity, new CustomLoginProvider(activity));
+
+                            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                    false, null, null, null, null);
+                            startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
+                        } finally {
+                            activity.supportInvalidateOptionsMenu();
                         }
                     }
                 }
             }).executeAsync();
         } else if (state.isClosed()) {
             AppSpice.createEvent(TrackingEvents.UserLoggedOut).track();
-            FacebookUtils.onLogout(activity);
+            LoginProviderFactory.get(activity).logout();
+            activity.supportInvalidateOptionsMenu();
         }
 
-        activity.supportInvalidateOptionsMenu();
+
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -146,6 +156,16 @@ public class LoginFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_ACCOUNT_EMAIL && resultCode == Activity.RESULT_OK) {
+            String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+            User user = new User();
+            Locale locale = getResources().getConfiguration().locale;
+            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+            user.setLoginType(CustomLoginProvider.PROVIDER_NAME);
+            user.setEmail(email);
+            LoginProviderFactory.get(activity).login(user);
+            activity.supportInvalidateOptionsMenu();
+        }
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.apphunt.app.api.Callback;
 import com.apphunt.app.api.models.App;
 import com.apphunt.app.api.models.AppsList;
 import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -128,7 +129,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    if (FacebookUtils.isSessionOpen()) {
+                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
                         if (app.isHasVoted()) {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
