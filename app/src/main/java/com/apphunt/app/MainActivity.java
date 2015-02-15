@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -59,8 +59,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
     private boolean firstStart = true;
-    
-    private Menu menu;
 
     private UiLifecycleHelper uiHelper;
 
@@ -75,12 +73,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
 
-        FacebookUtils.onStart(this);
+        LoginProviderFactory.get(this).onCreate(this, savedInstanceState);
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-        
-        if(SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+
+        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
             Intent splashIntent = new Intent(this, SplashActivity.class);
             startActivity(splashIntent);
 
@@ -141,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_app:
-                if (FacebookUtils.isSessionOpen()) {
+                if (LoginProviderFactory.get(this).isUserLoggedIn()) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
                             .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
@@ -163,14 +161,14 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (FacebookUtils.isSessionOpen()) {
+        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
             menu.findItem(R.id.action_login).setVisible(false);
             menu.findItem(R.id.action_logout).setVisible(true);
         } else {
             menu.findItem(R.id.action_login).setVisible(true);
             menu.findItem(R.id.action_logout).setVisible(false);
         }
-        
+
         return true;
     }
 
@@ -201,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setName("AppHunt")
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
-                    uiHelper.trackPendingDialogCall(shareDialog.present());
+                    shareDialog.present();
                     AppSpice.createEvent(TrackingEvents.UserSharedAppHunt).track();
                 }
                 break;
@@ -217,23 +215,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (uiHelper == null) {
-            return;
-        }
-
         uiHelper.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
-            @Override
-            public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-                Log.e(TAG, String.format("Error: %s", error.toString()));
-            }
-
-            @Override
-            public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-                Log.i(TAG, "Success!");
-            }
-        });
     }
 
     @Override
@@ -306,8 +288,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onResume() {
         super.onResume();
-        if (uiHelper != null)
-            uiHelper.onResume();
+        uiHelper.onResume();
         AppSpice.onResume(this);
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
@@ -315,17 +296,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        if (uiHelper != null) {
-            uiHelper.onSaveInstanceState(outState);
-        }
+        uiHelper.onSaveInstanceState(outState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (uiHelper != null)
-            uiHelper.onPause();
+        uiHelper.onPause();
         AppSpice.onPause(this);
         unregisterReceiver(networkChangeReceiver);
     }
@@ -333,8 +310,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (uiHelper != null)
-            uiHelper.onDestroy();
+        uiHelper.onDestroy();
     }
 
     @Override

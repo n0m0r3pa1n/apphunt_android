@@ -5,16 +5,16 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     public static final String KEY_USER_ID = "user_id";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_PROFILE_PICTURE = "profile_picture";
+//    public static final String KEY_NAME = "name";
+//    public static final String KEY_PROFILE_PICTURE = "profile_picture";
     public static final String KEY_EMAIL = "profile_email";
     public static final String KEY_DATA = "data";
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
     public static final String KEY_SHOW_RATING = "show_rating";
     public static final String KEY_INVITE_SHARE = "invite_count_left";
+    public static final String KEY_LOGIN_PROVIDER = "login_provider";
 
-    public static final String LOGIN_TYPE = "Facebook";
     public static final String PLATFORM = "Android";
 
     // Settings
@@ -32,7 +32,6 @@ public class Constants {
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
-    public static final int REQUEST_SPLASH = 5;
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
@@ -49,6 +48,7 @@ public class Constants {
 
     // Invites
     public static final int INVITE_SHARES_COUNT = 3;
+    public static final int REQUEST_ACCOUNT_EMAIL = 5;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);
