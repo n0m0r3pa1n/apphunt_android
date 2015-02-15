@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private Button reloadButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
-    private boolean firstStart = true;
 
     private UiLifecycleHelper uiHelper;
 
@@ -86,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             startActivity(splashIntent);
 
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-//            showInviteFragment();
+            showInviteFragment();
         }
     }
 
@@ -288,15 +287,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-//        if (!firstStart) {
-//            trendingAppsAdapter.resetAdapter();
-//
-//            while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//                getSupportFragmentManager().popBackStackImmediate();
-//            }
-//        } else {
-//            firstStart = false;
-//        }
         if (trendingAppsAdapter.getCount() == 0) {
             LoadersUtils.hideCenterLoader(this);
             reloadButton.setVisibility(View.VISIBLE);
