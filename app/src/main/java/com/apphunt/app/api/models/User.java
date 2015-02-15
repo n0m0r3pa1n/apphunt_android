@@ -6,7 +6,6 @@ public class User {
 
     @SerializedName("_id")
     private String id;
-    private String loginId;
     private String name;
     private String email;
     private String profilePicture;
@@ -19,14 +18,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getLoginId() {
-        return loginId;
-    }
-
-    public void setLoginId(String facebookId) {
-        this.loginId = facebookId;
     }
 
     public String getName() {
@@ -73,7 +64,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", loginId='" + loginId + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", profilePicture='" + profilePicture + '\'' +

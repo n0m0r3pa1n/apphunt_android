@@ -77,5 +77,6 @@
     <dimen name="dimen_invite_text">20sp</dimen>
     <dimen name="splash_company_text">15sp</dimen>
     <dimen name="splash_icon_size">250dp</dimen>
+    <dimen name="click_to_reload_text">22sp</dimen>
 
 </resources>

@@ -50,4 +50,5 @@
     <string name="invite_one_text">Share with %s friend to\nsign up for invite</string>
     <string name="share_subject_text">Take a look at this great app :)</string>
     <string name="company">AppHunt Inc. 2015</string>
+    <string name="click_to_reload">Click to Reload</string>
 </resources>

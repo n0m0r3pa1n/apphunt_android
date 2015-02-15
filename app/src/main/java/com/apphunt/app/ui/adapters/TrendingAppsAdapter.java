@@ -315,6 +315,15 @@ public class TrendingAppsAdapter extends BaseAdapter {
         getApps();
     }
 
+    public void clearAdapter() {
+        success = false;
+        items.clear();
+        notifyDataSetChanged();
+
+        calendar = Calendar.getInstance();
+        today = Calendar.getInstance();
+    }
+    
     @Override
     public int getViewTypeCount() {
         return 3;

@@ -97,8 +97,8 @@ public class LoginFragment extends BaseFragment {
                             Locale locale = getResources().getConfiguration().locale;
 
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
-                            user.setLoginId(jsonObject.getString("id"));
                             user.setEmail(jsonObject.getString("email"));
+                            
                             if (TextUtils.isEmpty(user.getEmail())) {
                                 throw new NoUserEmailAddressException();
                             }

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -36,6 +37,7 @@ import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -56,6 +58,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     private ListView trendingAppsList;
     private FloatingActionButton addAppButton;
+    private Button reloadButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
     private boolean firstStart = true;
@@ -83,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             startActivity(splashIntent);
 
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-            showInviteFragment();
+//            showInviteFragment();
         }
     }
 
@@ -105,6 +108,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
         trendingAppsList.setOnScrollListener(this);
+        
+        reloadButton = (Button) findViewById(R.id.reload);
+        reloadButton.setOnClickListener(this);
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -124,12 +130,14 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                     NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
                 addAppButton.setVisibility(View.INVISIBLE);
-            } else {
+                trendingAppsList.setVisibility(View.GONE);
+                trendingAppsAdapter.clearAdapter();
+                LoadersUtils.showCenterLoader(MainActivity.this);
+            } 
+            else {
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-
-                addAppButton.setVisibility(View.VISIBLE);
                 onNetworkAvailable();
             }
         }
@@ -152,6 +160,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 }
 
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                break;
+            
+            case R.id.reload:
+                v.setVisibility(View.GONE);
+                trendingAppsAdapter.resetAdapter();
+                trendingAppsList.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -274,14 +288,18 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onNetworkAvailable() {
-        if (!firstStart) {
-            trendingAppsAdapter.resetAdapter();
-
-            while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
-        } else {
-            firstStart = false;
+//        if (!firstStart) {
+//            trendingAppsAdapter.resetAdapter();
+//
+//            while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//                getSupportFragmentManager().popBackStackImmediate();
+//            }
+//        } else {
+//            firstStart = false;
+//        }
+        if (trendingAppsAdapter.getCount() == 0) {
+            LoadersUtils.hideCenterLoader(this);
+            reloadButton.setVisibility(View.VISIBLE);
         }
     }
 
