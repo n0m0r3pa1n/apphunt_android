@@ -41,7 +41,6 @@ import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
-import com.appnext.appnextsdk.AppnextTrack;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
@@ -68,7 +67,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Crashlytics.start(this);
-        AppnextTrack.track(this);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
@@ -107,7 +105,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
         trendingAppsList.setOnScrollListener(this);
-        
+
         reloadButton = (Button) findViewById(R.id.reload);
         reloadButton.setOnClickListener(this);
 
@@ -132,8 +130,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 trendingAppsList.setVisibility(View.GONE);
                 trendingAppsAdapter.clearAdapter();
                 LoadersUtils.showCenterLoader(MainActivity.this);
-            } 
-            else {
+            } else {
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
@@ -160,7 +157,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 break;
-            
+
             case R.id.reload:
                 v.setVisibility(View.GONE);
                 trendingAppsAdapter.resetAdapter();
