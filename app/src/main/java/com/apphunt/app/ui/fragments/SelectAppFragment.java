@@ -92,6 +92,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onDetach() {
         super.onDetach();
+        LoadersUtils.hideCenterLoader(activity);
     }
 
     @Override

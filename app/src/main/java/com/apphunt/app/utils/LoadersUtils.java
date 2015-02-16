@@ -36,23 +36,27 @@ public class LoadersUtils {
         }
     }
 
-    public static void showBottomLoader(Activity activity) {
+    public static void showBottomLoader(Activity activity, boolean soundEnabled) {
         RelativeLayout bottomLoaderLayout = (RelativeLayout) activity.findViewById(R.id.more_loader_layout);
         GifImageView bottomLoader = (GifImageView) activity.findViewById(R.id.more_loader);
 
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
+            if (soundEnabled)
+                SoundsUtils.playSound(activity, R.raw.notification_1);
+            
             bottomLoader.setBackgroundResource(R.drawable.loader_white);
-            SoundsUtils.playSound(activity, R.raw.notification_1);
             bottomLoaderLayout.setVisibility(View.VISIBLE);
         }
     }
 
-    public static void showBottomLoader(Activity activity, int resDrawable) {
+    public static void showBottomLoader(Activity activity, int resDrawable, boolean soundEnabled) {
         RelativeLayout bottomLoaderLayout = (RelativeLayout) activity.findViewById(R.id.more_loader_layout);
         GifImageView bottomLoader = (GifImageView) activity.findViewById(R.id.more_loader);
 
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
-            SoundsUtils.playSound(activity, R.raw.notification_1);
+            if (soundEnabled)
+                SoundsUtils.playSound(activity, R.raw.notification_1);
+            
             bottomLoaderLayout.setVisibility(View.VISIBLE);
             bottomLoader.setBackgroundResource(resDrawable);
         }

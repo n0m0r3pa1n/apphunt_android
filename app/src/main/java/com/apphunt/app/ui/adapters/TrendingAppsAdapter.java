@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.api.Callback;
@@ -233,10 +234,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         notifyDataSetChanged();
         LoadersUtils.hideCenterLoader((Activity) ctx);
+        ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
     }
 
     public void getAppsForNextDate() {
-        LoadersUtils.showBottomLoader((Activity) ctx);
+        LoadersUtils.showBottomLoader((Activity) ctx, true);
 
         calendar.add(Calendar.DATE, -1);
 

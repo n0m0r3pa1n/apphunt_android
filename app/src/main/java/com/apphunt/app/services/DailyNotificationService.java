@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -53,7 +54,7 @@ public class DailyNotificationService extends IntentService {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(DailyNotificationService.this)
                                 .setVisibility(Notification.VISIBILITY_PUBLIC)
-                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                                 .setContentTitle(notification.getTitle())
                                 .setContentText(notification.getMessage())
                                 .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 101, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT))

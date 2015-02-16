@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.models.User;
 import com.apphunt.app.auth.CustomLoginProvider;
@@ -20,6 +22,7 @@ import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.errors.NoUserEmailAddressException;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
@@ -48,6 +51,11 @@ public class LoginFragment extends BaseFragment {
     private UiLifecycleHelper uiHelper;
 
     private ActionBarActivity activity;
+    
+    private  User user = new User();
+    
+    private boolean blocked = false;
+    private LoginButton authButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +75,15 @@ public class LoginFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
+        authButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+                ((MainActivity) activity).setOnBackBlocked(true);
+            }
+        });
         authButton.setReadPermissions(Arrays.asList("email"));
 
         return view;
@@ -92,24 +107,26 @@ public class LoginFragment extends BaseFragment {
                 @Override
                 public void onCompleted(Response response) {
                     if (response != null) {
-                        User user = new User();
+                        
                         try {
                             Locale locale = getResources().getConfiguration().locale;
 
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
+
+                            Log.i(TAG, response.getRawResponse());
+                            
+                            user.setName(jsonObject.getString("name"));
+                            user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
+                            user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
+                            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                             user.setEmail(jsonObject.getString("email"));
                             
                             if (TextUtils.isEmpty(user.getEmail())) {
                                 throw new NoUserEmailAddressException();
                             }
-                            user.setName(jsonObject.getString("name"));
-                            user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
-                            user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
-                            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-
+                            
                             LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
                             LoginProviderFactory.get(activity).login(user);
-
                         } catch (Exception e) {
                             Crashlytics.logException(e);
                             LoginProviderFactory.setLoginProvider(activity, new CustomLoginProvider(activity));
@@ -147,6 +164,11 @@ public class LoginFragment extends BaseFragment {
         this.activity = (ActionBarActivity) activity;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ((MainActivity) activity).setOnBackBlocked(false);
+    }
 
     @Override
     public void onResume() {
@@ -160,13 +182,11 @@ public class LoginFragment extends BaseFragment {
         uiHelper.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_ACCOUNT_EMAIL && resultCode == Activity.RESULT_OK) {
             String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-            User user = new User();
             Locale locale = getResources().getConfiguration().locale;
             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
             user.setLoginType(CustomLoginProvider.PROVIDER_NAME);
             user.setEmail(email);
             LoginProviderFactory.get(activity).login(user);
-            activity.supportInvalidateOptionsMenu();
         }
     }
 

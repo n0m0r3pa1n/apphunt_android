@@ -7,9 +7,11 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
@@ -61,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private Button reloadButton;
     private TrendingAppsAdapter trendingAppsAdapter;
     private boolean endOfList = false;
+    private boolean isBlocked = false;
 
     private UiLifecycleHelper uiHelper;
 
@@ -85,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             startActivity(splashIntent);
 
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-            showInviteFragment();
+//            showInviteFragment();
         }
     }
 
@@ -128,6 +132,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 if (fragment == null) {
                     NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
+                
                 addAppButton.setVisibility(View.INVISIBLE);
                 trendingAppsList.setVisibility(View.GONE);
                 trendingAppsAdapter.clearAdapter();
@@ -164,6 +169,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             case R.id.reload:
                 v.setVisibility(View.GONE);
                 trendingAppsAdapter.resetAdapter();
+                addAppButton.setVisibility(View.VISIBLE);
                 trendingAppsList.setVisibility(View.VISIBLE);
                 break;
         }
@@ -274,14 +280,22 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
                 .commit();
     }
+    
+    public void setOnBackBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
 
     @Override
     public void onUserLogin() {
+        isBlocked = false;
+        LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
     }
 
     @Override
     public void onUserLogout() {
+        isBlocked = false;
+        LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
     }
 
@@ -298,6 +312,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onResume();
         uiHelper.onResume();
         AppSpice.onResume(this);
+
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
@@ -323,7 +338,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (!isBlocked) {
+            super.onBackPressed();
+        }
     }
 
     @Override

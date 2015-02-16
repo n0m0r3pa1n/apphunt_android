@@ -24,6 +24,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SoundsUtils;
 
 public class NotificationFragment extends BaseFragment implements OnClickListener {
@@ -117,16 +118,19 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dismiss:
-                if(showSettingsBtn) {
-                    while (activity.getSupportFragmentManager().getBackStackEntryCount() > 0){
-                        activity.getSupportFragmentManager().popBackStackImmediate();
-                    }
-                } else if (showRating) {
+//                if(showSettingsBtn) {
+//                    while (activity.getSupportFragmentManager().getBackStackEntryCount() > 0){
+//                        activity.getSupportFragmentManager().popBackStackImmediate();
+//                    }
+//                } else
+                
+                if (showRating) {
                     activity.getSupportFragmentManager().popBackStack();
                     SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
-                } else {
-                    activity.getSupportFragmentManager().popBackStack();
-                }
+                } 
+
+                activity.getSupportFragmentManager().popBackStack();
+                LoadersUtils.hideCenterLoader(activity);
                 break;
 
             case R.id.open_settings:
@@ -155,5 +159,11 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         } catch (ClassCastException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        LoadersUtils.hideCenterLoader(activity);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.AppHuntApiClient;
@@ -55,10 +56,12 @@ public abstract class BaseLoginProvider implements LoginProvider {
         saveSharedPreferences(activity, user);
 
         ((MainActivity) activity).onUserLogin();
+        ((MainActivity) activity).supportInvalidateOptionsMenu();
         hideLoginFragment(activity);
     }
 
     protected void saveSharedPreferences(Activity activity, User user) {
+        Log.i("BaseLoginProvider", user.toString());
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_USER_ID, user.getId());
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_EMAIL, user.getEmail());
     }
