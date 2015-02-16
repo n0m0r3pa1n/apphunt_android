@@ -169,6 +169,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     try {
+                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
                         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(((AppItem) getItem(position)).getData().getShortUrl()));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         ctx.startActivity(intent);

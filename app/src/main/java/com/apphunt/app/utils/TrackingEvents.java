@@ -21,4 +21,5 @@ public interface TrackingEvents {
     static String UserRequestedMoreApps = "user.requested.more.apps";
     static String UserStartedAppFromDailyTrendingAppsNotification = "user.started.app.from.daily.trending.apps.notification";
     static String AppShowedTrendingAppsNotification = "app.showed.trending.apps.notification";
+    static String UserOpenedAppFromList = "user.opened.app.from.list";
 }
