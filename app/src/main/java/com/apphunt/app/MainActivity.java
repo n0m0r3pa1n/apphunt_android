@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         super.onCreate(savedInstanceState);
         Crashlytics.start(this);
         setContentView(R.layout.activity_main);
+
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
@@ -95,6 +96,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
 
+        if (isStartedFromShareIntent()) {
+            startSelectAppFragment();
+        }
+
         if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
             Intent splashIntent = new Intent(this, SplashActivity.class);
             startActivity(splashIntent);
@@ -102,6 +107,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
             showInviteFragment();
         }
+
+
+    }
+
+    private boolean isStartedFromShareIntent() {
+        return Intent.ACTION_SEND.equals(getIntent().getAction());
     }
 
     private void showInviteFragment() {
@@ -160,17 +171,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_app:
-                if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-                    getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                            .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                            .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                            .commit();
-
-                    getSupportFragmentManager().executePendingTransactions();
-                } else {
-                    FacebookUtils.showLoginFragment(this);
-                }
+                startSelectAppFragment();
 
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 break;
@@ -180,6 +181,20 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 trendingAppsAdapter.resetAdapter();
                 trendingAppsList.setVisibility(View.VISIBLE);
                 break;
+        }
+    }
+
+    private void startSelectAppFragment() {
+        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                    .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
+                    .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
+                    .commit();
+
+            getSupportFragmentManager().executePendingTransactions();
+        } else {
+            FacebookUtils.showLoginFragment(this);
         }
     }
 

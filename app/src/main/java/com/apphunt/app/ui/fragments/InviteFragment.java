@@ -158,8 +158,6 @@ public class InviteFragment extends BaseFragment implements View.OnClickListener
         sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name));
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject_text));
         sendIntent.putExtra(Intent.EXTRA_TEXT, "AppHunt - find the best new apps, every day! \n" + Constants.BIT_LY_GOOGLE_PLAY_URL);
-
-
         startActivityForResult(Intent.createChooser(sendIntent, "Share AppHunt"), REQUEST_CODE_SHARE_INTENT);
     }
 
