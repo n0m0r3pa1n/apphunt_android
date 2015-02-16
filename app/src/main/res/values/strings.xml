@@ -41,7 +41,7 @@
     <string name="smartrate_feedback_title">Feedback</string>
     <string name="smartrate_send">SEND</string>
     <string name="smartrate_rate_dialog_title">Rate</string>
-    <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter a feedback...</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter your feedback...</string>
 
     <string name="enable_notifications">Enable notifications</string>
     <string name="enable_sounds">Enable sounds</string>

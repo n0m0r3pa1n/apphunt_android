@@ -14,6 +14,7 @@ public class Constants {
     public static final String KEY_SHOW_RATING = "show_rating";
     public static final String KEY_INVITE_SHARE = "invite_count_left";
     public static final String KEY_LOGIN_PROVIDER = "login_provider";
+    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
 
     public static final String PLATFORM = "Android";
 
@@ -49,6 +50,7 @@ public class Constants {
     // Invites
     public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
+
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2);

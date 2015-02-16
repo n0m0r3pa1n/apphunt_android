@@ -17,4 +17,9 @@ public interface TrackingEvents {
     static String UserShareForInviteCountDecremented = "app.share.for.invite.count.decremented";
     static String UserSharedForInvite = "user.shared.app.hunt.for.invite";
     static String UserReceivedInvite = "user.received.invite";
+    static String UserScrolledDownAppList = "user.scrolled.down.app.list";
+    static String UserRequestedMoreApps = "user.requested.more.apps";
+    static String UserStartedAppFromDailyTrendingAppsNotification = "user.started.app.from.daily.trending.apps.notification";
+    static String AppShowedTrendingAppsNotification = "app.showed.trending.apps.notification";
+    static String UserOpenedAppFromList = "user.opened.app.from.list";
 }
