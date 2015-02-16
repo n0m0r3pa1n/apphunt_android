@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             startActivity(splashIntent);
 
             AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-//            showInviteFragment();
+            showInviteFragment();
         }
     }
 
@@ -257,7 +257,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
                 if (endOfList) {
                     AppSpice.createEvent(TrackingEvents.UserScrolledDownAppList).track();
-                    Log.d("Scroll", "end of list");
                     trendingAppsAdapter.getAppsForNextDate();
                 }
             } else {
@@ -284,19 +283,24 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
     
     public void setOnBackBlocked(boolean isBlocked) {
+        if(isBlocked) {
+            ActionBarUtils.getInstance().hideActionBar(this);
+        } else {
+            ActionBarUtils.getInstance().showActionBar(this);
+        }
         this.isBlocked = isBlocked;
     }
 
     @Override
     public void onUserLogin() {
-        isBlocked = false;
+        setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
     }
 
     @Override
     public void onUserLogout() {
-        isBlocked = false;
+        setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
     }

@@ -102,19 +102,15 @@ public class LoginFragment extends BaseFragment {
         if (state.isOpened()) {
             Bundle params = new Bundle();
             params.putString("fields", "id,name,email,picture");
-
             new Request(session, "/me", params, HttpMethod.GET, new Request.Callback() {
                 @Override
                 public void onCompleted(Response response) {
                     if (response != null) {
-                        
                         try {
                             Locale locale = getResources().getConfiguration().locale;
 
                             JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
 
-                            Log.i(TAG, response.getRawResponse());
-                            
                             user.setName(jsonObject.getString("name"));
                             user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
                             user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);

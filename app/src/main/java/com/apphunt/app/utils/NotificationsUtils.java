@@ -12,6 +12,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.models.Notification;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.Calendar;
 
@@ -71,6 +72,7 @@ public class NotificationsUtils {
                     .addToBackStack(Constants.TAG_NOTIFICATION_FRAGMENT)
                     .commit();
         } catch (Exception e) {
+            Crashlytics.logException(e);
             Log.e(TAG, "Cannot present the notification fragment.\nError: " + e.getMessage());
         }
 

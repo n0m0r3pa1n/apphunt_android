@@ -36,7 +36,6 @@ public class DailyNotificationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (!ConnectivityUtils.isNetworkAvailable(this)) {
-            Log.d(TAG, "No internet in service!");
             return;
         }
         displayNotification();

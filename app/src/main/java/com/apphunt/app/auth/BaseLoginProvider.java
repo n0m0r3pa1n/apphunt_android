@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.AppHuntApiClient;
@@ -33,6 +33,17 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public void logout() {
         removeSharedPreferences(activity);
         ((MainActivity) activity).onUserLogout();
+        hideLoginFragment(activity);
+    }
+
+    @Override
+    public boolean isUserLoggedIn() {
+        String userId = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_USER_ID);
+        String loginProvider = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_LOGIN_PROVIDER);
+
+        boolean isLoggedIn = !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
+
+        return isLoggedIn;
     }
 
     protected void removeSharedPreferences(Activity activity) {
@@ -61,7 +72,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     protected void saveSharedPreferences(Activity activity, User user) {
-        Log.i("BaseLoginProvider", user.toString());
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_USER_ID, user.getId());
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_EMAIL, user.getEmail());
     }
