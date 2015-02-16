@@ -1,15 +1,20 @@
 package com.apphunt.app;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +27,9 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.apphunt.app.api.AppHuntApiClient;
+import com.apphunt.app.api.Callback;
+import com.apphunt.app.api.models.Notification;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
@@ -47,8 +55,12 @@ import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
+import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
@@ -69,6 +81,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         Crashlytics.start(this);
         setContentView(R.layout.activity_main);
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
+
+        boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
+        if(isStartedFromNotification) {
+            AppSpice.createEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification).track();
+        }
 
         uiHelper = new UiLifecycleHelper(this, null);
         uiHelper.onCreate(savedInstanceState);
@@ -247,6 +264,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 addAppButton.setVisibility(View.VISIBLE);
 
                 if (endOfList) {
+                    AppSpice.createEvent(TrackingEvents.UserScrolledDownAppList).track();
+                    Log.d("Scroll", "end of list");
                     trendingAppsAdapter.getAppsForNextDate();
                 }
             } else {

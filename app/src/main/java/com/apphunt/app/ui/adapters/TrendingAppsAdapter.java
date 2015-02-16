@@ -185,6 +185,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderMoreApps.moreApps.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AppSpice.createEvent(TrackingEvents.UserRequestedMoreApps).track();
                     loadMoreApps(position);
                 }
             });

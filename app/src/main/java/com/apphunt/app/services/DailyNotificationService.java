@@ -14,10 +14,13 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.api.Callback;
 import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.TrackingEvents;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 
@@ -31,7 +34,7 @@ public class DailyNotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(!ConnectivityUtils.isNetworkAvailable(this)) {
+        if (!ConnectivityUtils.isNetworkAvailable(this)) {
             Log.d(TAG, "No internet in service!");
             return;
         }
@@ -48,7 +51,10 @@ public class DailyNotificationService extends IntentService {
         AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.models.Notification notification, Response response) {
-                Intent notifyIntent =  new Intent(DailyNotificationService.this, MainActivity.class);
+
+                AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
+                Intent notifyIntent = new Intent(DailyNotificationService.this, MainActivity.class);
+                notifyIntent.putExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, true);
 
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(DailyNotificationService.this)
