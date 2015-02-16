@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -85,24 +84,17 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-
-        if (isStartedFromShareIntent()) {
-            startSelectAppFragment();
-        }
-
-        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
-            Intent splashIntent = new Intent(this, SplashActivity.class);
-            startActivity(splashIntent);
-
-            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-            showInviteFragment();
-        }
-
-
+        showStartFragments(getIntent());
     }
 
-    private boolean isStartedFromShareIntent() {
-        return Intent.ACTION_SEND.equals(getIntent().getAction());
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showStartFragments(intent);
+    }
+
+    private boolean isStartedFromShareIntent(Intent intent) {
+        return Intent.ACTION_SEND.equals(intent.getAction());
     }
 
     private void showInviteFragment() {
@@ -335,6 +327,20 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         AppSpice.onResume(this);
 
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    private void showStartFragments(Intent intent) {
+        if (isStartedFromShareIntent(intent)) {
+            startSelectAppFragment();
+        }
+
+        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
+            Intent splashIntent = new Intent(this, SplashActivity.class);
+            startActivity(splashIntent);
+
+            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
+            showInviteFragment();
+        }
     }
 
     @Override
