@@ -3,6 +3,7 @@ package com.apphunt.app.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.util.TypedValue;
@@ -139,6 +140,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(false);
                                     ((Button) v).setText(vote.getVotes());
+                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_text));
                                     v.setBackgroundResource(R.drawable.btn_vote);
                                 }
                             });
@@ -150,7 +152,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());
-                                    v.setBackgroundResource(R.drawable.btn_down_vote);
+                                    v.setBackgroundResource(R.drawable.btn_voted);
+                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_voted_text));
                                     SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
                                 }
                             });
@@ -163,7 +166,14 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
             });
-            viewHolderItem.vote.setBackgroundResource((app.isHasVoted() ? R.drawable.btn_down_vote : R.drawable.btn_vote));
+            if (app.isHasVoted()) {
+                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_voted);
+                viewHolderItem.vote.setTextColor(Color.parseColor("#FFFFFF"));
+            } else {
+                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_vote);
+                viewHolderItem.vote.setTextColor(Color.parseColor("#2f90de"));
+            }
+//            viewHolderItem.vote.setBackgroundResource((app.isHasVoted() ? R.drawable.btn_voted : R.drawable.btn_vote));
 
             viewHolderItem.layout.setOnClickListener(null);
             viewHolderItem.layout.setOnClickListener(new View.OnClickListener() {

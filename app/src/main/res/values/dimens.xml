@@ -34,17 +34,20 @@
     <dimen name="list_more_apps_button_height">16dp</dimen>
 
     <dimen name="save_box_margin">30dp</dimen>
+    <dimen name="save_box_elevation">10dp</dimen>
     <dimen name="save_box_title_margin_bottom">20dp</dimen>
+    <dimen name="save_box_title_height">100dp</dimen>
+    <dimen name="save_box_title_padding">10dp</dimen>
     <dimen name="save_box_title_text">25sp</dimen>
     <dimen name="save_box_icon_size">80dp</dimen>
     <dimen name="save_box_icon_margin_bottom">40dp</dimen>
-    <dimen name="save_box_desc_height">100dp</dimen>
+    <dimen name="save_box_desc_height">120dp</dimen>
     <dimen name="save_box_desc_padding">15dp</dimen>
     <dimen name="save_box_desc_elevation">0dp</dimen>
     <dimen name="save_box_desc_text">17sp</dimen>
-    <dimen name="save_btn_height">60dp</dimen>
+    <dimen name="save_btn_height">100dp</dimen>
     <dimen name="save_btn_margin_bottom">25dp</dimen>
-    <dimen name="save_btn_text">20sp</dimen>
+    <dimen name="save_btn_text">23sp</dimen>
 
     <dimen name="semi_fragment_layout_height">150dp</dimen>
     <dimen name="semi_fragment_layout_padding">15dp</dimen>
@@ -59,9 +62,13 @@
     <dimen name="notification_text_margin">10dp</dimen>
     <dimen name="list_view_divider_height">1dp</dimen>
     <dimen name="list_view_elevation">0dp</dimen>
+
+    <dimen name="select_apps_box_height">130dp</dimen>
+    <dimen name="select_apps_box_padding">15dp</dimen>
+    <dimen name="select_apps_box_elevation">5dp</dimen>
     <dimen name="select_apps_app_icon_size">60dp</dimen>
-    <dimen name="select_apps_icon_padding">3dp</dimen>
-    <dimen name="select_apps_app_name_height">40dp</dimen>
+    <dimen name="select_apps_icon_padding">8dp</dimen>
+    <dimen name="select_apps_app_name_height">35dp</dimen>
     <dimen name="select_apps_app_name_padding">5dp</dimen>
     <dimen name="select_apps_app_name_text">12sp</dimen>
     <dimen name="settings_layout_height">180dp</dimen>
@@ -78,5 +85,6 @@
     <dimen name="splash_company_text">15sp</dimen>
     <dimen name="splash_icon_size">250dp</dimen>
     <dimen name="click_to_reload_text">22sp</dimen>
+    <dimen name="desc_shadow_height">4dp</dimen>
 
 </resources>

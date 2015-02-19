@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:orientation="vertical"
-    android:layout_height="wrap_content" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_secondary"
+    android:elevation="@dimen/select_apps_box_elevation">
 
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="@dimen/select_apps_app_icon_size"
-        android:layout_height="@dimen/select_apps_app_icon_size"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/select_apps_icon_padding"
-        android:scaleType="centerCrop"/>
-
-
-    <TextView
-        android:id="@+id/app_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/select_apps_app_name_height"
-        android:padding="@dimen/select_apps_app_name_padding"
-        android:textSize="@dimen/select_apps_app_name_text"
-        android:gravity="center_horizontal"
-        android:maxLines="2"
-        android:textColor="@android:color/white"
-        />
+        android:layout_height="@dimen/select_apps_box_height"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/select_apps_box_padding">
+        
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="@dimen/select_apps_app_icon_size"
+            android:layout_height="@dimen/select_apps_app_icon_size"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"/>
 
-
-</LinearLayout>
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/select_apps_app_name_height"
+            android:layout_below="@+id/app_icon"
+            android:layout_marginTop="@dimen/select_apps_app_name_padding"
+            android:textSize="@dimen/select_apps_app_name_text"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/select_app_text"/>
+        </RelativeLayout>
+</RelativeLayout>

@@ -9,15 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="@dimen/save_box_margin">
+        android:layout_margin="@dimen/save_box_margin"
+        android:background="@color/bg_secondary"
+        android:elevation="@dimen/save_box_elevation">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/save_box_title_height"
             android:layout_marginBottom="@dimen/save_box_title_margin_bottom"
+            android:padding="@dimen/save_box_title_padding"
             android:gravity="center"
-            android:textColor="@android:color/white"
+            android:textColor="@color/save_app_text"
             android:textSize="@dimen/save_box_title_text"/>
 
         <ImageView
@@ -42,23 +45,36 @@
             android:elevation="@dimen/save_box_desc_elevation"
             android:hint="@string/hint_description"
             android:textSize="@dimen/save_box_desc_text"
-            android:textColor="@android:color/white"
+            android:textColor="@color/desc_text"
             android:textColorHint="@color/desc_hint"/>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/desc_shadow_height"
+            android:background="@drawable/shadow"
+            android:layout_alignTop="@+id/description"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/desc_shadow_height"
+            android:background="@drawable/shadow_bottom"
+            android:layout_alignBottom="@+id/description"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/save_btn_height"
+            android:background="@android:color/transparent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/description"
+            android:textColor="@color/save_app_text"
+            android:textSize="@dimen/save_btn_text"
+            android:text="@string/save"
+            android:gravity="center"/>
         </RelativeLayout>
-
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/save_btn_height"
-        android:background="@android:color/transparent"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/save_btn_margin_bottom"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/save_btn_text"
-        android:text="@string/save"
-        />
 
 </RelativeLayout>

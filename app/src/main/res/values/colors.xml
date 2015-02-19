@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bg_primary">#23a2eb</color>
+    <color name="bg_secondary">#eeeeee</color>
 
     <color name="bg_fab">#e91e63</color>
     <color name="primary_pressed">#e1bee7</color>
     <color name="ripple">#ba68c8</color>
     <color name="list_item_bg">#fafafa</color>
+    
+    <color name="vote_btn_text">#2f90de</color>
+    <color name="vote_btn_voted_text">#FFFFFF</color>
 
-    <color name="desc_bg">#1b90d4</color>
-    <color name="desc_hint">#005c91</color>
+    <color name="desc_bg">#e7e7e7</color>
+    <color name="desc_text">#96000000</color>
+    <color name="desc_hint">#69000000</color>
+
+    <color name="select_app_text">#96000000</color>
+    
+    <color name="save_app_text">#1e92d4</color>
     
     <color name="text_semi_shadow">#69000000</color>
 

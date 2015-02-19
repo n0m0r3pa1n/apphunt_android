@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-        showStartFragments(getIntent());
+//        showStartFragments(getIntent());
     }
 
     @Override
