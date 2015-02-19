@@ -71,6 +71,11 @@
     <dimen name="select_apps_app_name_height">35dp</dimen>
     <dimen name="select_apps_app_name_padding">5dp</dimen>
     <dimen name="select_apps_app_name_text">12sp</dimen>
+    <dimen name="select_apps_gridview_vertical_spacing">15dp</dimen>
+    <dimen name="select_apps_gridview_horizontal_spacing">10dp</dimen>
+    <dimen name="select_apps_gridview_padding">10dp</dimen>
+    <dimen name="select_apps_gridview_elevation">0dp</dimen>
+    
     <dimen name="settings_layout_height">180dp</dimen>
     <dimen name="settings_item_margin">15dp</dimen>
     <dimen name="notification_button_padding">5dp</dimen>
