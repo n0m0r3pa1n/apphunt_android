@@ -232,6 +232,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 }
                 break;
 
+            case R.id.action_suggest:
+
+                break;
+
             case android.R.id.home:
                 getSupportFragmentManager().popBackStack();
                 break;
@@ -248,11 +252,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
-            endOfList = true;
-        } else {
-            endOfList = false;
-        }
+        endOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
     }
 
     @Override

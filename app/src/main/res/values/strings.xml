@@ -17,6 +17,7 @@
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="action_share">Share</string>
+    <string name="action_suggest">Suggest</string>
     <string name="facebook_app_id">874212442599315</string>
     <string name="hint_description">Enter short description (max 100)</string>
     <string name="hint_please_enter_description">Please enter a short description…</string>
@@ -57,5 +58,6 @@
 
     <!-- Login -->
     <string name="login_canceled_text">Your email is required to continue</string>
+
 
 </resources>
