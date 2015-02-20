@@ -7,9 +7,4 @@
 manifest-merger-release-report.txt
 crashlytics.properties
 crashlytics-build.properties
-<<<<<<< HEAD
 com_crashlytics_export_strings.xml
-=======
-*com_crashlytics_export_strings.xml
-manifest-merger-release-report.txt
->>>>>>> 1a0ca5c8361c32d5dc0d9b3adf20bc93ceb336f9
