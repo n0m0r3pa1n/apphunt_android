@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -46,16 +46,11 @@ public class LoginFragment extends BaseFragment {
 
     private static final String TAG = LoginFragment.class.getName();
 
-    private View view;
-
     private UiLifecycleHelper uiHelper;
 
     private ActionBarActivity activity;
-    
-    private  User user = new User();
-    
-    private boolean blocked = false;
-    private LoginButton authButton;
+
+    private User user = new User();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,9 +68,9 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        authButton = (LoginButton) view.findViewById(R.id.authButton);
+        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,17 +111,14 @@ public class LoginFragment extends BaseFragment {
                             user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                             user.setEmail(jsonObject.getString("email"));
-                            
+
                             if (TextUtils.isEmpty(user.getEmail())) {
                                 throw new NoUserEmailAddressException();
                             }
-                            
                             LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
                             LoginProviderFactory.get(activity).login(user);
                         } catch (Exception e) {
                             Crashlytics.logException(e);
-                            LoginProviderFactory.setLoginProvider(activity, new CustomLoginProvider(activity));
-
                             Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                                     false, null, null, null, null);
                             startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
@@ -134,7 +126,7 @@ public class LoginFragment extends BaseFragment {
                             activity.supportInvalidateOptionsMenu();
                         }
                     } else {
-                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login) , false, false);
+                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login), false, false);
                     }
                 }
             }).executeAsync();
@@ -176,13 +168,20 @@ public class LoginFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_ACCOUNT_EMAIL && resultCode == Activity.RESULT_OK) {
-            String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-            Locale locale = getResources().getConfiguration().locale;
-            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-            user.setLoginType(CustomLoginProvider.PROVIDER_NAME);
-            user.setEmail(email);
-            LoginProviderFactory.get(activity).login(user);
+        if (requestCode == Constants.REQUEST_ACCOUNT_EMAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                Locale locale = getResources().getConfiguration().locale;
+                user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+                user.setLoginType(CustomLoginProvider.PROVIDER_NAME);
+                user.setEmail(email);
+                LoginProviderFactory.setLoginProvider(activity, new CustomLoginProvider(activity));
+                LoginProviderFactory.get(activity).login(user);
+            } else {
+                Session session = Session.getActiveSession();
+                session.closeAndClearTokenInformation();
+                Toast.makeText(getActivity(), R.string.login_canceled_text, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

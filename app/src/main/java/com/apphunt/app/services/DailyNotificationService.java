@@ -1,7 +1,6 @@
 package com.apphunt.app.services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -48,6 +47,7 @@ public class DailyNotificationService extends IntentService {
     private void displayNotification() {
         final String date = dateFormat.format(calendar.getTime());
 
+        AppSpice.init(this, "Enter token here", Constants.APP_SPICE_APP_ID);
         AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.models.Notification notification, Response response) {
@@ -58,7 +58,8 @@ public class DailyNotificationService extends IntentService {
 
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(DailyNotificationService.this)
-                                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                .setSmallIcon(R.drawable.ic_launcher)
                                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                                 .setContentTitle(notification.getTitle())
                                 .setContentText(notification.getMessage())

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -136,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 if (fragment == null) {
                     NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
-                
+
                 addAppButton.setVisibility(View.INVISIBLE);
                 trendingAppsList.setVisibility(View.GONE);
                 trendingAppsAdapter.clearAdapter();

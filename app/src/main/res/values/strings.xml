@@ -9,6 +9,9 @@
     <string name="title_settings">Settings</string>
     <string name="title_notification">Notification</string>
 
+    <!-- Actions -->
+    <string name="action_enable_notifications">com.apphunt.app.action.ENABLE_NOTIFICATIONS</string>
+
     <!-- Menu -->
     <string name="action_settings">Settings</string>
     <string name="action_login">Login</string>
@@ -16,14 +19,14 @@
     <string name="action_share">Share</string>
     <string name="facebook_app_id">874212442599315</string>
     <string name="hint_description">Enter short description (max 100)</string>
-    <string name="hint_please_enter_description">Please enter a short description...</string>
-    <string name="hint_short_description">Please enter at least 50 letters...</string>
+    <string name="hint_please_enter_description">Please enter a short description…</string>
+    <string name="hint_short_description">Please enter at least 50 letters…</string>
     <string name="save">Save</string>
 
     <!-- Notifications -->
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
-    <string name="notification_cannot_login">Unsuccessful login attempt! Please try again...</string>
+    <string name="notification_cannot_login">Unsuccessful login attempt! Please try again…</string>
     <string name="saved_successfully">App added successfully</string>
     <string name="list_view_header_yesterday">Yesterday</string>
     <string name="list_view_header_today">Today</string>
@@ -39,7 +42,7 @@
     <string name="smartrate_feedback_title">Feedback</string>
     <string name="smartrate_send">SEND</string>
     <string name="smartrate_rate_dialog_title">Rate</string>
-    <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter your feedback...</string>
+    <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter your feedback…</string>
     <string name="enable_notifications">Enable notifications</string>
     <string name="enable_sounds">Enable sounds</string>
     <string name="title_invite">AppHunt is invite only</string>
@@ -51,5 +54,8 @@
     <string name="title_activity_share_on_app_hunt">ShareOnAppHuntActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="share_on_apphunt_label">Add to AppHunt</string>
+
+    <!-- Login -->
+    <string name="login_canceled_text">Your email is required to continue</string>
 
 </resources>

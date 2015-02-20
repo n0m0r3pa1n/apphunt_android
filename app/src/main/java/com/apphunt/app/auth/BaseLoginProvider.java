@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.AppHuntApiClient;
@@ -54,6 +55,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public void login(User user) {
+        Log.d("User login", "user login");
         AppHuntApiClient.getClient().createUser(user, new Callback<User>() {
             @Override
             public void success(User user, retrofit.client.Response response) {

@@ -21,18 +21,20 @@ public class NotificationsUtils {
     private static final String TAG = Notification.class.getName();
 
     public static void setupDailyNotificationService(Context ctx) {
+
         Intent intent = new Intent(ctx, DailyNotificationService.class);
         PendingIntent alarmIntent = PendingIntent.getService(ctx, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 
-        if(alarmMgr == null || alarmIntent == null) {
+        if (alarmMgr == null || alarmIntent == null) {
             return;
         }
 
         Calendar today = Calendar.getInstance();
 
         Calendar calendar = Calendar.getInstance();
+
         calendar.set(Calendar.HOUR_OF_DAY, 19);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
