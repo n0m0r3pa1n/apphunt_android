@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_semi_fragment"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:id="@+id/suggestion_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/semi_fragment_layout_height"
+        android:background="@color/bg_primary"
+        android:padding="@dimen/semi_fragment_layout_padding"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/suggestion_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/suggestion_send"
+            android:background="@color/desc_bg"
+            android:elevation="@dimen/save_box_desc_elevation"
+            android:gravity="top|start"
+            android:hint="@string/suggestion_input_hint"
+            android:maxLength="100"
+            android:padding="@dimen/save_box_desc_padding"
+            android:singleLine="false"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/desc_hint"
+            android:textSize="@dimen/save_box_desc_text" />
+
+        <Button
+            android:id="@+id/suggestion_dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/notification_button_padding"
+            android:text="@string/dismiss"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/notification_button_text" />
+
+        <Button
+            android:id="@+id/suggestion_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/notification_button_padding"
+            android:text="@string/suggestion_send"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/notification_button_text" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

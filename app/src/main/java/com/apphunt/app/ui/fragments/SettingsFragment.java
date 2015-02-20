@@ -91,8 +91,6 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
             return enterAnim;
         } else {
             Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
-            ;
-
             settingsLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
 

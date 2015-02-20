@@ -58,6 +58,11 @@
 
     <!-- Login -->
     <string name="login_canceled_text">Your email is required to continue</string>
+    <string name="suggest_title">Suggest</string>
+    <string name="suggestion_input_hint">How AppHunt can be improved?</string>
+    <string name="suggestion_send">Improve</string>
+    <string name="suggestion_empty_text_error">Please, enter your suggestion</string>
+    <string name="feedback_send">Awesome! Thank you!</string>
 
 
 </resources>

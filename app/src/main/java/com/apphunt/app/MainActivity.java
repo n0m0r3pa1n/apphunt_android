@@ -30,6 +30,7 @@ import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
+import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.ui.interfaces.OnUserAuthListener;
@@ -233,7 +234,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_suggest:
-
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                        .add(R.id.container, new SuggestFragment(), Constants.TAG_SUGGEST_FRAGMENT)
+                        .addToBackStack(Constants.TAG_SUGGEST_FRAGMENT)
+                        .commit();
                 break;
 
             case android.R.id.home:
