@@ -50,6 +50,7 @@ public class Constants {
     // Invites
     public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
+    public static final int USER_SKIP_INVITE_PERCENTAGE = 60;
 
 
     public enum ItemType {

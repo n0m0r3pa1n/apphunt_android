@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +47,8 @@ import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
+import java.util.Random;
+
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 
@@ -74,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
-        if(isStartedFromNotification) {
+        if (isStartedFromNotification) {
             AppSpice.createEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification).track();
         }
 
@@ -289,9 +290,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
                 .commit();
     }
-    
+
     public void setOnBackBlocked(boolean isBlocked) {
-        if(isBlocked) {
+        if (isBlocked) {
             ActionBarUtils.getInstance().hideActionBar(this);
         } else {
             ActionBarUtils.getInstance().showActionBar(this);
@@ -336,11 +337,17 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
 
         if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
-            Intent splashIntent = new Intent(this, SplashActivity.class);
-            startActivity(splashIntent);
 
-            AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-            showInviteFragment();
+            Random random = new Random();
+            int randInt = random.nextInt(100);
+            if (randInt > Constants.USER_SKIP_INVITE_PERCENTAGE) {
+                Intent splashIntent = new Intent(this, SplashActivity.class);
+                startActivity(splashIntent);
+                AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
+                showInviteFragment();
+            } else {
+                SharedPreferencesHelper.setPreference(this, Constants.KEY_INVITE_SHARE, 0);
+            }
         }
     }
 
