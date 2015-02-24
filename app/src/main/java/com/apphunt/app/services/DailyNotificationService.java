@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -47,7 +46,7 @@ public class DailyNotificationService extends IntentService {
     private void displayNotification() {
         final String date = dateFormat.format(calendar.getTime());
 
-        AppSpice.init(this, "Enter token here", Constants.APP_SPICE_APP_ID);
+        AppSpice.init(this, Constants.APP_SPICE_APP_ID);
         AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.models.Notification notification, Response response) {

@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         Crashlytics.start(this);
         setContentView(R.layout.activity_main);
 
-        SmartRate.init(this, "ENTER TOKEN HERE", Constants.APP_SPICE_APP_ID);
+        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {

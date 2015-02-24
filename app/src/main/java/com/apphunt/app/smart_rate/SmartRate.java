@@ -33,21 +33,21 @@ public class SmartRate {
     private ActionBarActivity activity;
     private static long appRun;
 
-    private SmartRate(ActionBarActivity activity, String appSpiceId, String appId) {
+    private SmartRate(ActionBarActivity activity, String appId) {
         this.activity = activity;
         this.preferences = activity.getSharedPreferences(SmartRateConstants.SMART_RATE_PREFERENCES, Context.MODE_PRIVATE);
         incrementAppRuns();
         rateDialogVariable = new RateDialogVariable();
         rateDialogVariable.appRun = preferences.getLong(SmartRateConstants.SMART_RATE_VARIABLE_APP_RUN_KEY, 0);
         rateDialogVariable.showLocation = preferences.getString(SmartRateConstants.SMART_RATE_VARIABLE_SHOW_LOCATION_KEY, "");
-        AppSpice.init(activity, appSpiceId, appId);
+        AppSpice.init(activity, appId);
         if (rateDialogVariable.isUndefined()) {
             AppSpice.requestVariable(SmartRateConstants.SMART_RATE_DIALOG_VARIABLE, RateDialogVariable.class);
         }
     }
 
-    public static void init(ActionBarActivity activity, String appSpiceId, String appId) {
-        instance = new SmartRate(activity, appSpiceId, appId);
+    public static void init(ActionBarActivity activity, String appId) {
+        instance = new SmartRate(activity, appId);
     }
 
     public static void setRateDialogVariable(RateDialogVariable rateDialogVariable) {
