@@ -92,4 +92,28 @@
     <dimen name="click_to_reload_text">22sp</dimen>
     <dimen name="desc_shadow_height">4dp</dimen>
 
+    <!-- App Details -->
+    <dimen name="details_box_name_height">40dp</dimen>
+    <dimen name="details_box_name_margin_bottom">10dp</dimen>
+    <dimen name="details_box_name_padding">15dp</dimen>
+    <dimen name="details_avatar_creator">40dp</dimen>
+    <dimen name="details_box_name_creator_name_text">14sp</dimen>
+    <dimen name="details_box_name_creator_name_margin">15dp</dimen>
+    <dimen name="details_box_vote_size">40dp</dimen>
+    <dimen name="details_box_vote_text">10sp</dimen>
+    <dimen name="details_box_desc_height">90dp</dimen>
+    <dimen name="details_box_desc_padding_left">15dp</dimen>
+    <dimen name="details_box_desc_padding_top">5dp</dimen>
+    <dimen name="details_box_desc_icon_size">60dp</dimen>
+    <dimen name="details_box_desc_icon_margin">15dp</dimen>
+    <dimen name="details_box_desc_app_name_text">14sp</dimen>
+    <dimen name="details_box_desc_text">12sp</dimen>
+    <dimen name="details_box_voters_padding_top">10dp</dimen>
+    <dimen name="details_box_voters_padding_sides">15dp</dimen>
+    <dimen name="details_box_voters_padding_bottom">5dp</dimen>
+    <dimen name="details_voters_avatar_size">25dp</dimen>
+    <dimen name="details_voters_avatar_cell">30dp</dimen>
+    <dimen name="details_box_voters_header_margin">10dp</dimen>
+
+
 </resources>

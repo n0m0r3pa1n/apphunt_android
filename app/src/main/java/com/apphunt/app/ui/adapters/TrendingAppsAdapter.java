@@ -2,9 +2,9 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
@@ -28,6 +28,7 @@ import com.apphunt.app.api.models.AppsList;
 import com.apphunt.app.api.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
+import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
@@ -60,6 +61,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private boolean success = false;
     private int noAppsDays = 0;
+    private int lastItemClicked;
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -180,10 +182,26 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     try {
-                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
-                        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(((AppItem) getItem(position)).getData().getShortUrl()));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ctx.startActivity(intent);
+//                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
+//                        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(((AppItem) getItem(position)).getData().getShortUrl()));
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        ctx.startActivity(intent);
+                        
+                        App app = ((AppItem) getItem(position)).getData();
+                        
+                        AppDetailsFragment detailsFragment = new AppDetailsFragment();
+                        
+                        Bundle extras = new Bundle();
+                        extras.putString(Constants.KEY_APP_ID, app.getId());
+                        extras.putString(Constants.KEY_APP_NAME, app.getName());
+                        extras.putInt(Constants.KEY_ITEM_POSITION, position);
+                        detailsFragment.setArguments(extras);
+
+                        ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                            .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                            .commit();
+                        
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }

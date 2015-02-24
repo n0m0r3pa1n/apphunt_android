@@ -15,6 +15,9 @@ public class Constants {
     public static final String KEY_INVITE_SHARE = "invite_count_left";
     public static final String KEY_LOGIN_PROVIDER = "login_provider";
     public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
+    public static final String KEY_APP_ID = "app_id";
+    public static final String KEY_APP_NAME = "app_name";
+    public static final String KEY_ITEM_POSITION = "item_position";
 
     public static final String PLATFORM = "Android";
 
@@ -31,7 +34,8 @@ public class Constants {
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
     public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
-
+    public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
+    
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
 
@@ -52,7 +56,6 @@ public class Constants {
     public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
     public static final int USER_SKIP_INVITE_PERCENTAGE = 60;
-
 
 
     public enum ItemType {

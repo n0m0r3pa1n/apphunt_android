@@ -2,6 +2,8 @@ package com.apphunt.app.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class App {
     @SerializedName("_id")
     private String id;
@@ -14,6 +16,8 @@ public class App {
     private String shortUrl;
     private String url;
     private boolean hasVoted;
+    private ArrayList<Vote> votes = new ArrayList<>();
+    private User createdBy;
 
     public String getId() {
         return id;
@@ -85,5 +89,38 @@ public class App {
 
     public void setHasVoted(boolean hasVoted) {
         this.hasVoted = hasVoted;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public ArrayList<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(ArrayList<Vote> votes) {
+        this.votes = votes;
+    }
+
+    @Override
+    public String toString() {
+        return "App{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", votesCount='" + votesCount + '\'' +
+                ", shortUrl='" + shortUrl + '\'' +
+                ", url='" + url + '\'' +
+                ", hasVoted=" + hasVoted +
+                ", votes=" + votes +
+                ", createdBy=" + createdBy +
+                '}';
     }
 }

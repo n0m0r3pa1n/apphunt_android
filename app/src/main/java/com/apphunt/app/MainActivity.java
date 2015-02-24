@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -87,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-        showStartFragments(getIntent());
+//        showStartFragments(getIntent());
     }
 
     @Override
@@ -325,6 +326,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             LoadersUtils.hideCenterLoader(this);
             reloadButton.setVisibility(View.VISIBLE);
         }
+    }
+    
+    public void resetAdapter(int itemPosition) {
+        trendingAppsAdapter.resetAdapter();
+        trendingAppsList.smoothScrollToPosition(itemPosition);
     }
 
     @Override

@@ -8,6 +8,7 @@
     <string name="title_logout">Logout</string>
     <string name="title_settings">Settings</string>
     <string name="title_notification">Notification</string>
+    <string name="title_app_details">Details</string>
 
     <!-- Actions -->
     <string name="action_enable_notifications">com.apphunt.app.action.ENABLE_NOTIFICATIONS</string>
@@ -63,6 +64,10 @@
     <string name="suggestion_send">Improve</string>
     <string name="suggestion_empty_text_error">Please, enter your suggestion</string>
     <string name="feedback_send">Awesome! Thank you!</string>
+    <string name="less"><![CDATA[<]]></string>
+    <string name="more"><![CDATA[>]]></string>
 
-
+    <!-- Details -->
+    <string name="posted_by">Posted by %s</string>
+    <string name="header_voters">%s VOTERS</string>
 </resources>
