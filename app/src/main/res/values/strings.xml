@@ -70,4 +70,6 @@
     <!-- Details -->
     <string name="posted_by">Posted by %s</string>
     <string name="header_voters">%s VOTERS</string>
+    <string name="commenter_name">\@%s</string>
+    <string name="header_comments">%s COMMENTS</string>
 </resources>

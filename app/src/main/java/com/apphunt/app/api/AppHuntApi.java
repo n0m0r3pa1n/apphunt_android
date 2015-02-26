@@ -24,7 +24,7 @@ public interface AppHuntApi {
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
     
     @GET("/apps/{appId}")
-    void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, Callback<DetailedApp> cb);
+    void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, @Query("commentsCount") int commentsCount, Callback<DetailedApp> cb);
 
     @POST("/apps/actions/filter")
     void filterApps(@Body Packages packages, Callback<Packages> cb);

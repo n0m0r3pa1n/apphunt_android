@@ -14,24 +14,31 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.api.Callback;
 import com.apphunt.app.api.models.App;
+import com.apphunt.app.api.models.Comment;
 import com.apphunt.app.api.models.DetailedApp;
 import com.apphunt.app.api.models.User;
 import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
+import com.apphunt.app.ui.listview_items.Item;
+import com.apphunt.app.ui.listview_items.comments.CommentItem;
+import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ArrayList;
 
 import it.appspice.android.AppSpice;
 import retrofit.client.Response;
@@ -60,6 +67,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
     private boolean isVoted;
     private VotersAdapter votersAdapter;
     private User user;
+    private ListView commentsList;
+    private CommentsAdapter commentsAdapter;
+    private TextView headerComments;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,10 +102,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
         appDescription = (TextView) view.findViewById(R.id.desc);
 
         headerVoters = (TextView) view.findViewById(R.id.header_voters);
-
         avatars = (GridView) view.findViewById(R.id.voters);
 
-        AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<DetailedApp>() {
+        headerComments = (TextView) view.findViewById(R.id.header_comments);
+        commentsList = (ListView) view.findViewById(R.id.comments);
+
+        AppHuntApiClient.getClient().getDetailedApp(userId, appId, 20, new Callback<DetailedApp>() {
             @Override
             public void success(DetailedApp detailedApp, Response response) {
                 if (detailedApp != null) {
@@ -126,6 +138,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
                     headerVoters.setText(String.format(getString(R.string.header_voters), detailedApp.getApp().getVotesCount()));
                     votersAdapter = new VotersAdapter(activity, detailedApp.getApp().getVotes());
                     avatars.setAdapter(votersAdapter);
+
+                    headerComments.setText(String.format(getString(R.string.header_comments), detailedApp.getCommentsData().getTotalCount()));
+                    commentsAdapter = new CommentsAdapter(activity, detailedApp.getCommentsData().getComments());
+                    commentsList.setAdapter(commentsAdapter);
                 }
             }
         });

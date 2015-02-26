@@ -60,7 +60,8 @@ public class Constants {
 
 
     public enum ItemType {
-        SEPARATOR(0), ITEM(1), MORE_APPS(2);
+        SEPARATOR(0), ITEM(1), MORE_APPS(2), 
+        COMMENT(3), SUBCOMMENT(4);
 
         private int value;
 
