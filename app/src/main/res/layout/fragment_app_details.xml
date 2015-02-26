@@ -110,41 +110,41 @@
             android:textStyle="bold"
             android:textColor="@color/text_headers"/>
         
-        <LinearLayout
-            android:id="@+id/voters_control"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:orientation="horizontal"
-            android:layout_alignParentRight="true">
-            
-            <Button
-                android:id="@+id/less_voters"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/bg_secondary"
-                android:text="@string/less"
-                android:textColor="@color/bg_primary"
-                android:gravity="center"
-                />
+        <!--<LinearLayout-->
+            <!--android:id="@+id/voters_control"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_alignParentRight="true">-->
+            <!---->
+            <!--<Button-->
+                <!--android:id="@+id/less_voters"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:background="@color/bg_secondary"-->
+                <!--android:text="@string/less"-->
+                <!--android:textColor="@color/bg_primary"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
 
-            <Button
-                android:id="@+id/more_voters"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/bg_secondary"
-                android:text="@string/more"
-                android:textColor="@color/bg_primary"
-                android:gravity="center"
-                />
-            
-            </LinearLayout>
+            <!--<Button-->
+                <!--android:id="@+id/more_voters"-->
+                <!--android:layout_width="25dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:background="@color/bg_secondary"-->
+                <!--android:text="@string/more"-->
+                <!--android:textColor="@color/bg_primary"-->
+                <!--android:gravity="center"-->
+                <!--/>-->
+            <!---->
+            <!--</LinearLayout>-->
         
         <GridView
             android:id="@+id/voters"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:columnWidth="30dp"
             android:numColumns="auto_fit"
             android:layout_below="@id/header_voters"

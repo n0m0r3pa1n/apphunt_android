@@ -33,6 +33,7 @@ import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
+import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.ActionBarUtils;
@@ -55,7 +56,7 @@ import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
-        OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange {
+        OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange, OnAppVoteListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -328,9 +329,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
     }
     
-    public void resetAdapter(int itemPosition) {
-        trendingAppsAdapter.resetAdapter();
-        trendingAppsList.smoothScrollToPosition(itemPosition);
+    @Override
+    public void onAppVote(int position) {
+        trendingAppsAdapter.resetAdapter(position);
     }
 
     @Override

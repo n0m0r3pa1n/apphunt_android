@@ -18,6 +18,7 @@ public class Constants {
     public static final String KEY_APP_ID = "app_id";
     public static final String KEY_APP_NAME = "app_name";
     public static final String KEY_ITEM_POSITION = "item_position";
+    public static final String KEY_PROFILE_IMAGE = "profile_image";
 
     public static final String PLATFORM = "Android";
 

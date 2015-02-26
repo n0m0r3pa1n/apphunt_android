@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,10 @@ import com.apphunt.app.api.AppHuntApiClient;
 import com.apphunt.app.api.Callback;
 import com.apphunt.app.api.models.App;
 import com.apphunt.app.api.models.DetailedApp;
+import com.apphunt.app.api.models.User;
 import com.apphunt.app.api.models.Vote;
-import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.adapters.VotersAdapter;
+import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -40,7 +42,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
     private View view;
     private String appId;
     private Activity activity;
-    
+    private OnAppVoteListener callback;
+
     // TODO: DEV
     private App testApp = new App();
     private ImageView icon;
@@ -54,24 +57,28 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
     private GridView avatars;
     private App app;
     private int itemPosition;
+    private boolean isVoted;
+    private VotersAdapter votersAdapter;
+    private User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         appId = getArguments().getString(Constants.KEY_APP_ID);
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
         userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
 
         setTitle(R.string.title_app_details);
+        isVoted = false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_app_details, container, false);
-        
+
         initUI();
-        
+
         return view;
     }
 
@@ -85,7 +92,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
         appDescription = (TextView) view.findViewById(R.id.desc);
 
         headerVoters = (TextView) view.findViewById(R.id.header_voters);
-        
+
         avatars = (GridView) view.findViewById(R.id.voters);
 
         AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<DetailedApp>() {
@@ -93,13 +100,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
             public void success(DetailedApp detailedApp, Response response) {
                 if (detailedApp != null) {
                     app = detailedApp.getApp();
-                    
+
                     Picasso.with(activity)
                             .load(detailedApp.getApp().getCreatedBy().getProfilePicture())
                             .into(creator);
-                    creatorName.setText(String.format(getString(R.string.posted_by), 
+                    creatorName.setText(String.format(getString(R.string.posted_by),
                             detailedApp.getApp().getCreatedBy().getName()));
-                    
+
                     if (detailedApp.getApp().isHasVoted()) {
                         vote.setTextColor(getResources().getColor(R.color.bg_secondary));
                         vote.setBackgroundResource(R.drawable.btn_voted_v2);
@@ -115,9 +122,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
                             .into(icon);
                     appName.setText(detailedApp.getApp().getName());
                     appDescription.setText(detailedApp.getApp().getDescription());
-                    
+
                     headerVoters.setText(String.format(getString(R.string.header_voters), detailedApp.getApp().getVotesCount()));
-                    avatars.setAdapter(new VotersAdapter(activity, detailedApp.getApp().getVotes()));
+                    votersAdapter = new VotersAdapter(activity, detailedApp.getApp().getVotes());
+                    avatars.setAdapter(votersAdapter);
                 }
             }
         });
@@ -137,6 +145,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
                             vote.setText(voteResult.getVotes());
                             vote.setTextColor(activity.getResources().getColor(R.color.bg_primary));
                             vote.setBackgroundResource(R.drawable.btn_vote);
+                            
+                            user = new User();
+                            user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                            user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                            votersAdapter.removeCreator(user);
+                            headerVoters.setText(String.format(getString(R.string.header_voters), votersAdapter.getTotalVoters()));
                         }
                     });
                 } else {
@@ -149,11 +163,18 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
                             vote.setText(voteResult.getVotes());
                             vote.setBackgroundResource(R.drawable.btn_voted_v2);
                             vote.setTextColor(activity.getResources().getColor(R.color.bg_secondary));
+
+                            user = new User();
+                            user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                            user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                            votersAdapter.addCreatorIfNotVoter(user);
+                            headerVoters.setText(String.format(getString(R.string.header_voters), votersAdapter.getTotalVoters()));
                         }
                     });
                 }
-                
+
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                isVoted = true;
                 break;
         }
     }
@@ -170,14 +191,20 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        
+
         this.activity = activity;
+
+        try {
+            callback = (OnAppVoteListener) activity;
+        } catch (ClassCastException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        
-        ((MainActivity) activity).resetAdapter(itemPosition);
+
+        if (isVoted) callback.onAppVote(itemPosition);
     }
 }

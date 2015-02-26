@@ -76,6 +76,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     protected void saveSharedPreferences(Activity activity, User user) {
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_USER_ID, user.getId());
         SharedPreferencesHelper.setPreference(activity, Constants.KEY_EMAIL, user.getEmail());
+        SharedPreferencesHelper.setPreference(activity, Constants.KEY_PROFILE_IMAGE, user.getProfilePicture());
     }
 
     private void hideLoginFragment(Context ctx) {

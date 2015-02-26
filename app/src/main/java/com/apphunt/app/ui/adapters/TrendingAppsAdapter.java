@@ -66,6 +66,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
     private ViewHolderMoreApps viewHolderMoreApps = null;
+    private int selectedAppPosition = -1;
 
     public TrendingAppsAdapter(Context ctx, ListView listView) {
         this.ctx = ctx;
@@ -265,6 +266,10 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
         LoadersUtils.hideCenterLoader((Activity) ctx);
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
+        
+        if (selectedAppPosition > -1) {
+            listView.smoothScrollToPosition(selectedAppPosition);
+        }
     }
 
     public void getAppsForNextDate() {
@@ -345,6 +350,12 @@ public class TrendingAppsAdapter extends BaseAdapter {
         today = Calendar.getInstance();
 
         getApps();
+    }
+
+    public void resetAdapter(int position) {
+       this.selectedAppPosition = position;
+        
+       resetAdapter();
     }
 
     public void clearAdapter() {
