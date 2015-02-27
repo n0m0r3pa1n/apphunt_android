@@ -1,7 +1,11 @@
 package com.apphunt.app.api;
 
 import com.apphunt.app.api.models.AppsList;
+import com.apphunt.app.api.models.Comment;
+import com.apphunt.app.api.models.CommentVote;
+import com.apphunt.app.api.models.Comments;
 import com.apphunt.app.api.models.DetailedApp;
+import com.apphunt.app.api.models.NewComment;
 import com.apphunt.app.api.models.Notification;
 import com.apphunt.app.api.models.Packages;
 import com.apphunt.app.api.models.SaveApp;
@@ -40,4 +44,16 @@ public interface AppHuntApi {
 
     @GET("/notifications")
     void getNotification(@Query("type") String type, Callback<Notification> cb);
+    
+    @POST("/comments")
+    void sendComment(@Body NewComment comment, Callback<NewComment> cb);
+    
+    @GET("/comments/{appId}")
+    void getAppComments(@Path("appId") String appId, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, Callback<Comments> cb);
+    
+    @POST("/comments/votes")
+    void voteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb);
+
+    @DELETE("/comments/votes")
+    void downVoteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb);
 }

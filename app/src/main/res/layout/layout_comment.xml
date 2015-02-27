@@ -3,7 +3,7 @@
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
     android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingRight="5dp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
@@ -20,43 +20,54 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/avatar"
         android:layout_toEndOf="@+id/avatar"
+        android:layout_toLeftOf="@+id/bg_vote"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
         android:textStyle="bold"
         android:textSize="14sp"/>
 
     <TextView
-        android:id="@+id/comment"
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/avatar"
         android:layout_toEndOf="@+id/avatar"
+        android:layout_toLeftOf="@+id/bg_vote"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
         android:textSize="12sp"/>
-    
+
     <TextView
         android:id="@+id/reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/avatar"
         android:layout_toEndOf="@+id/avatar"
-        android:layout_below="@+id/comment"
+        android:layout_below="@+id/text"
         android:layout_marginLeft="15dp"
         android:text="Reply"
         android:textColor="@color/bg_primary"
         />
 
-    <TextView
-        android:id="@+id/like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/reply"
-        android:layout_toEndOf="@+id/avatar"
-        android:layout_below="@+id/comment"
-        android:layout_marginLeft="15dp"
-        android:text="Like"
-        android:textColor="@color/bg_primary"
-        />
+    <RelativeLayout
+        android:id="@+id/bg_vote"
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:clickable="true">
+
+        <Button
+            android:id="@+id/vote"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/list_item_vote_margin"
+            android:gravity="center"
+            android:textSize="@dimen/list_item_vote_text"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_vote"
+            android:focusable="false"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -72,4 +72,5 @@
     <string name="header_voters">%s VOTERS</string>
     <string name="commenter_name">\@%s</string>
     <string name="header_comments">%s COMMENTS</string>
+    <string name="reply_to">\@%s </string>
 </resources>
