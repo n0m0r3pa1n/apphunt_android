@@ -2,9 +2,12 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -391,5 +394,11 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(commentBox.getWindowToken(), 0);
+    }
+
+    private void openAppOnGooglePlay(String appUrl) {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
+        marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |Intent.FLAG_ACTIVITY_MULTIPLE_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(marketIntent);
     }
 }
