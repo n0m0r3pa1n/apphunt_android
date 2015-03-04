@@ -95,18 +95,7 @@ public class CommentsAdapter extends BaseAdapter {
             commentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    if (!comment.isHasVoted()) {
-                        AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                            @Override
-                            public void success(CommentVote vote, Response response) {
-                                comment.setHasVoted(true);
-                                comment.setVotesCount(vote.getVotesCount());
-                                ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                                ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                v.setBackgroundResource(R.drawable.btn_voted);
-                            }
-                        });
-                    } else {
+                    if (comment.isHasVoted()) {
                         AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                             @Override
                             public void success(CommentVote vote, Response response) {
@@ -117,20 +106,31 @@ public class CommentsAdapter extends BaseAdapter {
                                 v.setBackgroundResource(R.drawable.btn_vote);
                             }
                         });
+                    } else {
+                        AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            @Override
+                            public void success(CommentVote vote, Response response) {
+                                comment.setHasVoted(true);
+                                comment.setVotesCount(vote.getVotesCount());
+                                ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
+                                ((Button) v).setText(String.valueOf(vote.getVotesCount()));
+                                v.setBackgroundResource(R.drawable.btn_voted);
+                            }
+                        });
                     }
                 }
             });
 
-            if (!comment.isHasVoted()) {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
-            } else {
+            if (comment.isHasVoted()) {
                 commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
                 commentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
+            } else {
+                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
+                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
             }
         }
         else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
-            Comment comment = ((SubCommentItem) getItem(position)).getData();
+            final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
             Picasso.with(ctx)
                     .load(comment.getUser().getProfilePicture())
@@ -138,16 +138,44 @@ public class CommentsAdapter extends BaseAdapter {
 
             subCommentViewHolder.name.setText(String.format(ctx.getString(R.string.commenter_name), comment.getUser().getName()));
             subCommentViewHolder.comment.setText(comment.getText());
+            subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
 
-            if (!comment.isHasVoted()) {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
+            if (comment.isHasVoted()) {
+                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
+                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
             } else {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
+                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
+                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
             }
-
-            commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
+            
+            subCommentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    if (comment.isHasVoted()) {
+                        AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            @Override
+                            public void success(CommentVote vote, Response response) {
+                                comment.setHasVoted(false);
+                                comment.setVotesCount(vote.getVotesCount());
+                                ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_primary));
+                                ((Button) v).setText(String.valueOf(vote.getVotesCount()));
+                                v.setBackgroundResource(R.drawable.btn_vote);
+                            }
+                        });
+                    } else {
+                        AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            @Override
+                            public void success(CommentVote vote, Response response) {
+                                comment.setHasVoted(true);
+                                comment.setVotesCount(vote.getVotesCount());
+                                ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
+                                ((Button) v).setText(String.valueOf(vote.getVotesCount()));
+                                v.setBackgroundResource(R.drawable.btn_voted);
+                            }
+                        });
+                    }
+                }
+            });
         }
         
         return view;

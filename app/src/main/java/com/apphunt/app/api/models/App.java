@@ -12,7 +12,7 @@ public class App {
     private String icon;
     @SerializedName("package")
     private String packageName;
-    private String votesCount;
+    private int votesCount;
     private String shortUrl;
     private String url;
     private boolean hasVoted;
@@ -60,11 +60,11 @@ public class App {
     }
 
     public String getVotesCount() {
-        return votesCount;
+        return String.valueOf(votesCount);
     }
 
     public void setVotesCount(String votesCount) {
-        this.votesCount = votesCount;
+        this.votesCount = Integer.valueOf(votesCount);
     }
 
     public String getShortUrl() {
