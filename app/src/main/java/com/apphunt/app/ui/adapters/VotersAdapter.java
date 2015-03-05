@@ -1,6 +1,8 @@
 package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,7 @@ public class VotersAdapter extends BaseAdapter {
         maxVotersCount = (floatToDP(ctx.getResources().getDisplayMetrics().widthPixels) -
                 (2 * floatToDP(ctx.getResources().getDimension(R.dimen.details_box_voters_padding_sides)))) /
                 floatToDP(ctx.getResources().getDimension(R.dimen.details_voters_avatar_cell));
-        if (maxVotersCount > voters.size()) {
+        if (voters.size() > maxVotersCount) {
             maxVotersCount *= 2;
         }
     }
@@ -50,9 +52,19 @@ public class VotersAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Picasso.with(ctx)
-                .load(((Vote) getItem(position)).getUser().getProfilePicture())
-                .into(viewHolder.avatar);
+        String avatarUrl = ((Vote) getItem(position)).getUser().getProfilePicture();
+        
+        if (TextUtils.isEmpty(avatarUrl)) {
+            Picasso.with(ctx)
+                    .load(R.drawable.avatar_placeholder)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .into(viewHolder.avatar);
+        } else {
+            Picasso.with(ctx)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .into(viewHolder.avatar);
+        }
 
         return view;
     }

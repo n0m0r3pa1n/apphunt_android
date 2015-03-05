@@ -128,8 +128,7 @@ public class CommentsAdapter extends BaseAdapter {
                 commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
                 commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
             }
-        }
-        else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
+        } else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
             final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
             Picasso.with(ctx)

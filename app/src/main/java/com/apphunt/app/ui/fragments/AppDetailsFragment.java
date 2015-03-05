@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -38,11 +37,13 @@ import com.apphunt.app.api.models.DetailedApp;
 import com.apphunt.app.api.models.NewComment;
 import com.apphunt.app.api.models.User;
 import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.squareup.picasso.Picasso;
@@ -88,6 +89,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private int commentBoxHeight;
     private RelativeLayout.LayoutParams params;
     private Comment replyToComment;
+    private RelativeLayout boxDesc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         icon = (ImageView) view.findViewById(R.id.icon);
         appName = (TextView) view.findViewById(R.id.app_name);
         appDescription = (TextView) view.findViewById(R.id.desc);
+        boxDesc = (RelativeLayout) view.findViewById(R.id.box_desc);
+        boxDesc.setOnClickListener(this);
 
         headerVoters = (TextView) view.findViewById(R.id.header_voters);
         avatars = (GridView) view.findViewById(R.id.voters);
@@ -142,12 +146,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
         
-        closeComments = (TextView) view.findViewById(R.id.close_comments);
-        closeComments.setOnClickListener(this);
-        
-        send = (TextView) view.findViewById(R.id.send_comment);
-        send.setOnClickListener(this);
-
         commentBox.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -156,6 +154,20 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
         
+        TextView labelComment = (TextView) view.findViewById(R.id.label_comment);
+        if (userHasPermissions()) {
+            labelComment.setVisibility(View.GONE);
+            commentBox.setVisibility(View.VISIBLE);
+        }
+        
+        labelComment.setOnClickListener(this);
+        
+        closeComments = (TextView) view.findViewById(R.id.close_comments);
+        closeComments.setOnClickListener(this);
+        
+        send = (TextView) view.findViewById(R.id.send_comment);
+        send.setOnClickListener(this);
+
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -202,14 +214,14 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                     appName.setText(detailedApp.getApp().getName());
                     appDescription.setText(detailedApp.getApp().getDescription());
 
-                    headerVoters.setText(String.format(getString(R.string.header_voters), detailedApp.getApp().getVotesCount()));
+                    headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(detailedApp.getApp().getVotesCount()), Integer.valueOf(detailedApp.getApp().getVotesCount())));
                     votersAdapter = new VotersAdapter(activity, detailedApp.getApp().getVotes());
                     avatars.setAdapter(votersAdapter);
 
                     commentsAdapter = new CommentsAdapter(activity, detailedApp.getCommentsData().getComments());
                     commentsList.setAdapter(commentsAdapter);
 
-                    headerComments.setText(String.format(getString(R.string.header_comments), commentsAdapter.getCount()));
+                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
                 }
             }
         });
@@ -219,49 +231,70 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.vote:
-                if (app.isHasVoted()) {
-                    AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
-                        @Override
-                        public void success(Vote voteResult, Response response) {
-                            AppSpice.createEvent(TrackingEvents.UserDownVoted).track();
-                            app.setVotesCount(voteResult.getVotes());
-                            app.setHasVoted(false);
-                            vote.setText(voteResult.getVotes());
-                            vote.setTextColor(activity.getResources().getColor(R.color.bg_primary));
-                            vote.setBackgroundResource(R.drawable.btn_vote);
-                            
-                            user = new User();
-                            user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
-                            user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
-                            votersAdapter.removeCreator(user);
-                            headerVoters.setText(String.format(getString(R.string.header_voters), votersAdapter.getTotalVoters()));
-                        }
-                    });
+                if (userHasPermissions()) {
+                    if (app.isHasVoted()) {
+                        AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
+                            @Override
+                            public void success(Vote voteResult, Response response) {
+                                AppSpice.createEvent(TrackingEvents.UserDownVoted).track();
+                                app.setVotesCount(voteResult.getVotes());
+                                app.setHasVoted(false);
+                                vote.setText(voteResult.getVotes());
+                                vote.setTextColor(activity.getResources().getColor(R.color.bg_primary));
+                                vote.setBackgroundResource(R.drawable.btn_vote);
+
+                                user = new User();
+                                user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                                votersAdapter.removeCreator(user);
+                                commentsList.invalidateViews();
+                                headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
+                            }
+                        });
+                    } else {
+                        AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
+                            @Override
+                            public void success(Vote voteResult, Response response) {
+                                AppSpice.createEvent(TrackingEvents.UserVoted).track();
+                                app.setVotesCount(voteResult.getVotes());
+                                app.setHasVoted(true);
+                                vote.setText(voteResult.getVotes());
+                                vote.setBackgroundResource(R.drawable.btn_voted_v2);
+                                vote.setTextColor(activity.getResources().getColor(R.color.bg_secondary));
+
+                                user = new User();
+                                user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                                votersAdapter.addCreatorIfNotVoter(user);
+                                commentsList.invalidateViews();
+                                headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
+                            }
+                        });
+                    }
                 } else {
-                    AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
-                        @Override
-                        public void success(Vote voteResult, Response response) {
-                            AppSpice.createEvent(TrackingEvents.UserVoted).track();
-                            app.setVotesCount(voteResult.getVotes());
-                            app.setHasVoted(true);
-                            vote.setText(voteResult.getVotes());
-                            vote.setBackgroundResource(R.drawable.btn_voted_v2);
-                            vote.setTextColor(activity.getResources().getColor(R.color.bg_secondary));
-
-                            user = new User();
-                            user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
-                            user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
-                            votersAdapter.addCreatorIfNotVoter(user);
-                            headerVoters.setText(String.format(getString(R.string.header_voters), votersAdapter.getTotalVoters()));
-                        }
-                    });
+                    FacebookUtils.showLoginFragment(activity);
                 }
-
+                
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 isVoted = true;
                 break;
 
+            case R.id.box_desc:
+                openAppOnGooglePlay();
+                break;
+            
+            case R.id.label_comment:
+                FacebookUtils.showLoginFragment(activity);
+                v.setVisibility(View.GONE);
+                commentBox.setVisibility(View.VISIBLE);
+                break;
+            
             case R.id.send_comment:
+                if (!userHasPermissions()) {
+                    FacebookUtils.showLoginFragment(activity);
+                    return;
+                }
+                
                 NewComment comment = new NewComment();
                 
                 if (commentBox.getText().length() > 0) {
@@ -293,7 +326,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                                             public void success(Comments comments, Response response) {
                                                 if (comments != null) {
                                                     commentsAdapter.resetAdapter(comments.getComments());
-                                                    headerComments.setText(String.format(getString(R.string.header_comments), commentsAdapter.getCount()));
+                                                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
                                                 }
                                             }
                                         });
@@ -301,16 +334,16 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         }
                     });
                 }
-                
+
+                closeKeyboard(v);
                 commentBox.getText().clear();
                 resizeCommentBox(true);
-                closeKeyboard();
                 break;
             
             case R.id.close_comments:
+                closeKeyboard(v);
                 showDetails();
                 resizeCommentBox(true);
-                closeKeyboard();
                 break;
         }
     }
@@ -351,7 +384,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
-
+        
+        closeKeyboard(commentBox);
         if (isVoted) callback.onAppVote(itemPosition);
     }
 
@@ -389,16 +423,25 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             commentBox.setLayoutParams(params);
         }
     }
-
-    private void closeKeyboard() {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(commentBox.getWindowToken(), 0);
+    
+    private void showKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
     }
 
-    private void openAppOnGooglePlay(String appUrl) {
-        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
+    private void closeKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void openAppOnGooglePlay() {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.getShortUrl()));
         marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |Intent.FLAG_ACTIVITY_MULTIPLE_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(marketIntent);
+    }
+    
+    private boolean userHasPermissions() {
+        return LoginProviderFactory.get(activity).isUserLoggedIn();
     }
 }

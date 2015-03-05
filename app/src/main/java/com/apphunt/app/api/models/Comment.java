@@ -13,7 +13,6 @@ public class Comment {
     private String appId;
     private String parent;
     private ArrayList<Comment> children = new ArrayList<>();
-    private ArrayList<Vote> votes = new ArrayList<>();
     private int votesCount;
     private String text;
     private boolean hasVoted;
@@ -52,14 +51,6 @@ public class Comment {
     
     public void setChild(Comment comment) {
         this.children.add(comment);
-    }
-
-    public ArrayList<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(ArrayList<Vote> votes) {
-        this.votes = votes;
     }
 
     public int getVotesCount() {
@@ -119,7 +110,6 @@ public class Comment {
                 ", appId='" + appId + '\'' +
                 ", parent='" + parent + '\'' +
                 ", children=" + children +
-                ", votes=" + votes +
                 ", votesCount=" + votesCount +
                 ", text='" + text + '\'' +
                 ", hasVoted=" + hasVoted +

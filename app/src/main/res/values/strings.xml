@@ -69,8 +69,14 @@
 
     <!-- Details -->
     <string name="posted_by">Posted by %s</string>
-    <string name="header_voters">%s VOTERS</string>
+    <plurals name="header_voters">
+        <item quantity="one">%d VOTER</item>
+        <item quantity="other">%d VOTERS</item>
+    </plurals>
     <string name="commenter_name">\@%s</string>
-    <string name="header_comments">%s COMMENTS</string>
+    <plurals name="header_comments">
+        <item quantity="one">%d COMMENT</item>
+        <item quantity="other">%d COMMENTS</item>
+    </plurals>
     <string name="reply_to">\@%s </string>
 </resources>

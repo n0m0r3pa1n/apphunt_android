@@ -81,6 +81,13 @@
                 android:textSize="@dimen/details_box_desc_app_name_text"
                 android:textStyle="bold"
                 />
+            
+            <Button
+                android:id="@+id/download"
+                android:layout_width="@dimen/details_box_desc_ic_download_size"
+                android:layout_height="@dimen/details_box_desc_ic_download_size"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_action_download"/>
 
             <TextView
                 android:id="@+id/desc"
@@ -113,37 +120,6 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="@color/text_headers"/>
-
-            <!--<LinearLayout-->
-                <!--android:id="@+id/voters_control"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_alignParentRight="true">-->
-                <!---->
-                <!--<Button-->
-                    <!--android:id="@+id/less_voters"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="20dp"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--android:background="@color/bg_secondary"-->
-                    <!--android:text="@string/less"-->
-                    <!--android:textColor="@color/bg_primary"-->
-                    <!--android:gravity="center"-->
-                    <!--/>-->
-
-                <!--<Button-->
-                    <!--android:id="@+id/more_voters"-->
-                    <!--android:layout_width="25dp"-->
-                    <!--android:layout_height="20dp"-->
-                    <!--android:layout_marginRight="5dp"-->
-                    <!--android:background="@color/bg_secondary"-->
-                    <!--android:text="@string/more"-->
-                    <!--android:textColor="@color/bg_primary"-->
-                    <!--android:gravity="center"-->
-                    <!--/>-->
-                <!---->
-                <!--</LinearLayout>-->
 
             <GridView
                 android:id="@+id/voters"
@@ -219,6 +195,24 @@
 
         <EditText
             android:id="@+id/comment_entry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="45dp"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="80dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="@color/bg_secondary"
+            android:gravity="top"
+            android:singleLine="false"
+            android:textSize="14sp"
+            android:hint="Write a comment..."
+            android:textColorHint="#69000000"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/label_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="45dp"

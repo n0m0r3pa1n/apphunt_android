@@ -8,10 +8,8 @@ import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +26,6 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
@@ -355,8 +352,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             Random random = new Random();
             int randInt = random.nextInt(100);
             if (randInt > Constants.USER_SKIP_INVITE_PERCENTAGE) {
-                Intent splashIntent = new Intent(this, SplashActivity.class);
-                startActivity(splashIntent);
                 AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
                 showInviteFragment();
             } else {
