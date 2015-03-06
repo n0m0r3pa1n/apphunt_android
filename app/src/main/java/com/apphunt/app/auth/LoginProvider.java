@@ -1,11 +1,6 @@
 package com.apphunt.app.auth;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.models.User;
+import com.apphunt.app.api.apphunt.models.User;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>

@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.models.User;
+import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -30,6 +30,8 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class LoginFragment extends BaseFragment {
@@ -80,8 +82,13 @@ public class LoginFragment extends BaseFragment {
 
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
-                            public void success(Result<Friends> objectResult) {
-
+                            public void success(Result<Friends> friendsResult) {
+                                List<String> following = new ArrayList<>();
+                                for (com.twitter.sdk.android.core.models.User user :
+                                        friendsResult.data.getUsers()) {
+                                    following.add(user.screenName);
+                                }
+                                user.setFollowing(following);
                                 Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                                         false, null, null, null, null);
                                 startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);

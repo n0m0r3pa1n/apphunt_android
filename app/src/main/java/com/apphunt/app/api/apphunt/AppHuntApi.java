@@ -1,17 +1,15 @@
-package com.apphunt.app.api;
+package com.apphunt.app.api.apphunt;
 
-import com.apphunt.app.api.models.App;
-import com.apphunt.app.api.models.AppsList;
-import com.apphunt.app.api.models.Comment;
-import com.apphunt.app.api.models.CommentVote;
-import com.apphunt.app.api.models.Comments;
-import com.apphunt.app.api.models.DetailedApp;
-import com.apphunt.app.api.models.NewComment;
-import com.apphunt.app.api.models.Notification;
-import com.apphunt.app.api.models.Packages;
-import com.apphunt.app.api.models.SaveApp;
-import com.apphunt.app.api.models.User;
-import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.api.apphunt.models.App;
+import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.CommentVote;
+import com.apphunt.app.api.apphunt.models.Comments;
+import com.apphunt.app.api.apphunt.models.NewComment;
+import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.api.apphunt.models.Packages;
+import com.apphunt.app.api.apphunt.models.SaveApp;
+import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.Vote;
 
 import retrofit.http.Body;
 import retrofit.http.DELETE;

@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.models.Notification;
+import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
 import com.crashlytics.android.Crashlytics;

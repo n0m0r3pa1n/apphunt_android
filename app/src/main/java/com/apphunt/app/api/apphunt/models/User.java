@@ -1,6 +1,8 @@
-package com.apphunt.app.api.models;
+package com.apphunt.app.api.apphunt.models;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class User {
 
@@ -12,6 +14,7 @@ public class User {
     private String loginType;
     private String locale;
     private String username;
+    private List<String> following;
 
     public String getId() {
         return id;
@@ -75,5 +78,9 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setFollowing(List<String> following) {
+        this.following = following;
     }
 }
