@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -42,7 +43,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     private EditText desc;
     private ApplicationInfo data;
     private ActionBarActivity activity;
-    private boolean saveBtnClicked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     private void initUI() {
+        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.container);
+        container.setOnClickListener(this);
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(data.loadLabel(activity.getPackageManager()));
 
@@ -127,6 +129,10 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                     Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
                 }
+                break;
+            
+            case R.id.container:
+                closeKeyboard(desc);
                 break;
         }
     }
