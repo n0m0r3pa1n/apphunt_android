@@ -43,8 +43,6 @@ import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
-import com.crashlytics.android.Crashlytics;
-import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
@@ -66,12 +64,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private boolean endOfList = false;
     private boolean isBlocked = false;
 
-    private UiLifecycleHelper uiHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
         setContentView(R.layout.activity_main);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
@@ -81,10 +76,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             AppSpice.createEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification).track();
         }
 
-        uiHelper = new UiLifecycleHelper(this, null);
-        uiHelper.onCreate(savedInstanceState);
-
-        LoginProviderFactory.get(this).onCreate(this, savedInstanceState);
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
@@ -211,7 +202,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_logout:
-                FacebookUtils.showLoginFragment(this);
+                LoginProviderFactory.get(this).logout();
+                supportInvalidateOptionsMenu();
                 break;
 
             case R.id.action_settings:
@@ -253,7 +245,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
+
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
+        if (fragment != null) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -327,7 +324,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             reloadButton.setVisibility(View.VISIBLE);
         }
     }
-    
+
     @Override
     public void onAppVote(int position) {
         trendingAppsAdapter.resetAdapter(position);
@@ -336,7 +333,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onResume() {
         super.onResume();
-        uiHelper.onResume();
         AppSpice.onResume(this);
 
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -361,23 +357,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        uiHelper.onPause();
         AppSpice.onPause(this);
         unregisterReceiver(networkChangeReceiver);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        uiHelper.onDestroy();
     }
 
     @Override

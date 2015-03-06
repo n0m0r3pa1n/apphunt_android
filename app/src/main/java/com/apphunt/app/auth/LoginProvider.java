@@ -18,7 +18,5 @@ public interface LoginProvider {
 
     boolean isUserLoggedIn();
 
-    void onCreate(Activity activity, Bundle savedStateInstance);
-
     String getName();
 }

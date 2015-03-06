@@ -41,10 +41,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public boolean isUserLoggedIn() {
         String userId = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_USER_ID);
         String loginProvider = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_LOGIN_PROVIDER);
-
-        boolean isLoggedIn = !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
-
-        return isLoggedIn;
+        return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
     }
 
     protected void removeSharedPreferences(Activity activity) {
@@ -55,7 +52,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public void login(User user) {
-        Log.d("User login", "user login");
         AppHuntApiClient.getClient().createUser(user, new Callback<User>() {
             @Override
             public void success(User user, retrofit.client.Response response) {

@@ -17,11 +17,7 @@ public class LoginProviderFactory {
 
     public static LoginProvider get(Activity activity) {
         if (loginProvider == null) {
-            String loginProvider = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_LOGIN_PROVIDER);
-            if (!TextUtils.isEmpty(loginProvider) && loginProvider.equals(FacebookLoginProvider.PROVIDER_NAME)) {
-                return new FacebookLoginProvider(activity);
-            }
-            return new CustomLoginProvider(activity);
+            return new TwitterLoginProvider(activity);
         }
         return loginProvider;
     }
