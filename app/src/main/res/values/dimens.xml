@@ -115,5 +115,19 @@
     <dimen name="details_voters_avatar_size">25dp</dimen>
     <dimen name="details_voters_avatar_cell">30dp</dimen>
     <dimen name="details_box_voters_header_margin">10dp</dimen>
+    <dimen name="voters_gridview_column_width">30dp</dimen>
+    <dimen name="voters_gridview_vertical_spacing">5dp</dimen>
+    <dimen name="header_comments_padding_left">15dp</dimen>
+    <dimen name="header_comments_padding_top">5dp</dimen>
+    <dimen name="comments_arrow_width">20dp</dimen>
+    <dimen name="comments_arrow_height">10dp</dimen>
+    <dimen name="comments_arrow_margin_left">50dp</dimen>
+    <dimen name="comment_entry_min_height">45dp</dimen>
+    <dimen name="comment_entry_padding_left">15dp</dimen>
+    <dimen name="comment_entry_padding_right">80dp</dimen>
+    <dimen name="comment_entry_padding_top">15dp</dimen>
+    <dimen name="comment_entry_text">14sp</dimen>
+    <dimen name="send_comment_width">65dp</dimen>
+    <dimen name="send_comment_height">45dp</dimen>
 
 </resources>

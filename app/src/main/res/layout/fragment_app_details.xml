@@ -33,7 +33,6 @@
                 android:textSize="@dimen/details_box_name_creator_name_text"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
-                android:text="Posted by Georgi Mirchev"
                 android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
                 android:layout_toLeftOf="@+id/vote"
                 android:layout_toRightOf="@+id/creator_avatar"/>
@@ -45,7 +44,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center"
                 android:textSize="@dimen/details_box_vote_text"
-                android:text="25"
+                android:text="0"
                 android:textColor="@color/bg_primary"
                 android:background="@drawable/btn_vote"
                 android:layout_alignParentRight="true"/>
@@ -125,10 +124,10 @@
                 android:id="@+id/voters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnWidth="30dp"
+                android:columnWidth="@dimen/voters_gridview_column_width"
                 android:numColumns="auto_fit"
                 android:layout_below="@id/header_voters"
-                android:verticalSpacing="5dp"
+                android:verticalSpacing="@dimen/voters_gridview_vertical_spacing"
                 />
 
             </RelativeLayout>
@@ -145,37 +144,21 @@
             android:id="@+id/header_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/close_comments"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:paddingLeft="@dimen/header_comments_padding_left"
+            android:paddingRight="@dimen/header_comments_padding_left"
+            android:paddingTop="@dimen/header_comments_padding_top"
+            android:paddingBottom="@dimen/header_comments_padding_top"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:textColor="#C8FFFFFF"/>
-        
-        <TextView
-            android:id="@+id/close_comments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textColor="#C8FFFFFF"
-            android:text="close"
-            android:visibility="invisible"/>
+            android:textColor="@color/text_headers"/>
 
         <ImageView
             android:id="@+id/comments_arrow"
-            android:layout_width="20dp"
-            android:layout_height="10dp"
+            android:layout_width="@dimen/comments_arrow_width"
+            android:layout_height="@dimen/comments_arrow_height"
             android:layout_below="@+id/header_comments"
             android:background="@drawable/comments_arrow"
-            android:layout_marginLeft="50dp"/>
+            android:layout_marginLeft="@dimen/comments_arrow_margin_left"/>
 
         <ListView
             android:id="@+id/comments"
@@ -190,52 +173,52 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#cdcdcd"
+            android:background="@color/divider"
             android:layout_above="@+id/comment_entry"/>
 
         <EditText
             android:id="@+id/comment_entry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="45dp"
+            android:minHeight="@dimen/comment_entry_min_height"
             android:layout_alignParentBottom="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="80dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingLeft="@dimen/comment_entry_padding_left"
+            android:paddingRight="@dimen/comment_entry_padding_right"
+            android:paddingTop="@dimen/comment_entry_padding_top"
+            android:paddingBottom="@dimen/comment_entry_padding_top"
             android:background="@color/bg_secondary"
             android:gravity="top"
             android:singleLine="false"
-            android:textSize="14sp"
-            android:hint="Write a comment..."
-            android:textColorHint="#69000000"
+            android:textSize="@dimen/comment_entry_text"
+            android:hint="@string/comment_entry_hint"
+            android:textColorHint="@color/comment_entry_hint"
             android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/label_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="45dp"
+            android:minHeight="@dimen/comment_entry_min_height"
             android:layout_alignParentBottom="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="80dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingLeft="@dimen/comment_entry_padding_left"
+            android:paddingRight="@dimen/comment_entry_padding_right"
+            android:paddingTop="@dimen/comment_entry_padding_top"
+            android:paddingBottom="@dimen/comment_entry_padding_top"
             android:background="@color/bg_secondary"
             android:gravity="top"
             android:singleLine="false"
-            android:textSize="14sp"
-            android:hint="Write a comment..."
-            android:textColorHint="#69000000"/>
+            android:textSize="@dimen/comment_entry_text"
+            android:hint="@string/comment_entry_hint"
+            android:textColorHint="@color/comment_entry_hint"/>
 
         <TextView
             android:id="@+id/send_comment"
-            android:layout_width="65dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/send_comment_width"
+            android:layout_height="@dimen/send_comment_height"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@color/bg_secondary"
-            android:text="send"
+            android:text="@string/send"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:textColor="@color/bg_primary"

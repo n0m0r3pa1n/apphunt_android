@@ -9,11 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +43,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     private EditText desc;
     private ApplicationInfo data;
     private ActionBarActivity activity;
+    private boolean saveBtnClicked;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,10 +85,11 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.save:
                 if (desc.getText() != null && desc.getText().length() >=50) {
+                    v.setEnabled(false);
                     SaveApp app = new SaveApp();
                     app.setDescription(desc.getText().toString());
                     app.setPackageName(data.packageName);
@@ -108,13 +113,13 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                             activity.getSupportFragmentManager().popBackStack();
 
                             NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
-
+                            v.setEnabled(true);
                         }
                     });
                 } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
-                    desc.setText(null);
                     desc.setHint(R.string.hint_short_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+                    desc.setError("Min 50 chars");
                     Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(300);
                 } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
@@ -127,12 +132,24 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         }
     }
 
+    private void closeKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        closeKeyboard(desc);
+    }
 }

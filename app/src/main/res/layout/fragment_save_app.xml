@@ -46,7 +46,8 @@
             android:hint="@string/hint_description"
             android:textSize="@dimen/save_box_desc_text"
             android:textColor="@color/desc_text"
-            android:textColorHint="@color/desc_hint"/>
+            android:textColorHint="@color/desc_hint"
+            android:inputType="textMultiLine"/>
         
         <View
             android:layout_width="match_parent"
