@@ -9,6 +9,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_notification">Notification</string>
     <string name="title_app_details">Details</string>
+    <string name="title_close">Close</string>
 
     <!-- Actions -->
     <string name="action_enable_notifications">com.apphunt.app.action.ENABLE_NOTIFICATIONS</string>
@@ -79,4 +80,6 @@
         <item quantity="other">%d COMMENTS</item>
     </plurals>
     <string name="reply_to">\@%s </string>
+    <string name="comment_entry_hint">Write a comment...</string>
+    <string name="send">send</string>
 </resources>

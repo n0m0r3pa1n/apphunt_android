@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +35,6 @@ import com.apphunt.app.api.Callback;
 import com.apphunt.app.api.models.App;
 import com.apphunt.app.api.models.Comment;
 import com.apphunt.app.api.models.Comments;
-import com.apphunt.app.api.models.DetailedApp;
 import com.apphunt.app.api.models.NewComment;
 import com.apphunt.app.api.models.User;
 import com.apphunt.app.api.models.Vote;
@@ -42,6 +43,7 @@ import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.widgets.AvatarImageView;
+import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -52,7 +54,7 @@ import com.squareup.picasso.Target;
 import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
-public class AppDetailsFragment extends BaseFragment implements OnClickListener, AdapterView.OnItemClickListener {
+public class AppDetailsFragment extends BaseFragment implements OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private View view;
@@ -61,7 +63,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private OnAppVoteListener callback;
 
     // TODO: DEV
-    private App testApp = new App();
     private ImageView icon;
     private TextView appName;
     private TextView appDescription;
@@ -84,12 +85,14 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private TextView send;
     private EditText commentBox;
     
-    private TextView closeComments;
     private Animation enterAnimation;
     private int commentBoxHeight;
     private RelativeLayout.LayoutParams params;
     private Comment replyToComment;
     private RelativeLayout boxDesc;
+    private TextView labelComment;
+    private boolean isCommentsBoxOpened = false;
+    private boolean endOfList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +100,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
         appId = getArguments().getString(Constants.KEY_APP_ID);
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
-        userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
 
         setTitle(R.string.title_app_details);
         isVoted = false;
@@ -129,6 +131,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         headerComments = (TextView) view.findViewById(R.id.header_comments);
         commentsList = (ListView) view.findViewById(R.id.comments);
         commentsList.setOnItemClickListener(this);
+        commentsList.setOnScrollListener(this);
         
         boxDetails = (RelativeLayout) view.findViewById(R.id.box_details);
         boxComments = (RelativeLayout) view.findViewById(R.id.box_comments);
@@ -154,16 +157,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
         
-        TextView labelComment = (TextView) view.findViewById(R.id.label_comment);
+        labelComment = (TextView) view.findViewById(R.id.label_comment);
         if (userHasPermissions()) {
             labelComment.setVisibility(View.GONE);
             commentBox.setVisibility(View.VISIBLE);
         }
         
         labelComment.setOnClickListener(this);
-        
-        closeComments = (TextView) view.findViewById(R.id.close_comments);
-        closeComments.setOnClickListener(this);
         
         send = (TextView) view.findViewById(R.id.send_comment);
         send.setOnClickListener(this);
@@ -185,48 +185,67 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         });
     }
     
-    private void loadData() {
-        AppHuntApiClient.getClient().getDetailedApp(userId, appId, 20, new Callback<DetailedApp>() {
+    public void loadData() {
+        userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
+        AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<App>() {
             @Override
-            public void success(DetailedApp detailedApp, Response response) {
-                if (detailedApp != null) {
-                    app = detailedApp.getApp();
+            public void success(App app, Response response) {
+                if (app != null) {
+                    AppDetailsFragment.this.app = app;
 
                     Picasso.with(activity)
-                            .load(detailedApp.getApp().getCreatedBy().getProfilePicture())
+                            .load(app.getCreatedBy().getProfilePicture())
                             .into(creator);
                     creatorName.setText(String.format(getString(R.string.posted_by),
-                            detailedApp.getApp().getCreatedBy().getName()));
+                            app.getCreatedBy().getName()));
 
-                    if (detailedApp.getApp().isHasVoted()) {
+                    if (app.isHasVoted()) {
                         vote.setTextColor(getResources().getColor(R.color.bg_secondary));
                         vote.setBackgroundResource(R.drawable.btn_voted_v2);
                     } else {
                         vote.setTextColor(getResources().getColor(R.color.bg_primary));
                         vote.setBackgroundResource(R.drawable.btn_vote);
                     }
-                    vote.setText(detailedApp.getApp().getVotesCount());
+                    vote.setText(app.getVotesCount());
                     vote.setOnClickListener(AppDetailsFragment.this);
 
                     Picasso.with(activity)
-                            .load(detailedApp.getApp().getIcon())
+                            .load(app.getIcon())
                             .into(icon);
-                    appName.setText(detailedApp.getApp().getName());
-                    appDescription.setText(detailedApp.getApp().getDescription());
+                    appName.setText(app.getName());
+                    appDescription.setText(app.getDescription());
 
-                    headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(detailedApp.getApp().getVotesCount()), Integer.valueOf(detailedApp.getApp().getVotesCount())));
-                    votersAdapter = new VotersAdapter(activity, detailedApp.getApp().getVotes());
+                    headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(app.getVotesCount()),
+                            Integer.valueOf(app.getVotesCount())));
+                    votersAdapter = new VotersAdapter(activity, app.getVotes());
                     avatars.setAdapter(votersAdapter);
+                    
+                    if (userHasPermissions()) {
+                        labelComment.setVisibility(View.GONE);
+                        commentBox.setVisibility(View.VISIBLE);
+                    } else {
+                        labelComment.setVisibility(View.VISIBLE);
+                        commentBox.setVisibility(View.INVISIBLE);
+                    }
 
-                    commentsAdapter = new CommentsAdapter(activity, detailedApp.getCommentsData().getComments());
-                    commentsList.setAdapter(commentsAdapter);
-
-                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
+                    userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
                 }
             }
         });
-    }
 
+        AppHuntApiClient.getClient().getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
+            @Override
+            public void success(Comments comments, Response response) {
+                commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
+                commentsList.setAdapter(commentsAdapter);
+
+                headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
+
+                userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
+            }
+        });
+    }
+    
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
@@ -285,8 +304,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             
             case R.id.label_comment:
                 FacebookUtils.showLoginFragment(activity);
-                v.setVisibility(View.GONE);
-                commentBox.setVisibility(View.VISIBLE);
                 break;
             
             case R.id.send_comment:
@@ -310,6 +327,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                                 comment.setParentId(replyToComment.getParentId());
                             }
                         }
+                    } else {
+                        commentBox.setHint(R.string.comment_entry_hint);
                     }
 
                     comment.setText(commentBox.getText().toString());
@@ -337,12 +356,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
                 closeKeyboard(v);
                 commentBox.getText().clear();
-                resizeCommentBox(true);
-                break;
-            
-            case R.id.close_comments:
-                closeKeyboard(v);
-                showDetails();
                 resizeCommentBox(true);
                 break;
         }
@@ -389,27 +402,34 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         if (isVoted) callback.onAppVote(itemPosition);
     }
 
-    private void showDetails() {
+    public void showDetails() {
+        ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.title_app_details);
         params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         boxDetails.setVisibility(View.VISIBLE);
-        closeComments.setVisibility(View.INVISIBLE);
 
         params.addRule(RelativeLayout.BELOW, boxDetails.getId());
         boxComments.setLayoutParams(params);
 
         resizeCommentBox(true);
+        isCommentsBoxOpened = false;
+        closeKeyboard(commentBox);
     }
 
     private void hideDetails() {
+        ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.title_close);
         params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         boxDetails.setVisibility(View.GONE);
-        closeComments.setVisibility(View.VISIBLE);
         boxComments.setLayoutParams(params);
 
         resizeCommentBox(false);
+        isCommentsBoxOpened = true;
+    }
+    
+    public boolean isCommentsBoxOpened() {
+        return isCommentsBoxOpened;
     }
 
     private void resizeCommentBox(boolean reset) {
@@ -443,5 +463,22 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     
     private boolean userHasPermissions() {
         return LoginProviderFactory.get(activity).isUserLoggedIn();
+    }
+
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (ConnectivityUtils.isNetworkAvailable(activity)) {
+            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                if (endOfList) {
+                    commentsAdapter.loadMore(appId, userId);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        endOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
     }
 }

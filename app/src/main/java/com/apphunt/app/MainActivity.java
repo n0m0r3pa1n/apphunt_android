@@ -26,6 +26,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
+import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
@@ -243,7 +244,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case android.R.id.home:
-                getSupportFragmentManager().popBackStack();
+                AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+                if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
+                    fragment.showDetails();
+                } else {
+                    getSupportFragmentManager().popBackStack();
+                }
                 break;
         }
 
@@ -311,6 +317,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible()) {
+            fragment.loadData();
+        }
     }
 
     @Override
@@ -318,6 +329,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
         trendingAppsAdapter.resetAdapter();
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible()) {
+            fragment.loadData();
+        }
     }
 
     @Override
@@ -383,7 +399,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onBackPressed() {
         if (!isBlocked) {
-            super.onBackPressed();
+            AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+            if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
+                fragment.showDetails();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
