@@ -11,6 +11,7 @@ public class User {
     private String profilePicture;
     private String loginType;
     private String locale;
+    private String username;
 
     public String getId() {
         return id;
@@ -70,5 +71,9 @@ public class User {
                 ", loginType='" + loginType + '\'' +
                 ", locale='" + locale + '\'' +
                 '}';
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

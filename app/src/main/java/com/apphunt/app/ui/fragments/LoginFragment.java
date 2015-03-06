@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,8 @@ import android.widget.Toast;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.models.User;
+import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
+import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.utils.Constants;
@@ -25,16 +26,11 @@ import com.google.android.gms.common.AccountPicker;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
-import java.util.List;
 import java.util.Locale;
-
-import retrofit.http.GET;
-import retrofit.http.Query;
 
 public class LoginFragment extends BaseFragment {
 
@@ -75,6 +71,7 @@ public class LoginFragment extends BaseFragment {
                     public void success(Result<com.twitter.sdk.android.core.models.User> userResult) {
                         com.twitter.sdk.android.core.models.User twitterUser = userResult.data;
                         user = new User();
+                        user.setUsername(twitterUser.screenName);
                         user.setName(twitterUser.name);
                         user.setProfilePicture(twitterUser.profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
@@ -84,7 +81,7 @@ public class LoginFragment extends BaseFragment {
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
                             public void success(Result<Friends> objectResult) {
-                                Log.d("FriendsResponse", objectResult.data.users.get(0).screenName);
+
                                 Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                                         false, null, null, null, null);
                                 startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
@@ -92,7 +89,7 @@ public class LoginFragment extends BaseFragment {
 
                             @Override
                             public void failure(TwitterException e) {
-                                Log.d("GetFriendsError", e.getMessage(), e);
+                                onLoginFailed();
                             }
                         });
                     }
@@ -121,56 +118,6 @@ public class LoginFragment extends BaseFragment {
 
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
-
-//    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-//        if (state.isOpened()) {
-//            Bundle params = new Bundle();
-//            params.putString("fields", "id,name,email,picture");
-//            new Request(session, "/me", params, HttpMethod.GET, new Request.Callback() {
-//                @Override
-//                public void onCompleted(Response response) {
-//                    if (response != null) {
-//                        try {
-//                            Locale locale = getResources().getConfiguration().locale;
-//
-//                            JSONObject jsonObject = response.getGraphObject().getInnerJSONObject();
-//
-//                            user.setName(jsonObject.getString("name"));
-//                            user.setProfilePicture(jsonObject.getJSONObject("picture").getJSONObject("data").getString("url"));
-//                            user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
-//                            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-//                            user.setEmail(jsonObject.getString("email"));
-//
-//                            if (TextUtils.isEmpty(user.getEmail())) {
-//                                throw new NoUserEmailAddressException();
-//                            }
-//                            LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
-//                            LoginProviderFactory.get(activity).login(user);
-//                        } catch (Exception e) {
-//                            Crashlytics.logException(e);
-//
-//                        } finally {
-//                            activity.supportInvalidateOptionsMenu();
-//                        }
-//                    } else {
-//                        NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_cannot_login), false, false);
-//                    }
-//                }
-//            }).executeAsync();
-//        } else if (state.isClosed()) {
-//            AppSpice.createEvent(TrackingEvents.UserLoggedOut).track();
-//            LoginProviderFactory.get(activity).logout();
-//            activity.supportInvalidateOptionsMenu();
-//        }
-//
-//    }
-//
-//    private Session.StatusCallback callback = new Session.StatusCallback() {
-//        @Override
-//        public void call(Session session, SessionState state, Exception exception) {
-//            onSessionStateChange(session, state, exception);
-//        }
-//    };
 
     @Override
     public void onAttach(Activity activity) {
@@ -208,22 +155,4 @@ public class LoginFragment extends BaseFragment {
         Toast.makeText(getActivity(), R.string.login_canceled_text, Toast.LENGTH_LONG).show();
     }
 
-    class AppHuntTwitterApiClient extends TwitterApiClient {
-        public AppHuntTwitterApiClient(TwitterSession session) {
-            super(session);
-        }
-
-        public FriendsService getFriendsService() {
-            return getService(FriendsService.class);
-        }
-    }
-
-    interface FriendsService {
-        @GET("/1.1/friends/list.json")
-        void getFriends(@Query("screen_name") String screenName, Callback<Friends> cb);
-    }
-
-    class Friends {
-        List<com.twitter.sdk.android.core.models.User> users;
-    }
 }
