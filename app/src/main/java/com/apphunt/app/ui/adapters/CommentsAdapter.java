@@ -102,7 +102,7 @@ public class CommentsAdapter extends BaseAdapter {
                     .load(comment.getUser().getProfilePicture())
                     .into(commentViewHolder.avatar);
 
-            commentViewHolder.name.setText(String.format(ctx.getString(R.string.commenter_name), comment.getUser().getName()));
+            commentViewHolder.name.setText(comment.getUser().getName());
             commentViewHolder.comment.setText(comment.getText());
             commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
             
@@ -154,7 +154,7 @@ public class CommentsAdapter extends BaseAdapter {
                     .load(comment.getUser().getProfilePicture())
                     .into(subCommentViewHolder.avatar);
 
-            subCommentViewHolder.name.setText(String.format(ctx.getString(R.string.commenter_name), comment.getUser().getName()));
+            subCommentViewHolder.name.setText(comment.getUser().getName());
             subCommentViewHolder.comment.setText(comment.getText());
             subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
 
