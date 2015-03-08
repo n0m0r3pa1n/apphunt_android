@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +76,10 @@ public class LoginFragment extends BaseFragment {
         authButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                ((MainActivity) activity).setOnBackBlocked(true);
+                if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+                    LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+                    ((MainActivity) activity).setOnBackBlocked(true);
+                }
             }
         });
         authButton.setReadPermissions(Arrays.asList("email"));
