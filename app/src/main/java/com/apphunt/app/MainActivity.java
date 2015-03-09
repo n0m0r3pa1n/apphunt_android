@@ -290,17 +290,21 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public void onAppSelected(ApplicationInfo data) {
-        Bundle extras = new Bundle();
-        extras.putParcelable(Constants.KEY_DATA, data);
+        String curFragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
 
-        SaveAppFragment saveAppFragment = new SaveAppFragment();
-        saveAppFragment.setArguments(extras);
+        if (!curFragmentTag.equals(Constants.TAG_SAVE_APP_FRAGMENT)) {
+            Bundle extras = new Bundle();
+            extras.putParcelable(Constants.KEY_DATA, data);
 
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
-                .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
-                .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
-                .commit();
+            SaveAppFragment saveAppFragment = new SaveAppFragment();
+            saveAppFragment.setArguments(extras);
+
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                    .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
+                    .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
+                    .commit();
+        }
     }
 
     public void setOnBackBlocked(boolean isBlocked) {
