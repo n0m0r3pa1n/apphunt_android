@@ -2,7 +2,6 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,8 @@ import retrofit.client.Response;
 public class CommentsAdapter extends BaseAdapter {
 
     private static final String TAG = CommentsAdapter.class.getName();
-    private final ListView listView;
+    private ListView listView;
+    private String userId;
 
     private Context ctx;
     private ArrayList<Item> items = new ArrayList<>();
@@ -54,6 +54,7 @@ public class CommentsAdapter extends BaseAdapter {
         addItems(comments.getComments());
         totalPages = comments.getTotalPages();
         page = comments.getPage();
+        userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
 
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -104,6 +105,13 @@ public class CommentsAdapter extends BaseAdapter {
 
             commentViewHolder.name.setText(comment.getUser().getName());
             commentViewHolder.comment.setText(comment.getText());
+
+            if (comment.getUser().getId().equals(userId)) {
+                commentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
+            } else {
+                commentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
+            }
+
             commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
             
             commentViewHolder.vote.setOnClickListener(null);
@@ -157,6 +165,12 @@ public class CommentsAdapter extends BaseAdapter {
             subCommentViewHolder.name.setText(comment.getUser().getName());
             subCommentViewHolder.comment.setText(comment.getText());
             subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
+
+            if (comment.getUser().getId().equals(userId)) {
+                subCommentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
+            } else {
+                subCommentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
+            }
 
             if (comment.isHasVoted()) {
                 subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));

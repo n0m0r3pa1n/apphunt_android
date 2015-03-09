@@ -6,7 +6,8 @@
     android:paddingLeft="15dp"
     android:paddingRight="5dp"
     android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:paddingBottom="5dp"
+    android:elevation="0dp">
 
     <com.apphunt.app.ui.widgets.AvatarImageView
         android:id="@+id/avatar"
