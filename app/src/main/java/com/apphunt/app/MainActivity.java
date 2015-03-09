@@ -197,8 +197,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        String tag = null;
+
         switch (item.getItemId()) {
             case R.id.action_login:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
+                    break;
                 FacebookUtils.showLoginFragment(this);
                 break;
 
@@ -208,6 +213,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_settings:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
+                    break;
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
                         .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
@@ -228,6 +236,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 break;
 
             case R.id.action_suggest:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
+                    break;
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
                         .add(R.id.container, new SuggestFragment(), Constants.TAG_SUGGEST_FRAGMENT)

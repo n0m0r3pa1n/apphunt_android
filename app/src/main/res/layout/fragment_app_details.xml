@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginBottom="@dimen/details_box_voters_header_margin"
-                android:text="25 voters"
+                android:text="0 voters"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="@color/text_headers"/>
@@ -148,9 +148,40 @@
             android:paddingRight="@dimen/header_comments_padding_left"
             android:paddingTop="@dimen/header_comments_padding_top"
             android:paddingBottom="@dimen/header_comments_padding_top"
+            android:layout_toLeftOf="@+id/show_comments"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:textColor="@color/text_headers"/>
+            android:textColor="@color/text_headers"
+            android:text="0 comments"/>
+
+        <TextView
+            android:id="@+id/show_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/header_comments_padding_left"
+            android:paddingRight="@dimen/header_comments_padding_left"
+            android:paddingTop="@dimen/header_comments_padding_top"
+            android:paddingBottom="@dimen/header_comments_padding_top"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/text_headers"
+            android:text="@string/show_all_comments"/>
+
+        <TextView
+            android:id="@+id/hide_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/header_comments_padding_left"
+            android:paddingRight="@dimen/header_comments_padding_left"
+            android:paddingTop="@dimen/header_comments_padding_top"
+            android:paddingBottom="@dimen/header_comments_padding_top"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/text_headers"
+            android:text="@string/hide_all_comments"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/comments_arrow"

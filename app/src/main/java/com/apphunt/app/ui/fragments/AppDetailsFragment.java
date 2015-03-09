@@ -93,6 +93,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private TextView labelComment;
     private boolean isCommentsBoxOpened = false;
     private boolean endOfList;
+    private TextView showAllComments;
+    private TextView hideAllComments;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,6 +137,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         
         boxDetails = (RelativeLayout) view.findViewById(R.id.box_details);
         boxComments = (RelativeLayout) view.findViewById(R.id.box_comments);
+
+        showAllComments = (TextView) view.findViewById(R.id.show_comments);
+        showAllComments.setOnClickListener(this);
+
+        hideAllComments = (TextView) view.findViewById(R.id.hide_comments);
+        hideAllComments.setOnClickListener(this);
         
         commentBox = (EditText) view.findViewById(R.id.comment_entry);
         commentBox.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -306,6 +314,14 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             case R.id.label_comment:
                 FacebookUtils.showLoginFragment(activity);
                 break;
+
+            case R.id.show_comments:
+                hideDetails();
+                break;
+
+            case R.id.hide_comments:
+                showDetails();
+                break;
             
             case R.id.send_comment:
                 if (!userHasPermissions()) {
@@ -344,11 +360,11 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         public void success(NewComment comment, Response response) {
                             if (response.getStatus() == 200) {
                                 AppHuntApiClient.getClient().getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID),
-                                        1, 10, new Callback<Comments>() {
+                                        1, 3, new Callback<Comments>() {
                                             @Override
                                             public void success(Comments comments, Response response) {
                                                 if (comments != null) {
-                                                    commentsAdapter.resetAdapter(comments.getComments());
+                                                    commentsAdapter.resetAdapter(comments);
                                                     headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
                                                 }
                                             }
@@ -419,6 +435,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         resizeCommentBox(true);
         isCommentsBoxOpened = false;
         closeKeyboard(commentBox);
+
+        showAllComments.setVisibility(View.VISIBLE);
+        hideAllComments.setVisibility(View.INVISIBLE);
     }
 
     private void hideDetails() {
@@ -430,6 +449,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
         resizeCommentBox(false);
         isCommentsBoxOpened = true;
+
+        showAllComments.setVisibility(View.INVISIBLE);
+        hideAllComments.setVisibility(View.VISIBLE);
     }
     
     public boolean isCommentsBoxOpened() {
@@ -441,10 +463,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, commentBoxHeight);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             commentBox.setLayoutParams(params);
+            labelComment.setLayoutParams(params);
         } else {
             params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2 * commentBoxHeight);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             commentBox.setLayoutParams(params);
+            labelComment.setLayoutParams(params);
         }
     }
     
@@ -476,7 +500,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList) {
                     AppSpice.createEvent(TrackingEvents.UserScrolledDownCommentList).track();
-                    commentsAdapter.loadMore(appId, userId);
+                    commentsAdapter.loadMore(appId, userId, headerComments);
+
                 }
             }
         }
