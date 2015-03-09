@@ -82,4 +82,6 @@
     <string name="reply_to">\@%s </string>
     <string name="comment_entry_hint">Write a comment...</string>
     <string name="send">send</string>
+    <string name="show_all_comments">Show all</string>
+    <string name="hide_all_comments">hide all</string>
 </resources>

@@ -2,6 +2,7 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,7 @@ public class CommentsAdapter extends BaseAdapter {
         this.ctx = ctx;
         this.listView = listView;
 
-        addItems(comments.getComments());
+        addItems(comments);
         totalPages = comments.getTotalPages();
         page = comments.getPage();
         userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
@@ -255,8 +256,8 @@ public class CommentsAdapter extends BaseAdapter {
         return (item instanceof CommentItem) ? ((CommentItem) item).getData() : ((SubCommentItem) item).getData();
     }
     
-    public void addItems(ArrayList<Comment> comments) {
-        for (Comment c : comments) {
+    public void addItems(Comments comments) {
+        for (Comment c : comments.getComments()) {
             items.add(new CommentItem(c));
 
             if (c.getChildren().size() > 0) {
@@ -266,25 +267,26 @@ public class CommentsAdapter extends BaseAdapter {
             }
         }
 
-        page = 2;
+        page = comments.getPage();
         notifyDataSetChanged();
     }
     
-    public void loadMore(String appId, String userId) {
+    public void loadMore(String appId, String userId, final TextView header) {
         if (page < totalPages) {
             AppHuntApiClient.getClient().getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
                 @Override
                 public void success(Comments comments, Response response) {
-                    addItems(comments.getComments());
+                    addItems(comments);
                     listView.smoothScrollToPosition(items.size() - 3);
                     page = comments.getPage();
                     totalPages = comments.getTotalPages();
+                    header.setText(ctx.getResources().getQuantityString(R.plurals.header_comments, getCount(), getCount()));
                 }
             });
         }
     }
 
-    public void resetAdapter(ArrayList<Comment> comments) {
+    public void resetAdapter(Comments comments) {
         items.clear();
         addItems(comments);
     }
