@@ -26,17 +26,20 @@ import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.TrackingEvents;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
+import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 public class CommentsAdapter extends BaseAdapter {
 
     private static final String TAG = CommentsAdapter.class.getName();
-    private final ListView listView;
+    private ListView listView;
+    private String userId;
 
     private Context ctx;
     private ArrayList<Item> items = new ArrayList<>();
@@ -53,6 +56,7 @@ public class CommentsAdapter extends BaseAdapter {
         addItems(comments.getComments());
         totalPages = comments.getTotalPages();
         page = comments.getPage();
+        userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
 
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -101,8 +105,15 @@ public class CommentsAdapter extends BaseAdapter {
                     .load(comment.getUser().getProfilePicture())
                     .into(commentViewHolder.avatar);
 
-            commentViewHolder.name.setText(String.format(ctx.getString(R.string.commenter_name), comment.getUser().getName()));
+            commentViewHolder.name.setText(comment.getUser().getName());
             commentViewHolder.comment.setText(comment.getText());
+
+            if (comment.getUser().getId().equals(userId)) {
+                commentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
+            } else {
+                commentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
+            }
+
             commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
             
             commentViewHolder.vote.setOnClickListener(null);
@@ -111,6 +122,7 @@ public class CommentsAdapter extends BaseAdapter {
                 public void onClick(final View v) {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
+                            AppSpice.createEvent(TrackingEvents.UserDownVotedComment).track();
                             AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -122,6 +134,7 @@ public class CommentsAdapter extends BaseAdapter {
                                 }
                             });
                         } else {
+                            AppSpice.createEvent(TrackingEvents.UserVotedComment).track();
                             AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -153,9 +166,15 @@ public class CommentsAdapter extends BaseAdapter {
                     .load(comment.getUser().getProfilePicture())
                     .into(subCommentViewHolder.avatar);
 
-            subCommentViewHolder.name.setText(String.format(ctx.getString(R.string.commenter_name), comment.getUser().getName()));
+            subCommentViewHolder.name.setText(comment.getUser().getName());
             subCommentViewHolder.comment.setText(comment.getText());
             subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
+
+            if (comment.getUser().getId().equals(userId)) {
+                subCommentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
+            } else {
+                subCommentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
+            }
 
             if (comment.isHasVoted()) {
                 subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
@@ -170,6 +189,7 @@ public class CommentsAdapter extends BaseAdapter {
                 public void onClick(final View v) {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
+                            AppSpice.createEvent(TrackingEvents.UserDownVotedReplyComment).track();
                             AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -181,6 +201,7 @@ public class CommentsAdapter extends BaseAdapter {
                                 }
                             });
                         } else {
+                            AppSpice.createEvent(TrackingEvents.UserVotedReplyComment).track();
                             AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {

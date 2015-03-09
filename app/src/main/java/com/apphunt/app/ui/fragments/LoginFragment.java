@@ -57,8 +57,10 @@ public class LoginFragment extends BaseFragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                ((MainActivity) activity).setOnBackBlocked(true);
+                if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+                    LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+                    ((MainActivity) activity).setOnBackBlocked(true);
+                }
             }
         });
         loginButton.setCallback(new Callback<TwitterSession>() {

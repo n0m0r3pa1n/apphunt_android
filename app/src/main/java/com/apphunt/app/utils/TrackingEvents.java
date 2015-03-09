@@ -22,5 +22,15 @@ public interface TrackingEvents {
     static String UserStartedAppFromDailyTrendingAppsNotification = "user.started.app.from.daily.trending.apps.notification";
     static String AppShowedTrendingAppsNotification = "app.showed.trending.apps.notification";
     static String UserOpenedAppFromList = "user.opened.app.from.list";
+    static String UserVotedAppFromDetails = "user.voted.app.from.details";
+    static String UserDownVotedAppFromDetails = "user.down.voted.app.from.details";
+    static String UserSentComment = "user.sent.comment";
+    static String UserSentReplyComment = "user.sent.reply.comment";
+    static String UserVotedComment = "user.voted.comment";
+    static String UserDownVotedComment = "user.down.voted.comment";
+    static String UserVotedReplyComment = "user.voted.reply.comment";
+    static String UserDownVotedReplyComment = "user.down.voted.reply.comment";
+    static String UserScrolledDownCommentList = "user.scrolled.down.comment.list";
+    static String UserOpenedAppInMarket = "user.opened.app.in.market";
     static String UserMadeSuggestion = "user.made.suggestion";
 }
