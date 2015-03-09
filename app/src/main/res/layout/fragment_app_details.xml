@@ -200,6 +200,17 @@
             android:layout_above="@+id/divider"
             android:elevation="0dp"/>
 
+        <TextView
+            android:id="@+id/label_no_comments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/comments_arrow"
+            android:layout_above="@+id/divider"
+            android:text="@string/be_first"
+            android:gravity="center"
+            android:visibility="gone"
+            android:elevation="0dp"/>
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"

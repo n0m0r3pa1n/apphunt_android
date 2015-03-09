@@ -244,6 +244,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         AppHuntApiClient.getClient().getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
             @Override
             public void success(Comments comments, Response response) {
+                if (comments.getTotalCount() == 0) {
+                    view.findViewById(R.id.label_no_comments).setVisibility(View.VISIBLE);
+                }
+
                 commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
                 commentsList.setAdapter(commentsAdapter);
 
