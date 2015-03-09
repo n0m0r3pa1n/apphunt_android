@@ -72,7 +72,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
         setContentView(R.layout.activity_main);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
@@ -89,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         initUI();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-//        showStartFragments(getIntent());
+        showStartFragments(getIntent());
     }
 
     @Override
