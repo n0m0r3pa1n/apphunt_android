@@ -27,11 +27,13 @@ import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.TrackingEvents;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
+import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 public class CommentsAdapter extends BaseAdapter {
@@ -112,6 +114,7 @@ public class CommentsAdapter extends BaseAdapter {
                 public void onClick(final View v) {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
+                            AppSpice.createEvent(TrackingEvents.UserDownVotedComment).track();
                             AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -123,6 +126,7 @@ public class CommentsAdapter extends BaseAdapter {
                                 }
                             });
                         } else {
+                            AppSpice.createEvent(TrackingEvents.UserVotedComment).track();
                             AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -171,6 +175,7 @@ public class CommentsAdapter extends BaseAdapter {
                 public void onClick(final View v) {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
+                            AppSpice.createEvent(TrackingEvents.UserDownVotedReplyComment).track();
                             AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
@@ -182,6 +187,7 @@ public class CommentsAdapter extends BaseAdapter {
                                 }
                             });
                         } else {
+                            AppSpice.createEvent(TrackingEvents.UserVotedReplyComment).track();
                             AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {

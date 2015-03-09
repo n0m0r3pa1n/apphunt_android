@@ -255,7 +255,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
-                                AppSpice.createEvent(TrackingEvents.UserDownVoted).track();
+                                AppSpice.createEvent(TrackingEvents.UserDownVotedAppFromDetails).track();
                                 app.setVotesCount(voteResult.getVotes());
                                 app.setHasVoted(false);
                                 vote.setText(voteResult.getVotes());
@@ -274,7 +274,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
-                                AppSpice.createEvent(TrackingEvents.UserVoted).track();
+                                AppSpice.createEvent(TrackingEvents.UserVotedAppFromDetails).track();
                                 app.setVotesCount(voteResult.getVotes());
                                 app.setHasVoted(true);
                                 vote.setText(voteResult.getVotes());
@@ -299,6 +299,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 break;
 
             case R.id.box_desc:
+                AppSpice.createEvent(TrackingEvents.UserOpenedAppInMarket).track();
                 openAppOnGooglePlay();
                 break;
             
@@ -326,6 +327,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                             } else {
                                 comment.setParentId(replyToComment.getParentId());
                             }
+                            AppSpice.createEvent(TrackingEvents.UserSentReplyComment).track();
+                        } else {
+                            AppSpice.createEvent(TrackingEvents.UserSentComment).track();
                         }
                     } else {
                         commentBox.setHint(R.string.comment_entry_hint);
@@ -471,6 +475,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         if (ConnectivityUtils.isNetworkAvailable(activity)) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList) {
+                    AppSpice.createEvent(TrackingEvents.UserScrolledDownCommentList).track();
                     commentsAdapter.loadMore(appId, userId);
                 }
             }

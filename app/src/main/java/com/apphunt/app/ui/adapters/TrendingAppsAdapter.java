@@ -183,7 +183,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     try {
-//                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
+                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
 
                         App app = ((AppItem) getItem(position)).getData();
                         
