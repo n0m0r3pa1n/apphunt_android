@@ -23,9 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
-import com.apphunt.app.api.models.SaveApp;
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;

@@ -5,12 +5,11 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
-import com.apphunt.app.api.models.User;
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.ui.fragments.LoginFragment;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -41,10 +40,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public boolean isUserLoggedIn() {
         String userId = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_USER_ID);
         String loginProvider = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_LOGIN_PROVIDER);
-
-        boolean isLoggedIn = !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
-
-        return isLoggedIn;
+        return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
     }
 
     protected void removeSharedPreferences(Activity activity) {
@@ -55,7 +51,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public void login(User user) {
-        Log.d("User login", "user login");
         AppHuntApiClient.getClient().createUser(user, new Callback<User>() {
             @Override
             public void success(User user, retrofit.client.Response response) {

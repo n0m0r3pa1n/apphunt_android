@@ -1,4 +1,4 @@
-package com.apphunt.app.api.models;
+package com.apphunt.app.api.apphunt.models;
 
 import com.google.gson.annotations.SerializedName;
 

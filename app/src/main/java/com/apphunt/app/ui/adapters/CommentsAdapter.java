@@ -14,11 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
-import com.apphunt.app.api.models.Comment;
-import com.apphunt.app.api.models.CommentVote;
-import com.apphunt.app.api.models.Comments;
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.Comment;
+import com.apphunt.app.api.apphunt.models.CommentVote;
+import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;

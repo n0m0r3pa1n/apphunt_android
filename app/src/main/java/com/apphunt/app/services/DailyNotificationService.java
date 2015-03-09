@@ -10,8 +10,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
@@ -47,9 +47,9 @@ public class DailyNotificationService extends IntentService {
         final String date = dateFormat.format(calendar.getTime());
 
         AppSpice.init(this, Constants.APP_SPICE_APP_ID);
-        AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.models.Notification>() {
+        AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
             @Override
-            public void success(com.apphunt.app.api.models.Notification notification, Response response) {
+            public void success(com.apphunt.app.api.apphunt.models.Notification notification, Response response) {
 
                 AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
                 Intent notifyIntent = new Intent(DailyNotificationService.this, MainActivity.class);

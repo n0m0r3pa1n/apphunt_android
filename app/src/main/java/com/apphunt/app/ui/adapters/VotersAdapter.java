@@ -2,15 +2,14 @@ package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.models.User;
-import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;

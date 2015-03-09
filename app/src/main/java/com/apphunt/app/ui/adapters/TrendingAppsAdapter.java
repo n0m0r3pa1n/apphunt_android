@@ -21,11 +21,11 @@ import android.widget.TextView;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.AppHuntApiClient;
-import com.apphunt.app.api.Callback;
-import com.apphunt.app.api.models.App;
-import com.apphunt.app.api.models.AppsList;
-import com.apphunt.app.api.models.Vote;
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.App;
+import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;

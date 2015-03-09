@@ -1,6 +1,6 @@
 package com.apphunt.app.ui.listview_items;
 
-import com.apphunt.app.api.models.App;
+import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.utils.Constants;
 
 public class AppItem implements Item {
