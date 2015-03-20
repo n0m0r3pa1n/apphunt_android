@@ -227,14 +227,15 @@ public class TrendingAppsAdapter extends BaseAdapter {
         AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
             @Override
             public void success(AppsList appsList, Response response) {
-                calendar.add(Calendar.DATE, -1);
                 if (appsList.getTotalCount() > 0) {
                     notifyAdapter(appsList);
                     if (!success) {
+                        calendar.add(Calendar.DATE, -1);
                         getApps();
                         success = true;
                     }
                 } else {
+                    calendar.add(Calendar.DATE, -1);
                     getApps();
                 }
             }
