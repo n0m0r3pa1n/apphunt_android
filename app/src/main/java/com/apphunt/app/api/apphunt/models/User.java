@@ -64,6 +64,10 @@ public class User {
         this.locale = locale;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public String toString() {
         return "User{" +

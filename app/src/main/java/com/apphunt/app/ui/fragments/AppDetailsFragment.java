@@ -337,7 +337,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 
                 if (commentBox.getText().length() > 0) {
                     if (replyToComment != null) {
-                        String replyToName = String.format(getString(R.string.reply_to), replyToComment.getUser().getName()).split(" ")[0];
+                        String replyToName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername());
                         int replyToNameLength = replyToName.length();
 
                         if (commentBox.getText().length() > replyToNameLength &&
@@ -388,7 +388,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         replyToComment = commentsAdapter.getComment(position);
-        String replyName = String.format(getString(R.string.reply_to), replyToComment.getUser().getName().split(" ")[0]) + " ";
+        String replyName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername()) + " ";
         
         commentBox.getText().clear();
         commentBox.setText(replyName);
