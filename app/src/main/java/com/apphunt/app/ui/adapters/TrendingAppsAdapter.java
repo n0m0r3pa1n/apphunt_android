@@ -15,7 +15,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +37,7 @@ import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -52,7 +52,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private static final String TAG = TrendingAppsAdapter.class.getName();
 
     private Context ctx;
-    private ListView listView;
+    private SuperListview listView;
     private ArrayList<Item> items = new ArrayList<>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
@@ -68,7 +68,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private ViewHolderMoreApps viewHolderMoreApps = null;
     private int selectedAppPosition = -1;
 
-    public TrendingAppsAdapter(Context ctx, ListView listView) {
+    public TrendingAppsAdapter(Context ctx, SuperListview listView) {
         this.ctx = ctx;
         this.listView = listView;
 
@@ -92,6 +92,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem.icon = (ImageView) view.findViewById(R.id.app_icon);
                 viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
                 viewHolderItem.description = (TextView) view.findViewById(R.id.description);
+                viewHolderItem.commentsCount = (TextView) view.findViewById(R.id.comments_count);
                 viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
 
                 view.setTag(viewHolderItem);
@@ -128,6 +129,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
             viewHolderItem.title.setText(app.getName());
             viewHolderItem.description.setText(app.getDescription());
+            viewHolderItem.commentsCount.setText(String.valueOf(app.getCommentsCount()));
             viewHolderItem.vote.setText(app.getVotesCount());
 
             viewHolderItem.vote.setOnClickListener(null);
@@ -176,7 +178,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem.vote.setBackgroundResource(R.drawable.btn_vote);
                 viewHolderItem.vote.setTextColor(Color.parseColor("#2f90de"));
             }
-//            viewHolderItem.vote.setBackgroundResource((app.isHasVoted() ? R.drawable.btn_voted : R.drawable.btn_vote));
 
             viewHolderItem.layout.setOnClickListener(null);
             viewHolderItem.layout.setOnClickListener(new View.OnClickListener() {
@@ -266,7 +267,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
         
         if (selectedAppPosition > -1) {
-            listView.smoothScrollToPosition(selectedAppPosition);
+            listView.getList().smoothScrollToPosition(selectedAppPosition);
         }
     }
 
@@ -310,7 +311,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
 
         LoadersUtils.hideBottomLoader((Activity) ctx);
-        listView.smoothScrollToPosition(this.items.size() - 3);
+        listView.getList().smoothScrollToPosition(this.items.size() - 3);
     }
 
     private void loadMoreApps(final int position) {
@@ -334,7 +335,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         items.addAll(position, newItems);
 
                         notifyDataSetChanged();
-                        listView.smoothScrollToPosition(position + newItems.size());
+                        listView.getList().smoothScrollToPosition(position + newItems.size());
                     }
                 });
     }
@@ -395,6 +396,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         ImageView icon;
         TextView title;
         TextView description;
+        TextView commentsCount;
         Button vote;
     }
 

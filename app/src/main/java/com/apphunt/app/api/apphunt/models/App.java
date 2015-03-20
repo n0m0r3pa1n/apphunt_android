@@ -18,6 +18,7 @@ public class App {
     private boolean hasVoted;
     private ArrayList<Vote> votes = new ArrayList<>();
     private User createdBy;
+    private int commentsCount;
 
     public String getId() {
         return id;
@@ -107,6 +108,18 @@ public class App {
         this.votes = votes;
     }
 
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    public void setVotesCount(int votesCount) {
+        this.votesCount = votesCount;
+    }
+
     @Override
     public String toString() {
         return "App{" +
@@ -115,12 +128,13 @@ public class App {
                 ", description='" + description + '\'' +
                 ", icon='" + icon + '\'' +
                 ", packageName='" + packageName + '\'' +
-                ", votesCount='" + votesCount + '\'' +
+                ", votesCount=" + votesCount +
                 ", shortUrl='" + shortUrl + '\'' +
                 ", url='" + url + '\'' +
                 ", hasVoted=" + hasVoted +
                 ", votes=" + votes +
                 ", createdBy=" + createdBy +
+                ", commentsCount=" + commentsCount +
                 '}';
     }
 }

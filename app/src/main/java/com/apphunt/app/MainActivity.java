@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
@@ -45,6 +46,7 @@ import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.widget.FacebookDialog;
+import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
@@ -58,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     private static final String TAG = MainActivity.class.getName();
 
-    private ListView trendingAppsList;
+    private SuperListview trendingAppsList;
     private FloatingActionButton addAppButton;
     private Button reloadButton;
     private TrendingAppsAdapter trendingAppsAdapter;
@@ -106,11 +108,17 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
         addAppButton.setOnClickListener(this);
 
-        trendingAppsList = (ListView) findViewById(R.id.trending_list);
+        trendingAppsList = (SuperListview) findViewById(R.id.trending_list);
 
         trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
         trendingAppsList.setAdapter(trendingAppsAdapter);
         trendingAppsList.setOnScrollListener(this);
+        trendingAppsList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                trendingAppsAdapter.resetAdapter();
+            }
+        });
 
         reloadButton = (Button) findViewById(R.id.reload);
         reloadButton.setOnClickListener(this);

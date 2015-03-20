@@ -192,7 +192,7 @@
             android:layout_marginLeft="@dimen/comments_arrow_margin_left"/>
 
         <ListView
-            android:id="@+id/comments"
+            android:id="@+id/comments_count"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg_secondary"

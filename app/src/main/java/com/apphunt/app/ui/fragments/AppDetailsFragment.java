@@ -131,7 +131,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         avatars = (GridView) view.findViewById(R.id.voters);
 
         headerComments = (TextView) view.findViewById(R.id.header_comments);
-        commentsList = (ListView) view.findViewById(R.id.comments);
+        commentsList = (ListView) view.findViewById(R.id.comments_count);
         commentsList.setOnItemClickListener(this);
         commentsList.setOnScrollListener(this);
         

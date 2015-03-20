@@ -11,7 +11,7 @@
         android:layout_height="@dimen/ab_shadow_height"
         android:background="@drawable/bottom_shadow"/>
 
-    <ListView
+    <com.quentindommerc.superlistview.SuperListview
         android:id="@+id/trending_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
