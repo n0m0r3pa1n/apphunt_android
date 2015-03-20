@@ -341,7 +341,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         int replyToNameLength = replyToName.length();
 
                         if (commentBox.getText().length() > replyToNameLength &&
-                                replyToName.equals(commentBox.getText().toString().substring(0, replyToNameLength))) {
+                                replyToName.toLowerCase().equals(commentBox.getText().toString().substring(0, replyToNameLength).toLowerCase())) {
                             if (replyToComment.getParentId() == null) {
                                 comment.setParentId(replyToComment.getId());
                             } else {
