@@ -370,6 +370,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                                                 if (comments != null) {
                                                     commentsAdapter.resetAdapter(comments);
                                                     headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
+
+                                                    view.findViewById(R.id.label_no_comments).setVisibility(View.GONE);
                                                 }
                                             }
                                         });
