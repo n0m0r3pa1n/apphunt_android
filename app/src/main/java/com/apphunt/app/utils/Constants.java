@@ -19,6 +19,8 @@ public class Constants {
     public static final String KEY_APP_NAME = "app_name";
     public static final String KEY_ITEM_POSITION = "item_position";
     public static final String KEY_PROFILE_IMAGE = "profile_image";
+    public static final String KEY_NOTIFICATION_TITLE = "notification_title";
+    public static final String KEY_NOTIFICATION_MSG = "notification_msg";
 
     public static final String PLATFORM = "Android";
 
@@ -57,6 +59,9 @@ public class Constants {
     public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
     public static final int USER_SKIP_INVITE_PERCENTAGE = 60;
+
+    public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
+    public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
 
 
     public enum ItemType {
