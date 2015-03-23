@@ -205,7 +205,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                             .load(app.getCreatedBy().getProfilePicture())
                             .into(creator);
                     creatorName.setText(String.format(getString(R.string.posted_by),
-                            app.getCreatedBy().getName()));
+                            app.getCreatedBy().getUsername()));
 
                     if (app.isHasVoted()) {
                         vote.setTextColor(getResources().getColor(R.color.bg_secondary));
@@ -332,9 +332,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                     FacebookUtils.showLoginFragment(activity);
                     return;
                 }
-                
+
                 NewComment comment = new NewComment();
-                
+
                 if (commentBox.getText().length() > 0) {
                     if (replyToComment != null) {
                         String replyToName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername());

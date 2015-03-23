@@ -265,6 +265,7 @@
             android:textAllCaps="true"
             android:textColor="@color/bg_primary"
             android:gravity="center"/>
+
     </RelativeLayout>
     
 </RelativeLayout>

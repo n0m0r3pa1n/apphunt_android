@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -162,6 +163,8 @@ public class LoginFragment extends BaseFragment {
 
     private void onLoginFailed() {
         Toast.makeText(getActivity(), R.string.login_canceled_text, Toast.LENGTH_LONG).show();
+        ((MainActivity) activity).setOnBackBlocked(false);
+        LoadersUtils.hideBottomLoader(activity);
     }
 
 }

@@ -32,6 +32,7 @@ import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
+import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.LoadersUtils;
@@ -39,6 +40,7 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,6 +95,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
                 viewHolderItem.description = (TextView) view.findViewById(R.id.description);
                 viewHolderItem.commentsCount = (TextView) view.findViewById(R.id.comments_count);
+                viewHolderItem.creatorImageView = (AvatarImageView) view.findViewById(R.id.creator_avatar);
+                viewHolderItem.creatorUsername = (TextView) view.findViewById(R.id.creator_name);
                 viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
 
                 view.setTag(viewHolderItem);
@@ -130,6 +134,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.title.setText(app.getName());
             viewHolderItem.description.setText(app.getDescription());
             viewHolderItem.commentsCount.setText(String.valueOf(app.getCommentsCount()));
+            Picasso.with(ctx)
+                    .load(app.getCreatedBy().getProfilePicture())
+                    .into(viewHolderItem.creatorImageView);
+            viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
+
             viewHolderItem.vote.setText(app.getVotesCount());
 
             viewHolderItem.vote.setOnClickListener(null);
@@ -311,7 +320,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
 
         LoadersUtils.hideBottomLoader((Activity) ctx);
-        listView.getList().smoothScrollToPosition(this.items.size() - 3);
+        listView.getList().smoothScrollToPosition(this.items.size() - items.size() + 1);
     }
 
     private void loadMoreApps(final int position) {
@@ -397,6 +406,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         TextView title;
         TextView description;
         TextView commentsCount;
+        Target creatorImageView;
+        TextView creatorUsername;
         Button vote;
     }
 
