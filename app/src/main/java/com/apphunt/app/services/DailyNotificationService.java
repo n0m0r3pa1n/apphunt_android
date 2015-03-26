@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -18,6 +19,7 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.crashlytics.android.Crashlytics;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,7 +82,11 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void displayNotification(Notification notification) {
-        AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
+        try {
+            AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
         Intent notifyIntent = new Intent(DailyNotificationService.this, MainActivity.class);
         notifyIntent.putExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, true);
 
