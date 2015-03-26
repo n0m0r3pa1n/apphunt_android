@@ -251,7 +251,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
                 commentsList.setAdapter(commentsAdapter);
 
-                headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
+                headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
 
                 userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
             }
