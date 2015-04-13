@@ -85,4 +85,5 @@
     <string name="show_all_comments">Show all</string>
     <string name="hide_all_comments">hide all</string>
     <string name="be_first">Be the first one to comment! :)</string>
+    <string name="action_search">Search</string>
 </resources>

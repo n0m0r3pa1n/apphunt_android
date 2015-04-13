@@ -9,8 +9,10 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +23,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.ListView;
 
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
@@ -54,6 +58,7 @@ import java.util.Random;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
+import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange, OnAppVoteListener {
@@ -199,6 +204,43 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             menu.findItem(R.id.action_logout).setVisible(false);
         }
 
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, 10,
+                        Constants.PLATFORM, new Callback<AppsList>() {
+                            @Override
+                            public void success(AppsList appsList, Response response) {
+                                trendingAppsAdapter.showSearchResult(appsList.getApps());
+                            }
+                        });
+
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                trendingAppsAdapter.clearSearch();
+                return true;
+            }
+        });
+
+        searchView.setIconifiedByDefault(true);
+        searchView.clearFocus();
         return true;
     }
 
@@ -292,7 +334,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 addAppButton.startAnimation(slideInBottom);
                 addAppButton.setVisibility(View.VISIBLE);
 
-                if (endOfList) {
+                if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
                     AppSpice.createEvent(TrackingEvents.UserScrolledDownAppList).track();
                     trendingAppsAdapter.getAppsForNextDate();
                 }

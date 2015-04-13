@@ -56,6 +56,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private Context ctx;
     private SuperListview listView;
     private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Item> backup = new ArrayList<>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private Calendar calendar = Calendar.getInstance();
@@ -63,7 +64,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private boolean success = false;
     private int noAppsDays = 0;
-    private int lastItemClicked;
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -209,7 +209,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
                             .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
                             .commit();
-                        
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }
@@ -349,6 +348,25 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 });
     }
 
+    public void showSearchResult(ArrayList<App> apps) {
+        backup.addAll(items);
+        items.clear();
+
+        for (App app : apps) {
+            items.add(new AppItem(app));
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void clearSearch() {
+        items.clear();
+        items.addAll(backup);
+        backup.clear();
+
+        notifyDataSetChanged();
+    }
+
     public void resetAdapter() {
         success = false;
         items.clear();
@@ -374,7 +392,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
         calendar = Calendar.getInstance();
         today = Calendar.getInstance();
     }
-    
+
+    public boolean couldLoadMoreApps() {
+        return (backup.size() == 0);
+    }
+
     @Override
     public int getViewTypeCount() {
         return 3;

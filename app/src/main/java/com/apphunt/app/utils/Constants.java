@@ -21,6 +21,7 @@ public class Constants {
     public static final String KEY_PROFILE_IMAGE = "profile_image";
     public static final String KEY_NOTIFICATION_TITLE = "notification_title";
     public static final String KEY_NOTIFICATION_MSG = "notification_msg";
+    public static final String KEY_SEARCH_QUERY = "search_query";
 
     public static final String PLATFORM = "Android";
 
@@ -38,7 +39,7 @@ public class Constants {
     public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
-    
+
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
 
