@@ -198,6 +198,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<App>() {
             @Override
             public void success(App app, Response response) {
+                if(!isAdded()) {
+                    return;
+                }
                 if (app != null) {
                     AppDetailsFragment.this.app = app;
 
@@ -490,6 +493,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void openAppOnGooglePlay() {
+        if(app == null) {
+            Log.e(TAG, "Null app");
+            return;
+        }
         Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.getShortUrl()));
         marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |Intent.FLAG_ACTIVITY_MULTIPLE_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(marketIntent);

@@ -51,7 +51,11 @@ public class VotersAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        String avatarUrl = ((Vote) getItem(position)).getUser().getProfilePicture();
+        String avatarUrl = "";
+        User user = ((Vote) getItem(position)).getUser();
+        if(user != null) {
+            avatarUrl = user.getProfilePicture();
+        }
         
         if (TextUtils.isEmpty(avatarUrl)) {
             Picasso.with(ctx)

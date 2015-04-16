@@ -30,6 +30,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.crashlytics.android.Crashlytics;
 
 import it.appspice.android.AppSpice;
 import retrofit.RetrofitError;
@@ -110,11 +111,18 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            AppSpice.createEvent(TrackingEvents.UserAddedUnknownApp).track();
-                            activity.getSupportFragmentManager().popBackStack();
+                            if(!isAdded()) {
+                                return;
+                            }
+                            try {
+                                AppSpice.createEvent(TrackingEvents.UserAddedUnknownApp).track();
+                                activity.getSupportFragmentManager().popBackStack();
 
-                            NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
-                            v.setEnabled(true);
+                                NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
+                                v.setEnabled(true);
+                            } catch(Exception e) {
+                                Crashlytics.logException(e);
+                            }
                         }
                     });
                 } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
