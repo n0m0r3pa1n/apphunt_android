@@ -23,6 +23,8 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
@@ -48,6 +50,7 @@ public class LoginFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_login);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
     }
 
     @Override

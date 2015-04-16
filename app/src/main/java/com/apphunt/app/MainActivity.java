@@ -9,8 +9,11 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.text.Html;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,14 +24,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.ListView;
 
+import com.apphunt.app.api.apphunt.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
@@ -46,14 +50,14 @@ import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.widget.FacebookDialog;
+import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
-import java.util.Random;
-
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
+import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange, OnAppVoteListener {
@@ -76,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {
-            AppSpice.createEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification).track();
+            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
         }
 
         initUI();
@@ -95,13 +99,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         return Intent.ACTION_SEND.equals(intent.getAction());
     }
 
-    private void showInviteFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                .add(R.id.container, new InviteFragment(), Constants.TAG_INVITE_FRAGMENT)
-                .commit();
-    }
-
     private void initUI() {
         ActionBarUtils.getInstance().init(this);
 
@@ -116,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         trendingAppsList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getSupportActionBar().collapseActionView();
                 trendingAppsAdapter.resetAdapter();
             }
         });
@@ -199,24 +197,69 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             menu.findItem(R.id.action_logout).setVisible(false);
         }
 
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            menu.findItem(R.id.action_search).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_search).setVisible(true);
+        }
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
+                        Constants.PLATFORM, new Callback<AppsList>() {
+                            @Override
+                            public void success(AppsList appsList, Response response) {
+                                trendingAppsAdapter.showSearchResult(appsList.getApps());
+                            }
+                        });
+
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (item.getItemId() == R.id.action_search) {
+                    trendingAppsAdapter.clearSearch();
+                }
+                return true;
+            }
+        });
+
+        searchView.setIconifiedByDefault(true);
+        searchView.clearFocus();
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        String tag = null;
-
         switch (item.getItemId()) {
             case R.id.action_login:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
                         getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
                     break;
+
                 FacebookUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_logout:
                 LoginProviderFactory.get(this).logout();
+                FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
                 supportInvalidateOptionsMenu();
                 break;
 
@@ -239,7 +282,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     shareDialog.present();
-                    AppSpice.createEvent(TrackingEvents.UserSharedAppHunt).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
+                } else {
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    sharingIntent.setType("text/html");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
+                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
                 }
                 break;
 
@@ -292,8 +341,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 addAppButton.startAnimation(slideInBottom);
                 addAppButton.setVisibility(View.VISIBLE);
 
-                if (endOfList) {
-                    AppSpice.createEvent(TrackingEvents.UserScrolledDownAppList).track();
+                if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
+                    FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
                     trendingAppsAdapter.getAppsForNextDate();
                 }
             } else {
@@ -380,18 +429,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private void showStartFragments(Intent intent) {
         if (isStartedFromShareIntent(intent)) {
             startSelectAppFragment();
-        }
-
-        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
-
-            Random random = new Random();
-            int randInt = random.nextInt(100);
-            if (randInt > Constants.USER_SKIP_INVITE_PERCENTAGE) {
-                AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-                showInviteFragment();
-            } else {
-                SharedPreferencesHelper.setPreference(this, Constants.KEY_INVITE_SHARE, 0);
-            }
         }
     }
 

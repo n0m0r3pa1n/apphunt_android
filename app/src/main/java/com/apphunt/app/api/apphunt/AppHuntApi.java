@@ -41,6 +41,9 @@ public interface AppHuntApi {
     @POST("/apps")
     void saveApp(@Body SaveApp app, Callback cb);
 
+    @GET("/apps/search")
+    void searchApps(@Query("q") String query, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
+
     @GET("/notifications")
     void getNotification(@Query("type") String type, Callback<Notification> cb);
     

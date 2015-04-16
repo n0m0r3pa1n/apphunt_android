@@ -19,6 +19,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 
 import it.appspice.android.AppSpice;
 
@@ -38,6 +39,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.title_settings);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
     }
 
     @Override
@@ -111,7 +113,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
             case R.id.sounds_toggle:
                 if (!isChecked) {
-                    AppSpice.createEvent(TrackingEvents.UserDisabledSound).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
                 }
                 SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
                 break;

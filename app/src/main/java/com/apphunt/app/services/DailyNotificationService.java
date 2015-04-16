@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -19,12 +18,8 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
-import com.crashlytics.android.Crashlytics;
+import com.flurry.android.FlurryAgent;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 
@@ -45,14 +40,12 @@ public class DailyNotificationService extends IntentService {
         }
     }
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Calendar calendar = Calendar.getInstance();
-
-
     private void getNotificationFromServer() {
-        final String date = dateFormat.format(calendar.getTime());
-
-        AppSpice.init(this, Constants.APP_SPICE_APP_ID);
+        String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
+        if (!TextUtils.isEmpty(userId)) {
+            FlurryAgent.setUserId(userId);
+        }
+        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
         AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.apphunt.models.Notification notification, Response response) {
@@ -82,11 +75,7 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void displayNotification(Notification notification) {
-        try {
-            AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-        }
+
         Intent notifyIntent = new Intent(DailyNotificationService.this, MainActivity.class);
         notifyIntent.putExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, true);
 
@@ -104,5 +93,6 @@ public class DailyNotificationService extends IntentService {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
+        FlurryAgent.logEvent(TrackingEvents.AppShowedTrendingAppsNotification);
     }
 }

@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -38,6 +39,7 @@ import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -56,6 +58,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private Context ctx;
     private SuperListview listView;
     private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Item> backup = new ArrayList<>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private Calendar calendar = Calendar.getInstance();
@@ -63,7 +66,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private boolean success = false;
     private int noAppsDays = 0;
-    private int lastItemClicked;
 
     private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
@@ -196,9 +198,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
 
                         App app = ((AppItem) getItem(position)).getData();
-                        
+
                         AppDetailsFragment detailsFragment = new AppDetailsFragment();
-                        
+
                         Bundle extras = new Bundle();
                         extras.putString(Constants.KEY_APP_ID, app.getId());
                         extras.putString(Constants.KEY_APP_NAME, app.getName());
@@ -206,10 +208,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         detailsFragment.setArguments(extras);
 
                         ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                            .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                            .commit();
-                        
+                                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                                .commit();
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }
@@ -274,7 +275,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
         LoadersUtils.hideCenterLoader((Activity) ctx);
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
-        
+
         if (selectedAppPosition > -1) {
             listView.getList().smoothScrollToPosition(selectedAppPosition);
         }
@@ -349,6 +350,32 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 });
     }
 
+    public void showSearchResult(ArrayList<App> apps) {
+        backup.addAll(items);
+        items.clear();
+
+        for (App app : apps) {
+            items.add(new AppItem(app));
+        }
+
+        notifyDataSetChanged();
+        listView.getList().smoothScrollToPosition(0);
+        if (apps.isEmpty()) {
+            FlurryAgent.logEvent(TrackingEvents.UserFoundNoResults);
+            Toast.makeText(ctx, R.string.no_results_found, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void clearSearch() {
+        if (backup.size() > 0) {
+            items.clear();
+            items.addAll(backup);
+            backup.clear();
+
+            notifyDataSetChanged();
+        }
+    }
+
     public void resetAdapter() {
         success = false;
         items.clear();
@@ -361,9 +388,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter(int position) {
-       this.selectedAppPosition = position;
-        
-       resetAdapter();
+        this.selectedAppPosition = position;
+
+        resetAdapter();
     }
 
     public void clearAdapter() {
@@ -374,7 +401,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
         calendar = Calendar.getInstance();
         today = Calendar.getInstance();
     }
-    
+
+    public boolean couldLoadMoreApps() {
+        return (backup.size() == 0);
+    }
+
     @Override
     public int getViewTypeCount() {
         return 3;

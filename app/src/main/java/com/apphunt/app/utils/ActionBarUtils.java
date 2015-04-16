@@ -46,11 +46,14 @@ public class ActionBarUtils {
             ((ActionBarActivity) activity).getSupportActionBar().setTitle(fragment.getTitle());
             ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(true);
+            ((ActionBarActivity) activity).getSupportActionBar().collapseActionView();
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
             ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
             ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(false);
         }
+
+        ((ActionBarActivity) activity).supportInvalidateOptionsMenu();
     }
 
     public void showActionBar(ActionBarActivity activity) {
