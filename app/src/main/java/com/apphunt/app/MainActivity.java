@@ -50,6 +50,7 @@ import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.facebook.widget.FacebookDialog;
+import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
@@ -78,6 +79,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {
@@ -246,8 +248,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        String tag = null;
 
         switch (item.getItemId()) {
             case R.id.action_login:

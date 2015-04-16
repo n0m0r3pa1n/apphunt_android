@@ -63,6 +63,7 @@ public class Constants {
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
+    public static final String FLURRY_API_KEY = "TF65K4T659FTCPXGMNG3";
 
 
     public enum ItemType {
