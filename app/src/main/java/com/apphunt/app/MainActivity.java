@@ -253,11 +253,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
                         getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
                     break;
+
                 FacebookUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_logout:
                 LoginProviderFactory.get(this).logout();
+                FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
                 supportInvalidateOptionsMenu();
                 break;
 

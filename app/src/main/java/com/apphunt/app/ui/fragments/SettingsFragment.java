@@ -39,6 +39,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.title_settings);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
     }
 
     @Override

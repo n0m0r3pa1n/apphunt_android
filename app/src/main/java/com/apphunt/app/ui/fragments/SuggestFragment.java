@@ -40,6 +40,7 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.suggest_title);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedSuggestion);
     }
 
     @Override

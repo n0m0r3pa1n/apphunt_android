@@ -23,6 +23,8 @@ import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.utils.InstalledPackagesUtils;
 import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
 
         setTitle(R.string.title_select_app);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedSelectApp);
     }
 
     @Override

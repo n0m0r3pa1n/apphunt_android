@@ -52,7 +52,9 @@ import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import it.appspice.android.AppSpice;
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit.client.Response;
 
 public class AppDetailsFragment extends BaseFragment implements OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
@@ -101,8 +103,14 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         appId = getArguments().getString(Constants.KEY_APP_ID);
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("appId", appId);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
 
         setTitle(R.string.title_app_details);
         isVoted = false;

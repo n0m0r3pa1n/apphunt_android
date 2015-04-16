@@ -6,6 +6,7 @@ package com.apphunt.app.utils;
  */
 public interface TrackingEvents {
     String UserLoggedIn = "user.logged.in";
+    String UserLoggedOut = "user.logged.out";
     String UserAddedApp = "user.added.app";
     String UserAddedUnknownApp = "user.added.unknown.app";
     String UserVoted = "user.voted";
@@ -29,4 +30,10 @@ public interface TrackingEvents {
     String UserScrolledDownCommentList = "user.scrolled.down.comment.list";
     String UserOpenedAppInMarket = "user.opened.app.in.market";
     String UserMadeSuggestion = "user.made.suggestion";
+    String UserViewedAppDetails = "user.viewed.app.details";
+    String UserViewedLogin = "user.viewed.login";
+    String UserViewedSettings = "user.viewed.settings";
+    String UserViewedAddApp = "user.viewed.add.app";
+    String UserViewedSelectApp = "user.viewed.select.app";
+    String UserViewedSuggestion = "user.viewed.suggestion";
 }
