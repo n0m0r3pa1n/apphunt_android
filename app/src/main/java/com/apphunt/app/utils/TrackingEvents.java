@@ -36,4 +36,5 @@ public interface TrackingEvents {
     String UserViewedAddApp = "user.viewed.add.app";
     String UserViewedSelectApp = "user.viewed.select.app";
     String UserViewedSuggestion = "user.viewed.suggestion";
+    String UserFoundNoResults = "user.found.no.results";
 }

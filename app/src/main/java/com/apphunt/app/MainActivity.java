@@ -14,7 +14,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         trendingAppsList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getSupportActionBar().collapseActionView();
                 trendingAppsAdapter.resetAdapter();
             }
         });
@@ -207,7 +207,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, 10,
+                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
                         Constants.PLATFORM, new Callback<AppsList>() {
                             @Override
                             public void success(AppsList appsList, Response response) {

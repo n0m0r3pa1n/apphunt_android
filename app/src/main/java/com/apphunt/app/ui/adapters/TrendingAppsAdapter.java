@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
@@ -38,6 +39,7 @@ import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -196,9 +198,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
 
                         App app = ((AppItem) getItem(position)).getData();
-                        
+
                         AppDetailsFragment detailsFragment = new AppDetailsFragment();
-                        
+
                         Bundle extras = new Bundle();
                         extras.putString(Constants.KEY_APP_ID, app.getId());
                         extras.putString(Constants.KEY_APP_NAME, app.getName());
@@ -206,9 +208,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         detailsFragment.setArguments(extras);
 
                         ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                            .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                            .commit();
+                                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                                .commit();
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }
@@ -273,7 +275,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
         LoadersUtils.hideCenterLoader((Activity) ctx);
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
-        
+
         if (selectedAppPosition > -1) {
             listView.getList().smoothScrollToPosition(selectedAppPosition);
         }
@@ -357,6 +359,11 @@ public class TrendingAppsAdapter extends BaseAdapter {
         }
 
         notifyDataSetChanged();
+        listView.getList().smoothScrollToPosition(0);
+        if (apps.isEmpty()) {
+            FlurryAgent.logEvent(TrackingEvents.UserFoundNoResults);
+            Toast.makeText(ctx, R.string.no_results_found, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void clearSearch() {
@@ -381,9 +388,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter(int position) {
-       this.selectedAppPosition = position;
-        
-       resetAdapter();
+        this.selectedAppPosition = position;
+
+        resetAdapter();
     }
 
     public void clearAdapter() {

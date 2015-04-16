@@ -80,11 +80,12 @@
         <item quantity="other">%d COMMENTS</item>
     </plurals>
     <string name="reply_to">\@%s </string>
-    <string name="comment_entry_hint">Write a comment...</string>
+    <string name="comment_entry_hint">Write a comment…</string>
     <string name="send">send</string>
     <string name="show_all_comments">Show all</string>
     <string name="hide_all_comments">hide all</string>
     <string name="be_first">Be the first one to comment! :)</string>
     <string name="action_search">Search</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
+    <string name="no_results_found">No apps found! Try again :)</string>
 </resources>
