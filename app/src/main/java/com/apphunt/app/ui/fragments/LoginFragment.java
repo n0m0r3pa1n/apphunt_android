@@ -165,7 +165,10 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void onLoginFailed() {
-        Toast.makeText(getActivity(), R.string.login_canceled_text, Toast.LENGTH_LONG).show();
+        if(!isAdded()) {
+            return;
+        }
+        Toast.makeText(activity, R.string.login_canceled_text, Toast.LENGTH_LONG).show();
         ((MainActivity) activity).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(activity);
     }
