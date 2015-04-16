@@ -19,6 +19,7 @@ import com.apphunt.app.smart_rate.listeners.OnSendClickListener;
 import com.apphunt.app.smart_rate.listeners.OnYesClickListener;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.utils.Constants;
+import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class SmartRate {
     private OnYesClickListener onLoveYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(BaseRateFragment fragment, View view) {
-            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "love.yes.click");
+            FlurryAgent.logEvent("love.yes.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             RateFragment rateFragment = new RateFragment();
@@ -102,7 +103,7 @@ public class SmartRate {
     private OnNoClickListener onLoveNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(BaseRateFragment fragment, View view) {
-            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "love.no.click");
+            FlurryAgent.logEvent("love.no.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             FeedbackFragment feedbackFragment = new FeedbackFragment();
@@ -119,7 +120,7 @@ public class SmartRate {
     private OnYesClickListener onRateYesClickListener = new OnYesClickListener() {
         @Override
         public void onYesClick(BaseRateFragment fragment, View view) {
-            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "rate.yes.click");
+            FlurryAgent.logEvent("rate.yes.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + activity.getPackageName()));
@@ -131,7 +132,7 @@ public class SmartRate {
     private OnNoClickListener onRateNoClickListener = new OnNoClickListener() {
         @Override
         public void onNoClick(BaseRateFragment fragment, View view) {
-            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "rate.no.click");
+            FlurryAgent.logEvent("rate.no.click");
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     };
@@ -139,9 +140,9 @@ public class SmartRate {
     private OnSendClickListener onSendClickListener = new OnSendClickListener() {
         @Override
         public void onSendClick(BaseRateFragment fragment, String feedbackMessage) {
-            Map<String, Object> data = new HashMap<>();
+            Map<String, String> data = new HashMap<>();
             data.put("message", feedbackMessage);
-            AppSpice.track(SmartRateConstants.APP_SPICE_NAMESPACE, "feedback.send.click", data);
+            FlurryAgent.logEvent("feedback.send.click", data);
             activity.getSupportFragmentManager().popBackStack(fragment.getFragmentTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     };

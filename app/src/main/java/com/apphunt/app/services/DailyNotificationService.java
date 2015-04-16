@@ -20,6 +20,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
+import com.flurry.android.FlurryAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,14 +46,8 @@ public class DailyNotificationService extends IntentService {
         }
     }
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Calendar calendar = Calendar.getInstance();
-
-
     private void getNotificationFromServer() {
-        final String date = dateFormat.format(calendar.getTime());
-
-        AppSpice.init(this, Constants.APP_SPICE_APP_ID);
+        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
         AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.apphunt.models.Notification notification, Response response) {
@@ -83,7 +78,7 @@ public class DailyNotificationService extends IntentService {
 
     private void displayNotification(Notification notification) {
         try {
-            AppSpice.createEvent(TrackingEvents.AppShowedTrendingAppsNotification).track();
+            FlurryAgent.logEvent(TrackingEvents.AppShowedTrendingAppsNotification);
         } catch (Exception e) {
             Crashlytics.logException(e);
         }

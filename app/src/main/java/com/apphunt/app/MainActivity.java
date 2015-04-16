@@ -32,7 +32,6 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.ui.fragments.InviteFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
@@ -54,8 +53,6 @@ import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
-
-import java.util.Random;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
@@ -79,11 +76,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
-        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {
-            AppSpice.createEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification).track();
+            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
         }
 
         initUI();
@@ -100,13 +96,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     private boolean isStartedFromShareIntent(Intent intent) {
         return Intent.ACTION_SEND.equals(intent.getAction());
-    }
-
-    private void showInviteFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                .add(R.id.container, new InviteFragment(), Constants.TAG_INVITE_FRAGMENT)
-                .commit();
     }
 
     private void initUI() {
@@ -281,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     shareDialog.present();
-                    AppSpice.createEvent(TrackingEvents.UserSharedAppHunt).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHunt);
                 }
                 break;
 
@@ -335,7 +324,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 addAppButton.setVisibility(View.VISIBLE);
 
                 if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
-                    AppSpice.createEvent(TrackingEvents.UserScrolledDownAppList).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
                     trendingAppsAdapter.getAppsForNextDate();
                 }
             } else {
@@ -422,18 +411,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     private void showStartFragments(Intent intent) {
         if (isStartedFromShareIntent(intent)) {
             startSelectAppFragment();
-        }
-
-        if (SharedPreferencesHelper.getIntPreference(this, Constants.KEY_INVITE_SHARE, Constants.INVITE_SHARES_COUNT) > 0) {
-
-            Random random = new Random();
-            int randInt = random.nextInt(100);
-            if (randInt > Constants.USER_SKIP_INVITE_PERCENTAGE) {
-                AppSpice.createEvent(TrackingEvents.AppShowedInviteScreen).track();
-                showInviteFragment();
-            } else {
-                SharedPreferencesHelper.setPreference(this, Constants.KEY_INVITE_SHARE, 0);
-            }
         }
     }
 

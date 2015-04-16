@@ -20,6 +20,10 @@ import android.widget.Toast;
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.appspice.android.AppSpice;
 
@@ -95,7 +99,9 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
                     getSupportFragmentManager().popBackStack(Constants.TAG_SUGGEST_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    AppSpice.createEvent(TrackingEvents.UserMadeSuggestion).with("suggestion", messageText.toString()).track();
+                    Map<String, String> params = new HashMap<>();
+                    params.put("suggestion", messageText.toString());
+                    FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
                     Toast.makeText(getActivity(), R.string.feedback_send,Toast.LENGTH_LONG).show();
                 }
                 break;

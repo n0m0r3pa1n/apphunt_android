@@ -6,7 +6,6 @@ package com.apphunt.app.utils;
  */
 public interface TrackingEvents {
     static String UserLoggedIn = "user.logged.in";
-    static String UserLoggedOut = "user.logged.out";
     static String UserAddedApp = "user.added.app";
     static String UserAddedUnknownApp = "user.added.unknown.app";
     static String UserVoted = "user.voted";

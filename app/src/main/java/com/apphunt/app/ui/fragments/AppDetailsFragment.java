@@ -48,6 +48,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.FacebookUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -267,7 +268,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
-                                AppSpice.createEvent(TrackingEvents.UserDownVotedAppFromDetails).track();
+                                FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
                                 app.setVotesCount(voteResult.getVotes());
                                 app.setHasVoted(false);
                                 vote.setText(voteResult.getVotes());
@@ -286,7 +287,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
-                                AppSpice.createEvent(TrackingEvents.UserVotedAppFromDetails).track();
+                                FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
                                 app.setVotesCount(voteResult.getVotes());
                                 app.setHasVoted(true);
                                 vote.setText(voteResult.getVotes());
@@ -311,7 +312,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 break;
 
             case R.id.box_desc:
-                AppSpice.createEvent(TrackingEvents.UserOpenedAppInMarket).track();
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket);
                 openAppOnGooglePlay();
                 break;
             
@@ -347,9 +348,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                             } else {
                                 comment.setParentId(replyToComment.getParentId());
                             }
-                            AppSpice.createEvent(TrackingEvents.UserSentReplyComment).track();
+                            FlurryAgent.logEvent(TrackingEvents.UserSentReplyComment);
                         } else {
-                            AppSpice.createEvent(TrackingEvents.UserSentComment).track();
+                            FlurryAgent.logEvent(TrackingEvents.UserSentComment);
                         }
                     } else {
                         commentBox.setHint(R.string.comment_entry_hint);
@@ -505,7 +506,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         if (ConnectivityUtils.isNetworkAvailable(activity)) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList) {
-                    AppSpice.createEvent(TrackingEvents.UserScrolledDownCommentList).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserScrolledDownCommentList);
                     commentsAdapter.loadMore(appId, userId, headerComments);
 
                 }

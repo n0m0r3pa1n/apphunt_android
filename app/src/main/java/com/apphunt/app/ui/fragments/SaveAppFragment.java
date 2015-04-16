@@ -30,6 +30,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 
 import it.appspice.android.AppSpice;
 import retrofit.RetrofitError;
@@ -101,7 +102,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                         @Override
                         public void success(Object o, Response response) {
                             if (response.getStatus() == 200) {
-                                AppSpice.createEvent(TrackingEvents.UserAddedApp).track();
+                                FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
                                 activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                                 NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
@@ -110,7 +111,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            AppSpice.createEvent(TrackingEvents.UserAddedUnknownApp).track();
+                            FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
                             activity.getSupportFragmentManager().popBackStack();
 
                             NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);

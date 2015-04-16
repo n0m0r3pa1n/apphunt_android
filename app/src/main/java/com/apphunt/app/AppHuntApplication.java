@@ -2,7 +2,9 @@ package com.apphunt.app;
 
 import android.app.Application;
 
+import com.apphunt.app.utils.Constants;
 import com.crashlytics.android.Crashlytics;
+import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -17,6 +19,8 @@ public class AppHuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
 
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig("XCYebUTguuAJdTrF56zksVtmZ",
