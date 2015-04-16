@@ -32,6 +32,9 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import it.appspice.android.AppSpice;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -49,8 +52,12 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
+        Map<String, String> params = new HashMap<>();
+        params.put("appPackage", data.packageName);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedAddApp, params);
     }
 
     @Override
