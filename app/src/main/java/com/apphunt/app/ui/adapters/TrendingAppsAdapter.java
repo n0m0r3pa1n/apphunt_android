@@ -360,11 +360,13 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void clearSearch() {
-        items.clear();
-        items.addAll(backup);
-        backup.clear();
+        if (backup.size() > 0) {
+            items.clear();
+            items.addAll(backup);
+            backup.clear();
 
-        notifyDataSetChanged();
+            notifyDataSetChanged();
+        }
     }
 
     public void resetAdapter() {

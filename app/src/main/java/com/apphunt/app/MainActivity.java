@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -196,6 +197,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             menu.findItem(R.id.action_logout).setVisible(false);
         }
 
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            menu.findItem(R.id.action_search).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_search).setVisible(true);
+        }
+
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -226,7 +233,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                trendingAppsAdapter.clearSearch();
+                if (item.getItemId() == R.id.action_search) {
+                    trendingAppsAdapter.clearSearch();
+                }
                 return true;
             }
         });

@@ -52,6 +52,8 @@ public class ActionBarUtils {
             ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(false);
         }
+
+        ((ActionBarActivity) activity).supportInvalidateOptionsMenu();
     }
 
     public void showActionBar(ActionBarActivity activity) {
