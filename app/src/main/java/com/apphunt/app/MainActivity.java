@@ -13,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.Html;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -270,7 +271,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                             .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
                             .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
                     shareDialog.present();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHunt);
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
+                } else {
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    sharingIntent.setType("text/html");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
+                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
                 }
                 break;
 

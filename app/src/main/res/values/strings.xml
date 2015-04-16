@@ -86,4 +86,5 @@
     <string name="hide_all_comments">hide all</string>
     <string name="be_first">Be the first one to comment! :)</string>
     <string name="action_search">Search</string>
+    <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
 </resources>
