@@ -13,12 +13,12 @@ public class CommentItem implements Item {
         this.comment = comment;
         this.type = Constants.ItemType.COMMENT;
     }
-    
+
     @Override
     public Constants.ItemType getType() {
         return type;
     }
-    
+
     public Comment getData() {
         return comment;
     }

@@ -14,8 +14,7 @@ import com.apphunt.app.ui.fragments.LoginFragment;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
-
-import it.appspice.android.AppSpice;
+import com.flurry.android.FlurryAgent;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -60,7 +59,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void onUserCreated(User user) {
-        AppSpice.createEvent(TrackingEvents.UserLoggedIn).track();
+        FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(activity, user);
 
         ((MainActivity) activity).onUserLogin();

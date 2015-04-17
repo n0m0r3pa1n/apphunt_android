@@ -48,7 +48,7 @@ public class Comment {
     public void setChildren(ArrayList<Comment> children) {
         this.children = children;
     }
-    
+
     public void setChild(Comment comment) {
         this.children.add(comment);
     }

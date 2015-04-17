@@ -87,7 +87,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private RelativeLayout boxComments;
     private TextView send;
     private EditText commentBox;
-    
+
     private Animation enterAnimation;
     private int commentBoxHeight;
     private RelativeLayout.LayoutParams params;
@@ -102,7 +102,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         appId = getArguments().getString(Constants.KEY_APP_ID);
@@ -143,7 +142,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         commentsList = (ListView) view.findViewById(R.id.comments_count);
         commentsList.setOnItemClickListener(this);
         commentsList.setOnScrollListener(this);
-        
+
         boxDetails = (RelativeLayout) view.findViewById(R.id.box_details);
         boxComments = (RelativeLayout) view.findViewById(R.id.box_comments);
 
@@ -152,7 +151,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
         hideAllComments = (TextView) view.findViewById(R.id.hide_comments);
         hideAllComments.setOnClickListener(this);
-        
+
         commentBox = (EditText) view.findViewById(R.id.comment_entry);
         commentBox.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -165,7 +164,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 commentBoxHeight = commentBox.getHeight();
             }
         });
-        
+
         commentBox.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -173,15 +172,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 return false;
             }
         });
-        
+
         labelComment = (TextView) view.findViewById(R.id.label_comment);
         if (userHasPermissions()) {
             labelComment.setVisibility(View.GONE);
             commentBox.setVisibility(View.VISIBLE);
         }
-        
+
         labelComment.setOnClickListener(this);
-        
+
         send = (TextView) view.findViewById(R.id.send_comment);
         send.setOnClickListener(this);
 
@@ -201,13 +200,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
     }
-    
+
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
         AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<App>() {
             @Override
             public void success(App app, Response response) {
-                if(!isAdded()) {
+                if (!isAdded()) {
                     return;
                 }
                 if (app != null) {
@@ -239,7 +238,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                             Integer.valueOf(app.getVotesCount())));
                     votersAdapter = new VotersAdapter(activity, app.getVotes());
                     avatars.setAdapter(votersAdapter);
-                    
+
                     if (userHasPermissions()) {
                         labelComment.setVisibility(View.GONE);
                         commentBox.setVisibility(View.VISIBLE);
@@ -269,7 +268,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
     }
-    
+
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
@@ -317,7 +316,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 } else {
                     FacebookUtils.showLoginFragment(activity);
                 }
-                
+
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 isVoted = true;
                 break;
@@ -326,7 +325,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket);
                 openAppOnGooglePlay();
                 break;
-            
+
             case R.id.label_comment:
                 FacebookUtils.showLoginFragment(activity);
                 break;
@@ -338,7 +337,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             case R.id.hide_comments:
                 showDetails();
                 break;
-            
+
             case R.id.send_comment:
                 if (!userHasPermissions()) {
                     FacebookUtils.showLoginFragment(activity);
@@ -403,7 +402,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         replyToComment = commentsAdapter.getComment(position);
         String replyName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername()) + " ";
-        
+
         commentBox.getText().clear();
         commentBox.setText(replyName);
         commentBox.setSelection(replyName.length());
@@ -435,7 +434,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
-        
+
         closeKeyboard(commentBox);
         if (isVoted) callback.onAppVote(itemPosition);
     }
@@ -471,7 +470,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         showAllComments.setVisibility(View.INVISIBLE);
         hideAllComments.setVisibility(View.VISIBLE);
     }
-    
+
     public boolean isCommentsBoxOpened() {
         return isCommentsBoxOpened;
     }
@@ -489,7 +488,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             labelComment.setLayoutParams(params);
         }
     }
-    
+
     private void showKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
@@ -502,15 +501,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void openAppOnGooglePlay() {
-        if(app == null) {
+        if (app == null) {
             Log.e(TAG, "Null app");
             return;
         }
         Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.getShortUrl()));
-        marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |Intent.FLAG_ACTIVITY_MULTIPLE_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(marketIntent);
     }
-    
+
     private boolean userHasPermissions() {
         return LoginProviderFactory.get(activity).isUserLoggedIn();
     }

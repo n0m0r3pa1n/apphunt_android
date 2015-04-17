@@ -3,7 +3,6 @@ package com.apphunt.app.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.apphunt.app.R;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 /**
@@ -30,7 +29,7 @@ public class CustomTwitterLoginButton extends TwitterLoginButton {
     }
 
     private void init() {
-        if (isInEditMode()){
+        if (isInEditMode()) {
             return;
         }
         setBackgroundResource(NULL_RESOURCE);

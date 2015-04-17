@@ -25,7 +25,7 @@ public interface AppHuntApi {
 
     @GET("/apps")
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
-    
+
     @GET("/apps/{appId}")
     void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, Callback<App> cb);
 
@@ -46,13 +46,13 @@ public interface AppHuntApi {
 
     @GET("/notifications")
     void getNotification(@Query("type") String type, Callback<Notification> cb);
-    
+
     @POST("/comments")
     void sendComment(@Body NewComment comment, Callback<NewComment> cb);
-    
+
     @GET("/comments/{appId}")
     void getAppComments(@Path("appId") String appId, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, Callback<Comments> cb);
-    
+
     @POST("/comments/votes")
     void voteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb);
 

@@ -2,7 +2,6 @@ package com.apphunt.app.auth;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;

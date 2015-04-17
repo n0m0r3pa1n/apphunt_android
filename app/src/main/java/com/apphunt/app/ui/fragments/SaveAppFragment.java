@@ -31,14 +31,11 @@ import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
-
 import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
-import it.appspice.android.AppSpice;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -100,7 +97,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.save:
-                if (desc.getText() != null && desc.getText().length() >=50) {
+                if (desc.getText() != null && desc.getText().length() >= 50) {
                     v.setEnabled(false);
                     SaveApp app = new SaveApp();
                     app.setDescription(desc.getText().toString());
@@ -121,16 +118,15 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            if(!isAdded()) {
+                            if (!isAdded()) {
                                 return;
                             }
                             try {
-                                AppSpice.createEvent(TrackingEvents.UserAddedUnknownApp).track();
                                 activity.getSupportFragmentManager().popBackStack();
 
                                 NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
                                 v.setEnabled(true);
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 Crashlytics.logException(e);
                             }
 
@@ -151,7 +147,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                     vibrator.vibrate(300);
                 }
                 break;
-            
+
             case R.id.container:
                 closeKeyboard(desc);
                 break;

@@ -1,7 +1,7 @@
 package com.apphunt.app.api.apphunt.models;
 
 public class NewComment {
-    
+
     private String appId;
     private String userId;
     private String text;

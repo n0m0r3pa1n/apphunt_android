@@ -7,7 +7,7 @@ public class Vote {
     private String appId;
     @SerializedName("votesCount")
     private String votes;
-    private User user; 
+    private User user;
 
     public Vote(String userId) {
         this.userId = userId;

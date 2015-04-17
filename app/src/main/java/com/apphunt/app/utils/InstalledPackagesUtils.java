@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class InstalledPackagesUtils {
-    private static final String TAG =  InstalledPackagesUtils.class.getName();
+    private static final String TAG = InstalledPackagesUtils.class.getName();
 
     public static List<ApplicationInfo> installedPackages(PackageManager packageManager) {
         List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();

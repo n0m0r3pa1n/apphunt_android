@@ -48,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import it.appspice.android.AppSpice;
 import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
@@ -152,7 +151,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    AppSpice.createEvent(TrackingEvents.UserDownVoted).track();
+                                    FlurryAgent.logEvent(TrackingEvents.UserDownVoted);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(false);
                                     ((Button) v).setText(vote.getVotes());
@@ -164,7 +163,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    AppSpice.createEvent(TrackingEvents.UserVoted).track();
+                                    FlurryAgent.logEvent(TrackingEvents.UserVoted);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());
@@ -195,7 +194,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     try {
-                        AppSpice.createEvent(TrackingEvents.UserOpenedAppFromList).track();
+                        FlurryAgent.logEvent(TrackingEvents.UserOpenedAppFromList);
 
                         App app = ((AppItem) getItem(position)).getData();
 
@@ -224,7 +223,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderMoreApps.moreApps.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppSpice.createEvent(TrackingEvents.UserRequestedMoreApps).track();
+                    FlurryAgent.logEvent(TrackingEvents.UserRequestedMoreApps);
                     loadMoreApps(position);
                 }
             });

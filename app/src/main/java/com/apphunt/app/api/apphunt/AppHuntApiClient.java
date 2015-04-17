@@ -12,7 +12,7 @@ public class AppHuntApiClient {
     private static ExecutorService executorService;
 
     public static AppHuntApi getClient() {
-        if(client == null) {
+        if (client == null) {
             executorService = Executors.newCachedThreadPool();
 
             RestAdapter restAdapter = new RestAdapter.Builder()

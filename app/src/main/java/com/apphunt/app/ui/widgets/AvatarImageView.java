@@ -49,9 +49,9 @@ public class AvatarImageView extends ImageView implements Target {
         //TODO
     }
 
-    public Bitmap cropCircle(Bitmap bm){
+    public Bitmap cropCircle(Bitmap bm) {
         Bitmap mCanvasBitmap = null;
-        
+
         int width = bm.getWidth();
         int height = bm.getHeight();
 
@@ -79,11 +79,11 @@ public class AvatarImageView extends ImageView implements Target {
             mCanvasBitmap = Bitmap.createBitmap(width, height,
                     Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(mCanvasBitmap);
-            canvas.drawCircle(width/2, height/2, width/2, paint);
+            canvas.drawCircle(width / 2, height / 2, width / 2, paint);
         } catch (OutOfMemoryError e) {
             Log.e(TAG, "Cannot create bitmap");
         }
-        
+
         return mCanvasBitmap;
     }
 

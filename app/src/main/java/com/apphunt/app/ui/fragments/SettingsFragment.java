@@ -21,8 +21,6 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
-import it.appspice.android.AppSpice;
-
 public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static final String TAG = SettingsFragment.class.getName();

@@ -53,10 +53,10 @@ public class VotersAdapter extends BaseAdapter {
 
         String avatarUrl = "";
         User user = ((Vote) getItem(position)).getUser();
-        if(user != null) {
+        if (user != null) {
             avatarUrl = user.getProfilePicture();
         }
-        
+
         if (TextUtils.isEmpty(avatarUrl)) {
             Picasso.with(ctx)
                     .load(R.drawable.avatar_placeholder)
@@ -90,20 +90,20 @@ public class VotersAdapter extends BaseAdapter {
     public int floatToDP(float size) {
         return (int) (size * ctx.getResources().getDisplayMetrics().density);
     }
-    
+
     private static class ViewHolder {
         Target avatar;
     }
-    
+
     public void addCreatorIfNotVoter(User user) {
         boolean isVoter = false;
-        
+
         for (Vote vote : voters) {
             if (vote.getUser().getId().equals(user.getId())) {
                 isVoter = true;
             }
         }
-        
+
         if (!isVoter) {
             Vote vote = new Vote(user.getId());
             vote.setUser(user);
@@ -111,7 +111,7 @@ public class VotersAdapter extends BaseAdapter {
             notifyDataSetChanged();
         }
     }
-    
+
     public void removeCreator(User user) {
         for (Vote vote : voters) {
             if (vote.getUser().getId().equals(user.getId())) {
@@ -121,7 +121,7 @@ public class VotersAdapter extends BaseAdapter {
             }
         }
     }
-    
+
     public int getTotalVoters() {
         return voters.size();
     }

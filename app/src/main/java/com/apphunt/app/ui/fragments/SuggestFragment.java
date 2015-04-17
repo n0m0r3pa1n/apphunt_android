@@ -25,8 +25,6 @@ import com.flurry.android.FlurryAgent;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.appspice.android.AppSpice;
-
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 2/20/15.
@@ -103,7 +101,7 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
                     Map<String, String> params = new HashMap<>();
                     params.put("suggestion", messageText.toString());
                     FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
-                    Toast.makeText(getActivity(), R.string.feedback_send,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.feedback_send, Toast.LENGTH_LONG).show();
                 }
                 break;
 

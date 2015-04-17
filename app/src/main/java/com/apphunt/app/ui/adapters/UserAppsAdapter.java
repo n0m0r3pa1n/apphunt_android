@@ -30,13 +30,13 @@ public class UserAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        View view=convertView;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
         ViewHolder viewHolder;
 
         ApplicationInfo data = getItem(position);
 
-        if(view == null) {
+        if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) ctx
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.layout_user_app_item, parent, false);

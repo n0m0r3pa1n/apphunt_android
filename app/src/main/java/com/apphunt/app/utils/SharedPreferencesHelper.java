@@ -96,8 +96,8 @@ public class SharedPreferencesHelper {
     /**
      * Extracting an Int value from the SharedPreferences Manager.
      *
-     * @param ctx application's context.
-     * @param key preference's key.
+     * @param ctx          application's context.
+     * @param key          preference's key.
      * @param defaultValue default return value
      */
     public static int getIntPreference(Context ctx, String key, int defaultValue) {
@@ -114,7 +114,7 @@ public class SharedPreferencesHelper {
      */
     public static Boolean getBooleanPreference(Context ctx, String key) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        if(key.equals(Constants.IS_DAILY_NOTIFICATION_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
+        if (key.equals(Constants.IS_DAILY_NOTIFICATION_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
             return sharedPreferences.getBoolean(key, true);
         } else {
             return sharedPreferences.getBoolean(key, false);

@@ -43,7 +43,7 @@ public class LoadersUtils {
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
             if (soundEnabled)
                 SoundsUtils.playSound(activity, R.raw.notification_1);
-            
+
             bottomLoader.setBackgroundResource(R.drawable.loader_white);
             bottomLoaderLayout.setVisibility(View.VISIBLE);
         }
@@ -56,7 +56,7 @@ public class LoadersUtils {
         if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
             if (soundEnabled)
                 SoundsUtils.playSound(activity, R.raw.notification_1);
-            
+
             bottomLoaderLayout.setVisibility(View.VISIBLE);
             bottomLoader.setBackgroundResource(resDrawable);
         }

@@ -105,7 +105,8 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
             return enterAnim;
         } else {
-            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);;
+            Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
+            ;
 
             notificationLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
@@ -123,11 +124,11 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 //                        activity.getSupportFragmentManager().popBackStackImmediate();
 //                    }
 //                } else
-                
+
                 if (showRating) {
                     activity.getSupportFragmentManager().popBackStack();
                     SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
-                } 
+                }
 
                 activity.getSupportFragmentManager().popBackStack();
                 LoadersUtils.hideCenterLoader(activity);
