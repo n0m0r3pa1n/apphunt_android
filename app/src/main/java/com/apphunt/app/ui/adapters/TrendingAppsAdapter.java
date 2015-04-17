@@ -194,8 +194,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     try {
-                        FlurryAgent.logEvent(TrackingEvents.UserOpenedAppFromList);
-
                         App app = ((AppItem) getItem(position)).getData();
 
                         AppDetailsFragment detailsFragment = new AppDetailsFragment();
