@@ -28,7 +28,6 @@ import android.widget.Button;
 
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
-import com.apphunt.app.api.apphunt.EmptyCallback;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -480,10 +479,15 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 }
 
                 @Override
-                public void onDeliverRegistrationId(String regId, boolean b) {
+                public void onDeliverRegistrationId(final String regId, boolean b) {
                     User user = new User();
                     user.setNotificationId(regId);
-                    AppHuntApiClient.getClient().updateUser(userId, user, new EmptyCallback<User>());
+                    AppHuntApiClient.getClient().updateUser(userId, user, new Callback<User>() {
+                        @Override
+                        public void success(User user, Response response) {
+                            SharedPreferencesHelper.setPreference(MainActivity.this, Constants.KEY_NOTIFICATION_ID, regId);
+                        }
+                    });
                 }
 
                 @Override
