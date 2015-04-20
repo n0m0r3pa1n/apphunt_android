@@ -467,8 +467,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         AppSpice.onStop(this);
     }
 
-
-    private void updateNotificationIdIfNeeded() {
+    public void updateNotificationIdIfNeeded() {
         final String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
         String notificationId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_NOTIFICATION_ID);
         if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {

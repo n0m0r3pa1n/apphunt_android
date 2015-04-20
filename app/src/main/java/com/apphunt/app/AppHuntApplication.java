@@ -2,6 +2,7 @@ package com.apphunt.app;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -28,6 +29,10 @@ public class AppHuntApplication extends Application {
         }
 
         FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+        if(!BuildConfig.DEBUG) {
+            FlurryAgent.setLogEvents(false);
+
+        }
 
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig("XCYebUTguuAJdTrF56zksVtmZ",

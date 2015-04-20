@@ -17,13 +17,14 @@ public class GcmMessageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Bundle extras = intent.getExtras();
         if (SharedPreferencesHelper.getBooleanPreference(context, Constants.IS_DAILY_NOTIFICATION_ENABLED)) {
 
         }
 
-        Bundle extras = intent.getExtras();
+
         for (String s : extras.keySet()) {
-            Log.d("tag", "GcmMessageReceiver > onReceive : " + s + " = " + extras.get(s));
+            Log.d("GcmMessageReceiver", "GcmMessageReceiver > onReceive : " + s + " = " + extras.get(s));
         }
     }
 }
