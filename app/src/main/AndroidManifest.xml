@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
+    <permission
+        android:name="com.apphunt.app.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.apphunt.app.permission.C2D_MESSAGE" />
+
     <application
         android:name="com.apphunt.app.AppHuntApplication"
         android:allowBackup="true"
@@ -50,6 +56,20 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.apphunt.app.action.ENABLE_NOTIFICATIONS" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receivers.GcmRegistrationUpdateReceiver" >
+            <intent-filter>
+                <action android:name="FRUITY_TOKEN_NEEDS_UPDATE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receivers.GcmMessageReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.apphunt.app" />
             </intent-filter>
         </receiver>
 
