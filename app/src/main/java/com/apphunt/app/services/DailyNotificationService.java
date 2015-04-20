@@ -82,6 +82,7 @@ public class DailyNotificationService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(DailyNotificationService.this)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setDefaults(NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                         .setContentTitle(notification.getTitle())
