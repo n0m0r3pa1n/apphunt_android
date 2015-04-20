@@ -5,6 +5,7 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_NOTIFICATION_ID = "notification_id";
     //    public static final String KEY_NAME = "name";
 //    public static final String KEY_PROFILE_PICTURE = "profile_picture";
     public static final String KEY_EMAIL = "profile_email";
@@ -57,14 +58,15 @@ public class Constants {
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
 
     // Invites
-    public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
-    public static final int USER_SKIP_INVITE_PERCENTAGE = 60;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
     public static final String FLURRY_API_KEY = "TF65K4T659FTCPXGMNG3";
     public static final int SEARCH_RESULT_COUNT = 30;
+
+    // GCM
+    public static final String GCM_SENDER_ID = "437946264894";
 
 
     public enum ItemType {

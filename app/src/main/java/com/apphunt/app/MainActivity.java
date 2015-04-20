@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +28,9 @@ import android.widget.Button;
 
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.EmptyCallback;
 import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
@@ -57,12 +60,12 @@ import com.squareup.otto.Subscribe;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
+import kr.nectarine.android.fruitygcm.FruityGcmClient;
+import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
         OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange, OnAppVoteListener {
-
-    private static final String TAG = MainActivity.class.getName();
 
     private SuperListview trendingAppsList;
     private FloatingActionButton addAppButton;
@@ -82,6 +85,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         if (isStartedFromNotification) {
             FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
         }
+
+        updateNotificationIdIfNeeded();
 
         initUI();
 
@@ -463,12 +468,39 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         AppSpice.onStop(this);
     }
 
+
+    private void updateNotificationIdIfNeeded() {
+        final String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
+        String notificationId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_NOTIFICATION_ID);
+        if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
+            FruityGcmClient.start(this, Constants.GCM_SENDER_ID, new FruityGcmListener() {
+
+                @Override
+                public void onPlayServiceNotAvailable(boolean b) {
+                }
+
+                @Override
+                public void onDeliverRegistrationId(String regId, boolean b) {
+                    User user = new User();
+                    user.setNotificationId(regId);
+                    AppHuntApiClient.getClient().updateUser(userId, user, new EmptyCallback<User>());
+                }
+
+                @Override
+                public void onRegisterFailed() {
+                }
+            });
+        }
+    }
+
     @Subscribe
+    @SuppressWarnings("unused")
     public void onRateDialogVariableReady(RateDialogVariable rateDialogVariable) {
         SmartRate.setRateDialogVariable(rateDialogVariable);
     }
 
     @Subscribe
+    @SuppressWarnings("unused")
     public void onAppSpiceError(AppSpiceError error) {
         SmartRate.onError();
     }

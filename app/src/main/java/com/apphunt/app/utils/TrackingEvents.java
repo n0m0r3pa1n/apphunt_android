@@ -9,8 +9,8 @@ public interface TrackingEvents {
     String UserLoggedOut = "user.logged.out";
     String UserAddedApp = "user.added.app";
     String UserAddedUnknownApp = "user.added.unknown.app";
-    String UserVoted = "user.voted";
-    String UserDownVoted = "user.down.voted";
+    String UserVotedApp = "user.voted.app";
+    String UserDownVotedApp = "user.down.voted.app";
     String UserSharedAppHuntWithFacebook = "user.shared.app.hunt.with.facebook";
     String UserSharedAppHuntWithoutFacebook = "user.shared.app.hunt.without.facebook";
     String UserDisabledSound = "user.disabled.sound";
@@ -37,4 +37,5 @@ public interface TrackingEvents {
     String UserViewedSelectApp = "user.viewed.select.app";
     String UserViewedSuggestion = "user.viewed.suggestion";
     String UserFoundNoResults = "user.found.no.results";
+    String UserReceivedRegistrationIdRenewal = "user.received.registration.id.renewal";
 }

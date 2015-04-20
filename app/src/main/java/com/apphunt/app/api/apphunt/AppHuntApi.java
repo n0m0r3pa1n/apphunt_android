@@ -15,6 +15,7 @@ import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -22,6 +23,9 @@ import retrofit.http.Query;
 public interface AppHuntApi {
     @POST("/users")
     void createUser(@Body User user, Callback<User> cb);
+
+    @PUT("/users/{userId}")
+    void updateUser(@Path("userId") String userId, @Body User user, Callback<User> cb);
 
     @GET("/apps")
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
