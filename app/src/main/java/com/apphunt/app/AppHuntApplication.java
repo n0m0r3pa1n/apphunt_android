@@ -27,7 +27,6 @@ public class AppHuntApplication extends Application {
             FlurryAgent.setUserId(userId);
         }
 
-
         if (BuildConfig.DEBUG) {
             FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
         } else {
