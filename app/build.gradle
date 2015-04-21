@@ -23,8 +23,8 @@ android {
         applicationId "com.apphunt.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 12
-        versionName "1.3.2"
+        versionCode 13
+        versionName "1.3.3"
     }
     buildTypes {
         release {
@@ -46,6 +46,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.quentindommerc.superlistview:library:1.5.2'
     compile 'it.appspice:android:0.1.8'
+    compile 'com.github.nectarine:fruity-android-gcm-client:1.0.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.+@aar') {
         transitive = true;
     }

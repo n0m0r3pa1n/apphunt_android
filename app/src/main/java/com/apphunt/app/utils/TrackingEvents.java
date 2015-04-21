@@ -9,15 +9,21 @@ public interface TrackingEvents {
     String UserLoggedOut = "user.logged.out";
     String UserAddedApp = "user.added.app";
     String UserAddedUnknownApp = "user.added.unknown.app";
-    String UserVoted = "user.voted";
-    String UserDownVoted = "user.down.voted";
+    String UserVotedApp = "user.voted.app";
+    String UserDownVotedApp = "user.down.voted.app";
     String UserSharedAppHuntWithFacebook = "user.shared.app.hunt.with.facebook";
     String UserSharedAppHuntWithoutFacebook = "user.shared.app.hunt.without.facebook";
     String UserDisabledSound = "user.disabled.sound";
     String UserScrolledDownAppList = "user.scrolled.down.app.list";
     String UserRequestedMoreApps = "user.requested.more.apps";
+<<<<<<< HEAD
     String UserStartedAppFromDailyTrendingAppsNotification = "user.started.app.from.daily.trending.apps.notification";
     String AppShowedTrendingAppsNotification = "app.showed.trending.apps.notification";
+=======
+    String UserStartedAppFromNotification = "user.started.app.from.notification";
+    String AppShowedNotification = "app.showed.notification";
+    String UserOpenedAppFromList = "user.opened.app.from.list";
+>>>>>>> dev
     String UserVotedAppFromDetails = "user.voted.app.from.details";
     String UserDownVotedAppFromDetails = "user.down.voted.app.from.details";
     String UserSentComment = "user.sent.comment";
@@ -36,4 +42,5 @@ public interface TrackingEvents {
     String UserViewedSelectApp = "user.viewed.select.app";
     String UserViewedSuggestion = "user.viewed.suggestion";
     String UserFoundNoResults = "user.found.no.results";
+    String UserReceivedRegistrationIdRenewal = "user.received.registration.id.renewal";
 }

@@ -27,11 +27,15 @@ public class AppHuntApplication extends Application {
             FlurryAgent.setUserId(userId);
         }
 
-        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+        if (BuildConfig.DEBUG) {
+            FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
+        } else {
+            FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+        }
 
         TwitterAuthConfig authConfig =
-                new TwitterAuthConfig("XCYebUTguuAJdTrF56zksVtmZ",
-                        "EmN3llE9vdhD3wRX1Z7E15rYVVqYbUYwx0uSDAd2yNPShLuM7x");
+                new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
+                        Constants.TWITTER_CONSUMER_SECRET);
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
     }
 }

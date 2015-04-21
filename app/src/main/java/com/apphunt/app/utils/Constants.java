@@ -1,10 +1,13 @@
 package com.apphunt.app.utils;
 
 
+import java.util.HashMap;
+
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_NOTIFICATION_ID = "notification_id";
     //    public static final String KEY_NAME = "name";
 //    public static final String KEY_PROFILE_PICTURE = "profile_picture";
     public static final String KEY_EMAIL = "profile_email";
@@ -14,7 +17,9 @@ public class Constants {
     public static final String KEY_SHOW_RATING = "show_rating";
     public static final String KEY_INVITE_SHARE = "invite_count_left";
     public static final String KEY_LOGIN_PROVIDER = "login_provider";
-    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
+    public static final String KEY_NOTIFICATION_TYPE = "started_from_notification";
+//    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
+//    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "app_approved";
     public static final String KEY_APP_ID = "app_id";
     public static final String KEY_APP_NAME = "app_name";
     public static final String KEY_ITEM_POSITION = "item_position";
@@ -26,7 +31,7 @@ public class Constants {
     public static final String PLATFORM = "Android";
 
     // Settings
-    public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
+    public static final String SETTING_NOTIFICATIONS_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
     public static final String WAS_SPLASH_SHOWN = "wasSplashShown";
 
@@ -57,14 +62,35 @@ public class Constants {
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
 
     // Invites
-    public static final int INVITE_SHARES_COUNT = 3;
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
-    public static final int USER_SKIP_INVITE_PERCENTAGE = 60;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
     public static final String FLURRY_API_KEY = "TF65K4T659FTCPXGMNG3";
+    public static final String FLURRY_DEBUG_API_KEY = "TF65K4T659FTCPXGMNG4";
     public static final int SEARCH_RESULT_COUNT = 30;
+
+    // GCM
+    public static final String GCM_SENDER_ID = "437946264894";
+
+    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_ID = new HashMap<String, Integer>() {{
+        put("dailyReminder", 1);
+        put("appApproved", 2);
+        put("appRejected", 3);
+        put("userComment", 4);
+        put("userMentioned", 5);
+    }};
+
+    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_REQUEST_CODE = new HashMap<String, Integer>() {{
+        put("dailyReminder", 101);
+        put("appApproved", 102);
+        put("appRejected", 103);
+        put("userComment", 104);
+        put("userMentioned", 105);
+    }};
+    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
+    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+
 
 
     public enum ItemType {

@@ -15,6 +15,7 @@ public class User {
     private String locale;
     private String username;
     private List<String> following;
+    private String notificationId;
 
     public String getId() {
         return id;
@@ -86,5 +87,13 @@ public class User {
 
     public void setFollowing(List<String> following) {
         this.following = following;
+    }
+
+    public String getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
     }
 }

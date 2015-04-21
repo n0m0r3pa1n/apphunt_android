@@ -61,9 +61,9 @@ public abstract class BaseLoginProvider implements LoginProvider {
     private void onUserCreated(User user) {
         FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(activity, user);
-
         ((MainActivity) activity).onUserLogin();
         ((MainActivity) activity).supportInvalidateOptionsMenu();
+        ((MainActivity) activity).updateNotificationIdIfNeeded();
         hideLoginFragment(activity);
     }
 

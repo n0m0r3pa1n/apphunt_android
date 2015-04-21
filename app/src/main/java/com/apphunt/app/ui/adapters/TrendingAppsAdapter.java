@@ -47,6 +47,8 @@ import com.squareup.picasso.Target;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.client.Response;
 
@@ -151,7 +153,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    FlurryAgent.logEvent(TrackingEvents.UserDownVoted);
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("appId", app.getId());
+                                    FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp, params);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(false);
                                     ((Button) v).setText(vote.getVotes());
@@ -163,7 +167,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
                             AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
-                                    FlurryAgent.logEvent(TrackingEvents.UserVoted);
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("appId", app.getId());
+                                    FlurryAgent.logEvent(TrackingEvents.UserVotedApp, params);
                                     app.setVotesCount(vote.getVotes());
                                     app.setHasVoted(true);
                                     ((Button) v).setText(vote.getVotes());
