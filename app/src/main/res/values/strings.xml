@@ -30,7 +30,8 @@
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
     <string name="notification_cannot_login">Unsuccessful login attempt! Please try again…</string>
-    <string name="saved_successfully">App added successfully</string>
+    <string name="saved_successfully">Your app is waiting for review. You will be notified when status is changed :)</string>
+    <string name="app_already_exist">The app you are trying to add is already on AppHunt. Add another of your favourite apps :)</string>
     <string name="list_view_header_yesterday">Yesterday</string>
     <string name="list_view_header_today">Today</string>
     <string name="dismiss">DISMISS</string>
@@ -60,6 +61,8 @@
 
     <!-- Login -->
     <string name="login_canceled_text">Your email is required to continue</string>
+    <string name="login_info_text">Let your friends see what you do</string>
+    <string name="login_not_now">Not now</string>
     <string name="suggest_title">Suggest</string>
     <string name="suggestion_input_hint">How AppHunt can be improved?</string>
     <string name="suggestion_send">Improve</string>

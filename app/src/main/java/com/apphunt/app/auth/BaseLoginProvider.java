@@ -10,6 +10,8 @@ import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.UserCreatedEvent;
 import com.apphunt.app.ui.fragments.LoginFragment;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -54,6 +56,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
             @Override
             public void success(User user, retrofit.client.Response response) {
                 onUserCreated(user);
+                BusProvider.getInstance().post(new UserCreatedEvent(user));
             }
         });
     }
@@ -61,9 +64,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
     private void onUserCreated(User user) {
         FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(activity, user);
-        ((MainActivity) activity).onUserLogin();
-        ((MainActivity) activity).supportInvalidateOptionsMenu();
-        ((MainActivity) activity).updateNotificationIdIfNeeded();
         hideLoginFragment(activity);
     }
 

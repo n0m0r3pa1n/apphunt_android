@@ -35,7 +35,7 @@ import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -181,7 +181,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         }
 
                     } else {
-                        FacebookUtils.showLoginFragment(ctx);
+                        LoginUtils.showLoginFragment(ctx);
                     }
 
                     v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
