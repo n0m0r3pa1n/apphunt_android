@@ -21,7 +21,6 @@ public class AppHuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);
@@ -36,6 +35,7 @@ public class AppHuntApplication extends Application {
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
                         Constants.TWITTER_CONSUMER_SECRET);
+
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
     }
 }

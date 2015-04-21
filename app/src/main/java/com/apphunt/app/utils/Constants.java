@@ -15,7 +15,6 @@ public class Constants {
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
     public static final String KEY_SHOW_RATING = "show_rating";
-    public static final String KEY_INVITE_SHARE = "invite_count_left";
     public static final String KEY_LOGIN_PROVIDER = "login_provider";
     public static final String KEY_NOTIFICATION_TYPE = "started_from_notification";
 //    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
@@ -30,6 +29,10 @@ public class Constants {
 
     public static final String PLATFORM = "Android";
 
+    // Login
+    public static final String APPHUNT_ADMIN_USER_ID = "54be5d68e4b0d3cacca686c5";
+    public static final int USER_SKIP_LOGIN_PERCENTAGE = 50;
+
     // Settings
     public static final String SETTING_NOTIFICATIONS_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
@@ -41,7 +44,6 @@ public class Constants {
     public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
     public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
-    public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
 

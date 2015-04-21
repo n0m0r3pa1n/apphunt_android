@@ -29,9 +29,12 @@ import android.widget.Button;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
-import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.ShowNotificationEvent;
+import com.apphunt.app.event_bus.events.UserCreatedEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -47,7 +50,7 @@ import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -181,17 +184,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     private void startSelectAppFragment() {
-        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                    .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                    .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                    .commit();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
+                .commit();
 
-            getSupportFragmentManager().executePendingTransactions();
-        } else {
-            FacebookUtils.showLoginFragment(this);
-        }
+        getSupportFragmentManager().executePendingTransactions();
     }
 
     @Override
@@ -264,7 +263,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                         getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
                     break;
 
-                FacebookUtils.showLoginFragment(this);
+                LoginUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_logout:
@@ -431,6 +430,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onResume() {
         super.onResume();
+        BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
 
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -445,6 +445,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onPause() {
         super.onPause();
+        BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
         unregisterReceiver(networkChangeReceiver);
     }
@@ -512,5 +513,22 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @SuppressWarnings("unused")
     public void onAppSpiceError(AppSpiceError error) {
         SmartRate.onError();
+    }
+
+    @Subscribe
+    public void onUserCreated(UserCreatedEvent event) {
+        onUserLogin();
+        supportInvalidateOptionsMenu();
+        updateNotificationIdIfNeeded();
+    }
+
+    @Subscribe
+    public void onHideFragmentEvent(HideFragmentEvent event) {
+        getSupportFragmentManager().popBackStack(event.getTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Subscribe
+    public void showNotificationFragment(ShowNotificationEvent event) {
+        NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
     }
 }

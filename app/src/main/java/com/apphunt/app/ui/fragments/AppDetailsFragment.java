@@ -45,7 +45,7 @@ import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
@@ -314,7 +314,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         });
                     }
                 } else {
-                    FacebookUtils.showLoginFragment(activity);
+                    LoginUtils.showLoginFragment(activity);
                 }
 
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -327,7 +327,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 break;
 
             case R.id.label_comment:
-                FacebookUtils.showLoginFragment(activity);
+                LoginUtils.showLoginFragment(activity);
                 break;
 
             case R.id.show_comments:
@@ -340,7 +340,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
             case R.id.send_comment:
                 if (!userHasPermissions()) {
-                    FacebookUtils.showLoginFragment(activity);
+                    LoginUtils.showLoginFragment(activity);
                     return;
                 }
 
