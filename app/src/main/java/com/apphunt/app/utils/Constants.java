@@ -67,6 +67,7 @@ public class Constants {
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
     public static final String FLURRY_API_KEY = "TF65K4T659FTCPXGMNG3";
+    public static final String FLURRY_DEBUG_API_KEY = "TF65K4T659FTCPXGMNG4";
     public static final int SEARCH_RESULT_COUNT = 30;
 
     // GCM
@@ -87,6 +88,9 @@ public class Constants {
         put("userComment", 104);
         put("userMentioned", 105);
     }};
+    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
+    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+
 
 
     public enum ItemType {
