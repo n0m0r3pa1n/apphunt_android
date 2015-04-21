@@ -16,8 +16,8 @@ public interface TrackingEvents {
     String UserDisabledSound = "user.disabled.sound";
     String UserScrolledDownAppList = "user.scrolled.down.app.list";
     String UserRequestedMoreApps = "user.requested.more.apps";
-    String UserStartedAppFromDailyTrendingAppsNotification = "user.started.app.from.daily.trending.apps.notification";
-    String AppShowedTrendingAppsNotification = "app.showed.trending.apps.notification";
+    String UserStartedAppFromNotification = "user.started.app.from.notification";
+    String AppShowedNotification = "app.showed.notification";
     String UserOpenedAppFromList = "user.opened.app.from.list";
     String UserVotedAppFromDetails = "user.voted.app.from.details";
     String UserDownVotedAppFromDetails = "user.down.voted.app.from.details";

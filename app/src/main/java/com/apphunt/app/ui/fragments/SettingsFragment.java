@@ -56,7 +56,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
         notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
         notifications.setOnCheckedChangeListener(this);
-        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_DAILY_NOTIFICATION_ENABLED));
+        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.SETTING_NOTIFICATIONS_ENABLED));
 
         sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
         sounds.setOnCheckedChangeListener(this);

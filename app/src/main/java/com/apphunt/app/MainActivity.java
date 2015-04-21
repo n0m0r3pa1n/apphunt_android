@@ -1,20 +1,14 @@
 package com.apphunt.app;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -35,9 +29,9 @@ import android.widget.Button;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -63,9 +57,9 @@ import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
@@ -90,40 +84,11 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Bitmap icon = null;
-                    try {
-                    icon = Picasso.with(MainActivity.this)
-                            .load("https://lh5.ggpht.com/QCZxZdYqoTuj4Ph5ahvrC9ZBSMNCJwtg9wG-R6G6-Yptk5euSyCkdXd7iGYI9-VrRL2M=w300").get();
-
-                    } catch (IOException e) {
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-                    }
-                    Intent notifyIntent = new Intent(MainActivity.this, MainActivity.class);
-                    notifyIntent.putExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, true);
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(MainActivity.this)
-                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                                    .setDefaults(NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS)
-                                    .setSmallIcon(R.drawable.ic_small_notification)
-                                    .setLargeIcon(icon)
-                                    .setContentTitle("Test")
-                                    .setContentText("Test")
-                                    .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 101, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                                    .setStyle(new NotificationCompat.BigTextStyle()
-                                            .bigText("Test"))
-                                    .setAutoCancel(true);
-                    NotificationManager mNotificationManager =
-                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.notify(1, mBuilder.build());
-                }
-            }).start();
-
-        boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
-        if (isStartedFromNotification) {
-            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
+        String notificationType = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_TYPE);
+        if (!TextUtils.isEmpty(notificationType)) {
+            Map<String, String> params = new HashMap<>();
+            params.put("type", notificationType);
+            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
         }
 
         updateNotificationIdIfNeeded();

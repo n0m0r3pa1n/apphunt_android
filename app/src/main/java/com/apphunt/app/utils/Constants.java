@@ -1,6 +1,8 @@
 package com.apphunt.app.utils;
 
 
+import java.util.HashMap;
+
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
@@ -15,7 +17,9 @@ public class Constants {
     public static final String KEY_SHOW_RATING = "show_rating";
     public static final String KEY_INVITE_SHARE = "invite_count_left";
     public static final String KEY_LOGIN_PROVIDER = "login_provider";
-    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
+    public static final String KEY_NOTIFICATION_TYPE = "started_from_notification";
+//    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "daily_reminder_notification";
+//    public static final String KEY_DAILY_REMINDER_NOTIFICATION = "app_approved";
     public static final String KEY_APP_ID = "app_id";
     public static final String KEY_APP_NAME = "app_name";
     public static final String KEY_ITEM_POSITION = "item_position";
@@ -27,7 +31,7 @@ public class Constants {
     public static final String PLATFORM = "Android";
 
     // Settings
-    public static final String IS_DAILY_NOTIFICATION_ENABLED = "isDisplayNotificationServiceEnabled";
+    public static final String SETTING_NOTIFICATIONS_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
     public static final String WAS_SPLASH_SHOWN = "wasSplashShown";
 
@@ -67,6 +71,22 @@ public class Constants {
 
     // GCM
     public static final String GCM_SENDER_ID = "437946264894";
+
+    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_ID = new HashMap<String, Integer>() {{
+        put("dailyReminder", 1);
+        put("appApproved", 2);
+        put("appRejected", 3);
+        put("userComment", 4);
+        put("userMentioned", 5);
+    }};
+
+    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_REQUEST_CODE = new HashMap<String, Integer>() {{
+        put("dailyReminder", 101);
+        put("appApproved", 102);
+        put("appRejected", 103);
+        put("userComment", 104);
+        put("userMentioned", 105);
+    }};
 
 
     public enum ItemType {
