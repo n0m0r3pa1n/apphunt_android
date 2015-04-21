@@ -83,8 +83,6 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
 
-        BusProvider.getInstance().register(this);
-
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {
             FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
@@ -424,6 +422,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onResume() {
         super.onResume();
+        BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
 
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -438,6 +437,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     public void onPause() {
         super.onPause();
+        BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
         unregisterReceiver(networkChangeReceiver);
     }

@@ -106,8 +106,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
             return enterAnim;
         } else {
             Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
-            ;
-
             notificationLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
 

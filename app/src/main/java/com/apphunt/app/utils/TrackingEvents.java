@@ -40,4 +40,5 @@ public interface TrackingEvents {
     String AppShowedRegularLogin = "app.showed.regular.login.when.save.app";
     String AppShowedSkippableLogin = "app.showed.skippable.login.when.save.app";
     String UserSkippedLoginWhenAddApp = "user.skipped.login.when.add.app";
+    String UserAddedConflictApp = "user.tried.to.add.already.added.app";
 }

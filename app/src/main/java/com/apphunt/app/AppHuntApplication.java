@@ -21,7 +21,6 @@ public class AppHuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FlurryAgent.setLogEnabled(true);
         String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);
@@ -30,8 +29,8 @@ public class AppHuntApplication extends Application {
         FlurryAgent.init(this, Constants.FLURRY_API_KEY);
 
         TwitterAuthConfig authConfig =
-                new TwitterAuthConfig("XCYebUTguuAJdTrF56zksVtmZ",
-                        "EmN3llE9vdhD3wRX1Z7E15rYVVqYbUYwx0uSDAd2yNPShLuM7x");
+                new TwitterAuthConfig("2GwWIq8PXArLO1YKieGNsAKQa",
+                        "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK");
         Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
     }
 }

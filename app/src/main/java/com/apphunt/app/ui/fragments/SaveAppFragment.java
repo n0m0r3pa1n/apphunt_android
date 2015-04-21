@@ -37,6 +37,7 @@ import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.StatusCode;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -62,7 +63,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
+
         setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
@@ -77,6 +78,18 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         initUI();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     private void initUI() {
@@ -119,13 +132,11 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                     desc.setHint(R.string.hint_short_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
                     desc.setError("Min 50 chars");
-                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(300);
+                    vibrate();
                 } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
                     desc.setHint(R.string.hint_please_enter_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(300);
+                    vibrate();
                 }
                 break;
 
@@ -133,6 +144,11 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                 closeKeyboard(desc);
                 break;
         }
+    }
+
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(300);
     }
 
     private void showLoginFragment() {
@@ -158,7 +174,11 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         AppHuntApiClient.getClient().saveApp(app, new Callback() {
             @Override
             public void success(Object o, Response response) {
-                if (response.getStatus() == 200) {
+                int statusCode = response.getStatus();
+                if(!isAdded()) {
+                    return;
+                }
+                if (statusCode == StatusCode.SUCCESS.getCode()) {
                     FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
                     BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
                     BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully)));
