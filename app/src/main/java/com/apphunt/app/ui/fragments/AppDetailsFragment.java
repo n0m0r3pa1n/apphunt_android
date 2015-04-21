@@ -322,7 +322,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 break;
 
             case R.id.box_desc:
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket);
+                Map<String, String> params = new HashMap<>();
+                params.put("appId", appId);
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                 openAppOnGooglePlay();
                 break;
 
