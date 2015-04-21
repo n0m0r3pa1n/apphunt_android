@@ -26,7 +26,10 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.SaveApp;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.ui.interfaces.UserLoginScreenListener;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -39,7 +42,7 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SaveAppFragment extends BaseFragment implements OnClickListener {
+public class SaveAppFragment extends BaseFragment implements OnClickListener, UserLoginScreenListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
@@ -51,7 +54,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
@@ -97,43 +99,14 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.save:
+
                 if (desc.getText() != null && desc.getText().length() >= 50) {
-                    v.setEnabled(false);
-                    SaveApp app = new SaveApp();
-                    app.setDescription(desc.getText().toString());
-                    app.setPackageName(data.packageName);
-                    app.setPlatform(Constants.PLATFORM);
-                    app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                    if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+                        saveApp(v);
+                    } else {
+                        LoginUtils.showSkippableLoginFragment(getActivity());
+                    }
 
-                    AppHuntApiClient.getClient().saveApp(app, new Callback() {
-                        @Override
-                        public void success(Object o, Response response) {
-                            if (response.getStatus() == 200) {
-                                FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
-                                activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                                NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
-                            }
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            if (!isAdded()) {
-                                return;
-                            }
-                            try {
-                                activity.getSupportFragmentManager().popBackStack();
-
-                                NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
-                                v.setEnabled(true);
-                            } catch (Exception e) {
-                                Crashlytics.logException(e);
-                            }
-
-                            FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
-                            activity.getSupportFragmentManager().popBackStack();
-                        }
-                    });
                 } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
                     desc.setHint(R.string.hint_short_description);
                     desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
@@ -152,6 +125,45 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                 closeKeyboard(desc);
                 break;
         }
+    }
+
+    private void saveApp(final View v) {
+        v.setEnabled(false);
+        SaveApp app = new SaveApp();
+        app.setDescription(desc.getText().toString());
+        app.setPackageName(data.packageName);
+        app.setPlatform(Constants.PLATFORM);
+        app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+
+        AppHuntApiClient.getClient().saveApp(app, new Callback() {
+            @Override
+            public void success(Object o, Response response) {
+                if (response.getStatus() == 200) {
+                    FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
+                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                if (!isAdded()) {
+                    return;
+                }
+                try {
+                    activity.getSupportFragmentManager().popBackStack();
+
+                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
+                    v.setEnabled(true);
+                } catch (Exception e) {
+                    Crashlytics.logException(e);
+                }
+
+                FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
+                activity.getSupportFragmentManager().popBackStack();
+            }
+        });
     }
 
     private void closeKeyboard(View v) {
@@ -174,4 +186,20 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         closeKeyboard(desc);
     }
+
+    @Override
+    public void onLoginSuccessful() {
+
+    }
+
+    @Override
+    public void onLoginFailed() {
+
+    }
+
+    @Override
+    public void onLoginSkipped() {
+
+    }
+
 }

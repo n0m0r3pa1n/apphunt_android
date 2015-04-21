@@ -21,7 +21,7 @@ public class AppHuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        FlurryAgent.setLogEnabled(false);
         String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);

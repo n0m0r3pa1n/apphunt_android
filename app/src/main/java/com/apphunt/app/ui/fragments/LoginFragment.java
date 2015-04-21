@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
@@ -20,6 +21,7 @@ import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
+import com.apphunt.app.ui.interfaces.UserLoginScreenListener;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
@@ -45,6 +47,13 @@ public class LoginFragment extends BaseFragment {
     private User user;
     private TwitterLoginButton loginButton;
 
+    private boolean canBeSkipped = false;
+    private UserLoginScreenListener userLoginScreenListener;
+
+    public void setCanBeSkipped(boolean canBeSkipped) {
+        this.canBeSkipped = canBeSkipped;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,18 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        Button notNowButton = (Button) view.findViewById(R.id.not_now);
+        notNowButton.setVisibility(View.GONE);
+        if(canBeSkipped) {
+            notNowButton.setVisibility(View.VISIBLE);
+            notNowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    userLoginScreenListener.onLoginSkipped();
+                }
+            });
+        }
 
         loginButton = (TwitterLoginButton) view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -157,8 +178,10 @@ public class LoginFragment extends BaseFragment {
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                 LoginProviderFactory.get(activity).login(user);
+                userLoginScreenListener.onLoginSuccessful();
             } else {
                 onLoginFailed();
+                userLoginScreenListener.onLoginFailed();
             }
         }
     }
@@ -172,4 +195,8 @@ public class LoginFragment extends BaseFragment {
         LoadersUtils.hideBottomLoader(activity);
     }
 
+
+    public void setUserLoginScreenListener(UserLoginScreenListener userLoginScreenListener) {
+        this.userLoginScreenListener = userLoginScreenListener;
+    }
 }

@@ -44,7 +44,7 @@ import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -171,17 +171,13 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     private void startSelectAppFragment() {
-        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                    .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                    .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                    .commit();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
+                .commit();
 
-            getSupportFragmentManager().executePendingTransactions();
-        } else {
-            FacebookUtils.showLoginFragment(this);
-        }
+        getSupportFragmentManager().executePendingTransactions();
     }
 
     @Override
@@ -254,7 +250,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                         getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
                     break;
 
-                FacebookUtils.showLoginFragment(this);
+                LoginUtils.showLoginFragment(this);
                 break;
 
             case R.id.action_logout:

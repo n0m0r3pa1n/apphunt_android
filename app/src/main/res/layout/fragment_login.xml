@@ -5,6 +5,20 @@
     android:background="@color/bg_primary"
     android:clickable="true">
 
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/notification_text_margin"
+        android:layout_marginRight="@dimen/notification_text_margin"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_info_text"
+        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:textSize="@dimen/notification_text"
+        android:layout_above="@+id/login_button"/>
+
+
     <com.apphunt.app.ui.CustomTwitterLoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
@@ -12,5 +26,19 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal"
         />
+
+    <Button
+        android:layout_below="@id/login_button"
+        android:id="@+id/not_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/login_not_now"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/notification_button_text"
+        android:background="@android:color/transparent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

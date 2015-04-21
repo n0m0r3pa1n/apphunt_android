@@ -24,7 +24,7 @@ import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
@@ -146,7 +146,7 @@ public class CommentsAdapter extends BaseAdapter {
                             });
                         }
                     } else {
-                        FacebookUtils.showLoginFragment(ctx);
+                        LoginUtils.showLoginFragment(ctx);
                     }
                 }
             });
@@ -213,7 +213,7 @@ public class CommentsAdapter extends BaseAdapter {
                             });
                         }
                     } else {
-                        FacebookUtils.showLoginFragment(ctx);
+                        LoginUtils.showLoginFragment(ctx);
                     }
 
                     v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
