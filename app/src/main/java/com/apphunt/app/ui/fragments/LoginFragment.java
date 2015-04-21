@@ -21,7 +21,9 @@ import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
-import com.apphunt.app.ui.interfaces.UserLoginScreenListener;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.LoginSkippedEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
@@ -48,7 +50,6 @@ public class LoginFragment extends BaseFragment {
     private TwitterLoginButton loginButton;
 
     private boolean canBeSkipped = false;
-    private UserLoginScreenListener userLoginScreenListener;
 
     public void setCanBeSkipped(boolean canBeSkipped) {
         this.canBeSkipped = canBeSkipped;
@@ -72,7 +73,8 @@ public class LoginFragment extends BaseFragment {
             notNowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    userLoginScreenListener.onLoginSkipped();
+                    BusProvider.getInstance().post(new LoginSkippedEvent());
+                    BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_LOGIN_FRAGMENT));
                 }
             });
         }
@@ -178,10 +180,8 @@ public class LoginFragment extends BaseFragment {
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                 LoginProviderFactory.get(activity).login(user);
-                userLoginScreenListener.onLoginSuccessful();
             } else {
                 onLoginFailed();
-                userLoginScreenListener.onLoginFailed();
             }
         }
     }
@@ -193,10 +193,5 @@ public class LoginFragment extends BaseFragment {
         Toast.makeText(activity, R.string.login_canceled_text, Toast.LENGTH_LONG).show();
         ((MainActivity) activity).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(activity);
-    }
-
-
-    public void setUserLoginScreenListener(UserLoginScreenListener userLoginScreenListener) {
-        this.userLoginScreenListener = userLoginScreenListener;
     }
 }

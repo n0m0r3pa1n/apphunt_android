@@ -37,4 +37,7 @@ public interface TrackingEvents {
     String UserViewedSelectApp = "user.viewed.select.app";
     String UserViewedSuggestion = "user.viewed.suggestion";
     String UserFoundNoResults = "user.found.no.results";
+    String AppShowedRegularLogin = "app.showed.regular.login.when.save.app";
+    String AppShowedSkippableLogin = "app.showed.skippable.login.when.save.app";
+    String UserSkippedLoginWhenAddApp = "user.skipped.login.when.add.app";
 }

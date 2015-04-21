@@ -28,7 +28,12 @@ import android.widget.Button;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.ShowNotificationEvent;
+import com.apphunt.app.event_bus.events.UserCreatedEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -77,6 +82,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+
+        BusProvider.getInstance().register(this);
 
         boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
         if (isStartedFromNotification) {
@@ -467,5 +474,21 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Subscribe
     public void onAppSpiceError(AppSpiceError error) {
         SmartRate.onError();
+    }
+
+    @Subscribe
+    public void onUserCreated(UserCreatedEvent event) {
+        onUserLogin();
+        supportInvalidateOptionsMenu();
+    }
+
+    @Subscribe
+    public void onHideFragmentEvent(HideFragmentEvent event) {
+        getSupportFragmentManager().popBackStack(event.getTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Subscribe
+    public void showNotificationFragment(ShowNotificationEvent event) {
+        NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
     }
 }

@@ -8,6 +8,7 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +28,11 @@ import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.ui.interfaces.UserLoginScreenListener;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.LoginSkippedEvent;
+import com.apphunt.app.event_bus.events.ShowNotificationEvent;
+import com.apphunt.app.event_bus.events.UserCreatedEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.NotificationsUtils;
@@ -35,14 +40,16 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SaveAppFragment extends BaseFragment implements OnClickListener, UserLoginScreenListener {
+public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
@@ -50,11 +57,12 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener, Us
     private EditText desc;
     private ApplicationInfo data;
     private ActionBarActivity activity;
+    private Button saveButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        BusProvider.getInstance().register(this);
         setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
@@ -82,8 +90,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener, Us
 
         desc = (EditText) view.findViewById(R.id.description);
 
-        Button save = (Button) view.findViewById(R.id.save);
-        save.setOnClickListener(this);
+        saveButton = (Button) view.findViewById(R.id.save);
+        saveButton.setOnClickListener(this);
     }
 
     @Override
@@ -102,9 +110,9 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener, Us
 
                 if (desc.getText() != null && desc.getText().length() >= 50) {
                     if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-                        saveApp(v);
+                        saveApp(v, SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
                     } else {
-                        LoginUtils.showSkippableLoginFragment(getActivity());
+                        showLoginFragment();
                     }
 
                 } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
@@ -127,22 +135,33 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener, Us
         }
     }
 
-    private void saveApp(final View v) {
+    private void showLoginFragment() {
+        Random random = new Random();
+        int currPercent = random.nextInt(100) + 1;
+        if(currPercent <= Constants.USER_SKIP_LOGIN_PERCENTAGE) {
+            FlurryAgent.logEvent(TrackingEvents.AppShowedSkippableLogin);
+            LoginUtils.showSkippableLoginFragment(getActivity());
+        } else {
+            FlurryAgent.logEvent(TrackingEvents.AppShowedRegularLogin);
+            LoginUtils.showLoginFragment(getActivity());
+        }
+    }
+
+    private void saveApp(final View v, String userId) {
         v.setEnabled(false);
         SaveApp app = new SaveApp();
         app.setDescription(desc.getText().toString());
         app.setPackageName(data.packageName);
         app.setPlatform(Constants.PLATFORM);
-        app.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+        app.setUserId(userId);
 
         AppHuntApiClient.getClient().saveApp(app, new Callback() {
             @Override
             public void success(Object o, Response response) {
                 if (response.getStatus() == 200) {
                     FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
-                    activity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.saved_successfully), false, true);
+                    BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
+                    BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully)));
                 }
             }
 
@@ -187,19 +206,15 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener, Us
         closeKeyboard(desc);
     }
 
-    @Override
-    public void onLoginSuccessful() {
-
+    @Subscribe
+    public void onLoginSkipped(LoginSkippedEvent event) {
+        FlurryAgent.logEvent(TrackingEvents.UserSkippedLoginWhenAddApp);
+        saveApp(saveButton, Constants.APPHUNT_ADMIN_USER_ID);
     }
 
-    @Override
-    public void onLoginFailed() {
-
-    }
-
-    @Override
-    public void onLoginSkipped() {
-
+    @Subscribe
+    public void onUserCreated(UserCreatedEvent event) {
+        saveApp(saveButton, event.getUser().getId());
     }
 
 }

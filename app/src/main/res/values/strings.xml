@@ -30,7 +30,7 @@
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
     <string name="notification_cannot_login">Unsuccessful login attempt! Please try again…</string>
-    <string name="saved_successfully">App added successfully</string>
+    <string name="saved_successfully">Your app is waiting for review. You will be notified when status is changed :)</string>
     <string name="list_view_header_yesterday">Yesterday</string>
     <string name="list_view_header_today">Today</string>
     <string name="dismiss">DISMISS</string>
