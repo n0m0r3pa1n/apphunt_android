@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,7 +94,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem = new ViewHolderItem();
 
                 view = inflater.inflate(R.layout.layout_app_item, parent, false);
-                viewHolderItem.layout = (RelativeLayout) view.findViewById(R.id.item);
+                viewHolderItem.layout = (LinearLayout) view.findViewById(R.id.item);
                 viewHolderItem.icon = (ImageView) view.findViewById(R.id.app_icon);
                 viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
                 viewHolderItem.description = (TextView) view.findViewById(R.id.description);
@@ -435,7 +436,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     private static class ViewHolderItem {
-        RelativeLayout layout;
+        LinearLayout layout;
         ImageView icon;
         TextView title;
         TextView description;

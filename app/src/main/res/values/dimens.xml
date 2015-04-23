@@ -18,14 +18,14 @@
     <dimen name="list_header_height">48dp</dimen>
     <dimen name="list_header_text">18sp</dimen>
 
-    <dimen name="list_item_height">100dp</dimen>
-    <dimen name="list_item_icon_margin_left">16dp</dimen>
-    <dimen name="list_item_icon_margin_right">16dp</dimen>
-    <dimen name="list_item_icon_size">50dp</dimen>
+    <dimen name="list_item_height">250dp</dimen>
+    <dimen name="list_item_icon_margin_left">7dp</dimen>
+    <dimen name="list_item_icon_margin_right">7dp</dimen>
+    <dimen name="list_item_icon_size">75dp</dimen>
     <dimen name="list_item_name">14sp</dimen>
     <dimen name="list_item_desc">13sp</dimen>
     <dimen name="list_item_vote_size">50dp</dimen>
-    <dimen name="list_item_vote_margin">16dp</dimen>
+    <dimen name="list_item_vote_margin">7dp</dimen>
     <dimen name="list_item_vote_padding">5dp</dimen>
     <dimen name="list_item_vote_text">15sp</dimen>
 
@@ -129,7 +129,7 @@
     <dimen name="comment_entry_text">14sp</dimen>
     <dimen name="send_comment_width">65dp</dimen>
     <dimen name="send_comment_height">45dp</dimen>
-    <dimen name="dimen_app_list_avatar_creator">20dp</dimen>
+    <dimen name="dimen_app_list_avatar_creator">30dp</dimen>
     <dimen name="dimen_app_list_creator_name">12sp</dimen>
 
 </resources>
