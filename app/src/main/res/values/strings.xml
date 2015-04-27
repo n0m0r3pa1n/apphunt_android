@@ -29,6 +29,7 @@
     <!-- Notifications -->
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
+    <string name="server_error">Oops, something went wrong. Please, try again later :)</string>
     <string name="notification_cannot_login">Unsuccessful login attempt! Please try again…</string>
     <string name="saved_successfully">Your app is waiting for review. You will be notified when status is changed :)</string>
     <string name="app_already_exist">The app you are trying to add is already on AppHunt. Add another of your favourite apps :)</string>
@@ -91,4 +92,5 @@
     <string name="action_search">Search</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">No apps found! Try again :)</string>
+    <string name="details">Details</string>
 </resources>

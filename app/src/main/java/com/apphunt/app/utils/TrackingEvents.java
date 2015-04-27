@@ -41,4 +41,5 @@ public interface TrackingEvents {
     String AppShowedSkippableLogin = "app.showed.skippable.login.when.save.app";
     String UserSkippedLoginWhenAddApp = "user.skipped.login.when.add.app";
     String UserSearchedForApp = "user.searched.for.app";
+    String UserSharedApp = "user.shared.app";
 }

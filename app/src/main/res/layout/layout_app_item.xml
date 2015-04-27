@@ -1,111 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height">
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
 
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="@dimen/list_item_icon_size"
-        android:layout_height="@dimen/list_item_icon_size"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/list_item_icon_margin_left"
-        android:layout_marginRight="@dimen/list_item_icon_margin_right"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        cardview:cardCornerRadius="2dp"
+        cardview:cardUseCompatPadding="true">
 
-    <LinearLayout
-        android:id="@+id/info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/app_icon"
-        android:layout_toRightOf="@+id/app_icon"
-        android:layout_toStartOf="@+id/vote"
-        android:layout_toLeftOf="@+id/vote">
-
-        <TextView
-            android:id="@+id/app_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_name"
-            android:textStyle="bold"
-            android:singleLine="true" />
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_desc"
-            android:maxLines="3"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-            <com.apphunt.app.ui.widgets.AvatarImageView
-                android:id="@+id/creator_avatar"
-                android:layout_width="@dimen/dimen_app_list_avatar_creator"
-                android:layout_height="@dimen/dimen_app_list_avatar_creator"
-                android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/app_icon"
+                        android:layout_width="@dimen/list_item_icon_size"
+                        android:layout_height="@dimen/list_item_icon_size"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/list_item_icon_margin_right" />
 
-            <TextView
-                android:id="@+id/creator_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/dimen_app_list_creator_name"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp" />
+                    <TextView
+                        android:id="@+id/app_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/list_item_name" />
+
+                    <Button
+                        android:id="@+id/vote"
+                        android:layout_width="@dimen/list_item_vote_size"
+                        android:layout_height="@dimen/list_item_vote_size"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/btn_vote"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/list_item_vote_text" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:maxLines="3"
+                    android:textSize="@dimen/list_item_desc" />
+
+                <LinearLayout
+                    android:id="@+id/creator_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal">
+
+                    <com.apphunt.app.ui.widgets.AvatarImageView
+                        android:id="@+id/creator_avatar"
+                        android:layout_width="@dimen/dimen_app_list_avatar_creator"
+                        android:layout_height="@dimen/dimen_app_list_avatar_creator"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:id="@+id/creator_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/dimen_app_list_creator_name" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_comment"
+                        android:gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/comments_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:elevation="0dp"
+                        android:gravity="center_vertical"
+                        android:padding="0dp"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
 
             <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_above="@+id/actions_container"
+                android:background="@color/list_item_divider"
+                android:elevation="0dp" />
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@drawable/ic_comment"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="15dp"/>
-
-            <TextView
-                android:id="@+id/comments_count"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/actions_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:padding="0dp"
-                android:elevation="0dp"
-                android:textSize="@dimen/list_item_name"
-                android:textStyle="bold"
-                android:layout_marginRight="20dp"/>
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
 
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/vote"
-        android:layout_width="@dimen/list_item_vote_size"
-        android:layout_height="@dimen/list_item_vote_size"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/list_item_vote_margin"
-        android:layout_marginLeft="@dimen/list_item_vote_margin"
-        android:gravity="center"
-        android:textSize="@dimen/list_item_vote_text"
-        android:textColor="@android:color/white"
-        android:background="@drawable/btn_vote"/>
+                <Button
+                    android:id="@+id/btn_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:text="@string/action_share"
+                    android:textColor="@color/save_app_text" />
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_view_divider_height"
-        android:background="@color/bg_divider"
-        android:layout_toRightOf="@+id/app_icon"
-        android:layout_toEndOf="@+id/app_icon"
-        android:layout_alignParentBottom="true"
-        android:elevation="@dimen/list_view_elevation" />
-</RelativeLayout>
+                <Button
+                    android:id="@+id/btn_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:text="@string/details"
+                    android:textColor="@color/save_app_text" />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

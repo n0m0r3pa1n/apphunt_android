@@ -192,15 +192,16 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
                 }
                 try {
                     activity.getSupportFragmentManager().popBackStack();
-
-                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.not_available_in_the_store), false, false);
+                    String message = getString(R.string.not_available_in_the_store);
+                    if(error.getResponse().getStatus() != 404) {
+                        message = getString(R.string.server_error);
+                    }
+                    NotificationsUtils.showNotificationFragment(activity, message, false, false);
                     v.setEnabled(true);
                 } catch (Exception e) {
                     Crashlytics.logException(e);
                 }
-
                 FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
-                activity.getSupportFragmentManager().popBackStack();
             }
         });
     }
