@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apphunt.app">
+    package="com.apphunt.app"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -59,14 +60,14 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.GcmRegistrationUpdateReceiver" >
+        <receiver android:name=".receivers.GcmRegistrationUpdateReceiver">
             <intent-filter>
                 <action android:name="FRUITY_TOKEN_NEEDS_UPDATE" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".receivers.GcmMessageReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="com.apphunt.app" />
