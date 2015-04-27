@@ -2,9 +2,16 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
@@ -45,6 +52,9 @@ import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +79,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private boolean success = false;
     private int noAppsDays = 0;
 
-    private ViewHolderItem viewHolderItem = null;
+//    private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
     private ViewHolderMoreApps viewHolderMoreApps = null;
     private int selectedAppPosition = -1;
@@ -87,9 +97,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
 
+            ViewHolderItem viewHolderItem = null;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
             if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
                 viewHolderItem = new ViewHolderItem();
 
@@ -102,6 +112,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem.creatorImageView = (AvatarImageView) view.findViewById(R.id.creator_avatar);
                 viewHolderItem.creatorUsername = (TextView) view.findViewById(R.id.creator_name);
                 viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
+                viewHolderItem.details = (Button) view.findViewById(R.id.btn_details);
+                viewHolderItem.share = (Button) view.findViewById(R.id.btn_share);
 
                 view.setTag(viewHolderItem);
             } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
@@ -196,8 +208,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 viewHolderItem.vote.setTextColor(Color.parseColor("#2f90de"));
             }
 
-            viewHolderItem.layout.setOnClickListener(null);
-            viewHolderItem.layout.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener detailsClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
@@ -220,7 +231,32 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     }
 
                 }
+            };
+
+            viewHolderItem.layout.setOnClickListener(null);
+            viewHolderItem.layout.setOnClickListener(detailsClickListener);
+
+            viewHolderItem.details.setOnClickListener(null);
+            viewHolderItem.details.setOnClickListener(detailsClickListener);
+
+            viewHolderItem.share.setOnClickListener(null);
+            final Uri iconUri = getLocalBitmapUri(viewHolderItem.icon);
+            final App currApp = ((AppItem)items.get(position)).getData();
+            final String message = viewHolderItem.title.getText() + ". " + viewHolderItem.description.getText() + " " + app.getShortUrl();
+            viewHolderItem.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    sharingIntent.setType("*/*");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, iconUri);
+                    ctx.startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("appId", currApp.getId());
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
+                }
             });
+
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue() && viewHolderSeparator != null) {
             viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
         } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue() && viewHolderMoreApps != null) {
@@ -236,6 +272,33 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         return view;
     }
+
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            File file =  new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+            file.getParentFile().mkdirs();
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
+
 
     private void getApps() {
         String userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
@@ -444,6 +507,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         Target creatorImageView;
         TextView creatorUsername;
         Button vote;
+        Button details;
+        Button share;
     }
 
     private static class ViewHolderSeparator {

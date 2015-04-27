@@ -42,7 +42,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.shamanland:fab:0.0.5'
     compile 'com.facebook.android:facebook-android-sdk:3.22.0'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.6'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.quentindommerc.superlistview:library:1.5.2'
     compile 'it.appspice:android:0.1.8'

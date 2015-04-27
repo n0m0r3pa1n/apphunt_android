@@ -24,7 +24,9 @@
     <color name="bg_semi_fragment">#B4000000</color>
 
     <color name="bg_divider">#c7c7c7</color>
-    
+
+    <color name="list_item_divider">#1e1e92d4</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#C8FFFFFF</color>

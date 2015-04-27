@@ -12,17 +12,6 @@
         android:layout_height="@dimen/ab_shadow_height"
         android:background="@drawable/bottom_shadow" />
 
-    <com.quentindommerc.superlistview.SuperListview
-        android:id="@+id/trending_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_divider_height"
-        android:paddingTop="7dp"
-        android:layoutAnimation="@anim/list_view_entry"
-        android:elevation="@dimen/listview_elevation"
-        android:layout_above="@+id/more_loader_layout" />
-
     <com.shamanland.fab.FloatingActionButton
         android:id="@+id/add_app"
         android:layout_width="wrap_content"
@@ -36,6 +25,19 @@
         app:floatingActionButtonColor="@color/bg_fab"
         app:floatingActionButtonSize="normal"
         android:elevation="@dimen/add_btn_elevation" />
+
+    <com.quentindommerc.superlistview.SuperListview
+        android:id="@+id/trending_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/list_divider_height"
+        android:paddingTop="7dp"
+        android:layoutAnimation="@anim/list_view_entry"
+        android:elevation="@dimen/listview_elevation"
+        android:layout_above="@+id/more_loader_layout" />
+
+
 
     <FrameLayout
         android:id="@+id/container"
