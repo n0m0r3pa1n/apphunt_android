@@ -79,7 +79,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private boolean success = false;
     private int noAppsDays = 0;
 
-//    private ViewHolderItem viewHolderItem = null;
     private ViewHolderSeparator viewHolderSeparator = null;
     private ViewHolderMoreApps viewHolderMoreApps = null;
     private int selectedAppPosition = -1;
@@ -145,6 +144,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             final App app = ((AppItem) getItem(position)).getData();
 
             int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
+
             Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
 
             viewHolderItem.title.setText(app.getName());
@@ -240,12 +240,13 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.details.setOnClickListener(detailsClickListener);
 
             viewHolderItem.share.setOnClickListener(null);
-            final Uri iconUri = getLocalBitmapUri(viewHolderItem.icon);
+            final ImageView iconImageView = viewHolderItem.icon;
             final App currApp = ((AppItem)items.get(position)).getData();
             final String message = viewHolderItem.title.getText() + ". " + viewHolderItem.description.getText() + " " + app.getShortUrl();
             viewHolderItem.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Uri iconUri = getLocalBitmapUri(iconImageView);
                     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                     sharingIntent.setType("*/*");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
