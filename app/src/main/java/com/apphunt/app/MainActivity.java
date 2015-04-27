@@ -216,6 +216,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                Map<String, String> params = new HashMap<>();
+                params.put("query", s);
+                FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
                 AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
                         Constants.PLATFORM, new Callback<AppsList>() {
                             @Override
