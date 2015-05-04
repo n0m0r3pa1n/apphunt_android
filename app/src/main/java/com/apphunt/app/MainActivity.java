@@ -348,19 +348,10 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (ConnectivityUtils.isNetworkAvailable(this)) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                Animation slideInBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
-
-                addAppButton.startAnimation(slideInBottom);
-                addAppButton.setVisibility(View.VISIBLE);
-
                 if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
                     trendingAppsAdapter.getAppsForNextDate();
                 }
-            } else {
-                Animation slideOutBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
-                addAppButton.startAnimation(slideOutBottom);
-                addAppButton.setVisibility(View.INVISIBLE);
             }
         }
     }
