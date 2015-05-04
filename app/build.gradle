@@ -23,8 +23,8 @@ android {
         applicationId "com.apphunt.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 16
-        versionName "1.4.0"
+        versionCode 17
+        versionName "1.4.1"
     }
     buildTypes {
         release {
