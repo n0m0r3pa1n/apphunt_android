@@ -1,14 +1,18 @@
 Find the best new apps, every day!
 <font color="#159ae6"><b>AppHunt</b></font> gives you a curated list of useful apps composed by other app hunters, just like you.
-Discover the latest mobile apps that everyone's talking about!
+Discover the latest mobile apps that everyone's talking about! Share great useful apps with your friends and get personal recommendations from other hunters!
 
-* Check out today's trending apps
+* Discover today's great trending apps
+* Find discounted and free apps that your friends and other app hunters love
 * Submit and vote for your favorite apps
 * Share an app you like with other app hunters
 * See what other's are hunting
 * Find the app of the day without wasting time
+* Discover great useful tools
 * Enjoy list of new apps every day
 * Great functionality for app discovery
+* Discuss with other hunters
+* Ask for new features, updates and free gifts directly from app developers
 
 Hunt for top Android apps that help you 
 
@@ -28,5 +32,13 @@ How to use
 - Discover awesome free apps and games added by other app hunters 
 - Recommend apps to your friends on Facebook
 - Follow app updates
+- Discuss your favorite app with your friends and other app hunters
+
+** For Android app developers **
+
+- Get meaningful real user feedback
+- Add your app on AppHunt and increase your app downloads instantly for free
+- Let your users vote for your app on AppHunt and be #1 on the leaderboard for great apps!
+- Survey your users instantly and for free
 
 Join the app hunt now! It's <b>FREE</b>!
