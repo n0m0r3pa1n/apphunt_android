@@ -39,7 +39,7 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void getNotificationFromServer() {
-        String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
+        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);
         }
@@ -54,20 +54,20 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void saveNotification(Notification notification) {
-        SharedPreferencesHelper.setPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_TITLE, notification.getTitle());
-        SharedPreferencesHelper.setPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_MSG, notification.getMessage());
+        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_TITLE, notification.getTitle());
+        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_MSG, notification.getMessage());
     }
 
     private Notification getNotificationFromSharedPrefs() {
         Notification notification = new Notification();
 
-        if (TextUtils.isEmpty(SharedPreferencesHelper.getStringPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_TITLE))) {
-            SharedPreferencesHelper.setPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_TITLE, Constants.DEFAULT_NOTIFICATION_TITLE);
-            SharedPreferencesHelper.setPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_MSG, Constants.DEFAULT_NOTIFICATION_MSG);
+        if (TextUtils.isEmpty(SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_TITLE))) {
+            SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_TITLE, Constants.DEFAULT_NOTIFICATION_TITLE);
+            SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_MSG, Constants.DEFAULT_NOTIFICATION_MSG);
         }
 
-        notification.setTitle(SharedPreferencesHelper.getStringPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_TITLE));
-        notification.setMessage(SharedPreferencesHelper.getStringPreference(getApplicationContext(), Constants.KEY_NOTIFICATION_MSG));
+        notification.setTitle(SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_TITLE));
+        notification.setMessage(SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_MSG));
 
         return notification;
     }

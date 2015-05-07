@@ -39,15 +39,15 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public boolean isUserLoggedIn() {
-        String userId = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_USER_ID);
-        String loginProvider = SharedPreferencesHelper.getStringPreference(getActivity(), Constants.KEY_LOGIN_PROVIDER);
+        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        String loginProvider = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER);
         return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
     }
 
     protected void removeSharedPreferences(Activity activity) {
-        SharedPreferencesHelper.removePreference(activity, Constants.KEY_USER_ID);
-        SharedPreferencesHelper.removePreference(activity, Constants.KEY_EMAIL);
-        SharedPreferencesHelper.removePreference(activity, Constants.KEY_LOGIN_PROVIDER);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_ID);
+        SharedPreferencesHelper.removePreference(Constants.KEY_EMAIL);
+        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
     }
 
     @Override
@@ -68,9 +68,9 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     protected void saveSharedPreferences(Activity activity, User user) {
-        SharedPreferencesHelper.setPreference(activity, Constants.KEY_USER_ID, user.getId());
-        SharedPreferencesHelper.setPreference(activity, Constants.KEY_EMAIL, user.getEmail());
-        SharedPreferencesHelper.setPreference(activity, Constants.KEY_PROFILE_IMAGE, user.getProfilePicture());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, user.getId());
+        SharedPreferencesHelper.setPreference(Constants.KEY_EMAIL, user.getEmail());
+        SharedPreferencesHelper.setPreference(Constants.KEY_PROFILE_IMAGE, user.getProfilePicture());
     }
 
     private void hideLoginFragment(Context ctx) {

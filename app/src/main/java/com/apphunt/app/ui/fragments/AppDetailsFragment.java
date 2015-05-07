@@ -202,7 +202,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     public void loadData() {
-        userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
+        userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<App>() {
             @Override
             public void success(App app, Response response) {
@@ -247,7 +247,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         commentBox.setVisibility(View.INVISIBLE);
                     }
 
-                    userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
+                    userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
                 }
             }
         });
@@ -264,7 +264,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
                 headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
 
-                userId = SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID);
+                userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
             }
         });
     }
@@ -275,7 +275,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             case R.id.vote:
                 if (userHasPermissions()) {
                     if (app.isHasVoted()) {
-                        AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
+                        AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
                                 FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
@@ -286,15 +286,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                                 vote.setBackgroundResource(R.drawable.btn_vote);
 
                                 user = new User();
-                                user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
-                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                                user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
                                 votersAdapter.removeCreator(user);
                                 commentsList.invalidateViews();
                                 headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
                             }
                         });
                     } else {
-                        AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID), new Callback<Vote>() {
+                        AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
                             @Override
                             public void success(Vote voteResult, Response response) {
                                 FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
@@ -305,8 +305,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                                 vote.setTextColor(activity.getResources().getColor(R.color.bg_secondary));
 
                                 user = new User();
-                                user.setId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
-                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_PROFILE_IMAGE));
+                                user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
                                 votersAdapter.addCreatorIfNotVoter(user);
                                 commentsList.invalidateViews();
                                 headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
@@ -370,13 +370,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
                     comment.setText(commentBox.getText().toString());
                     comment.setAppId(app.getId());
-                    comment.setUserId(SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                    comment.setUserId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
 
                     AppHuntApiClient.getClient().sendComment(comment, new Callback<NewComment>() {
                         @Override
                         public void success(NewComment comment, Response response) {
                             if (response.getStatus() == 200) {
-                                AppHuntApiClient.getClient().getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID),
+                                AppHuntApiClient.getClient().getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                                         1, 3, new Callback<Comments>() {
                                             @Override
                                             public void success(Comments comments, Response response) {

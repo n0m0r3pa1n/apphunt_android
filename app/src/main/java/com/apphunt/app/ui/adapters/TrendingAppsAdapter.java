@@ -163,7 +163,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 public void onClick(final View v) {
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
                         if (app.isHasVoted()) {
-                            AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
+                            AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
                                     Map<String, String> params = new HashMap<>();
@@ -177,7 +177,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                                 }
                             });
                         } else {
-                            AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
+                            AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
                                 @Override
                                 public void success(Vote vote, Response response) {
                                     Map<String, String> params = new HashMap<>();
@@ -302,7 +302,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
 
     private void getApps() {
-        String userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
+        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
             @Override
             public void success(AppsList appsList, Response response) {
@@ -356,7 +356,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         String date = dateFormat.format(calendar.getTime());
 
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
+        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
                     @Override
                     public void success(AppsList appsList, Response response) {
@@ -394,7 +394,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private void loadMoreApps(final int position) {
         final MoreAppsItem item = (MoreAppsItem) getItem(position);
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
+        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
                     @Override
                     public void success(AppsList appsList, Response response) {

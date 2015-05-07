@@ -56,7 +56,7 @@ public class CommentsAdapter extends BaseAdapter {
         addItems(comments);
         totalPages = comments.getTotalPages();
         page = comments.getPage();
-        userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
+        userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -122,7 +122,7 @@ public class CommentsAdapter extends BaseAdapter {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
                             FlurryAgent.logEvent(TrackingEvents.UserDownVotedComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
                                     comment.setHasVoted(false);
@@ -134,7 +134,7 @@ public class CommentsAdapter extends BaseAdapter {
                             });
                         } else {
                             FlurryAgent.logEvent(TrackingEvents.UserVotedComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
                                     comment.setHasVoted(true);
@@ -189,7 +189,7 @@ public class CommentsAdapter extends BaseAdapter {
                     if (userHasPermissions()) {
                         if (comment.isHasVoted()) {
                             FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
                                     comment.setHasVoted(false);
@@ -201,7 +201,7 @@ public class CommentsAdapter extends BaseAdapter {
                             });
                         } else {
                             FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
                                 @Override
                                 public void success(CommentVote vote, Response response) {
                                     comment.setHasVoted(true);

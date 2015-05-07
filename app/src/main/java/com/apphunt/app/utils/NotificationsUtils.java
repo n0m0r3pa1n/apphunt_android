@@ -52,7 +52,7 @@ public class NotificationsUtils {
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
-        SharedPreferencesHelper.setPreference(ctx, Constants.SETTING_NOTIFICATIONS_ENABLED, true);
+        SharedPreferencesHelper.setPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true);
     }
 
     public static void disableDailyNotificationsService(Context ctx) {
@@ -62,7 +62,7 @@ public class NotificationsUtils {
         AlarmManager alarmMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.cancel(alarmIntent);
 
-        SharedPreferencesHelper.setPreference(ctx, Constants.SETTING_NOTIFICATIONS_ENABLED, false);
+        SharedPreferencesHelper.setPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, false);
     }
 
     public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {

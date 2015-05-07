@@ -23,7 +23,7 @@ public class LoginProviderFactory {
 
     public static void setLoginProvider(Context context, LoginProvider loginProvider) {
         LoginProviderFactory.loginProvider = loginProvider;
-        SharedPreferencesHelper.setPreference(context, Constants.KEY_LOGIN_PROVIDER, loginProvider.getName());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, loginProvider.getName());
     }
 
 

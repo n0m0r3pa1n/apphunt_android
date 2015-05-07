@@ -14,7 +14,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context ctx, Intent intent) {
         if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction()) || ctx.getString(R.string.action_enable_notifications).equals(intent.getAction())) {
-            if (SharedPreferencesHelper.getBooleanPreference(ctx, Constants.SETTING_NOTIFICATIONS_ENABLED)) {
+            if (SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED)) {
                 NotificationsUtils.setupDailyNotificationService(ctx);
             } else {
                 NotificationsUtils.disableDailyNotificationsService(ctx);

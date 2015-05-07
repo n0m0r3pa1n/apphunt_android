@@ -56,11 +56,11 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
         notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
         notifications.setOnCheckedChangeListener(this);
-        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.SETTING_NOTIFICATIONS_ENABLED));
+        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED));
 
         sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
         sounds.setOnCheckedChangeListener(this);
-        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_SOUNDS_ENABLED));
+        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
 
         dismissBtn = (Button) view.findViewById(R.id.dismiss);
         dismissBtn.setOnClickListener(this);
@@ -113,7 +113,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                 if (!isChecked) {
                     FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
                 }
-                SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
+                SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
                 break;
         }
     }

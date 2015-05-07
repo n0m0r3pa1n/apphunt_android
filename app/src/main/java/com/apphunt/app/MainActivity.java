@@ -219,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
+                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
                         Constants.PLATFORM, new Callback<AppsList>() {
                             @Override
                             public void success(AppsList appsList, Response response) {
@@ -289,24 +289,17 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             case R.id.action_share:
                 if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
                         FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                    FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-                            .setName("AppHunt")
-                            .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
-                            .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
-                    shareDialog.present();
+                    shareWithFacebook();
                     FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
                 } else {
-                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                    sharingIntent.setType("text/html");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
-                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    shareWithLocalApps();
                     FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
                 }
                 break;
 
             case R.id.action_suggest:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
+                    getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
                     break;
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
@@ -326,6 +319,21 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
 
         return true;
+    }
+
+    private void shareWithLocalApps() {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/html");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
+        startActivity(Intent.createChooser(sharingIntent, "Share using"));
+    }
+
+    private void shareWithFacebook() {
+        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+                .setName("AppHunt")
+                .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
+                .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
+        shareDialog.present();
     }
 
     @Override
@@ -469,8 +477,8 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     public void updateNotificationIdIfNeeded() {
-        final String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
-        String notificationId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_NOTIFICATION_ID);
+        final String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
         if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
             FruityGcmClient.start(this, Constants.GCM_SENDER_ID, new FruityGcmListener() {
 
@@ -485,7 +493,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                     AppHuntApiClient.getClient().updateUser(userId, user, new Callback<User>() {
                         @Override
                         public void success(User user, Response response) {
-                            SharedPreferencesHelper.setPreference(MainActivity.this, Constants.KEY_NOTIFICATION_ID, regId);
+                            SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);
                         }
                     });
                 }

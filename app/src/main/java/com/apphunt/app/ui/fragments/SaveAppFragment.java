@@ -123,7 +123,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
                 if (desc.getText() != null && desc.getText().length() >= 50) {
                     if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-                        saveApp(v, SharedPreferencesHelper.getStringPreference(activity, Constants.KEY_USER_ID));
+                        saveApp(v, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
                     } else {
                         showLoginFragment();
                     }
