@@ -15,7 +15,7 @@ import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.votes.UserVotedForAppEvent;
+import com.apphunt.app.event_bus.events.votes.UserAppVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -30,21 +30,22 @@ import retrofit.client.Response;
 /**
  * Created by nmp on 15-5-8.
  */
-public class VoteButton extends LinearLayout {
+public class AppVoteButton extends LinearLayout {
+    public static final String TAG = AppVoteButton.class.getSimpleName();
     private App app;
     private LayoutInflater inflater;
 
     @InjectView(R.id.vote)
     Button voteButton;
 
-    public VoteButton(Context context) {
+    public AppVoteButton(Context context) {
         super(context);
         if (!isInEditMode()) {
             init(context);
         }
     }
 
-    public VoteButton(Context context, App app) {
+    public AppVoteButton(Context context, App app) {
         super(context);
         this.app = app;
         if (!isInEditMode()) {
@@ -52,29 +53,33 @@ public class VoteButton extends LinearLayout {
         }
     }
 
-    public VoteButton(Context context, AttributeSet attrs) {
+    public AppVoteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init(context);
         }
     }
 
-    public VoteButton(Context context, AttributeSet attrs, int defStyle) {
+    public AppVoteButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (!isInEditMode()) {
             init(context);
         }
     }
 
-    protected void init(Context context) {
+
+    protected LayoutInflater getLayoutInflater() {
         if(inflater == null) {
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        View view = inflater.inflate(R.layout.view_vote_button, this, true);
-        ButterKnife.inject(this, view);
+        return inflater;
+    }
 
-        if(app == null) {
+    protected void init(Context context) {
+        View view = getLayoutInflater().inflate(R.layout.view_vote_button, this, true);
+        ButterKnife.inject(this, view);
+        if(!shouldBeAbleToVote()) {
             voteButton.setText("0");
             return;
         }
@@ -82,15 +87,19 @@ public class VoteButton extends LinearLayout {
         updateVoteButton();
     }
 
-    private void updateVoteButton() {
-        if (app.isHasVoted()) {
+    protected void updateVoteButton() {
+        if (hasVoted()) {
             voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
             voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
         } else {
             voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
             voteButton.setBackgroundResource(R.drawable.btn_vote);
         }
-        voteButton.setText(app.getVotesCount());
+        voteButton.setText(getButtonText());
+    }
+
+    protected String getButtonText() {
+        return app.getVotesCount();
     }
 
     public void setApp(App app) {
@@ -105,14 +114,22 @@ public class VoteButton extends LinearLayout {
             return;
         }
 
-        if(app == null)
+        if(!shouldBeAbleToVote())
             return;
 
-        if(app.isHasVoted()) {
+        if(hasVoted()) {
             downVote();
         } else {
             vote();
         }
+    }
+
+    protected boolean shouldBeAbleToVote() {
+        return app != null;
+    }
+
+    protected boolean hasVoted() {
+        return app.isHasVoted();
     }
 
     protected void downVote() {
@@ -146,7 +163,7 @@ public class VoteButton extends LinearLayout {
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {
-        BusProvider.getInstance().post(new UserVotedForAppEvent(hasVoted));
+        BusProvider.getInstance().post(new UserAppVoteEvent(hasVoted));
     }
 
 

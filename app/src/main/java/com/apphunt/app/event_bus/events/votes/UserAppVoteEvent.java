@@ -1,10 +1,10 @@
 package com.apphunt.app.event_bus.events.votes;
 
 
-public class UserVotedForAppEvent {
+public class UserAppVoteEvent {
     private boolean isVote = true;
 
-    public UserVotedForAppEvent(boolean isVote) {
+    public UserAppVoteEvent(boolean isVote) {
         this.isVote = isVote;
     }
 

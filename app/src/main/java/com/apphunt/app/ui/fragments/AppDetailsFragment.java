@@ -38,11 +38,11 @@ import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.votes.UserVotedForAppEvent;
+import com.apphunt.app.event_bus.events.votes.UserAppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
-import com.apphunt.app.ui.views.vote.VoteButton;
+import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
@@ -101,7 +101,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     Target creator;
 
     @InjectView(R.id.vote_btn)
-    VoteButton voteBtn;
+    AppVoteButton voteBtn;
 
     @InjectView(R.id.creator_name)
     TextView creatorName;
@@ -296,7 +296,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     @Subscribe
-    public void updateVoters(UserVotedForAppEvent event) {
+    public void updateVoters(UserAppVoteEvent event) {
         user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));

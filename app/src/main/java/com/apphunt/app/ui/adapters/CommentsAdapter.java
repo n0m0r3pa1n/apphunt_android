@@ -2,12 +2,10 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,18 +14,15 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.Comment;
-import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
+import com.apphunt.app.ui.views.vote.CommentVoteButton;
 import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -74,7 +69,7 @@ public class CommentsAdapter extends BaseAdapter {
                 commentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
                 commentViewHolder.name = (TextView) view.findViewById(R.id.name);
                 commentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                commentViewHolder.vote = (Button) view.findViewById(R.id.vote);
+                commentViewHolder.vote = (CommentVoteButton) view.findViewById(R.id.vote_btn);
 
                 view.setTag(commentViewHolder);
             } else if (getItemViewType(position) == 1) {
@@ -85,7 +80,7 @@ public class CommentsAdapter extends BaseAdapter {
                 subCommentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
                 subCommentViewHolder.name = (TextView) view.findViewById(R.id.name);
                 subCommentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                subCommentViewHolder.vote = (Button) view.findViewById(R.id.vote);
+                subCommentViewHolder.vote = (CommentVoteButton) view.findViewById(R.id.vote_btn);
 
                 view.setTag(subCommentViewHolder);
             }
@@ -113,51 +108,7 @@ public class CommentsAdapter extends BaseAdapter {
                 commentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
             }
 
-            commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
-
-            commentViewHolder.vote.setOnClickListener(null);
-            commentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (userHasPermissions()) {
-                        if (comment.isHasVoted()) {
-                            FlurryAgent.logEvent(TrackingEvents.UserDownVotedComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(false);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            FlurryAgent.logEvent(TrackingEvents.UserVotedComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(true);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                }
-                            });
-                        }
-                    } else {
-                        LoginUtils.showLoginFragment(ctx);
-                    }
-                }
-            });
-
-            if (comment.isHasVoted()) {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
-            } else {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
-            }
+            commentViewHolder.vote.setComment(comment);
         } else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
             final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
@@ -167,7 +118,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             subCommentViewHolder.name.setText(comment.getUser().getUsername());
             subCommentViewHolder.comment.setText(comment.getText());
-            subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
+
 
             if (comment.getUser().getId().equals(userId)) {
                 subCommentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
@@ -175,50 +126,7 @@ public class CommentsAdapter extends BaseAdapter {
                 subCommentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
             }
 
-            if (comment.isHasVoted()) {
-                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
-            } else {
-                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
-            }
-
-            subCommentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (userHasPermissions()) {
-                        if (comment.isHasVoted()) {
-                            FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(false);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(true);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                }
-                            });
-                        }
-                    } else {
-                        LoginUtils.showLoginFragment(ctx);
-                    }
-
-                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                }
-            });
+            subCommentViewHolder.vote.setComment(comment);
         }
 
         return view;
@@ -298,7 +206,7 @@ public class CommentsAdapter extends BaseAdapter {
         Target avatar;
         TextView name;
         TextView comment;
-        Button vote;
+        CommentVoteButton vote;
     }
 
     static class SubCommentViewHolder {
@@ -306,6 +214,6 @@ public class CommentsAdapter extends BaseAdapter {
         Target avatar;
         TextView name;
         TextView comment;
-        Button vote;
+        CommentVoteButton vote;
     }
 }

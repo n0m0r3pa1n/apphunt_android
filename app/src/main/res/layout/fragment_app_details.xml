@@ -38,7 +38,7 @@
                 android:layout_toLeftOf="@+id/vote"
                 android:layout_toRightOf="@+id/creator_avatar"/>
 
-            <com.apphunt.app.ui.views.vote.VoteButton
+            <com.apphunt.app.ui.views.vote.AppVoteButton
                 android:id="@+id/vote_btn"
                 android:layout_width="@dimen/details_box_vote_size"
                 android:layout_height="@dimen/details_box_vote_size"
