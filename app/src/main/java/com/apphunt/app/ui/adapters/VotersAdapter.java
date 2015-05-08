@@ -10,11 +10,13 @@ import android.widget.BaseAdapter;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.models.Vote;
-import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class VotersAdapter extends BaseAdapter {
 
@@ -26,12 +28,16 @@ public class VotersAdapter extends BaseAdapter {
         this.ctx = ctx;
         this.voters = voters;
 
-        maxVotersCount = (floatToDP(ctx.getResources().getDisplayMetrics().widthPixels) -
-                (2 * floatToDP(ctx.getResources().getDimension(R.dimen.details_box_voters_padding_sides)))) /
-                floatToDP(ctx.getResources().getDimension(R.dimen.details_voters_avatar_cell));
+        maxVotersCount = getVotersScreenFitNumber(ctx);
         if (voters.size() > maxVotersCount) {
             maxVotersCount *= 2;
         }
+    }
+
+    private int getVotersScreenFitNumber(Context ctx) {
+        return (floatToDP(ctx.getResources().getDisplayMetrics().widthPixels) -
+                (2 * floatToDP(ctx.getResources().getDimension(R.dimen.details_box_voters_padding_sides)))) /
+                floatToDP(ctx.getResources().getDimension(R.dimen.details_voters_avatar_cell));
     }
 
     @Override
@@ -42,10 +48,7 @@ public class VotersAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.layout_voter_avatar, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
-
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -91,8 +94,13 @@ public class VotersAdapter extends BaseAdapter {
         return (int) (size * ctx.getResources().getDisplayMetrics().density);
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
+        @InjectView(R.id.avatar)
         Target avatar;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
     public void addCreatorIfNotVoter(User user) {

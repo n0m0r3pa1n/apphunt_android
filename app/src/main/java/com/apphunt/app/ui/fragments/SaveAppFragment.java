@@ -6,9 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +34,6 @@ import com.apphunt.app.event_bus.events.UserCreatedEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.NotificationsUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StatusCode;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
@@ -47,6 +44,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -58,12 +58,13 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     private EditText desc;
     private ApplicationInfo data;
     private ActionBarActivity activity;
-    private Button saveButton;
+
+    @InjectView(R.id.save)
+    Button saveButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setTitle(R.string.title_save_app);
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
@@ -74,7 +75,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_save_app, container, false);
-
+        ButterKnife.inject(this, view);
         initUI();
 
         return view;
@@ -102,9 +103,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
 
         desc = (EditText) view.findViewById(R.id.description);
-
-        saveButton = (Button) view.findViewById(R.id.save);
-        saveButton.setOnClickListener(this);
     }
 
     @Override
@@ -119,30 +117,30 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.save:
-
-                if (desc.getText() != null && desc.getText().length() >= 50) {
-                    if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-                        saveApp(v, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-                    } else {
-                        showLoginFragment();
-                    }
-
-                } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
-                    desc.setHint(R.string.hint_short_description);
-                    desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-                    desc.setError("Min 50 chars");
-                    vibrate();
-                } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
-                    desc.setHint(R.string.hint_please_enter_description);
-                    desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-                    vibrate();
-                }
-                break;
-
             case R.id.container:
                 closeKeyboard(desc);
                 break;
+        }
+    }
+
+    @OnClick(R.id.save)
+    public void saveApp() {
+        if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            showLoginFragment();
+            return;
+        }
+
+        if (desc.getText() != null && desc.getText().length() >= 50) {
+            showLoginFragment();
+        } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
+            desc.setHint(R.string.hint_short_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            desc.setError("Min 50 chars");
+            vibrate();
+        } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
+            desc.setHint(R.string.hint_please_enter_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            vibrate();
         }
     }
 
