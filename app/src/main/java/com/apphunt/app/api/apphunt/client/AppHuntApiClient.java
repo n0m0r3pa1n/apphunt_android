@@ -20,9 +20,7 @@ import retrofit.http.Body;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by nmp on 15-5-8.
- */
+
 public class AppHuntApiClient implements AppHuntApi {
     private Context context;
     public AppHuntApiClient(Context context) {
@@ -41,7 +39,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsRequest(""));
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsRequest("2015-3-19", "Android", 5, 1));
     }
 
     @Override

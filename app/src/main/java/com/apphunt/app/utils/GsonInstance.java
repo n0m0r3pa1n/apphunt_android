@@ -6,9 +6,6 @@ import com.google.gson.JsonSyntaxException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
-/**
- * Created by nmp on 15-5-8.
- */
 public class GsonInstance {
 
     private static Gson sGson;

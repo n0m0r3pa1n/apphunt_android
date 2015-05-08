@@ -2,9 +2,7 @@ package com.apphunt.app.event_bus.events.api;
 
 import com.apphunt.app.api.apphunt.models.AppsList;
 
-/**
- * Created by nmp on 15-5-8.
- */
+
 public class GetAppsEvent {
     private AppsList appsList;
 
