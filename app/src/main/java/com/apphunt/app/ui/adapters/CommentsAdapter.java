@@ -20,7 +20,6 @@ import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.views.vote.CommentVoteButton;
-import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
@@ -28,6 +27,8 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.client.Response;
 
 public class CommentsAdapter extends BaseAdapter {
@@ -62,26 +63,12 @@ public class CommentsAdapter extends BaseAdapter {
 
         if (view == null) {
             if (getItemViewType(position) == 0) {
-                commentViewHolder = new CommentViewHolder();
                 view = inflater.inflate(R.layout.layout_comment, parent, false);
-
-                commentViewHolder.layout = (RelativeLayout) view.findViewById(R.id.layout);
-                commentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
-                commentViewHolder.name = (TextView) view.findViewById(R.id.name);
-                commentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                commentViewHolder.vote = (CommentVoteButton) view.findViewById(R.id.vote_btn);
-
+                commentViewHolder = new CommentViewHolder(view);
                 view.setTag(commentViewHolder);
             } else if (getItemViewType(position) == 1) {
                 view = inflater.inflate(R.layout.layout_subcomment, parent, false);
-                subCommentViewHolder = new SubCommentViewHolder();
-
-                subCommentViewHolder.layout = (RelativeLayout) view.findViewById(R.id.layout);
-                subCommentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
-                subCommentViewHolder.name = (TextView) view.findViewById(R.id.name);
-                subCommentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                subCommentViewHolder.vote = (CommentVoteButton) view.findViewById(R.id.vote_btn);
-
+                subCommentViewHolder = new SubCommentViewHolder(view);
                 view.setTag(subCommentViewHolder);
             }
         } else {
@@ -202,18 +189,29 @@ public class CommentsAdapter extends BaseAdapter {
     }
 
     static class CommentViewHolder {
+        @InjectView(R.id.layout)
         RelativeLayout layout;
+
+        @InjectView(R.id.avatar)
         Target avatar;
+
+        @InjectView(R.id.name)
         TextView name;
+
+        @InjectView(R.id.text)
         TextView comment;
+
+        @InjectView(R.id.vote_btn)
         CommentVoteButton vote;
+
+        public CommentViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
-    static class SubCommentViewHolder {
-        RelativeLayout layout;
-        Target avatar;
-        TextView name;
-        TextView comment;
-        CommentVoteButton vote;
+    static class SubCommentViewHolder extends CommentViewHolder {
+        public SubCommentViewHolder(View view) {
+            super(view);
+        }
     }
 }
