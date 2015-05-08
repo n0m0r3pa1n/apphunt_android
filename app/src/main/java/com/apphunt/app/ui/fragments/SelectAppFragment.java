@@ -16,8 +16,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.AppHuntApiClient;
-import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;

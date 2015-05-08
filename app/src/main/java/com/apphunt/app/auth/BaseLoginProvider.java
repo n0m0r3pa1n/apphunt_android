@@ -7,8 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.apphunt.AppHuntApiClient;
-import com.apphunt.app.api.apphunt.Callback;
+import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.UserCreatedEvent;

@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt;
+package com.apphunt.app.api.apphunt.client;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

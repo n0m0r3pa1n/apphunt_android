@@ -1,5 +1,6 @@
-package com.apphunt.app.api.apphunt;
+package com.apphunt.app.api.apphunt.client;
 
+import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.CommentVote;
