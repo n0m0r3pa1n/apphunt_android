@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
     android:clickable="true"
@@ -37,17 +38,14 @@
                 android:layout_toLeftOf="@+id/vote"
                 android:layout_toRightOf="@+id/creator_avatar"/>
 
-            <Button
-                android:id="@+id/vote"
+            <com.apphunt.app.ui.views.vote.VoteButton
+                android:id="@+id/vote_btn"
                 android:layout_width="@dimen/details_box_vote_size"
                 android:layout_height="@dimen/details_box_vote_size"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:textSize="@dimen/details_box_vote_text"
-                android:text="0"
-                android:textColor="@color/bg_primary"
-                android:background="@drawable/btn_vote"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                />
+
 
             </RelativeLayout>
 

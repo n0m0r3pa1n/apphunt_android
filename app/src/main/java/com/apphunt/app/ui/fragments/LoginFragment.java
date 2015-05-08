@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class LoginFragment extends BaseFragment {
 
     private static final String TAG = LoginFragment.class.getName();
@@ -47,7 +50,9 @@ public class LoginFragment extends BaseFragment {
     private ActionBarActivity activity;
 
     private User user;
-    private TwitterLoginButton loginButton;
+
+    @InjectView(R.id.login_button)
+    TwitterLoginButton loginButton;
 
     private boolean canBeSkipped = false;
 
@@ -65,6 +70,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ButterKnife.inject(this, view);
 
         Button notNowButton = (Button) view.findViewById(R.id.not_now);
         notNowButton.setVisibility(View.GONE);
@@ -79,7 +85,6 @@ public class LoginFragment extends BaseFragment {
             });
         }
 
-        loginButton = (TwitterLoginButton) view.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -37,72 +36,116 @@ import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
-import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.votes.UserVotedForAppEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
-import com.apphunt.app.ui.widgets.AvatarImageView;
+import com.apphunt.app.ui.views.vote.VoteButton;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.client.Response;
 
 public class AppDetailsFragment extends BaseFragment implements OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String TAG = AppDetailsFragment.class.getName();
-    private View view;
+
     private String appId;
-    private Activity activity;
-    private OnAppVoteListener callback;
-
-    // TODO: DEV
-    private ImageView icon;
-    private TextView appName;
-    private TextView appDescription;
-    private Target creator;
     private String userId;
-    private Button vote;
-    private TextView creatorName;
-    private TextView headerVoters;
-    private GridView avatars;
-    private App app;
     private int itemPosition;
-    private boolean isVoted;
-    private VotersAdapter votersAdapter;
-    private User user;
-    private ListView commentsList;
-    private CommentsAdapter commentsAdapter;
-    private TextView headerComments;
-    private RelativeLayout boxDetails;
-    private RelativeLayout boxComments;
-    private TextView send;
-    private EditText commentBox;
-
-    private Animation enterAnimation;
     private int commentBoxHeight;
-    private RelativeLayout.LayoutParams params;
-    private Comment replyToComment;
-    private RelativeLayout boxDesc;
-    private TextView labelComment;
+    private boolean isVoted;
     private boolean isCommentsBoxOpened = false;
     private boolean endOfList;
-    private TextView showAllComments;
-    private TextView hideAllComments;
+
+    private Animation enterAnimation;
+    private View view;
+    private Activity activity;
+    private OnAppVoteListener callback;
+    private VotersAdapter votersAdapter;
+    private CommentsAdapter commentsAdapter;
+
+    private RelativeLayout.LayoutParams params;
+
+    private App app;
+    private User user;
+    private Comment replyToComment;
+
+    // TODO: DEV
+    //region InjectViews
+    @InjectView(R.id.icon)
+    ImageView icon;
+
+    @InjectView(R.id.app_name)
+    TextView appName;
+
+    @InjectView(R.id.desc)
+    TextView appDescription;
+
+    @InjectView(R.id.creator_avatar)
+    Target creator;
+
+    @InjectView(R.id.vote_btn)
+    VoteButton voteBtn;
+
+    @InjectView(R.id.creator_name)
+    TextView creatorName;
+
+    @InjectView(R.id.header_voters)
+    TextView headerVoters;
+
+    @InjectView(R.id.voters)
+    GridView votersAvatars;
+
+    @InjectView(R.id.comments_count)
+    ListView commentsList;
+
+    @InjectView(R.id.header_comments)
+    TextView headerComments;
+
+    @InjectView(R.id.box_details)
+    RelativeLayout boxDetails;
+
+    @InjectView(R.id.box_comments)
+    RelativeLayout boxComments;
+
+    @InjectView(R.id.send_comment)
+    TextView send;
+
+    @InjectView(R.id.comment_entry)
+    EditText commentBox;
+
+    @InjectView(R.id.box_desc)
+    RelativeLayout boxDesc;
+
+    @InjectView(R.id.label_comment)
+    TextView labelComment;
+
+    @InjectView(R.id.show_comments)
+    TextView showAllComments;
+
+    @InjectView(R.id.hide_comments)
+    TextView hideAllComments;
+    //endregion
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         appId = getArguments().getString(Constants.KEY_APP_ID);
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
@@ -118,6 +161,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_app_details, container, false);
+        ButterKnife.inject(this, view);
 
         initUI();
 
@@ -125,34 +169,14 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void initUI() {
-        creator = (AvatarImageView) view.findViewById(R.id.creator_avatar);
-        creatorName = (TextView) view.findViewById(R.id.creator_name);
-        vote = (Button) view.findViewById(R.id.vote);
-
-        icon = (ImageView) view.findViewById(R.id.icon);
-        appName = (TextView) view.findViewById(R.id.app_name);
-        appDescription = (TextView) view.findViewById(R.id.desc);
-        boxDesc = (RelativeLayout) view.findViewById(R.id.box_desc);
         boxDesc.setOnClickListener(this);
 
-        headerVoters = (TextView) view.findViewById(R.id.header_voters);
-        avatars = (GridView) view.findViewById(R.id.voters);
-
-        headerComments = (TextView) view.findViewById(R.id.header_comments);
-        commentsList = (ListView) view.findViewById(R.id.comments_count);
         commentsList.setOnItemClickListener(this);
         commentsList.setOnScrollListener(this);
 
-        boxDetails = (RelativeLayout) view.findViewById(R.id.box_details);
-        boxComments = (RelativeLayout) view.findViewById(R.id.box_comments);
-
-        showAllComments = (TextView) view.findViewById(R.id.show_comments);
         showAllComments.setOnClickListener(this);
-
-        hideAllComments = (TextView) view.findViewById(R.id.hide_comments);
         hideAllComments.setOnClickListener(this);
 
-        commentBox = (EditText) view.findViewById(R.id.comment_entry);
         commentBox.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -173,7 +197,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
 
-        labelComment = (TextView) view.findViewById(R.id.label_comment);
         if (userHasPermissions()) {
             labelComment.setVisibility(View.GONE);
             commentBox.setVisibility(View.VISIBLE);
@@ -211,22 +234,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 }
                 if (app != null) {
                     AppDetailsFragment.this.app = app;
+                    voteBtn.setApp(app);
 
                     Picasso.with(activity)
                             .load(app.getCreatedBy().getProfilePicture())
                             .into(creator);
                     creatorName.setText(String.format(getString(R.string.posted_by),
                             app.getCreatedBy().getUsername()));
-
-                    if (app.isHasVoted()) {
-                        vote.setTextColor(getResources().getColor(R.color.bg_secondary));
-                        vote.setBackgroundResource(R.drawable.btn_voted_v2);
-                    } else {
-                        vote.setTextColor(getResources().getColor(R.color.bg_primary));
-                        vote.setBackgroundResource(R.drawable.btn_vote);
-                    }
-                    vote.setText(app.getVotesCount());
-                    vote.setOnClickListener(AppDetailsFragment.this);
 
                     Picasso.with(activity)
                             .load(app.getIcon())
@@ -237,7 +251,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                     headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(app.getVotesCount()),
                             Integer.valueOf(app.getVotesCount())));
                     votersAdapter = new VotersAdapter(activity, app.getVotes());
-                    avatars.setAdapter(votersAdapter);
+                    votersAvatars.setAdapter(votersAdapter);
 
                     if (userHasPermissions()) {
                         labelComment.setVisibility(View.GONE);
@@ -270,57 +284,38 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void updateVoters(UserVotedForAppEvent event) {
+        user = new User();
+        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
+
+        if(event.isVote()) {
+            votersAdapter.addCreatorIfNotVoter(user);
+
+        } else {
+            votersAdapter.removeCreator(user);
+        }
+        isVoted = true;
+        voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        commentsList.invalidateViews();
+        headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
+    }
+
+    @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.vote:
-                if (userHasPermissions()) {
-                    if (app.isHasVoted()) {
-                        AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-                            @Override
-                            public void success(Vote voteResult, Response response) {
-                                FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
-                                app.setVotesCount(voteResult.getVotes());
-                                app.setHasVoted(false);
-                                vote.setText(voteResult.getVotes());
-                                vote.setTextColor(activity.getResources().getColor(R.color.bg_primary));
-                                vote.setBackgroundResource(R.drawable.btn_vote);
-
-                                user = new User();
-                                user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
-                                votersAdapter.removeCreator(user);
-                                commentsList.invalidateViews();
-                                headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
-                            }
-                        });
-                    } else {
-                        AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-                            @Override
-                            public void success(Vote voteResult, Response response) {
-                                FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
-                                app.setVotesCount(voteResult.getVotes());
-                                app.setHasVoted(true);
-                                vote.setText(voteResult.getVotes());
-                                vote.setBackgroundResource(R.drawable.btn_voted_v2);
-                                vote.setTextColor(activity.getResources().getColor(R.color.bg_secondary));
-
-                                user = new User();
-                                user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-                                user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
-                                votersAdapter.addCreatorIfNotVoter(user);
-                                commentsList.invalidateViews();
-                                headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
-                            }
-                        });
-                    }
-                } else {
-                    LoginUtils.showLoginFragment(activity);
-                }
-
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                isVoted = true;
-                break;
-
             case R.id.box_desc:
                 Map<String, String> params = new HashMap<>();
                 params.put("appId", appId);
@@ -504,7 +499,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     private void openAppOnGooglePlay() {
         if (app == null) {
-            Log.e(TAG, "Null app");
+            Crashlytics.log("App is null!");
             return;
         }
         Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.getShortUrl()));

@@ -39,6 +39,10 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public boolean isUserLoggedIn() {
+        //TODO: Remove
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, "553554860b9ce203003112a9");
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, "twitter");
+
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         String loginProvider = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER);
         return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
