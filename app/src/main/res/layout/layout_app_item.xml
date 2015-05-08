@@ -49,14 +49,12 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/list_item_name" />
 
-                    <Button
-                        android:id="@+id/vote"
+                    <com.apphunt.app.ui.views.vote.AppVoteButton
+                        android:id="@+id/btn_vote"
                         android:layout_width="@dimen/list_item_vote_size"
                         android:layout_height="@dimen/list_item_vote_size"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/btn_vote"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/list_item_vote_text" />
+                        />
 
                 </LinearLayout>
 

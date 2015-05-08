@@ -21,8 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Button;
 
@@ -35,6 +33,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.UserCreatedEvent;
+import com.apphunt.app.event_bus.events.votes.UserAppVoteEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -50,8 +49,8 @@ import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.ActionBarUtils;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -424,6 +423,12 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         }
     }
 
+    @Subscribe
+    public void userVotedForAppEvent(UserAppVoteEvent event) {
+        if(event.isVote()) {
+            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
+        }
+    }
     @Override
     public void onAppVote(int position) {
         trendingAppsAdapter.resetAdapter(position);

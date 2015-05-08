@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,17 +29,13 @@ import com.apphunt.app.api.apphunt.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
-import com.apphunt.app.api.apphunt.models.Vote;
-import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
-import com.apphunt.app.ui.widgets.AvatarImageView;
+import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -61,6 +53,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
@@ -92,6 +86,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         getApps();
     }
 
+
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
@@ -100,34 +96,16 @@ public class TrendingAppsAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-                viewHolderItem = new ViewHolderItem();
-
                 view = inflater.inflate(R.layout.layout_app_item, parent, false);
-                viewHolderItem.layout = (LinearLayout) view.findViewById(R.id.item);
-                viewHolderItem.icon = (ImageView) view.findViewById(R.id.app_icon);
-                viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
-                viewHolderItem.description = (TextView) view.findViewById(R.id.description);
-                viewHolderItem.commentsCount = (TextView) view.findViewById(R.id.comments_count);
-                viewHolderItem.creatorImageView = (AvatarImageView) view.findViewById(R.id.creator_avatar);
-                viewHolderItem.creatorUsername = (TextView) view.findViewById(R.id.creator_name);
-                viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
-                viewHolderItem.details = (Button) view.findViewById(R.id.btn_details);
-                viewHolderItem.share = (Button) view.findViewById(R.id.btn_share);
-
+                viewHolderItem = new ViewHolderItem(view);
                 view.setTag(viewHolderItem);
             } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
-                viewHolderSeparator = new ViewHolderSeparator();
-
                 view = inflater.inflate(R.layout.layout_app_list_header, parent, false);
-                viewHolderSeparator.header = (TextView) view.findViewById(R.id.header);
-
+                viewHolderSeparator = new ViewHolderSeparator(view);
                 view.setTag(viewHolderSeparator);
             } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue()) {
-                viewHolderMoreApps = new ViewHolderMoreApps();
-
                 view = inflater.inflate(R.layout.layout_more_apps, parent, false);
-                viewHolderMoreApps.moreApps = (ImageButton) view.findViewById(R.id.more_apps);
-
+                viewHolderMoreApps = new ViewHolderMoreApps(view);
                 view.setTag(viewHolderMoreApps);
             }
         } else {
@@ -154,59 +132,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     .load(app.getCreatedBy().getProfilePicture())
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-
-            viewHolderItem.vote.setText(app.getVotesCount());
-
-            viewHolderItem.vote.setOnClickListener(null);
-            viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        if (app.isHasVoted()) {
-                            AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-                                @Override
-                                public void success(Vote vote, Response response) {
-                                    Map<String, String> params = new HashMap<>();
-                                    params.put("appId", app.getId());
-                                    FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp, params);
-                                    app.setVotesCount(vote.getVotes());
-                                    app.setHasVoted(false);
-                                    ((Button) v).setText(vote.getVotes());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_text));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-                                @Override
-                                public void success(Vote vote, Response response) {
-                                    Map<String, String> params = new HashMap<>();
-                                    params.put("appId", app.getId());
-                                    FlurryAgent.logEvent(TrackingEvents.UserVotedApp, params);
-                                    app.setVotesCount(vote.getVotes());
-                                    app.setHasVoted(true);
-                                    ((Button) v).setText(vote.getVotes());
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_voted_text));
-                                    SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
-                                }
-                            });
-                        }
-
-                    } else {
-                        LoginUtils.showLoginFragment(ctx);
-                    }
-
-                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                }
-            });
-            if (app.isHasVoted()) {
-                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_voted);
-                viewHolderItem.vote.setTextColor(Color.parseColor("#FFFFFF"));
-            } else {
-                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_vote);
-                viewHolderItem.vote.setTextColor(Color.parseColor("#2f90de"));
-            }
+            viewHolderItem.vote.setApp(app);
 
             View.OnClickListener detailsClickListener = new View.OnClickListener() {
                 @Override
@@ -499,24 +425,59 @@ public class TrendingAppsAdapter extends BaseAdapter {
         return position;
     }
 
-    private static class ViewHolderItem {
+    //region ViewHolders
+    static class ViewHolderItem {
+        @InjectView(R.id.item)
         LinearLayout layout;
+
+        @InjectView(R.id.app_icon)
         ImageView icon;
+
+        @InjectView(R.id.app_name)
         TextView title;
+
+        @InjectView(R.id.description)
         TextView description;
+
+        @InjectView(R.id.comments_count)
         TextView commentsCount;
+
+        @InjectView(R.id.creator_avatar)
         Target creatorImageView;
+
+        @InjectView(R.id.creator_name)
         TextView creatorUsername;
-        Button vote;
+
+        @InjectView(R.id.btn_vote)
+        AppVoteButton vote;
+
+        @InjectView(R.id.btn_details)
         Button details;
+
+        @InjectView(R.id.btn_share)
         Button share;
+
+        public ViewHolderItem(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
-    private static class ViewHolderSeparator {
+    static class ViewHolderSeparator {
+        @InjectView(R.id.header)
         TextView header;
+
+        public ViewHolderSeparator(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
-    private static class ViewHolderMoreApps {
+    static class ViewHolderMoreApps {
+        @InjectView(R.id.more_apps)
         ImageButton moreApps;
+
+        public ViewHolderMoreApps(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
+    //endregion
 }
