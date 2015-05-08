@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
@@ -133,7 +133,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void downVote() {
-        AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
+        ApiClient.getClient(getContext()).downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
             @Override
             public void success(Vote voteResult, Response response) {
                 FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
@@ -148,7 +148,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void vote() {
-        AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
+        ApiClient.getClient(getContext()).vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
             @Override
             public void success(Vote voteResult, Response response) {
                 FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);

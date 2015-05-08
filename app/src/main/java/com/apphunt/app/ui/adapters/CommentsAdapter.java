@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.Comments;
@@ -166,7 +166,7 @@ public class CommentsAdapter extends BaseAdapter {
 
     public void loadMore(String appId, String userId, final TextView header) {
         if (page < totalPages) {
-            AppHuntApiClient.getClient().getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
+            ApiClient.getClient(ctx).getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
                 @Override
                 public void success(Comments comments, Response response) {
                     addItems(comments);

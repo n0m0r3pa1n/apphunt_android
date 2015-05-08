@@ -24,7 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.Button;
 
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.User;
@@ -218,7 +218,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
+                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
                         Constants.PLATFORM, new Callback<AppsList>() {
                             @Override
                             public void success(AppsList appsList, Response response) {
@@ -495,7 +495,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 public void onDeliverRegistrationId(final String regId, boolean b) {
                     User user = new User();
                     user.setNotificationId(regId);
-                    AppHuntApiClient.getClient().updateUser(userId, user, new Callback<User>() {
+                    ApiClient.getClient(getApplicationContext()).updateUser(userId, user, new Callback<User>() {
                         @Override
                         public void success(User user, Response response) {
                             SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);

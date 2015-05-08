@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.CommentVote;
@@ -53,7 +53,7 @@ public class CommentVoteButton extends AppVoteButton {
     @Override
     protected void downVote() {
         FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
-        AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(),
+        ApiClient.getClient(getContext()).downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(),
                 new Callback<CommentVote>() {
                     @Override
                     public void success(CommentVote vote, Response response) {
@@ -70,7 +70,7 @@ public class CommentVoteButton extends AppVoteButton {
     @Override
     protected void vote() {
         FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
-        AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
+        ApiClient.getClient(getContext()).voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
             @Override
             public void success(CommentVote vote, Response response) {
                 comment.setHasVoted(true);

@@ -3,7 +3,9 @@ package com.apphunt.app;
 import android.app.Application;
 import android.text.TextUtils;
 
+import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
@@ -37,5 +39,7 @@ public class AppHuntApplication extends Application {
                         Constants.TWITTER_CONSUMER_SECRET);
 
         Fabric.with(this, /*new Crashlytics(),*/ new Twitter(authConfig));
+        VolleyInstance.getInstance(this);
+        GsonInstance.init();
     }
 }

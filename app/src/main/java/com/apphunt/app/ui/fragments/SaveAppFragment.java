@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -169,7 +169,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         app.setPlatform(Constants.PLATFORM);
         app.setUserId(userId);
 
-        AppHuntApiClient.getClient().saveApp(app, new Callback() {
+        ApiClient.getClient(getActivity()).saveApp(app, new Callback() {
             @Override
             public void success(Object o, Response response) {
                 int statusCode = response.getStatus();

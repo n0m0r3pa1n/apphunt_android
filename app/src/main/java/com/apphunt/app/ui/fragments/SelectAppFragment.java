@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
@@ -125,7 +125,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         protected void onPostExecute(Packages packages) {
             super.onPostExecute(packages);
 
-            AppHuntApiClient.getClient().filterApps(packages, new Callback<Packages>() {
+            ApiClient.getClient(getActivity()).filterApps(packages, new Callback<Packages>() {
                 @Override
                 public void success(Packages packages, Response response) {
 

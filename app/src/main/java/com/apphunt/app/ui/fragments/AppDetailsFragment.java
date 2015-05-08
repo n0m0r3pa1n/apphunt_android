@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Comment;
@@ -226,7 +226,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        AppHuntApiClient.getClient().getDetailedApp(userId, appId, new Callback<App>() {
+        ApiClient.getClient(getActivity()).getDetailedApp(userId, appId, new Callback<App>() {
             @Override
             public void success(App app, Response response) {
                 if (!isAdded()) {
@@ -266,7 +266,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             }
         });
 
-        AppHuntApiClient.getClient().getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
+        ApiClient.getClient(getActivity()).getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
             @Override
             public void success(Comments comments, Response response) {
                 if (comments.getTotalCount() == 0) {
@@ -367,11 +367,11 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                     comment.setAppId(app.getId());
                     comment.setUserId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
 
-                    AppHuntApiClient.getClient().sendComment(comment, new Callback<NewComment>() {
+                    ApiClient.getClient(getActivity()).sendComment(comment, new Callback<NewComment>() {
                         @Override
                         public void success(NewComment comment, Response response) {
                             if (response.getStatus() == 200) {
-                                AppHuntApiClient.getClient().getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                                         1, 3, new Callback<Comments>() {
                                             @Override
                                             public void success(Comments comments, Response response) {

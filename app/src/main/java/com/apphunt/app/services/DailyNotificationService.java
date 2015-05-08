@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -27,6 +27,7 @@ public class DailyNotificationService extends IntentService {
     public DailyNotificationService() {
         super("DailyNotificationService");
         setIntentRedelivery(true);
+        SharedPreferencesHelper.init(this);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class DailyNotificationService extends IntentService {
             FlurryAgent.setUserId(userId);
         }
         FlurryAgent.init(this, Constants.FLURRY_API_KEY);
-        AppHuntApiClient.getClient().getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
+        ApiClient.getClient(this).getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
             @Override
             public void success(com.apphunt.app.api.apphunt.models.Notification notification, Response response) {
                 displayNotification(notification);

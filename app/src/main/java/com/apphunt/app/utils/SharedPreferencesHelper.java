@@ -10,7 +10,9 @@ public class SharedPreferencesHelper {
     private static SharedPreferences.Editor editor;
 
     public static void init(Context ctx) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        if(sharedPreferences == null) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        }
     }
 
     /**

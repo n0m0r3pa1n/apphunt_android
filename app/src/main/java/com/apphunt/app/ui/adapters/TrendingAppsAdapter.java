@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
@@ -229,7 +229,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private void getApps() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
+        ApiClient.getClient(ctx).getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
             @Override
             public void success(AppsList appsList, Response response) {
                 if (appsList.getTotalCount() > 0) {
@@ -282,7 +282,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         String date = dateFormat.format(calendar.getTime());
 
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
                     @Override
                     public void success(AppsList appsList, Response response) {
@@ -320,7 +320,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private void loadMoreApps(final int position) {
         final MoreAppsItem item = (MoreAppsItem) getItem(position);
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
                     @Override
                     public void success(AppsList appsList, Response response) {
