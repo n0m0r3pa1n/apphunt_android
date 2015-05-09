@@ -3,7 +3,6 @@ package com.apphunt.app.api.apphunt.client;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.CommentVote;
-import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
@@ -55,7 +54,7 @@ public interface AppHuntApi {
     void sendComment(@Body NewComment comment, Callback<NewComment> cb);
 
     @GET("/comments/{appId}")
-    void getAppComments(@Path("appId") String appId, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, Callback<Comments> cb);
+    void getAppComments(String appId, String userId, int page, int pageSize);
 
     @POST("/comments/votes")
     void voteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb);

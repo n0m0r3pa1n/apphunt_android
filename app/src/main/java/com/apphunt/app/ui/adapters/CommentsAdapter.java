@@ -11,8 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
+import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.client.Response;
 
 public class CommentsAdapter extends BaseAdapter {
     public static final String TAG = CommentsAdapter.class.getSimpleName();
@@ -162,20 +160,24 @@ public class CommentsAdapter extends BaseAdapter {
 
         page = comments.getPage();
         notifyDataSetChanged();
+
+        listView.smoothScrollToPosition(items.size() - 2);
+        totalPages = comments.getTotalPages();
     }
 
-    public void loadMore(String appId, String userId, final TextView header) {
+    public void loadMore(String appId, String userId) {
         if (page < totalPages) {
-            ApiClient.getClient(ctx).getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
-                @Override
-                public void success(Comments comments, Response response) {
-                    addItems(comments);
-                    listView.smoothScrollToPosition(items.size() - 3);
-                    page = comments.getPage();
-                    totalPages = comments.getTotalPages();
-                    header.setText(ctx.getResources().getQuantityString(R.plurals.header_comments, getCount(), getCount()));
-                }
-            });
+            ApiService.loadAppComments(ctx, appId, userId, page + 1, 3);
+//            ApiClient.getClient(ctx).getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
+//                @Override
+//                public void success(Comments comments, Response response) {
+//                    addItems(comments);
+//                    listView.smoothScrollToPosition(items.size() - 3);
+//                    page = comments.getPage();
+//                    totalPages = comments.getTotalPages();
+//                    header.setText(ctx.getResources().getQuantityString(R.plurals.header_comments, getCount(), getCount()));
+//                }
+//            });
         }
     }
 

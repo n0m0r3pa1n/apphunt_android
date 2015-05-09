@@ -33,4 +33,8 @@ public class ApiService {
     public static void loadAppDetails(Context context, String userId, String appId) {
         ApiClient.getClient(context).getDetailedApp(userId, appId);
     }
+
+    public static void loadAppComments(Context context, String appId, String userId, int page, int pageSize) {
+        ApiClient.getClient(context).getAppComments(appId, userId, page, pageSize);
+    }
 }

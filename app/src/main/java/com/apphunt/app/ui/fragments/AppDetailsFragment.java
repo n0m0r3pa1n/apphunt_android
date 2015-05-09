@@ -38,6 +38,7 @@ import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
 import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
@@ -224,23 +225,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         ApiService.loadAppDetails(activity, userId, appId);
-
-        ApiClient.getClient(getActivity()).getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
-            @Override
-            public void success(Comments comments, Response response) {
-                if (comments.getTotalCount() == 0) {
-                    view.findViewById(R.id.label_no_comments).setVisibility(View.VISIBLE);
-                }
-
-                commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
-                commentsList.setAdapter(commentsAdapter);
-
-                headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
-
-                userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-            }
-        });
+        ApiService.loadAppComments(activity, appId, userId, 1, 3);
     }
+
 
     @Override
     public void onResume() {
@@ -311,6 +298,22 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         }
     }
 
+    @Subscribe
+    public void onAppCommentsLoaded(LoadAppCommentsEvent event) {
+        Comments comments = event.getComments();
+        if (comments.getTotalCount() == 0) {
+            view.findViewById(R.id.label_no_comments).setVisibility(View.VISIBLE);
+        }
+        if(commentsAdapter == null) {
+            commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
+            commentsList.setAdapter(commentsAdapter);
+        } else {
+            commentsAdapter.addItems(comments);
+        }
+
+        headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
+    }
+
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
@@ -370,17 +373,19 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                         public void success(NewComment comment, Response response) {
                             if (response.getStatus() == 200) {
                                 ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                                        1, 3, new Callback<Comments>() {
-                                            @Override
-                                            public void success(Comments comments, Response response) {
-                                                if (comments != null) {
-                                                    commentsAdapter.resetAdapter(comments);
-                                                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
-
-                                                    view.findViewById(R.id.label_no_comments).setVisibility(View.GONE);
-                                                }
-                                            }
-                                        });
+                                        1, 3);
+//                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+//                                        1, 3, new Callback<Comments>() {
+//                                            @Override
+//                                            public void success(Comments comments, Response response) {
+//                                                if (comments != null) {
+//                                                    commentsAdapter.resetAdapter(comments);
+//                                                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
+//
+//                                                    view.findViewById(R.id.label_no_comments).setVisibility(View.GONE);
+//                                                }
+//                                            }
+//                                        });
                             }
                         }
                     });
@@ -508,8 +513,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList) {
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownCommentList);
-                    commentsAdapter.loadMore(appId, userId, headerComments);
-
+                    commentsAdapter.loadMore(appId, userId);
                 }
             }
         }
