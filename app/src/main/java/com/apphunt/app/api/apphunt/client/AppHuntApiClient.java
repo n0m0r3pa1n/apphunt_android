@@ -12,9 +12,9 @@ import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
-import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
+import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 
 import retrofit.http.Body;
@@ -54,13 +54,13 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void vote(@Query("appId") String appId, @Query("userId") String userId) {
+    public void vote(String appId, String userId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new PostAppVoteRequest(appId, userId, null, null));
     }
 
     @Override
-    public void downVote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb) {
-
+    public void downVote(String appId, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new DeleteAppVoteRequest(appId, userId, null));
     }
 
     @Override

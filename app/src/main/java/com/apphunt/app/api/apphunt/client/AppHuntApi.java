@@ -9,7 +9,6 @@ import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
-import com.apphunt.app.api.apphunt.models.Vote;
 
 import retrofit.http.Body;
 import retrofit.http.DELETE;
@@ -41,7 +40,7 @@ public interface AppHuntApi {
     void vote(@Query("appId") String appId, @Query("userId") String userId);
 
     @DELETE("/apps/votes")
-    void downVote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb);
+    void downVote(String appId, String userId);
 
     @POST("/apps")
     void saveApp(@Body SaveApp app, Callback cb);

@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -27,7 +26,6 @@ import com.squareup.otto.Subscribe;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.client.Response;
 
 /**
  * Created by nmp on 15-5-8.
@@ -146,18 +144,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void downVote() {
-        ApiClient.getClient(getContext()).downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-            @Override
-            public void success(Vote voteResult, Response response) {
-                FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
-                app.setVotesCount(voteResult.getVotes());
-                app.setHasVoted(false);
-                voteButton.setText(voteResult.getVotes());
-                voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
-                voteButton.setBackgroundResource(R.drawable.btn_vote);
-                postUserVotedEvent(false);
-            }
-        });
+        ApiClient.getClient(getContext()).downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     protected void vote() {
@@ -166,14 +153,24 @@ public class AppVoteButton extends LinearLayout {
 
     @Subscribe
     public void onAppVote(VoteForAppEvent event) {
+        if(!app.getId().equals(event.getVote().getAppId())) {
+            return;
+        }
         Vote voteResult = event.getVote();
         FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
         app.setVotesCount(voteResult.getVotes());
-        app.setHasVoted(true);
+        app.setHasVoted(event.isVote());
         voteButton.setText(voteResult.getVotes());
-        voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
-        voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
-        postUserVotedEvent(true);
+        if(event.isVote()) {
+            FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
+            voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
+            voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
+        } else {
+            FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
+            voteButton.setBackgroundResource(R.drawable.btn_vote);
+            voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
+        }
+        postUserVotedEvent(event.isVote());
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {

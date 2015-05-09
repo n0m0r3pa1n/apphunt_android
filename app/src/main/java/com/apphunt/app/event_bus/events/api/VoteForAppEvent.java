@@ -7,9 +7,11 @@ import com.apphunt.app.api.apphunt.models.Vote;
  */
 public class VoteForAppEvent {
     private Vote vote;
+    private boolean isVote;
 
-    public VoteForAppEvent(Vote vote) {
+    public VoteForAppEvent(Vote vote, boolean isVote) {
         this.vote = vote;
+        this.isVote = isVote;
     }
 
     public Vote getVote() {
@@ -18,5 +20,13 @@ public class VoteForAppEvent {
 
     public void setVote(Vote vote) {
         this.vote = vote;
+    }
+
+    public boolean isVote() {
+        return isVote;
+    }
+
+    public void setIsVote(boolean isVote) {
+        this.isVote = isVote;
     }
 }

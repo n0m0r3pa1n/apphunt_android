@@ -2,16 +2,15 @@ package com.apphunt.app.api.apphunt.requests.votes;
 
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.Vote;
-import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
+import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.VoteForAppEvent;
 
 
-public class PostAppVoteRequest extends BasePostRequest<Vote> {
-    private final String appId;
-
-    public PostAppVoteRequest(String appId, String userId, Object body, Response.ErrorListener listener) {
-        super(BASE_URL + "/apps/votes?appId=" + appId + "&userId=" + userId, null, listener);
+public class DeleteAppVoteRequest extends BaseGsonRequest<Vote> {
+    private String appId;
+    public DeleteAppVoteRequest(String appId, String userId, Response.ErrorListener listener) {
+        super(Method.DELETE, BASE_URL + "/apps/votes?appId=" + appId + "&userId=" + userId, listener);
         this.appId = appId;
     }
 
@@ -23,6 +22,6 @@ public class PostAppVoteRequest extends BasePostRequest<Vote> {
     @Override
     public void deliverResponse(Vote response) {
         response.setAppId(appId);
-        BusProvider.getInstance().post(new VoteForAppEvent(response, true));
+        BusProvider.getInstance().post(new VoteForAppEvent(response, false));
     }
 }
