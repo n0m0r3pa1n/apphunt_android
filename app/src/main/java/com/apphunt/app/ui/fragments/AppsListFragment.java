@@ -62,7 +62,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
 
                 btnAddApp.setVisibility(View.INVISIBLE);
                 lvTrendingApps.setVisibility(View.GONE);
-                trendingAppsAdapter.resetAdapter();
+
                 LoadersUtils.showCenterLoader(activity);
             } else {
                 if (fragment != null) {
@@ -101,7 +101,8 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
             @Override
             public void onRefresh() {
                 activity.getSupportActionBar().collapseActionView();
-                trendingAppsAdapter.resetAdapter();
+                trendingAppsAdapter.resetAdapter(0);
+                ApiService.loadAppsForToday(activity);
             }
         });
 
