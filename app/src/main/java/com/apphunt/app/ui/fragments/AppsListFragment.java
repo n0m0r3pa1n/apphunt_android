@@ -24,9 +24,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
-import com.apphunt.app.event_bus.events.auth.LoginEvent;
-import com.apphunt.app.event_bus.events.auth.LogoutEvent;
-import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -193,11 +192,6 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
         trendingAppsAdapter.resetAdapter();
-    }
-
-    @Subscribe
-    public void onAppVote(AppVoteEvent event) {
-        trendingAppsAdapter.resetAdapter(event.getPosition());
     }
 
     @Subscribe

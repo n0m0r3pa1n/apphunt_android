@@ -13,11 +13,13 @@ public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
     private static final String PROTOCOL_CONTENT_TYPE =
             String.format("application/json; charset=%s", PROTOCOL_CHARSET);
 
-    private final String requestBody;
+    private String requestBody = null;
 
     public BasePostRequest(String url, Object body, Response.ErrorListener listener) {
         super(Method.POST, url, listener);
-        requestBody = GsonInstance.toJson(body);
+        if(body != null) {
+            requestBody = GsonInstance.toJson(body);
+        }
     }
 
     public abstract Class<T> getParsedAppClass();

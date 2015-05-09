@@ -15,12 +15,14 @@ import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
+import com.apphunt.app.event_bus.events.api.VoteForAppEvent;
+import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,6 +69,17 @@ public class AppVoteButton extends LinearLayout {
         }
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        BusProvider.getInstance().unregister(this);
+    }
 
     protected LayoutInflater getLayoutInflater() {
         if(inflater == null) {
@@ -148,18 +161,19 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void vote() {
-        ApiClient.getClient(getContext()).vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), new Callback<Vote>() {
-            @Override
-            public void success(Vote voteResult, Response response) {
-                FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
-                app.setVotesCount(voteResult.getVotes());
-                app.setHasVoted(true);
-                voteButton.setText(voteResult.getVotes());
-                voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
-                voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
-                postUserVotedEvent(true);
-            }
-        });
+        ApiClient.getClient(getContext()).vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+    }
+
+    @Subscribe
+    public void onAppVote(VoteForAppEvent event) {
+        Vote voteResult = event.getVote();
+        FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
+        app.setVotesCount(voteResult.getVotes());
+        app.setHasVoted(true);
+        voteButton.setText(voteResult.getVotes());
+        voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
+        voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
+        postUserVotedEvent(true);
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {

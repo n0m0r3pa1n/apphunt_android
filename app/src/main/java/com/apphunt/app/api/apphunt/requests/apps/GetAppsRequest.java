@@ -23,6 +23,4 @@ public class GetAppsRequest extends BaseGetRequest<AppsList> {
         Log.d("TEST", response.toString());
         BusProvider.getInstance().post(new LoadAppsEvent(response));
     }
-
-
 }

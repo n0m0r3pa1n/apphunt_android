@@ -38,7 +38,7 @@ public interface AppHuntApi {
     void filterApps(@Body Packages packages, Callback<Packages> cb);
 
     @POST("/apps/votes")
-    void vote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb);
+    void vote(@Query("appId") String appId, @Query("userId") String userId);
 
     @DELETE("/apps/votes")
     void downVote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb);

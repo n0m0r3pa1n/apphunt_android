@@ -44,14 +44,4 @@ public class Vote {
     public void setUser(User user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "Vote{" +
-                "userId='" + userId + '\'' +
-                ", appId='" + appId + '\'' +
-                ", votes='" + votes + '\'' +
-                ", user=" + user.toString() +
-                '}';
-    }
 }

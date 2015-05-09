@@ -15,6 +15,7 @@ import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
+import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 
 import retrofit.http.Body;
 import retrofit.http.Path;
@@ -53,8 +54,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void vote(@Query("appId") String appId, @Query("userId") String userId, Callback<Vote> cb) {
-
+    public void vote(@Query("appId") String appId, @Query("userId") String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostAppVoteRequest(appId, userId, null, null));
     }
 
     @Override

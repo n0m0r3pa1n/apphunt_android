@@ -1,4 +1,4 @@
-package com.apphunt.app.event_bus.events;
+package com.apphunt.app.event_bus.events.ui;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>

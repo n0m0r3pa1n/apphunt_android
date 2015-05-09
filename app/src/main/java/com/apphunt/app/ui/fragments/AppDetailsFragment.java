@@ -39,7 +39,7 @@ import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
-import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
+import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.vote.AppVoteButton;

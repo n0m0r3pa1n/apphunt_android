@@ -1,4 +1,4 @@
-package com.apphunt.app.event_bus.events.auth;
+package com.apphunt.app.event_bus.events.ui.auth;
 
 import com.apphunt.app.api.apphunt.models.User;
 
