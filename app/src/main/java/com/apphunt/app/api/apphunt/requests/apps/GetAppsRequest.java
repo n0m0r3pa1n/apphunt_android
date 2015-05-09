@@ -5,7 +5,7 @@ import android.util.Log;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
+import com.apphunt.app.event_bus.events.api.LoadAppsApiEvent;
 
 
 public class GetAppsRequest extends BaseGetRequest<AppsList> {
@@ -21,6 +21,6 @@ public class GetAppsRequest extends BaseGetRequest<AppsList> {
     @Override
     public void deliverResponse(AppsList response) {
         Log.d("TEST", response.toString());
-        BusProvider.getInstance().post(new LoadAppsEvent(response));
+        BusProvider.getInstance().post(new LoadAppsApiEvent(response));
     }
 }

@@ -193,23 +193,6 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
             comment.setUserId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
             comment.setAppId(appId);
             ApiClient.getClient(getContext()).sendComment(comment);
-
-//                        //TODO
-////                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-////                                        1, 3, new Callback<Comments>() {
-////                                            @Override
-////                                            public void success(Comments comments, Response response) {
-////                                                if (comments != null) {
-////                                                    commentsAdapter.resetAdapter(comments);
-////                                                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
-////
-////                                                    view.findViewById(R.id.label_no_comments).setVisibility(View.GONE);
-////                                                }
-////                                            }
-////                                        });
-//                    }
-//                }
-//            });
         }
 
         closeKeyboard(send);

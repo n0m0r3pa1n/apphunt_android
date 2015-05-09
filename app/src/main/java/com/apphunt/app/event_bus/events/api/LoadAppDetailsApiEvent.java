@@ -5,10 +5,10 @@ import com.apphunt.app.api.apphunt.models.App;
 /**
  * Created by nmp on 15-5-9.
  */
-public class LoadAppDetailsEvent {
+public class LoadAppDetailsApiEvent {
     private App app;
 
-    public LoadAppDetailsEvent(App app) {
+    public LoadAppDetailsApiEvent(App app) {
         this.app = app;
     }
 

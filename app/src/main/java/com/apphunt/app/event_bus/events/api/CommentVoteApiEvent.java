@@ -5,11 +5,11 @@ import com.apphunt.app.api.apphunt.models.CommentVote;
 /**
  * Created by nmp on 15-5-9.
  */
-public class ApiCommentVoteEvent {
+public class CommentVoteApiEvent {
     private boolean isVote;
     private CommentVote commentVote;
 
-    public ApiCommentVoteEvent(CommentVote commentVote, boolean isVote) {
+    public CommentVoteApiEvent(CommentVote commentVote, boolean isVote) {
         this.isVote = isVote;
         this.commentVote = commentVote;
     }

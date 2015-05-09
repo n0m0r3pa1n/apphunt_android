@@ -5,7 +5,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.ApiCommentVoteEvent;
+import com.apphunt.app.event_bus.events.api.CommentVoteApiEvent;
 
 
 public class DeleteCommentVoteRequest extends BaseGsonRequest<CommentVote>{
@@ -23,6 +23,6 @@ public class DeleteCommentVoteRequest extends BaseGsonRequest<CommentVote>{
     @Override
     public void deliverResponse(CommentVote response) {
         response.setCommentId(commentId);
-        BusProvider.getInstance().post(new ApiCommentVoteEvent(response, false));
+        BusProvider.getInstance().post(new CommentVoteApiEvent(response, false));
     }
 }

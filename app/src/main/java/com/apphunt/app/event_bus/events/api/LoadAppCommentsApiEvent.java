@@ -2,11 +2,11 @@ package com.apphunt.app.event_bus.events.api;
 
 import com.apphunt.app.api.apphunt.models.Comments;
 
-public class LoadAppCommentsEvent {
+public class LoadAppCommentsApiEvent {
     private Comments comments;
     private boolean shouldReload;
 
-    public LoadAppCommentsEvent(Comments comments, boolean shouldReload) {
+    public LoadAppCommentsApiEvent(Comments comments, boolean shouldReload) {
         this.comments = comments;
         this.shouldReload = shouldReload;
 

@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.ApiCommentVoteEvent;
+import com.apphunt.app.event_bus.events.api.CommentVoteApiEvent;
 
 
 public class PostCommentVoteRequest extends BasePostRequest<CommentVote> {
@@ -22,6 +22,6 @@ public class PostCommentVoteRequest extends BasePostRequest<CommentVote> {
     @Override
     public void deliverResponse(CommentVote response) {
         response.setCommentId(commentId);
-        BusProvider.getInstance().post(new ApiCommentVoteEvent(response, true));
+        BusProvider.getInstance().post(new CommentVoteApiEvent(response, true));
     }
 }

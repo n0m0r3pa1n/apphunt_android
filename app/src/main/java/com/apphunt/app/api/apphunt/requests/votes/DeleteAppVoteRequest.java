@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.ApiAppVoteEvent;
+import com.apphunt.app.event_bus.events.api.AppVoteApiEvent;
 
 
 public class DeleteAppVoteRequest extends BaseGsonRequest<Vote> {
@@ -22,6 +22,6 @@ public class DeleteAppVoteRequest extends BaseGsonRequest<Vote> {
     @Override
     public void deliverResponse(Vote response) {
         response.setAppId(appId);
-        BusProvider.getInstance().post(new ApiAppVoteEvent(response, false));
+        BusProvider.getInstance().post(new AppVoteApiEvent(response, false));
     }
 }

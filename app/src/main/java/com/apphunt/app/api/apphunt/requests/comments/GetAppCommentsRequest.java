@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
+import com.apphunt.app.event_bus.events.api.LoadAppCommentsApiEvent;
 
 
 public class GetAppCommentsRequest extends BaseGetRequest<Comments> {
@@ -22,6 +22,6 @@ public class GetAppCommentsRequest extends BaseGetRequest<Comments> {
 
     @Override
     public void deliverResponse(Comments response) {
-        BusProvider.getInstance().post(new LoadAppCommentsEvent(response, shouldReload));
+        BusProvider.getInstance().post(new LoadAppCommentsApiEvent(response, shouldReload));
     }
 }

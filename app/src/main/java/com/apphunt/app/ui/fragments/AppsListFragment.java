@@ -23,7 +23,7 @@ import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
+import com.apphunt.app.event_bus.events.api.LoadAppsApiEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -198,7 +198,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     }
 
     @Subscribe
-    public void onAppsLoaded(LoadAppsEvent event) {
+    public void onAppsLoaded(LoadAppsApiEvent event) {
         LoadersUtils.hideBottomLoader(activity);
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
     }

@@ -23,8 +23,8 @@ import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
-import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
+import com.apphunt.app.event_bus.events.api.LoadAppCommentsApiEvent;
+import com.apphunt.app.event_bus.events.api.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.CommentsBox;
@@ -182,7 +182,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     @Subscribe
-    public void onAppDetailsLoaded(LoadAppDetailsEvent event) {
+    public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
         app = event.getApp();
         if (!isAdded()) {
             return;
@@ -216,7 +216,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     @Subscribe
-    public void onAppCommentsLoaded(LoadAppCommentsEvent event) {
+    public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         if(event.shouldReload()) {
             commentsBox.resetComments(event.getComments());
         } else {
