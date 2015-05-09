@@ -33,4 +33,8 @@ public class GsonInstance {
     public static String toJson(Serializable dto) {
         return sGson.toJson(dto);
     }
+
+    public static String toJson(Object object) {
+        return sGson.toJson(object);
+    }
 }

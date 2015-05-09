@@ -247,7 +247,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         });
     }
 
-    private void notifyAdapter(AppsList appsList) {
+    public void notifyAdapter(AppsList appsList) {
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);

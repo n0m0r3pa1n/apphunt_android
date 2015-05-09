@@ -3,10 +3,10 @@ package com.apphunt.app.event_bus.events.api;
 import com.apphunt.app.api.apphunt.models.AppsList;
 
 
-public class GetAppsEvent {
+public class LoadAppsEvent {
     private AppsList appsList;
 
-    public GetAppsEvent(AppsList appsList) {
+    public LoadAppsEvent(AppsList appsList) {
         this.appsList = appsList;
     }
 

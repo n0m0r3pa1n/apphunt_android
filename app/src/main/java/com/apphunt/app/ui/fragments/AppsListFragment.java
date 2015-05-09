@@ -22,6 +22,7 @@ import android.widget.Button;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
 import com.apphunt.app.event_bus.events.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
@@ -118,6 +119,16 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
         btnAddApp.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
+    private void startSelectAppFragment() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
+                .commit();
+
+        activity.getSupportFragmentManager().executePendingTransactions();
+    }
+
     @Override
     public void onNetworkAvailable() {
         if (trendingAppsAdapter.getCount() == 0) {
@@ -184,13 +195,9 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
         trendingAppsAdapter.resetAdapter(event.getPosition());
     }
 
-    private void startSelectAppFragment() {
-        activity.getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                .commit();
-
-        activity.getSupportFragmentManager().executePendingTransactions();
+    @Subscribe
+    public void onAppsLoaded(LoadAppsEvent event) {
+        trendingAppsAdapter.notifyAdapter(event.getAppsList());
     }
+
 }
