@@ -61,26 +61,26 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private Context ctx;
     private SuperListview listView;
+    private MoreAppsItem moreAppsItem;
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Item> backup = new ArrayList<>();
 
-    private Calendar calendar = Calendar.getInstance();
     private Calendar today = Calendar.getInstance();
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
 
-    private boolean success = false;
-    private int noAppsDays = 0;
+    private boolean isMoreItemsPressed = false;
 
+    private int allAppsSize = 0;
+    private int previousAppsSize = 0;
+    private int moreAppsItemPosition = 0;
+    private int selectedAppPosition = -1;
     private ViewHolderSeparator viewHolderSeparator = null;
     private ViewHolderMoreApps viewHolderMoreApps = null;
-    private int selectedAppPosition = -1;
 
     public TrendingAppsAdapter(Context ctx, SuperListview listView) {
         this.ctx = ctx;
         this.listView = listView;
     }
-
-
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -220,6 +220,16 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void notifyAdapter(AppsList appsList) {
+
+        if(isMoreItemsPressed) {
+            displayMoreApps(appsList);
+            return;
+        }
+
+        displayAppsForPreviousDay(appsList);
+    }
+
+    private void displayAppsForPreviousDay(AppsList appsList) {
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);
@@ -244,77 +254,45 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
         if (selectedAppPosition > -1) {
             listView.getList().smoothScrollToPosition(selectedAppPosition);
+        } else {
+            scrollToFirstAppForNextDay();
         }
     }
 
-    public void getAppsForPreviousDate() {
-        LoadersUtils.showBottomLoader((Activity) ctx, true);
-        ApiService.loadAppsForPreviousDate(ctx);
-
-//        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-//                date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-//                    @Override
-//                    public void success(AppsList appsList, Response response) {
-//                        ArrayList<Item> items = new ArrayList<>();
-//
-//                        if (appsList.getTotalCount() > 0) {
-//                            items.add(new SeparatorItem(appsList.getDate()));
-//
-//                            for (App app : appsList.getApps()) {
-//                                items.add(new AppItem(app));
-//                            }
-//
-//                            if (appsList.haveMoreApps())
-//                                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
-//
-//                            addItems(items);
-//                        } else if (noAppsDays < 5) {
-//                            getAppsForPreviousDate();
-//                            ++noAppsDays;
-//                        } else {
-//                            LoadersUtils.hideBottomLoader((Activity) ctx);
-//                            noAppsDays = 0;
-//                        }
-//                    }
-//                });
+    private void scrollToFirstAppForNextDay() {
+        if(allAppsSize != 0) {
+            previousAppsSize = allAppsSize + 1;
+        }
+        allAppsSize = items.size();
+        listView.getList().smoothScrollToPosition(previousAppsSize);
     }
 
-    public void addItems(ArrayList<Item> items) {
-        this.items.addAll(items);
+    private void displayMoreApps(AppsList appsList) {
+        if (!appsList.haveMoreApps()) {
+            items.remove(moreAppsItem);
+        } else {
+            moreAppsItem.setPage(moreAppsItem.getNextPage());
+        }
+
+        ArrayList<AppItem> newItems = new ArrayList<>();
+
+        for (App app : appsList.getApps()) {
+            newItems.add(new AppItem(app));
+        }
+
+        items.addAll(moreAppsItemPosition, newItems);
+
         notifyDataSetChanged();
-
-        LoadersUtils.hideBottomLoader((Activity) ctx);
-        listView.getList().smoothScrollToPosition(this.items.size() - items.size() + 1);
+        listView.getList().smoothScrollToPosition(moreAppsItemPosition + newItems.size());
+        isMoreItemsPressed = false;
     }
 
-    private void loadMoreApps(final int position) {
-        final MoreAppsItem item = (MoreAppsItem) getItem(position);
+    private void loadMoreApps(int position) {
+        moreAppsItem = (MoreAppsItem) getItem(position);
+        moreAppsItemPosition = position;
+        isMoreItemsPressed = true;
         ApiService.loadMoreApps(ctx, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                item.getDate(), Constants.PLATFORM, item.getNextPage(), item.getItems());
-
-
-//        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-//                item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
-//                    @Override
-//                    public void success(AppsList appsList, Response response) {
-//                        if (!appsList.haveMoreApps()) {
-//                            items.remove(position);
-//                        } else {
-//                            item.setPage(item.getNextPage());
-//                        }
-//
-//                        ArrayList<AppItem> newItems = new ArrayList<>();
-//
-//                        for (App app : appsList.getApps()) {
-//                            newItems.add(new AppItem(app));
-//                        }
-//
-//                        items.addAll(position, newItems);
-//
-//                        notifyDataSetChanged();
-//                        listView.getList().smoothScrollToPosition(position + newItems.size());
-//                    }
-//                });
+                moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
     public void showSearchResult(ArrayList<App> apps) {
@@ -344,29 +322,16 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter() {
-        success = false;
         items.clear();
         notifyDataSetChanged();
 
-        calendar = Calendar.getInstance();
         today = Calendar.getInstance();
-
-
     }
 
     public void resetAdapter(int position) {
         this.selectedAppPosition = position;
 
         resetAdapter();
-    }
-
-    public void clearAdapter() {
-        success = false;
-        items.clear();
-        notifyDataSetChanged();
-
-        calendar = Calendar.getInstance();
-        today = Calendar.getInstance();
     }
 
     public boolean couldLoadMoreApps() {

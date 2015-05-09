@@ -31,6 +31,7 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
@@ -51,7 +52,6 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     private boolean endOfList = false;
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
 
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
@@ -65,7 +65,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
 
                 btnAddApp.setVisibility(View.INVISIBLE);
                 lvTrendingApps.setVisibility(View.GONE);
-                trendingAppsAdapter.clearAdapter();
+                trendingAppsAdapter.resetAdapter();
                 LoadersUtils.showCenterLoader(activity);
             } else {
                 if (fragment != null) {
@@ -164,6 +164,8 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
         if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
+                    LoadersUtils.showBottomLoader(activity,
+                            SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
                     ApiService.loadAppsForPreviousDate(activity);
                 }
