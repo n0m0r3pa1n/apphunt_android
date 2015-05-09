@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;

@@ -11,7 +11,8 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.UserCreatedEvent;
+import com.apphunt.app.event_bus.events.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.auth.LogoutEvent;
 import com.apphunt.app.ui.fragments.LoginFragment;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -33,6 +34,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     @Override
     public void logout() {
         removeSharedPreferences(activity);
+        BusProvider.getInstance().post(new LogoutEvent());
         ((MainActivity) activity).onUserLogout();
         hideLoginFragment(activity);
     }
@@ -60,7 +62,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
             @Override
             public void success(User user, retrofit.client.Response response) {
                 onUserCreated(user);
-                BusProvider.getInstance().post(new UserCreatedEvent(user));
+                BusProvider.getInstance().post(new LoginEvent(user));
             }
         });
     }

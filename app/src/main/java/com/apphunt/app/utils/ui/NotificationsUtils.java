@@ -1,4 +1,4 @@
-package com.apphunt.app.utils;
+package com.apphunt.app.utils.ui;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -16,6 +16,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
+import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.Calendar;

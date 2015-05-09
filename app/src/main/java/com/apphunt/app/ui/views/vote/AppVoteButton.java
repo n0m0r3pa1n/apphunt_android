@@ -15,7 +15,7 @@ import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.votes.UserAppVoteEvent;
+import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -163,7 +163,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {
-        BusProvider.getInstance().post(new UserAppVoteEvent(hasVoted));
+        BusProvider.getInstance().post(new AppVoteEvent(hasVoted, app.getPosition()));
     }
 
 

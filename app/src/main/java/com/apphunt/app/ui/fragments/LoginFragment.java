@@ -25,7 +25,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.LoginSkippedEvent;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;

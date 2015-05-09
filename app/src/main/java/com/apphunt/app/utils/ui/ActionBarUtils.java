@@ -1,4 +1,4 @@
-package com.apphunt.app.utils;
+package com.apphunt.app.utils.ui;
 
 
 import android.content.Context;

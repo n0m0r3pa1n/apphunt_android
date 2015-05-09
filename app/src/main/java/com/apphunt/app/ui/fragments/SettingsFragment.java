@@ -16,7 +16,7 @@ import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;

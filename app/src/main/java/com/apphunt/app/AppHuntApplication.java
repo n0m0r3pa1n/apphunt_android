@@ -31,7 +31,7 @@ public class AppHuntApplication extends Application {
         if (BuildConfig.DEBUG) {
             FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
         } else {
-            FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+            //FlurryAgent.init(this, Constants.FLURRY_API_KEY);
         }
 
         TwitterAuthConfig authConfig =

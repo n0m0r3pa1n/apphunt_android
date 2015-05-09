@@ -30,10 +30,10 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ShowNotificationEvent;
-import com.apphunt.app.event_bus.events.UserCreatedEvent;
+import com.apphunt.app.event_bus.events.auth.LoginEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.StatusCode;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
@@ -232,7 +232,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     @Subscribe
-    public void onUserCreated(UserCreatedEvent event) {
+    public void onUserCreated(LoginEvent event) {
         saveApp(saveButton, event.getUser().getId());
     }
 

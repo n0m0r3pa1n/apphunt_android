@@ -1,10 +1,11 @@
-package com.apphunt.app.utils;
+package com.apphunt.app.utils.ui;
 
 import android.app.Activity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
+import com.apphunt.app.utils.SoundsUtils;
 
 import pl.droidsonroids.gif.GifImageView;
 

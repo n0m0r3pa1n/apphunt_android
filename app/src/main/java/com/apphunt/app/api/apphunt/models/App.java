@@ -10,6 +10,7 @@ public class App {
     private String name;
     private String description;
     private String icon;
+    private transient int position;
     @SerializedName("package")
     private String packageName;
     private int votesCount;
@@ -19,6 +20,14 @@ public class App {
     private ArrayList<Vote> votes = new ArrayList<>();
     private User createdBy;
     private int commentsCount;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public String getId() {
         return id;

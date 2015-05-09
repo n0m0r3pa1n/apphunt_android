@@ -1,4 +1,4 @@
-package com.apphunt.app.event_bus.events;
+package com.apphunt.app.event_bus.events.auth;
 
 import com.apphunt.app.api.apphunt.models.User;
 
@@ -6,10 +6,10 @@ import com.apphunt.app.api.apphunt.models.User;
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 4/21/15.
  */
-public class UserCreatedEvent {
+public class LoginEvent {
     private User user;
 
-    public UserCreatedEvent(User user) {
+    public LoginEvent(User user) {
         this.user = user;
     }
 

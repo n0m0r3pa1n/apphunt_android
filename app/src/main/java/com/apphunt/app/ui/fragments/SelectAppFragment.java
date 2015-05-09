@@ -22,7 +22,7 @@ import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.utils.InstalledPackagesUtils;
-import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 

@@ -38,7 +38,7 @@ import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.votes.UserAppVoteEvent;
+import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.interfaces.OnAppVoteListener;
@@ -69,7 +69,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private String userId;
     private int itemPosition;
     private int commentBoxHeight;
-    private boolean isVoted;
     private boolean isCommentsBoxOpened = false;
     private boolean endOfList;
 
@@ -155,7 +154,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
 
         setTitle(R.string.title_app_details);
-        isVoted = false;
     }
 
     @Override
@@ -234,6 +232,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 }
                 if (app != null) {
                     AppDetailsFragment.this.app = app;
+                    app.setPosition(itemPosition);
                     voteBtn.setApp(app);
 
                     Picasso.with(activity)
@@ -296,7 +295,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     @Subscribe
-    public void updateVoters(UserAppVoteEvent event) {
+    public void updateVoters(AppVoteEvent event) {
         user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
@@ -307,7 +306,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         } else {
             votersAdapter.removeCreator(user);
         }
-        isVoted = true;
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         commentsList.invalidateViews();
         headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
@@ -433,7 +431,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         super.onDetach();
 
         closeKeyboard(commentBox);
-        if (isVoted) callback.onAppVote(itemPosition);
     }
 
     public void showDetails() {

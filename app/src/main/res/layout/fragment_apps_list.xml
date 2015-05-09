@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.quentindommerc.superlistview.SuperListview
+        android:id="@+id/trending_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/more_loader_layout"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/list_divider_height"
+        android:elevation="@dimen/listview_elevation"
+        android:layoutAnimation="@anim/list_view_entry"
+        android:paddingTop="7dp" />
+
+    <com.shamanland.fab.FloatingActionButton
+        android:id="@+id/add_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/add_btn_margin_bottom"
+        android:layout_marginRight="@dimen/add_btn_margin_right"
+        android:layout_marginTop="@dimen/add_btn_margin_top"
+        android:elevation="@dimen/add_btn_elevation"
+        android:src="@drawable/ic_add_white"
+        app:floatingActionButtonColor="@color/bg_fab"
+        app:floatingActionButtonSize="normal" />
+
+    <RelativeLayout
+        android:id="@+id/more_loader_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_primary"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/more_loader"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/reload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        android:text="@string/retry_text"
+        android:textColor="@color/bg_primary"
+        android:textSize="@dimen/click_to_reload_text"
+        android:visibility="gone" />
+</RelativeLayout>

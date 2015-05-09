@@ -32,8 +32,8 @@ import butterknife.InjectView;
 import retrofit.client.Response;
 
 public class CommentsAdapter extends BaseAdapter {
+    public static final String TAG = CommentsAdapter.class.getSimpleName();
 
-    private static final String TAG = CommentsAdapter.class.getName();
     private ListView listView;
     private String userId;
 

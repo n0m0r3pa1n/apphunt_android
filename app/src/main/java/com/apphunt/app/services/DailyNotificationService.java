@@ -10,7 +10,7 @@ import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;

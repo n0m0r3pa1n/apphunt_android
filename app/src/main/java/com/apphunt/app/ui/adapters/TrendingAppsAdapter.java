@@ -36,7 +36,7 @@ import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;

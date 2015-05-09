@@ -24,7 +24,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.SoundsUtils;
 
 public class NotificationFragment extends BaseFragment implements OnClickListener {

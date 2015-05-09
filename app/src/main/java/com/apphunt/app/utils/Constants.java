@@ -46,6 +46,7 @@ public class Constants {
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
+    public static final String TAG_APPS_LIST_FRAGMENT = "apps_list_fragment";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
