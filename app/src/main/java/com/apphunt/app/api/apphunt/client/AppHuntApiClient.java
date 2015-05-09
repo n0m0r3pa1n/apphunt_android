@@ -13,6 +13,7 @@ import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
+import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
@@ -80,13 +81,14 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void sendComment(@Body NewComment comment, Callback<NewComment> cb) {
-
+    public void sendComment(NewComment comment) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostNewCommentRequest(comment, null));
     }
 
     @Override
-    public void getAppComments(String appId, String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppCommentsRequest(appId, userId, page, pageSize, null));
+    public void getAppComments(String appId, String userId, int page, int pageSize, boolean shouldReload) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppCommentsRequest(appId, userId, page, pageSize,
+                shouldReload, null));
     }
 
     @Override

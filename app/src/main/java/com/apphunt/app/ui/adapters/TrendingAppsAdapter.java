@@ -291,7 +291,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         moreAppsItem = (MoreAppsItem) getItem(position);
         moreAppsItemPosition = position;
         isMoreItemsPressed = true;
-        ApiService.loadMoreApps(ctx, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+        ApiService.getInstance(ctx).loadMoreApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 

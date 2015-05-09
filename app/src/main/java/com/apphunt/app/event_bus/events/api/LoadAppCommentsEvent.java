@@ -4,9 +4,12 @@ import com.apphunt.app.api.apphunt.models.Comments;
 
 public class LoadAppCommentsEvent {
     private Comments comments;
+    private boolean shouldReload;
 
-    public LoadAppCommentsEvent(Comments comments) {
+    public LoadAppCommentsEvent(Comments comments, boolean shouldReload) {
         this.comments = comments;
+        this.shouldReload = shouldReload;
+
     }
 
     public Comments getComments() {
@@ -15,5 +18,13 @@ public class LoadAppCommentsEvent {
 
     public void setComments(Comments comments) {
         this.comments = comments;
+    }
+
+    public boolean shouldReload() {
+        return shouldReload;
+    }
+
+    public void setShouldReload(boolean shouldReload) {
+        this.shouldReload = shouldReload;
     }
 }

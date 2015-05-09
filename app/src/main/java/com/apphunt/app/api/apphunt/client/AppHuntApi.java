@@ -50,10 +50,10 @@ public interface AppHuntApi {
     void getNotification(@Query("type") String type, Callback<Notification> cb);
 
     @POST("/comments")
-    void sendComment(@Body NewComment comment, Callback<NewComment> cb);
+    void sendComment(NewComment comment);
 
     @GET("/comments/{appId}")
-    void getAppComments(String appId, String userId, int page, int pageSize);
+    void getAppComments(String appId, String userId, int page, int pageSize, boolean shouldReload);
 
     @POST("/comments/votes")
     void voteComment(String userId, String commentId);

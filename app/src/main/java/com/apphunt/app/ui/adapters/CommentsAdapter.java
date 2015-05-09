@@ -167,7 +167,7 @@ public class CommentsAdapter extends BaseAdapter {
 
     public void loadMore(String appId, String userId) {
         if (page < totalPages) {
-            ApiService.loadAppComments(ctx, appId, userId, page + 1, 3);
+            ApiService.getInstance(ctx).loadAppComments(appId, userId, page + 1, 3);
         }
     }
 

@@ -27,7 +27,7 @@ import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
 import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.VotersAdapter;
-import com.apphunt.app.ui.views.CommentBox;
+import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -44,7 +44,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class AppDetailsFragment extends BaseFragment implements OnClickListener, CommentBox.OnDisplayCommentBox {
+public class AppDetailsFragment extends BaseFragment implements OnClickListener, CommentsBox.OnDisplayCommentBox {
 
     private static final String TAG = AppDetailsFragment.class.getName();
 
@@ -94,7 +94,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     RelativeLayout boxDesc;
 
     @InjectView(R.id.comments_box)
-    CommentBox commentsBox;
+    CommentsBox commentsBox;
 
     //endregion
 
@@ -145,8 +145,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        ApiService.loadAppDetails(activity, userId, appId);
-        ApiService.loadAppComments(activity, appId, userId, 1, 3);
+        ApiService.getInstance(activity).loadAppDetails(userId, appId);
+        ApiService.getInstance(activity).loadAppComments(appId, userId, 1, 3);
     }
 
 
@@ -217,7 +217,11 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsEvent event) {
-        commentsBox.setComments(event.getComments());
+        if(event.shouldReload()) {
+            commentsBox.resetComments(event.getComments());
+        } else {
+            commentsBox.setComments(event.getComments());
+        }
     }
 
     @Override

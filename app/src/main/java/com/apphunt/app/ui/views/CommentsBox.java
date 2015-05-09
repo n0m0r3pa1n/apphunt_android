@@ -19,10 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.Comments;
 import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
@@ -30,13 +34,14 @@ import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class CommentBox extends RelativeLayout implements  AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class CommentsBox extends RelativeLayout implements  AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
     private int commentBoxHeight;
     private int belowId;
@@ -79,21 +84,21 @@ public class CommentBox extends RelativeLayout implements  AbsListView.OnScrollL
     TextView send;
 
 
-    public CommentBox(Context context) {
+    public CommentsBox(Context context) {
         super(context);
         if (!isInEditMode()) {
             init(context);
         }
     }
 
-    public CommentBox(Context context, AttributeSet attrs) {
+    public CommentsBox(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init(context);
         }
     }
 
-    public CommentBox(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CommentsBox(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (!isInEditMode()) {
             init(context);
@@ -101,9 +106,16 @@ public class CommentBox extends RelativeLayout implements  AbsListView.OnScrollL
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         closeKeyboard(commentBox);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -180,14 +192,8 @@ public class CommentBox extends RelativeLayout implements  AbsListView.OnScrollL
             comment.setText(commentBox.getText().toString());
             comment.setUserId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
             comment.setAppId(appId);
-//
-//            ApiClient.getClient(getActivity()).sendComment(comment, new Callback<NewComment>() {
-//                @Override
-//                public void success(NewComment comment, Response response) {
-//                    if (response.getStatus() == 200) {
-//                        ApiClient.getClient(getActivity()).getAppComments(app.getId(),
-//                                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-//                                1, 3);
+            ApiClient.getClient(getContext()).sendComment(comment);
+
 //                        //TODO
 ////                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
 ////                                        1, 3, new Callback<Comments>() {
@@ -210,6 +216,21 @@ public class CommentBox extends RelativeLayout implements  AbsListView.OnScrollL
         commentBox.getText().clear();
         resizeCommentBox(true);
 
+    }
+
+    public void resetComments(Comments comments) {
+        if (comments != null) {
+            commentsAdapter.resetAdapter(comments);
+            headerComments.setText(getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(),
+                    commentsAdapter.getCount()));
+
+            labelNoComment.setVisibility(View.GONE);
+        }
+    }
+
+    @Subscribe
+    public void refreshAppComments(ReloadCommentsEvent event) {
+        ApiService.getInstance(getContext()).reloadAppComments(appId);
     }
 
     protected void init(Context context) {

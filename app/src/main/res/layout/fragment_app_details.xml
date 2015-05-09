@@ -132,7 +132,7 @@
 
         </RelativeLayout>
 
-        <com.apphunt.app.ui.views.CommentBox
+        <com.apphunt.app.ui.views.CommentsBox
             android:id="@+id/comments_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

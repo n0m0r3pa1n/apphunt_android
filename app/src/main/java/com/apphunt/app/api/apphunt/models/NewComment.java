@@ -38,14 +38,4 @@ public class NewComment {
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
-
-    @Override
-    public String toString() {
-        return "NewComment{" +
-                "appId='" + appId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", text='" + text + '\'' +
-                ", parentId='" + parentId + '\'' +
-                '}';
-    }
 }

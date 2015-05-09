@@ -1,6 +1,7 @@
 package com.apphunt.app.api.apphunt.client;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -11,14 +12,27 @@ import java.util.Calendar;
 public class ApiService {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private static Calendar calendar = Calendar.getInstance();
+    private static ApiService apiService;
+    private Context context;
 
-    public static void loadAppsForToday(Context context) {
+    private ApiService(Context context) {
+        this.context = context;
+    }
+    public static ApiService getInstance(Context context) {
+        if(apiService == null) {
+            apiService = new ApiService(context);
+        }
+
+        return apiService;
+    }
+
+    public void loadAppsForToday() {
         calendar = Calendar.getInstance();
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         ApiClient.getClient(context).getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM);
     }
 
-    public static void loadAppsForPreviousDate(Context context) {
+    public void loadAppsForPreviousDate() {
         calendar.add(Calendar.DATE, -1);
         String date = dateFormat.format(calendar.getTime());
 
@@ -26,15 +40,20 @@ public class ApiService {
                 date, 1, 5, Constants.PLATFORM);
     }
 
-    public static void loadMoreApps(Context context, String userId, String date, String platform, int page, int pageSize) {
+    public void loadMoreApps(String userId, String date, String platform, int page, int pageSize) {
         ApiClient.getClient(context).getApps(userId, date, page, pageSize, platform);
     }
 
-    public static void loadAppDetails(Context context, String userId, String appId) {
+    public void loadAppDetails(String userId, String appId) {
         ApiClient.getClient(context).getDetailedApp(userId, appId);
     }
 
-    public static void loadAppComments(Context context, String appId, String userId, int page, int pageSize) {
-        ApiClient.getClient(context).getAppComments(appId, userId, page, pageSize);
+    public void loadAppComments(String appId, String userId, int page, int pageSize) {
+        ApiClient.getClient(context).getAppComments(appId, userId, page, pageSize, false);
+    }
+
+    public void reloadAppComments(String applicationId) {
+        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        ApiClient.getClient(context).getAppComments(applicationId, userId, 1, 3, true);
     }
 }

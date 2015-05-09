@@ -88,7 +88,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
         View view = inflater.inflate(R.layout.fragment_apps_list, container, false);
         ButterKnife.inject(this, view);
         initUi();
-        ApiService.loadAppsForToday(activity);
+        ApiService.getInstance(activity).loadAppsForToday();
 
         return view;
     }
@@ -102,7 +102,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
             public void onRefresh() {
                 activity.getSupportActionBar().collapseActionView();
                 trendingAppsAdapter.resetAdapter();
-                ApiService.loadAppsForToday(activity);
+                ApiService.getInstance(activity).loadAppsForToday();
             }
         });
 
@@ -165,7 +165,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
                     LoadersUtils.showBottomLoader(activity,
                             SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
-                    ApiService.loadAppsForPreviousDate(activity);
+                    ApiService.getInstance(activity).loadAppsForPreviousDate();
                 }
             }
         }
@@ -188,13 +188,13 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     @Subscribe
     public void onUserLogin(LoginEvent event) {
         trendingAppsAdapter.resetAdapter();
-        ApiService.loadAppsForToday(activity);
+        ApiService.getInstance(activity).loadAppsForToday();
     }
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
         trendingAppsAdapter.resetAdapter();
-        ApiService.loadAppsForToday(activity);
+        ApiService.getInstance(activity).loadAppsForToday();
     }
 
     @Subscribe
