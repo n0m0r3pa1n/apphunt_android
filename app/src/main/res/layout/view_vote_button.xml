@@ -2,6 +2,7 @@
 <Button
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/vote"
+    android:focusable="false"
     android:layout_width="@dimen/details_box_vote_size"
     android:layout_height="@dimen/details_box_vote_size"
     android:gravity="center"

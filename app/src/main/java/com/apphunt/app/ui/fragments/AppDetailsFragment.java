@@ -1,52 +1,35 @@
 package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.callback.Callback;
-import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.App;
-import com.apphunt.app.api.apphunt.models.Comment;
-import com.apphunt.app.api.apphunt.models.Comments;
-import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
 import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
-import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
+import com.apphunt.app.ui.views.CommentBox;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
-import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.crashlytics.android.Crashlytics;
@@ -60,32 +43,25 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.client.Response;
 
-public class AppDetailsFragment extends BaseFragment implements OnClickListener, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class AppDetailsFragment extends BaseFragment implements OnClickListener, CommentBox.OnDisplayCommentBox {
 
     private static final String TAG = AppDetailsFragment.class.getName();
 
     private String appId;
     private String userId;
     private int itemPosition;
-    private int commentBoxHeight;
-    private boolean isCommentsBoxOpened = false;
-    private boolean endOfList;
 
     private Animation enterAnimation;
     private View view;
     private Activity activity;
     private VotersAdapter votersAdapter;
-    private CommentsAdapter commentsAdapter;
 
     private RelativeLayout.LayoutParams params;
 
     private App app;
     private User user;
-    private Comment replyToComment;
 
-    // TODO: DEV
     //region InjectViews
     @InjectView(R.id.icon)
     ImageView icon;
@@ -111,35 +87,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @InjectView(R.id.voters)
     GridView votersAvatars;
 
-    @InjectView(R.id.comments_count)
-    ListView commentsList;
-
-    @InjectView(R.id.header_comments)
-    TextView headerComments;
-
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
-
-    @InjectView(R.id.box_comments)
-    RelativeLayout boxComments;
-
-    @InjectView(R.id.send_comment)
-    TextView send;
-
-    @InjectView(R.id.comment_entry)
-    EditText commentBox;
 
     @InjectView(R.id.box_desc)
     RelativeLayout boxDesc;
 
-    @InjectView(R.id.label_comment)
-    TextView labelComment;
+    @InjectView(R.id.comments_box)
+    CommentBox commentsBox;
 
-    @InjectView(R.id.show_comments)
-    TextView showAllComments;
-
-    @InjectView(R.id.hide_comments)
-    TextView hideAllComments;
     //endregion
 
     @Override
@@ -167,44 +123,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void initUI() {
+        commentsBox.setBelowId(boxDetails.getId());
+        commentsBox.setAppId(appId);
         boxDesc.setOnClickListener(this);
-
-        commentsList.setOnItemClickListener(this);
-        commentsList.setOnScrollListener(this);
-
-        showAllComments.setOnClickListener(this);
-        hideAllComments.setOnClickListener(this);
-
-        commentBox.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT > 16) {
-                    commentBox.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    commentBox.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-                commentBoxHeight = commentBox.getHeight();
-            }
-        });
-
-        commentBox.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                hideDetails();
-                return false;
-            }
-        });
-
-        if (userHasPermissions()) {
-            labelComment.setVisibility(View.GONE);
-            commentBox.setVisibility(View.VISIBLE);
-        }
-
-        labelComment.setOnClickListener(this);
-
-        send = (TextView) view.findViewById(R.id.send_comment);
-        send.setOnClickListener(this);
-
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -233,16 +154,18 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
+        commentsBox.addOnDisplayCommentsBoxListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
+        commentsBox.removeOnDisplayCommentsBoxListener(this);
     }
 
     @Subscribe
-    public void updateVoters(AppVoteEvent event) {
+    public void onVotersReceived(AppVoteEvent event) {
         user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
@@ -254,7 +177,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             votersAdapter.removeCreator(user);
         }
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        commentsList.invalidateViews();
+        commentsBox.invalidateViews();
         headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
     }
 
@@ -286,13 +209,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             votersAdapter = new VotersAdapter(activity, app.getVotes());
             votersAvatars.setAdapter(votersAdapter);
 
-            if (userHasPermissions()) {
-                labelComment.setVisibility(View.GONE);
-                commentBox.setVisibility(View.VISIBLE);
-            } else {
-                labelComment.setVisibility(View.VISIBLE);
-                commentBox.setVisibility(View.INVISIBLE);
-            }
+            commentsBox.checkIfUserCanComment();
 
             userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         }
@@ -300,18 +217,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsEvent event) {
-        Comments comments = event.getComments();
-        if (comments.getTotalCount() == 0) {
-            view.findViewById(R.id.label_no_comments).setVisibility(View.VISIBLE);
-        }
-        if(commentsAdapter == null) {
-            commentsAdapter = new CommentsAdapter(activity, comments, commentsList);
-            commentsList.setAdapter(commentsAdapter);
-        } else {
-            commentsAdapter.addItems(comments);
-        }
-
-        headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
+        commentsBox.setComments(event.getComments());
     }
 
     @Override
@@ -323,91 +229,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                 FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                 openAppOnGooglePlay();
                 break;
-
-            case R.id.label_comment:
-                LoginUtils.showLoginFragment(activity);
-                break;
-
-            case R.id.show_comments:
-                hideDetails();
-                break;
-
-            case R.id.hide_comments:
-                showDetails();
-                break;
-
-            case R.id.send_comment:
-                if (!userHasPermissions()) {
-                    LoginUtils.showLoginFragment(activity);
-                    return;
-                }
-
-                NewComment comment = new NewComment();
-
-                if (commentBox.getText().length() > 0) {
-                    if (replyToComment != null) {
-                        String replyToName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername());
-                        int replyToNameLength = replyToName.length();
-
-                        if (commentBox.getText().length() > replyToNameLength &&
-                                replyToName.toLowerCase().equals(commentBox.getText().toString().substring(0, replyToNameLength).toLowerCase())) {
-                            if (replyToComment.getParentId() == null) {
-                                comment.setParentId(replyToComment.getId());
-                            } else {
-                                comment.setParentId(replyToComment.getParentId());
-                            }
-                            FlurryAgent.logEvent(TrackingEvents.UserSentReplyComment);
-                        } else {
-                            FlurryAgent.logEvent(TrackingEvents.UserSentComment);
-                        }
-                    } else {
-                        commentBox.setHint(R.string.comment_entry_hint);
-                    }
-
-                    comment.setText(commentBox.getText().toString());
-                    comment.setAppId(app.getId());
-                    comment.setUserId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-
-                    ApiClient.getClient(getActivity()).sendComment(comment, new Callback<NewComment>() {
-                        @Override
-                        public void success(NewComment comment, Response response) {
-                            if (response.getStatus() == 200) {
-                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                                        1, 3);
-                                //TODO
-//                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-//                                        1, 3, new Callback<Comments>() {
-//                                            @Override
-//                                            public void success(Comments comments, Response response) {
-//                                                if (comments != null) {
-//                                                    commentsAdapter.resetAdapter(comments);
-//                                                    headerComments.setText(activity.getResources().getQuantityString(R.plurals.header_comments, commentsAdapter.getCount(), commentsAdapter.getCount()));
-//
-//                                                    view.findViewById(R.id.label_no_comments).setVisibility(View.GONE);
-//                                                }
-//                                            }
-//                                        });
-                            }
-                        }
-                    });
-                }
-
-                closeKeyboard(v);
-                commentBox.getText().clear();
-                resizeCommentBox(true);
-                break;
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        replyToComment = commentsAdapter.getComment(position);
-        String replyName = String.format(getString(R.string.reply_to), replyToComment.getUser().getUsername()) + " ";
-
-        commentBox.getText().clear();
-        commentBox.setText(replyName);
-        commentBox.setSelection(replyName.length());
-        hideDetails();
     }
 
     @Override
@@ -425,74 +247,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         this.activity = activity;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        closeKeyboard(commentBox);
-    }
-
-    public void showDetails() {
-        ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.title_app_details);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        boxDetails.setVisibility(View.VISIBLE);
-
-        params.addRule(RelativeLayout.BELOW, boxDetails.getId());
-        boxComments.setLayoutParams(params);
-
-        resizeCommentBox(true);
-        isCommentsBoxOpened = false;
-        closeKeyboard(commentBox);
-
-        showAllComments.setVisibility(View.VISIBLE);
-        hideAllComments.setVisibility(View.INVISIBLE);
-    }
-
-    private void hideDetails() {
-        ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.title_close);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        boxDetails.setVisibility(View.GONE);
-        boxComments.setLayoutParams(params);
-
-        resizeCommentBox(false);
-        isCommentsBoxOpened = true;
-
-        showAllComments.setVisibility(View.INVISIBLE);
-        hideAllComments.setVisibility(View.VISIBLE);
-    }
-
-    public boolean isCommentsBoxOpened() {
-        return isCommentsBoxOpened;
-    }
-
-    private void resizeCommentBox(boolean reset) {
-        if (reset) {
-            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, commentBoxHeight);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            commentBox.setLayoutParams(params);
-            labelComment.setLayoutParams(params);
-        } else {
-            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2 * commentBoxHeight);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            commentBox.setLayoutParams(params);
-            labelComment.setLayoutParams(params);
-        }
-    }
-
-    private void showKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
-    }
-
-    private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-    }
-
     private void openAppOnGooglePlay() {
         if (app == null) {
             Crashlytics.log("App is null!");
@@ -507,21 +261,20 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         return LoginProviderFactory.get(activity).isUserLoggedIn();
     }
 
-
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (ConnectivityUtils.isNetworkAvailable(activity)) {
-            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                if (endOfList) {
-                    FlurryAgent.logEvent(TrackingEvents.UserScrolledDownCommentList);
-                    commentsAdapter.loadMore(appId, userId);
-                }
-            }
+    public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
+        if(isBoxFullscreen) {
+            boxDetails.setVisibility(View.GONE);
+        } else {
+            boxDetails.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        endOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
+    public void showDetails() {
+        commentsBox.hideBox();
+    }
+
+    public boolean isCommentsBoxOpened() {
+        return commentsBox.isCommentsBoxOpened();
     }
 }

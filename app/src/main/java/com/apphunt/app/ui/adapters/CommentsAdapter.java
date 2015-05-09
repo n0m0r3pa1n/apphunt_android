@@ -168,16 +168,6 @@ public class CommentsAdapter extends BaseAdapter {
     public void loadMore(String appId, String userId) {
         if (page < totalPages) {
             ApiService.loadAppComments(ctx, appId, userId, page + 1, 3);
-//            ApiClient.getClient(ctx).getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
-//                @Override
-//                public void success(Comments comments, Response response) {
-//                    addItems(comments);
-//                    listView.smoothScrollToPosition(items.size() - 3);
-//                    page = comments.getPage();
-//                    totalPages = comments.getTotalPages();
-//                    header.setText(ctx.getResources().getQuantityString(R.plurals.header_comments, getCount(), getCount()));
-//                }
-//            });
         }
     }
 

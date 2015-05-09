@@ -15,9 +15,7 @@ import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
-/**
- * Created by nmp on 15-5-8.
- */
+
 public class CommentVoteButton extends AppVoteButton {
     private Comment comment;
 

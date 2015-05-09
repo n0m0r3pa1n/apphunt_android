@@ -27,9 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by nmp on 15-5-8.
- */
 public class AppVoteButton extends LinearLayout {
     public static final String TAG = AppVoteButton.class.getSimpleName();
     private App app;
