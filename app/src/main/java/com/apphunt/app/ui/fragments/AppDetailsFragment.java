@@ -374,6 +374,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                             if (response.getStatus() == 200) {
                                 ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                                         1, 3);
+                                //TODO
 //                                ApiClient.getClient(getActivity()).getAppComments(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
 //                                        1, 3, new Callback<Comments>() {
 //                                            @Override
