@@ -5,7 +5,6 @@ import android.content.Context;
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
-import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
@@ -13,9 +12,11 @@ import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
-import com.apphunt.app.api.apphunt.requests.comments.GetAppComments;
+import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
+import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
+import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 
 import retrofit.http.Body;
 import retrofit.http.Path;
@@ -85,16 +86,16 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getAppComments(String appId, String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppComments(appId, userId, page, pageSize, null));
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppCommentsRequest(appId, userId, page, pageSize, null));
     }
 
     @Override
-    public void voteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb) {
-
+    public void voteComment(String userId, String commentId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostCommentVoteRequest(commentId, userId, null));
     }
 
     @Override
-    public void downVoteComment(@Query("userId") String userId, @Query("commentId") String commentId, Callback<CommentVote> cb) {
-
+    public void downVoteComment(String userId,String commentId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new DeleteCommentVoteRequest(commentId, userId, null));
     }
 }

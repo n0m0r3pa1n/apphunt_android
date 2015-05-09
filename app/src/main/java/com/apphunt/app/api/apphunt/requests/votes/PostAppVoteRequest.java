@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.VoteForAppEvent;
+import com.apphunt.app.event_bus.events.api.ApiAppVoteEvent;
 
 
 public class PostAppVoteRequest extends BasePostRequest<Vote> {
@@ -23,6 +23,6 @@ public class PostAppVoteRequest extends BasePostRequest<Vote> {
     @Override
     public void deliverResponse(Vote response) {
         response.setAppId(appId);
-        BusProvider.getInstance().post(new VoteForAppEvent(response, true));
+        BusProvider.getInstance().post(new ApiAppVoteEvent(response, true));
     }
 }

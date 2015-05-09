@@ -5,11 +5,11 @@ import com.apphunt.app.api.apphunt.models.Vote;
 /**
  * Created by nmp on 15-5-9.
  */
-public class VoteForAppEvent {
+public class ApiAppVoteEvent {
     private Vote vote;
     private boolean isVote;
 
-    public VoteForAppEvent(Vote vote, boolean isVote) {
+    public ApiAppVoteEvent(Vote vote, boolean isVote) {
         this.vote = vote;
         this.isVote = isVote;
     }

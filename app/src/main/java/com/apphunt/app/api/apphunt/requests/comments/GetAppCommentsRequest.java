@@ -7,8 +7,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppCommentsEvent;
 
 
-public class GetAppComments extends BaseGetRequest<Comments> {
-    public GetAppComments(String appId, String userId, int page, int pageSize, Response.ErrorListener listener) {
+public class GetAppCommentsRequest extends BaseGetRequest<Comments> {
+    public GetAppCommentsRequest(String appId, String userId, int page, int pageSize, Response.ErrorListener listener) {
         super(BASE_URL + "/comments/" + appId + "?userId=" + userId + "&page=" + page + "&pageSize=" +  pageSize, listener);
     }
 

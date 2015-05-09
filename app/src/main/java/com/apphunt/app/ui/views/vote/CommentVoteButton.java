@@ -6,15 +6,14 @@ import android.view.HapticFeedbackConstants;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.CommentVote;
+import com.apphunt.app.event_bus.events.api.ApiCommentVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
-
-import retrofit.client.Response;
+import com.squareup.otto.Subscribe;
 
 /**
  * Created by nmp on 15-5-8.
@@ -53,35 +52,34 @@ public class CommentVoteButton extends AppVoteButton {
     @Override
     protected void downVote() {
         FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
-        ApiClient.getClient(getContext()).downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(),
-                new Callback<CommentVote>() {
-                    @Override
-                    public void success(CommentVote vote, Response response) {
-                        comment.setHasVoted(false);
-                        comment.setVotesCount(vote.getVotesCount());
-                        voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
-                        voteButton.setText(String.valueOf(vote.getVotesCount()));
-                        voteButton.setBackgroundResource(R.drawable.btn_vote);
-                        voteButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                    }
-                });
+        ApiClient.getClient(getContext()).downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId());
     }
 
     @Override
     protected void vote() {
         FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
-        ApiClient.getClient(getContext()).voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-            @Override
-            public void success(CommentVote vote, Response response) {
-                comment.setHasVoted(true);
-                comment.setVotesCount(vote.getVotesCount());
-                voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
-                voteButton.setText(String.valueOf(vote.getVotesCount()));
-                voteButton.setBackgroundResource(R.drawable.btn_voted);
-                voteButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            }
-        });
+        ApiClient.getClient(getContext()).voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+                comment.getId());
     }
 
+    @Subscribe
+    public void onAppCommentVoted(ApiCommentVoteEvent event) {
+        if(!event.getCommentVote().getCommentId().equals(comment.getId())) {
+            return;
+        }
 
+        CommentVote vote = event.getCommentVote();
+        comment.setHasVoted(event.isVote());
+        comment.setVotesCount(vote.getVotesCount());
+        voteButton.setText(String.valueOf(vote.getVotesCount()));
+        if(event.isVote()) {
+            voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
+            voteButton.setBackgroundResource(R.drawable.btn_voted);
+        } else {
+            voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
+            voteButton.setBackgroundResource(R.drawable.btn_vote);
+        }
+
+        voteButton.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+    }
 }

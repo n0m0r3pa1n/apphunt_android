@@ -8,6 +8,15 @@ package com.apphunt.app.api.apphunt.models;
  */
 public class CommentVote {
     private int votesCount;
+    private transient String commentId;
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
 
     public int getVotesCount() {
         return votesCount;
@@ -15,12 +24,5 @@ public class CommentVote {
 
     public void setVotesCount(int votesCount) {
         this.votesCount = votesCount;
-    }
-
-    @Override
-    public String toString() {
-        return "CommentVote{" +
-                "votesCount=" + votesCount +
-                '}';
     }
 }
