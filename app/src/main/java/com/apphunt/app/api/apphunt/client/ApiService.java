@@ -29,4 +29,8 @@ public class ApiService {
     public static void loadMoreApps(Context context, String userId, String date, String platform, int page, int pageSize) {
         ApiClient.getClient(context).getApps(userId, date, page, pageSize, platform);
     }
+
+    public static void loadAppDetails(Context context, String userId, String appId) {
+        ApiClient.getClient(context).getDetailedApp(userId, appId);
+    }
 }

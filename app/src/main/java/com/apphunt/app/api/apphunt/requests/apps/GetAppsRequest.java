@@ -1,8 +1,9 @@
-package com.apphunt.app.api.apphunt.requests;
+package com.apphunt.app.api.apphunt.requests.apps;
 
 import android.util.Log;
 
 import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
 

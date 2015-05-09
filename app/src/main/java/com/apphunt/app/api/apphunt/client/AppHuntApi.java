@@ -1,7 +1,6 @@
 package com.apphunt.app.api.apphunt.client;
 
 import com.apphunt.app.api.apphunt.callback.Callback;
-import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.models.Comments;
@@ -33,7 +32,7 @@ public interface AppHuntApi {
                  @Query("pageSize") int pageSize, @Query("platform") String platform);
 
     @GET("/apps/{appId}")
-    void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, Callback<App> cb);
+    void getDetailedApp(String userId, String appId);
 
     @POST("/apps/actions/filter")
     void filterApps(@Body Packages packages, Callback<Packages> cb);

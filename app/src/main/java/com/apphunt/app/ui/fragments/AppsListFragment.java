@@ -40,8 +40,6 @@ import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
-import java.text.SimpleDateFormat;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;

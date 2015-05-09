@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,8 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.callback.Callback;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.Comments;
@@ -38,10 +38,10 @@ import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.LoadAppDetailsEvent;
 import com.apphunt.app.event_bus.events.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
-import com.apphunt.app.ui.interfaces.OnAppVoteListener;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
@@ -75,7 +75,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     private Animation enterAnimation;
     private View view;
     private Activity activity;
-    private OnAppVoteListener callback;
     private VotersAdapter votersAdapter;
     private CommentsAdapter commentsAdapter;
 
@@ -224,46 +223,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        ApiClient.getClient(getActivity()).getDetailedApp(userId, appId, new Callback<App>() {
-            @Override
-            public void success(App app, Response response) {
-                if (!isAdded()) {
-                    return;
-                }
-                if (app != null) {
-                    AppDetailsFragment.this.app = app;
-                    app.setPosition(itemPosition);
-                    voteBtn.setApp(app);
-
-                    Picasso.with(activity)
-                            .load(app.getCreatedBy().getProfilePicture())
-                            .into(creator);
-                    creatorName.setText(String.format(getString(R.string.posted_by),
-                            app.getCreatedBy().getUsername()));
-
-                    Picasso.with(activity)
-                            .load(app.getIcon())
-                            .into(icon);
-                    appName.setText(app.getName());
-                    appDescription.setText(app.getDescription());
-
-                    headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(app.getVotesCount()),
-                            Integer.valueOf(app.getVotesCount())));
-                    votersAdapter = new VotersAdapter(activity, app.getVotes());
-                    votersAvatars.setAdapter(votersAdapter);
-
-                    if (userHasPermissions()) {
-                        labelComment.setVisibility(View.GONE);
-                        commentBox.setVisibility(View.VISIBLE);
-                    } else {
-                        labelComment.setVisibility(View.VISIBLE);
-                        commentBox.setVisibility(View.INVISIBLE);
-                    }
-
-                    userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-                }
-            }
-        });
+        ApiService.loadAppDetails(activity, userId, appId);
 
         ApiClient.getClient(getActivity()).getAppComments(appId, userId, 1, 3, new Callback<Comments>() {
             @Override
@@ -309,6 +269,46 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         commentsList.invalidateViews();
         headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
+    }
+
+    @Subscribe
+    public void onAppDetailsLoaded(LoadAppDetailsEvent event) {
+        app = event.getApp();
+        if (!isAdded()) {
+            return;
+        }
+        if (app != null) {
+
+            app.setPosition(itemPosition);
+            voteBtn.setApp(app);
+
+            Picasso.with(activity)
+                    .load(app.getCreatedBy().getProfilePicture())
+                    .into(creator);
+            creatorName.setText(String.format(getString(R.string.posted_by),
+                    app.getCreatedBy().getUsername()));
+
+            Picasso.with(activity)
+                    .load(app.getIcon())
+                    .into(icon);
+            appName.setText(app.getName());
+            appDescription.setText(app.getDescription());
+
+            headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(app.getVotesCount()),
+                    Integer.valueOf(app.getVotesCount())));
+            votersAdapter = new VotersAdapter(activity, app.getVotes());
+            votersAvatars.setAdapter(votersAdapter);
+
+            if (userHasPermissions()) {
+                labelComment.setVisibility(View.GONE);
+                commentBox.setVisibility(View.VISIBLE);
+            } else {
+                labelComment.setVisibility(View.VISIBLE);
+                commentBox.setVisibility(View.INVISIBLE);
+            }
+
+            userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        }
     }
 
     @Override
@@ -416,14 +416,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = activity;
-
-        try {
-            callback = (OnAppVoteListener) activity;
-        } catch (ClassCastException e) {
-            Log.e(TAG, e.getMessage());
-        }
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.callback.Callback;
-import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.CommentVote;
 import com.apphunt.app.api.apphunt.models.Comments;
@@ -14,7 +13,8 @@ import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.models.Vote;
-import com.apphunt.app.api.apphunt.requests.GetAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 
 import retrofit.http.Body;
 import retrofit.http.Path;
@@ -43,8 +43,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, Callback<App> cb) {
-
+    public void getDetailedApp(String userId, String appId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppDetailsRequest(appId, userId, null));
     }
 
     @Override

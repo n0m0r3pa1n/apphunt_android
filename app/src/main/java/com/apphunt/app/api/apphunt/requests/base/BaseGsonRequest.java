@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.requests;
+package com.apphunt.app.api.apphunt.requests.base;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
