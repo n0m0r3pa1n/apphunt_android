@@ -21,6 +21,7 @@ import android.widget.Button;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
 import com.apphunt.app.event_bus.events.auth.LoginEvent;
@@ -30,13 +31,15 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
+
+import java.text.SimpleDateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,6 +51,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     private boolean endOfList = false;
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
 
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
@@ -87,6 +91,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
         View view = inflater.inflate(R.layout.fragment_apps_list, container, false);
         ButterKnife.inject(this, view);
         initUi();
+        ApiService.loadAppsForToday(activity);
 
         return view;
     }
@@ -160,7 +165,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
             if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                 if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
-                    trendingAppsAdapter.getAppsForNextDate();
+                    ApiService.loadAppsForPreviousDate(activity);
                 }
             }
         }
@@ -197,7 +202,12 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
 
     @Subscribe
     public void onAppsLoaded(LoadAppsEvent event) {
+        LoadersUtils.hideBottomLoader(activity);
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
     }
 
+    private void getApps() {
+        LoadersUtils.showCenterLoader(activity);
+        ApiService.loadAppsForToday(activity);
+    }
 }

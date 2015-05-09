@@ -38,8 +38,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsRequest("2015-3-19", "Android", 5, 1));
+    public void getApps(String userId, String date, int page, int pageSize, String platform) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsRequest(date, userId, platform, pageSize, page));
     }
 
     @Override

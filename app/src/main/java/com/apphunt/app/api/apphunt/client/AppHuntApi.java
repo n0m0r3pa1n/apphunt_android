@@ -29,7 +29,8 @@ public interface AppHuntApi {
     void updateUser(@Path("userId") String userId, @Body User user, Callback<User> cb);
 
     @GET("/apps")
-    void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
+    void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page,
+                 @Query("pageSize") int pageSize, @Query("platform") String platform);
 
     @GET("/apps/{appId}")
     void getDetailedApp(@Query("userId") String userId, @Path("appId") String appId, Callback<App> cb);

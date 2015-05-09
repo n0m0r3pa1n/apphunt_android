@@ -25,8 +25,7 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
+import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
@@ -36,9 +35,9 @@ import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
@@ -55,7 +54,6 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.client.Response;
 
 public class TrendingAppsAdapter extends BaseAdapter {
 
@@ -66,9 +64,9 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Item> backup = new ArrayList<>();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private Calendar calendar = Calendar.getInstance();
     private Calendar today = Calendar.getInstance();
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
 
     private boolean success = false;
     private int noAppsDays = 0;
@@ -80,10 +78,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public TrendingAppsAdapter(Context ctx, SuperListview listView) {
         this.ctx = ctx;
         this.listView = listView;
-
-        LoadersUtils.showCenterLoader((Activity) ctx);
-
-        getApps();
     }
 
 
@@ -225,28 +219,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
         return bmpUri;
     }
 
-
-
-    private void getApps() {
-        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        ApiClient.getClient(ctx).getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                if (appsList.getTotalCount() > 0) {
-                    notifyAdapter(appsList);
-                    if (!success) {
-                        calendar.add(Calendar.DATE, -1);
-                        getApps();
-                        success = true;
-                    }
-                } else {
-                    calendar.add(Calendar.DATE, -1);
-                    getApps();
-                }
-            }
-        });
-    }
-
     public void notifyAdapter(AppsList appsList) {
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
@@ -275,39 +247,36 @@ public class TrendingAppsAdapter extends BaseAdapter {
         }
     }
 
-    public void getAppsForNextDate() {
+    public void getAppsForPreviousDate() {
         LoadersUtils.showBottomLoader((Activity) ctx, true);
+        ApiService.loadAppsForPreviousDate(ctx);
 
-        calendar.add(Calendar.DATE, -1);
-
-        String date = dateFormat.format(calendar.getTime());
-
-        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-                    @Override
-                    public void success(AppsList appsList, Response response) {
-                        ArrayList<Item> items = new ArrayList<>();
-
-                        if (appsList.getTotalCount() > 0) {
-                            items.add(new SeparatorItem(appsList.getDate()));
-
-                            for (App app : appsList.getApps()) {
-                                items.add(new AppItem(app));
-                            }
-
-                            if (appsList.haveMoreApps())
-                                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
-
-                            addItems(items);
-                        } else if (noAppsDays < 5) {
-                            getAppsForNextDate();
-                            ++noAppsDays;
-                        } else {
-                            LoadersUtils.hideBottomLoader((Activity) ctx);
-                            noAppsDays = 0;
-                        }
-                    }
-                });
+//        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+//                date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
+//                    @Override
+//                    public void success(AppsList appsList, Response response) {
+//                        ArrayList<Item> items = new ArrayList<>();
+//
+//                        if (appsList.getTotalCount() > 0) {
+//                            items.add(new SeparatorItem(appsList.getDate()));
+//
+//                            for (App app : appsList.getApps()) {
+//                                items.add(new AppItem(app));
+//                            }
+//
+//                            if (appsList.haveMoreApps())
+//                                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
+//
+//                            addItems(items);
+//                        } else if (noAppsDays < 5) {
+//                            getAppsForPreviousDate();
+//                            ++noAppsDays;
+//                        } else {
+//                            LoadersUtils.hideBottomLoader((Activity) ctx);
+//                            noAppsDays = 0;
+//                        }
+//                    }
+//                });
     }
 
     public void addItems(ArrayList<Item> items) {
@@ -320,28 +289,32 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
     private void loadMoreApps(final int position) {
         final MoreAppsItem item = (MoreAppsItem) getItem(position);
-        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
-                    @Override
-                    public void success(AppsList appsList, Response response) {
-                        if (!appsList.haveMoreApps()) {
-                            items.remove(position);
-                        } else {
-                            item.setPage(item.getNextPage());
-                        }
+        ApiService.loadMoreApps(ctx, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+                item.getDate(), Constants.PLATFORM, item.getNextPage(), item.getItems());
 
-                        ArrayList<AppItem> newItems = new ArrayList<>();
 
-                        for (App app : appsList.getApps()) {
-                            newItems.add(new AppItem(app));
-                        }
-
-                        items.addAll(position, newItems);
-
-                        notifyDataSetChanged();
-                        listView.getList().smoothScrollToPosition(position + newItems.size());
-                    }
-                });
+//        ApiClient.getClient(ctx).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+//                item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
+//                    @Override
+//                    public void success(AppsList appsList, Response response) {
+//                        if (!appsList.haveMoreApps()) {
+//                            items.remove(position);
+//                        } else {
+//                            item.setPage(item.getNextPage());
+//                        }
+//
+//                        ArrayList<AppItem> newItems = new ArrayList<>();
+//
+//                        for (App app : appsList.getApps()) {
+//                            newItems.add(new AppItem(app));
+//                        }
+//
+//                        items.addAll(position, newItems);
+//
+//                        notifyDataSetChanged();
+//                        listView.getList().smoothScrollToPosition(position + newItems.size());
+//                    }
+//                });
     }
 
     public void showSearchResult(ArrayList<App> apps) {
@@ -378,7 +351,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         calendar = Calendar.getInstance();
         today = Calendar.getInstance();
 
-        getApps();
+
     }
 
     public void resetAdapter(int position) {

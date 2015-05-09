@@ -8,8 +8,8 @@ import com.apphunt.app.event_bus.events.api.LoadAppsEvent;
 
 
 public class GetAppsRequest extends BaseGetRequest<AppsList> {
-    public GetAppsRequest(String date, String platform, int pageSize, int page) {
-        super(BASE_URL + "/apps?date="+date+"&platform="+platform+"&status=approved&pageSize="+pageSize+"&page=" + page, null);
+    public GetAppsRequest(String date, String userId,String platform, int pageSize, int page) {
+        super(BASE_URL + "/apps?userId="+userId+"&date="+date+"&platform="+platform+"&status=approved&pageSize="+pageSize+"&page=" + page, null);
     }
 
     @Override
