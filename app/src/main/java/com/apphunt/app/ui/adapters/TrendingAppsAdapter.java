@@ -322,6 +322,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter() {
+        allAppsSize = 0;
+        previousAppsSize = 0;
         items.clear();
         notifyDataSetChanged();
 

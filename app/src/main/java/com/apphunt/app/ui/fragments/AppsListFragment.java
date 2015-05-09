@@ -101,7 +101,7 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
             @Override
             public void onRefresh() {
                 activity.getSupportActionBar().collapseActionView();
-                trendingAppsAdapter.resetAdapter(0);
+                trendingAppsAdapter.resetAdapter();
                 ApiService.loadAppsForToday(activity);
             }
         });
@@ -188,21 +188,18 @@ public class AppsListFragment extends BaseFragment implements AbsListView.OnScro
     @Subscribe
     public void onUserLogin(LoginEvent event) {
         trendingAppsAdapter.resetAdapter();
+        ApiService.loadAppsForToday(activity);
     }
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
         trendingAppsAdapter.resetAdapter();
+        ApiService.loadAppsForToday(activity);
     }
 
     @Subscribe
     public void onAppsLoaded(LoadAppsEvent event) {
         LoadersUtils.hideBottomLoader(activity);
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
-    }
-
-    private void getApps() {
-        LoadersUtils.showCenterLoader(activity);
-        ApiService.loadAppsForToday(activity);
     }
 }
