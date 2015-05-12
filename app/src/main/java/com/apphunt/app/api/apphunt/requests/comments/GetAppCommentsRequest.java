@@ -15,6 +15,12 @@ public class GetAppCommentsRequest extends BaseGetRequest<Comments> {
         this.shouldReload = shouldReload;
     }
 
+    public GetAppCommentsRequest(String appId, int page, int pageSize, boolean shouldReload,
+                                 Response.ErrorListener listener) {
+        super(BASE_URL + "/comments/" + appId + "?page=" + page + "&pageSize=" +  pageSize, listener);
+        this.shouldReload = shouldReload;
+    }
+
     @Override
     public Class<Comments> getParsedAppClass() {
         return Comments.class;

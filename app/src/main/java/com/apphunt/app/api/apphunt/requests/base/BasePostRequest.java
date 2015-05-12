@@ -16,12 +16,12 @@ public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
     private static final String PROTOCOL_CONTENT_TYPE =
             String.format("application/json; charset=%s", PROTOCOL_CHARSET);
 
-    private String requestBody = null;
+    private String body = null;
 
     public BasePostRequest(String url, Object body, Response.ErrorListener listener) {
         super(Method.POST, url, listener);
         if(body != null) {
-            requestBody = GsonInstance.toJson(body);
+            this.body = GsonInstance.toJson(body);
         }
         Log.d(TAG, "BasePostRequest ");
     }
@@ -37,10 +37,10 @@ public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
     @Override
     public byte[] getBody() {
         try {
-            return requestBody == null ? null : requestBody.getBytes(PROTOCOL_CHARSET);
+            return body == null ? null : body.getBytes(PROTOCOL_CHARSET);
         } catch (UnsupportedEncodingException uee) {
             VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                    requestBody, PROTOCOL_CHARSET);
+                    body, PROTOCOL_CHARSET);
             return null;
         }
     }

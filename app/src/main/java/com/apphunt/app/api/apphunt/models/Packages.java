@@ -33,11 +33,4 @@ public class Packages {
     public void setExistingPackages(ArrayList<String> existingPackages) {
         this.existingPackages = existingPackages;
     }
-
-    @Override
-    public String toString() {
-        return "Packages{" +
-                "packages=" + packages +
-                '}';
-    }
 }

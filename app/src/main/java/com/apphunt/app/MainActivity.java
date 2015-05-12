@@ -14,13 +14,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserUpdatedApiEvent;
+import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -53,7 +52,6 @@ import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 import kr.nectarine.android.fruitygcm.FruityGcmClient;
 import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
-import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements
         OnAppSelectedListener, OnUserAuthListener {
@@ -133,13 +131,7 @@ public class MainActivity extends ActionBarActivity implements
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
                 ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
-                        Constants.PLATFORM, new Callback<AppsList>() {
-                            @Override
-                            public void success(AppsList appsList, Response response) {
-                                //TODO
-                                // trendingAppsAdapter.showSearchResult(appsList.getApps());
-                            }
-                        });
+                        Constants.PLATFORM);
 
                 searchView.clearFocus();
                 return true;
@@ -160,8 +152,7 @@ public class MainActivity extends ActionBarActivity implements
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if (item.getItemId() == R.id.action_search) {
-                    //TODO
-                    //trendingAppsAdapter.clearSearch();
+                    BusProvider.getInstance().post(new ClearSearchEvent());
                 }
                 return true;
             }

@@ -7,6 +7,10 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 
 public class GetAppDetailsRequest extends BaseGetRequest<App> {
+    public GetAppDetailsRequest(String appId, Response.ErrorListener listener) {
+        super(BASE_URL + "/apps/" + appId, listener);
+    }
+
     public GetAppDetailsRequest(String appId, String userId, Response.ErrorListener listener) {
         super(BASE_URL + "/apps/" + appId + "?userId=" + userId, listener);
     }

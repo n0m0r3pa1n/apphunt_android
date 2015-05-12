@@ -68,19 +68,6 @@ public class LoginFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_login);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -179,12 +166,14 @@ public class LoginFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ((MainActivity) activity).setOnBackBlocked(false);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override

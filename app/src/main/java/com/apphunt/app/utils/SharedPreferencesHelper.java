@@ -73,7 +73,6 @@ public class SharedPreferencesHelper {
      * @param key preference's key.
      */
     public static String getStringPreference(String key) {
-
         return sharedPreferences.getString(key, null);
     }
 

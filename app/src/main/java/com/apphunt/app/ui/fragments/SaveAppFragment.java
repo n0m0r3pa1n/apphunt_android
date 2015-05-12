@@ -23,19 +23,20 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.apps.AppSavedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StatusCode;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -47,20 +48,21 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
     private View view;
-    private EditText desc;
+
     private ApplicationInfo data;
     private ActionBarActivity activity;
 
     @InjectView(R.id.save)
     Button saveButton;
+
+    @InjectView(R.id.description)
+    EditText desc;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,8 +103,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
         ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
         icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
-
-        desc = (EditText) view.findViewById(R.id.description);
     }
 
     @Override
@@ -131,7 +131,11 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         }
 
         if (desc.getText() != null && desc.getText().length() >= 50) {
-            showLoginFragment();
+            if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+                saveApp(saveButton, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+            } else {
+                showLoginFragment();
+            }
         } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
             desc.setHint(R.string.hint_short_description);
             desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
@@ -169,39 +173,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         app.setPlatform(Constants.PLATFORM);
         app.setUserId(userId);
 
-        ApiClient.getClient(getActivity()).saveApp(app, new Callback() {
-            @Override
-            public void success(Object o, Response response) {
-                int statusCode = response.getStatus();
-                if(!isAdded()) {
-                    return;
-                }
-                if (statusCode == StatusCode.SUCCESS.getCode()) {
-                    FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
-                    BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
-                    BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully)));
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                if (!isAdded()) {
-                    return;
-                }
-                try {
-                    activity.getSupportFragmentManager().popBackStack();
-                    String message = getString(R.string.not_available_in_the_store);
-                    if(error.getResponse().getStatus() != 404) {
-                        message = getString(R.string.server_error);
-                    }
-                    NotificationsUtils.showNotificationFragment(activity, message, false, false);
-                    v.setEnabled(true);
-                } catch (Exception e) {
-                    Crashlytics.logException(e);
-                }
-                FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
-            }
-        });
+        ApiClient.getClient(getActivity()).saveApp(app);
     }
 
     private void closeKeyboard(View v) {
@@ -234,6 +206,32 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Subscribe
     public void onUserCreated(LoginEvent event) {
         saveApp(saveButton, event.getUser().getId());
+    }
+
+    @Subscribe
+    public void onAppSaved(AppSavedApiEvent event) {
+        int statusCode = event.getStatusCode();
+        if(!isAdded()) {
+            return;
+        }
+        if (statusCode == StatusCode.SUCCESS.getCode()) {
+            FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
+            BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
+            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully)));
+        } else {
+            try {
+                activity.getSupportFragmentManager().popBackStack();
+                String message = getString(R.string.not_available_in_the_store);
+                if(statusCode != 404) {
+                    message = getString(R.string.server_error);
+                }
+                NotificationsUtils.showNotificationFragment(activity, message, false, false);
+                saveButton.setEnabled(true);
+            } catch (Exception e) {
+                Crashlytics.logException(e);
+            }
+            FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
+        }
     }
 
 }

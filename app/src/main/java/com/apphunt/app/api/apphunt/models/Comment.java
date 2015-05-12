@@ -100,19 +100,4 @@ public class Comment {
     public void setHasVoted(boolean hasVoted) {
         this.hasVoted = hasVoted;
     }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id='" + id + '\'' +
-                ", user=" + user +
-                ", userId='" + userId + '\'' +
-                ", appId='" + appId + '\'' +
-                ", parent='" + parent + '\'' +
-                ", children=" + children +
-                ", votesCount=" + votesCount +
-                ", text='" + text + '\'' +
-                ", hasVoted=" + hasVoted +
-                '}';
-    }
 }

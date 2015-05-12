@@ -75,15 +75,4 @@ public class AppsList {
 
         return false;
     }
-
-    @Override
-    public String toString() {
-        return "AppsList{" +
-                "apps=" + apps +
-                ", totalCount=" + totalCount +
-                ", page=" + page +
-                ", totalPages=" + totalPages +
-                ", date='" + date + '\'' +
-                '}';
-    }
 }

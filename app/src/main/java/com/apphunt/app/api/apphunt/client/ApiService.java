@@ -1,7 +1,6 @@
 package com.apphunt.app.api.apphunt.client;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -28,8 +27,7 @@ public class ApiService {
 
     public void loadAppsForToday() {
         calendar = Calendar.getInstance();
-        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        ApiClient.getClient(context).getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM);
+        ApiClient.getClient(context).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM);
     }
 
     public void loadAppsForPreviousDate() {
@@ -53,7 +51,6 @@ public class ApiService {
     }
 
     public void reloadAppComments(String applicationId) {
-        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        ApiClient.getClient(context).getAppComments(applicationId, userId, 1, 3, true);
+        ApiClient.getClient(context).getAppComments(applicationId, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, 3, true);
     }
 }

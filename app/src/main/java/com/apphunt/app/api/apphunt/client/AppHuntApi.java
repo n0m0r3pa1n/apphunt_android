@@ -1,13 +1,10 @@
 package com.apphunt.app.api.apphunt.client;
 
-import com.apphunt.app.api.apphunt.callback.Callback;
-import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.NewComment;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
 
-import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -39,10 +36,11 @@ public interface AppHuntApi {
     void downVote(String appId, String userId);
 
     @POST("/apps")
-    void saveApp(@Body SaveApp app, Callback cb);
+    void saveApp(SaveApp app);
 
     @GET("/apps/search")
-    void searchApps(@Query("q") String query, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
+    void searchApps(String query, String userId, int page,
+                    int pageSize, String platform);
 
     @GET("/notifications")
     void getNotification(String type);
