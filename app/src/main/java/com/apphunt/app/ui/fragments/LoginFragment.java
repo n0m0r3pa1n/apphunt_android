@@ -190,7 +190,7 @@ public class LoginFragment extends BaseFragment {
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                 ApiClient.getClient(getActivity()).createUser(user);
-
+                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
             } else {
                 onLoginFailed();
             }
@@ -199,6 +199,7 @@ public class LoginFragment extends BaseFragment {
 
     @Subscribe
     public void onUserCreated(UserCreatedApiEvent event) {
+        LoadersUtils.hideBottomLoader(activity);
         LoginProviderFactory.get(activity).login(event.getUser());
     }
 

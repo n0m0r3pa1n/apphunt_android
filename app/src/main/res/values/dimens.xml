@@ -99,7 +99,7 @@
     <dimen name="details_avatar_creator">40dp</dimen>
     <dimen name="details_box_name_creator_name_text">14sp</dimen>
     <dimen name="details_box_name_creator_name_margin">15dp</dimen>
-    <dimen name="details_box_vote_size">40dp</dimen>
+    <dimen name="details_box_vote_size">42dp</dimen>
     <dimen name="details_box_vote_text">15sp</dimen>
     <dimen name="details_box_desc_height">90dp</dimen>
     <dimen name="details_box_desc_padding_left">15dp</dimen>
