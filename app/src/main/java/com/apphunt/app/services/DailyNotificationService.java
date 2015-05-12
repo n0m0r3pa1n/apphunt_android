@@ -6,19 +6,19 @@ import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.NotificationReceivedApiEvent;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import retrofit.client.Response;
 
 
 public class DailyNotificationService extends IntentService {
@@ -28,6 +28,24 @@ public class DailyNotificationService extends IntentService {
         super("DailyNotificationService");
         setIntentRedelivery(true);
         SharedPreferencesHelper.init(this);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onNotificationReceived(NotificationReceivedApiEvent event) {
+        displayNotification(event.getNotification());
+        saveNotification(event.getNotification());
     }
 
     @Override
@@ -45,13 +63,7 @@ public class DailyNotificationService extends IntentService {
             FlurryAgent.setUserId(userId);
         }
         FlurryAgent.init(this, Constants.FLURRY_API_KEY);
-        ApiClient.getClient(this).getNotification("DailyReminder", new Callback<com.apphunt.app.api.apphunt.models.Notification>() {
-            @Override
-            public void success(com.apphunt.app.api.apphunt.models.Notification notification, Response response) {
-                displayNotification(notification);
-                saveNotification(notification);
-            }
-        });
+        ApiClient.getClient(this).getNotification("DailyReminder");
     }
 
     private void saveNotification(Notification notification) {

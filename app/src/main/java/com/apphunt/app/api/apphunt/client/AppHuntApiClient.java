@@ -6,21 +6,22 @@ import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.NewComment;
-import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
+import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 
 import retrofit.http.Body;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 
@@ -31,13 +32,13 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void createUser(@Body User user, Callback<User> cb) {
-
+    public void createUser(User user) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostUserRequest(user, null));
     }
 
     @Override
-    public void updateUser(@Path("userId") String userId, @Body User user, Callback<User> cb) {
-
+    public void updateUser(String userId, User user) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PutUserRequest(userId, user, null));
     }
 
     @Override
@@ -76,8 +77,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getNotification(@Query("type") String type, Callback<Notification> cb) {
-
+    public void getNotification(String type) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetNotificationRequest(type, null));
     }
 
     @Override

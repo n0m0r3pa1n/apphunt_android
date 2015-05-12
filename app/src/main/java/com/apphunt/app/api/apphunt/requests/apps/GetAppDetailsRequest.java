@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppDetailsApiEvent;
+import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 
 public class GetAppDetailsRequest extends BaseGetRequest<App> {
     public GetAppDetailsRequest(String appId, String userId, Response.ErrorListener listener) {

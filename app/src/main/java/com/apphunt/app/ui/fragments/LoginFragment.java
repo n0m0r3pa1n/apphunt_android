@@ -16,19 +16,22 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
+import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -65,6 +68,19 @@ public class LoginFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_login);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -184,11 +200,17 @@ public class LoginFragment extends BaseFragment {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
-                LoginProviderFactory.get(activity).login(user);
+                ApiClient.getClient(getActivity()).createUser(user);
+
             } else {
                 onLoginFailed();
             }
         }
+    }
+
+    @Subscribe
+    public void onUserCreated(UserCreatedApiEvent event) {
+        LoginProviderFactory.get(activity).login(event.getUser());
     }
 
     private void onLoginFailed() {

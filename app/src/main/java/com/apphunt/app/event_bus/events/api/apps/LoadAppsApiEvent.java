@@ -1,4 +1,4 @@
-package com.apphunt.app.event_bus.events.api;
+package com.apphunt.app.event_bus.events.api.apps;
 
 import com.apphunt.app.api.apphunt.models.AppsList;
 

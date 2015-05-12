@@ -8,7 +8,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.Comment;
 import com.apphunt.app.api.apphunt.models.CommentVote;
-import com.apphunt.app.event_bus.events.api.CommentVoteApiEvent;
+import com.apphunt.app.event_bus.events.api.votes.CommentVoteApiEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;

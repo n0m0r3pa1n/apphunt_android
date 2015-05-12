@@ -7,8 +7,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -58,13 +56,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public void login(User user) {
-        ApiClient.getClient(getActivity()).createUser(user, new Callback<User>() {
-            @Override
-            public void success(User user, retrofit.client.Response response) {
-                onUserCreated(user);
-                BusProvider.getInstance().post(new LoginEvent(user));
-            }
-        });
+        onUserCreated(user);
+        BusProvider.getInstance().post(new LoginEvent(user));
     }
 
     private void onUserCreated(User user) {

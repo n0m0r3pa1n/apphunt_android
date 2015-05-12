@@ -3,7 +3,6 @@ package com.apphunt.app.api.apphunt.client;
 import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.NewComment;
-import com.apphunt.app.api.apphunt.models.Notification;
 import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.api.apphunt.models.SaveApp;
 import com.apphunt.app.api.apphunt.models.User;
@@ -13,16 +12,15 @@ import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 
 public interface AppHuntApi {
     @POST("/users")
-    void createUser(@Body User user, Callback<User> cb);
+    void createUser(User user);
 
     @PUT("/users/{userId}")
-    void updateUser(@Path("userId") String userId, @Body User user, Callback<User> cb);
+    void updateUser(String userId, User user);
 
     @GET("/apps")
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page,
@@ -47,7 +45,7 @@ public interface AppHuntApi {
     void searchApps(@Query("q") String query, @Query("userId") String userId, @Query("page") int page, @Query("pageSize") int pageSize, @Query("platform") String platform, Callback<AppsList> cb);
 
     @GET("/notifications")
-    void getNotification(@Query("type") String type, Callback<Notification> cb);
+    void getNotification(String type);
 
     @POST("/comments")
     void sendComment(NewComment comment);

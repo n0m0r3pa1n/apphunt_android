@@ -20,6 +20,7 @@ import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.UserUpdatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -57,8 +58,7 @@ import retrofit.client.Response;
 public class MainActivity extends ActionBarActivity implements
         OnAppSelectedListener, OnUserAuthListener {
 
-
-
+    private String registrationId;
     private boolean isBlocked = false;
 
     @Override
@@ -381,14 +381,11 @@ public class MainActivity extends ActionBarActivity implements
 
                 @Override
                 public void onDeliverRegistrationId(final String regId, boolean b) {
+                    registrationId = regId;
                     User user = new User();
                     user.setNotificationId(regId);
-                    ApiClient.getClient(getApplicationContext()).updateUser(userId, user, new Callback<User>() {
-                        @Override
-                        public void success(User user, Response response) {
-                            SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);
-                        }
-                    });
+                    ApiClient.getClient(getApplicationContext()).updateUser(userId, user);
+
                 }
 
                 @Override
@@ -397,6 +394,12 @@ public class MainActivity extends ActionBarActivity implements
             });
         }
     }
+
+    @Subscribe
+    public void onUserUpdated(UserUpdatedApiEvent event) {
+        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, registrationId);
+    }
+
 
     @Subscribe
     @SuppressWarnings("unused")
@@ -411,7 +414,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Subscribe
-    public void onUserCreated(LoginEvent event) {
+    public void onuserLogin(LoginEvent event) {
         onUserLogin();
         supportInvalidateOptionsMenu();
         updateNotificationIdIfNeeded();

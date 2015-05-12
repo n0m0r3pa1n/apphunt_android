@@ -5,7 +5,7 @@ import android.util.Log;
 import com.apphunt.app.api.apphunt.models.AppsList;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.LoadAppsApiEvent;
+import com.apphunt.app.event_bus.events.api.apps.LoadAppsApiEvent;
 
 
 public class GetAppsRequest extends BaseGetRequest<AppsList> {

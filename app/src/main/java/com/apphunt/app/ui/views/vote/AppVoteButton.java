@@ -14,7 +14,7 @@ import com.apphunt.app.api.apphunt.models.App;
 import com.apphunt.app.api.apphunt.models.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.AppVoteApiEvent;
+import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
