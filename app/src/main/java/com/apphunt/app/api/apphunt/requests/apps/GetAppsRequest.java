@@ -20,7 +20,6 @@ public class GetAppsRequest extends BaseGetRequest<AppsList> {
 
     @Override
     public void deliverResponse(AppsList response) {
-        Log.d("TEST", response.toString());
         BusProvider.getInstance().post(new LoadAppsApiEvent(response));
     }
 }

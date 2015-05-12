@@ -17,19 +17,19 @@ import android.widget.GridView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.callback.Callback;
 import com.apphunt.app.api.apphunt.models.Packages;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.utils.InstalledPackagesUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.client.Response;
 
 public class SelectAppFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
@@ -50,6 +50,18 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
         setTitle(R.string.title_select_app);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSelectApp);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -103,6 +115,25 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         callback.onAppSelected(userAppsAdapter.getItem(position));
     }
 
+    @Subscribe
+    public void onFilteredPackagesReceived(PackagesFilteredApiEvent event) {
+       if(event.getPackages() != null) {
+           List<ApplicationInfo> tempData = new ArrayList<>();
+
+           for (ApplicationInfo info : data) {
+               for (String packageName : event.getPackages().getAvailablePackages()) {
+                   if (info.packageName.equals(packageName)) {
+                       tempData.add(info);
+                   }
+               }
+           }
+
+           LoadersUtils.hideCenterLoader(activity);
+           userAppsAdapter = new UserAppsAdapter(activity, tempData);
+           gridView.setAdapter(userAppsAdapter);
+       }
+    }
+
     private class LoadInstalledApps extends AsyncTask<Void, Void, Packages> {
 
         @Override
@@ -125,27 +156,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         protected void onPostExecute(Packages packages) {
             super.onPostExecute(packages);
 
-            ApiClient.getClient(getActivity()).filterApps(packages, new Callback<Packages>() {
-                @Override
-                public void success(Packages packages, Response response) {
-
-                    if (response.getStatus() == 200 && packages != null) {
-                        List<ApplicationInfo> tempData = new ArrayList<>();
-
-                        for (ApplicationInfo info : data) {
-                            for (String packageName : packages.getAvailablePackages()) {
-                                if (info.packageName.equals(packageName)) {
-                                    tempData.add(info);
-                                }
-                            }
-                        }
-
-                        LoadersUtils.hideCenterLoader(activity);
-                        userAppsAdapter = new UserAppsAdapter(activity, tempData);
-                        gridView.setAdapter(userAppsAdapter);
-                    }
-                }
-            });
+            ApiClient.getClient(getActivity()).filterApps(packages);
         }
     }
 }

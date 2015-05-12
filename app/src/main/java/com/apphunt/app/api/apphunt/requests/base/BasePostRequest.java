@@ -1,5 +1,7 @@
 package com.apphunt.app.api.apphunt.requests.base;
 
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.apphunt.app.utils.GsonInstance;
@@ -8,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 
 
 public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
+    public static final String TAG = BasePostRequest.class.getSimpleName();
     private static final String PROTOCOL_CHARSET = "utf-8";
 
     private static final String PROTOCOL_CONTENT_TYPE =
@@ -20,6 +23,7 @@ public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
         if(body != null) {
             requestBody = GsonInstance.toJson(body);
         }
+        Log.d(TAG, "BasePostRequest ");
     }
 
     public abstract Class<T> getParsedAppClass();

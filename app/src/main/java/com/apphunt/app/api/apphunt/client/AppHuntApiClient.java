@@ -12,6 +12,7 @@ import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
@@ -52,8 +53,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void filterApps(@Body Packages packages, Callback<Packages> cb) {
-
+    public void filterApps(Packages packages) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilteredAppPackages(packages, null));
     }
 
     @Override

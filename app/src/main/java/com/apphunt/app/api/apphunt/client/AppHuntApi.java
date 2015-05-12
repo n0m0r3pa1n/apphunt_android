@@ -30,7 +30,7 @@ public interface AppHuntApi {
     void getDetailedApp(String userId, String appId);
 
     @POST("/apps/actions/filter")
-    void filterApps(@Body Packages packages, Callback<Packages> cb);
+    void filterApps(Packages packages);
 
     @POST("/apps/votes")
     void vote(@Query("appId") String appId, @Query("userId") String userId);
