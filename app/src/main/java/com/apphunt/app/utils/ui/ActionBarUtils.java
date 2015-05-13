@@ -46,12 +46,12 @@ public class ActionBarUtils {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
             BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
-            ((MainActivity) activity).setDrawerIndicatorEnabled(false);
+            ((MainActivity) activity).setDrawerIndicatorEnabled(true);
             actionBarActivity.getSupportActionBar().setTitle(fragment.getTitle());
             actionBarActivity.getSupportActionBar().collapseActionView();
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
             actionBarActivity.getSupportActionBar().setTitle(R.string.app_name);
-            ((MainActivity) activity).setDrawerIndicatorEnabled(true);
+            ((MainActivity) activity).setDrawerIndicatorEnabled(false);
         }
 
         actionBarActivity.supportInvalidateOptionsMenu();

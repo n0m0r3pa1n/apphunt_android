@@ -124,9 +124,9 @@ public class MainActivity extends ActionBarActivity implements
         }
         ValueAnimator anim;
         if(isEnabled) {
-            anim = ValueAnimator.ofFloat(1, 0);
-        } else {
             anim = ValueAnimator.ofFloat(0, 1);
+        } else {
+            anim = ValueAnimator.ofFloat(1, 0);
         }
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
