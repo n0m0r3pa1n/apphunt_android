@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.User;
@@ -31,6 +34,8 @@ import com.apphunt.app.ui.fragments.AppsListFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.Constants;
@@ -54,7 +59,10 @@ import kr.nectarine.android.fruitygcm.FruityGcmClient;
 import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 
 public class MainActivity extends ActionBarActivity implements
-        OnAppSelectedListener, OnUserAuthListener {
+        OnAppSelectedListener, OnUserAuthListener, NavigationDrawerCallbacks {
+
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private Toolbar mToolbar;
 
     private String registrationId;
     private boolean isBlocked = false;
@@ -63,6 +71,14 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(mToolbar);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
 
@@ -338,6 +354,9 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen())
+            mNavigationDrawerFragment.closeDrawer();
+
         if (!isBlocked) {
             AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
             if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
@@ -419,5 +438,10 @@ public class MainActivity extends ActionBarActivity implements
     @Subscribe
     public void showNotificationFragment(ShowNotificationEvent event) {
         NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
     }
 }

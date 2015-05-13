@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
 
     <string name="app_name">App Hunt</string>
     <string name="title_select_app">Select App</string>

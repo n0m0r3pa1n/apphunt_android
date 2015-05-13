@@ -12,6 +12,9 @@
     <dimen name="add_btn_margin_right">16dp</dimen>
     <dimen name="add_btn_elevation">5dp</dimen>
 
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+
     <dimen name="list_divider_height">0dp</dimen>
 
     <dimen name="list_header_padding">16dp</dimen>
