@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -60,6 +61,7 @@ import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 
 public class MainActivity extends ActionBarActivity implements
         OnAppSelectedListener, OnUserAuthListener, NavigationDrawerCallbacks {
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private Toolbar mToolbar;
@@ -73,12 +75,26 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mToolbar);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    if (!mNavigationDrawerFragment.isDrawerOpen()) {
+                        mNavigationDrawerFragment.openDrawer();
+                    } else {
+                        mNavigationDrawerFragment.closeDrawer();
+                    }
+
+                    return;
+                }
+
+                onBackPressed();
+            }
+        });
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
 
@@ -95,6 +111,12 @@ public class MainActivity extends ActionBarActivity implements
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         showStartFragments(getIntent());
+        ActionBarUtils.getInstance().configActionBar(this);
+    }
+
+    public void setDrawerIndicatorEnabled(boolean isEnabled) {
+        mNavigationDrawerFragment.getActionBarDrawerToggle().setDrawerIndicatorEnabled(isEnabled);
+        mNavigationDrawerFragment.getActionBarDrawerToggle().syncState();
     }
 
     @Override
@@ -181,7 +203,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_login:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
@@ -354,8 +375,10 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onBackPressed() {
-        if (mNavigationDrawerFragment.isDrawerOpen())
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
             mNavigationDrawerFragment.closeDrawer();
+            return;
+        }
 
         if (!isBlocked) {
             AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);

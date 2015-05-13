@@ -281,4 +281,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public boolean isCommentsBoxOpened() {
         return commentsBox.isCommentsBoxOpened();
     }
+
+//    private void setUpActionBar() {
+//        final ActionBar actionBar = ((ActionBarActivity)activity).getSupportActionBar();
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//    }
 }

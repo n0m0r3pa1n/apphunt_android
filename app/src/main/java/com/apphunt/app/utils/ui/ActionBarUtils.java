@@ -2,9 +2,12 @@ package com.apphunt.app.utils.ui;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 
+import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.ui.fragments.BaseFragment;
 
@@ -27,31 +30,31 @@ public class ActionBarUtils {
     }
 
     public void init(ActionBarActivity activity) {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
-//        } else {
-//            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
-//        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+        } else {
+            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+        }
     }
 
     public void configActionBar(Context activity) {
-        FragmentManager fragmentManager = ((ActionBarActivity) activity).getSupportFragmentManager();
+        ActionBarActivity actionBarActivity = ((ActionBarActivity) activity);
+        FragmentManager fragmentManager = actionBarActivity.getSupportFragmentManager();
+        actionBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBarActivity.getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (fragmentManager.getBackStackEntryCount() > 0) {
             String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
             BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
-
-            ((ActionBarActivity) activity).getSupportActionBar().setTitle(fragment.getTitle());
-            ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(true);
-            ((ActionBarActivity) activity).getSupportActionBar().collapseActionView();
+            ((MainActivity) activity).setDrawerIndicatorEnabled(false);
+            actionBarActivity.getSupportActionBar().setTitle(fragment.getTitle());
+            actionBarActivity.getSupportActionBar().collapseActionView();
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
-            ((ActionBarActivity) activity).getSupportActionBar().setTitle(R.string.app_name);
-            ((ActionBarActivity) activity).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            ((ActionBarActivity) activity).getSupportActionBar().setHomeButtonEnabled(false);
+            actionBarActivity.getSupportActionBar().setTitle(R.string.app_name);
+            ((MainActivity) activity).setDrawerIndicatorEnabled(true);
         }
 
-        ((ActionBarActivity) activity).supportInvalidateOptionsMenu();
+        actionBarActivity.supportInvalidateOptionsMenu();
     }
 
     public void showActionBar(ActionBarActivity activity) {
