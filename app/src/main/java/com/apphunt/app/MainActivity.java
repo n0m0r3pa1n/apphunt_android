@@ -1,5 +1,6 @@
 package com.apphunt.app;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -68,6 +70,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private String registrationId;
     private boolean isBlocked = false;
+    private boolean isFirstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +118,26 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void setDrawerIndicatorEnabled(boolean isEnabled) {
-        mNavigationDrawerFragment.getActionBarDrawerToggle().setDrawerIndicatorEnabled(isEnabled);
-        mNavigationDrawerFragment.getActionBarDrawerToggle().syncState();
+        if(isFirstLaunch) {
+            isFirstLaunch = false;
+            return;
+        }
+        ValueAnimator anim;
+        if(isEnabled) {
+            anim = ValueAnimator.ofFloat(1, 0);
+        } else {
+            anim = ValueAnimator.ofFloat(0, 1);
+        }
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                mNavigationDrawerFragment.getActionBarDrawerToggle().onDrawerSlide(mNavigationDrawerFragment.getDrawerLayout(), slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setDuration(500);
+        anim.start();
     }
 
     @Override
