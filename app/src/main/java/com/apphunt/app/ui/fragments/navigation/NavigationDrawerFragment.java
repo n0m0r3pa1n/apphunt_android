@@ -15,8 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.NavigationItem;
-import com.apphunt.app.ui.adapters.NavigationDrawerAdapter;
+import com.apphunt.app.ui.adapters.DrawerItemAdapter;
+import com.apphunt.app.ui.models.DrawerItem;
+import com.apphunt.app.ui.models.DrawerMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks {
+public class NavigationDrawerFragment extends Fragment implements DrawerItemAdapter.OnItemClickListener {
     public static final String TAG = NavigationDrawerFragment.class.getSimpleName();
     /**
      * Remember the position of the selected item.
@@ -82,9 +83,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerList.setLayoutManager(layoutManager);
         mDrawerList.setHasFixedSize(true);
 
-        final List<NavigationItem> navigationItems = getMenu();
-        NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
-        adapter.setNavigationDrawerCallbacks(this);
+        DrawerItemAdapter adapter = new DrawerItemAdapter(getMenu());
+        adapter.setOnItemClickListener(this);
         mDrawerList.setAdapter(adapter);
         selectItem(mCurrentSelectedPosition);
         return view;
@@ -102,16 +102,15 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         return mDrawerLayout;
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        selectItem(position);
-    }
+    public List<DrawerItem> getMenu() {
+        List<DrawerItem> items = new ArrayList<DrawerItem>();
+        String[] menuItems = getResources().getStringArray(R.array.drawer_menu);
+        items.add(new DrawerItem(DrawerItem.Type.HEADER));
+        items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
+        for (int i = 0; i < menuItems.length; i++) {
+            items.add(new DrawerMenu().setIconRes(R.drawable.ic_menu_check).setText(menuItems[i]));
+        }
 
-    public List<NavigationItem> getMenu() {
-        List<NavigationItem> items = new ArrayList<NavigationItem>();
-        items.add(new NavigationItem("item 1", getResources().getDrawable(R.drawable.ic_menu_check)));
-        items.add(new NavigationItem("item 2", getResources().getDrawable(R.drawable.ic_menu_check)));
-        items.add(new NavigationItem("item 3", getResources().getDrawable(R.drawable.ic_menu_check)));
         return items;
     }
 
@@ -174,7 +173,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
-        ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
+        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
     }
 
     public void openDrawer() {
@@ -214,4 +213,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onClick(View view, int position) {
+        selectItem(position);
+    }
 }
