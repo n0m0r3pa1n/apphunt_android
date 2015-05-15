@@ -3,6 +3,7 @@ package com.apphunt.app;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -84,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     if (!mNavigationDrawerFragment.isDrawerOpen()) {
                         mNavigationDrawerFragment.openDrawer();
                     } else {
@@ -100,6 +102,14 @@ public class MainActivity extends ActionBarActivity implements
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
 
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+
+        if (isStartedFromDeepLink()) {
+            String action = getIntent().getAction();
+            Uri data = getIntent().getData();
+
+            Log.d("DeepLink Action", action);
+            Log.d("DeepLink Data", data.toString());
+        }
 
         String notificationType = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_TYPE);
         if (!TextUtils.isEmpty(notificationType)) {
@@ -117,13 +127,18 @@ public class MainActivity extends ActionBarActivity implements
         ActionBarUtils.getInstance().configActionBar(this);
     }
 
+    private boolean isStartedFromDeepLink() {
+        Intent intent = getIntent();
+        return intent != null && intent.getAction().equals(Intent.ACTION_VIEW) && intent.getData() != null;
+    }
+
     public void setDrawerIndicatorEnabled(boolean isEnabled) {
-        if(isFirstLaunch) {
+        if (isFirstLaunch) {
             isFirstLaunch = false;
             return;
         }
         ValueAnimator anim;
-        if(isEnabled) {
+        if (isEnabled) {
             anim = ValueAnimator.ofFloat(0, 1);
         } else {
             anim = ValueAnimator.ofFloat(1, 0);
@@ -263,7 +278,7 @@ public class MainActivity extends ActionBarActivity implements
 
             case R.id.action_suggest:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                    getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
+                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
                     break;
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
@@ -310,7 +325,6 @@ public class MainActivity extends ActionBarActivity implements
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 
     @Override
@@ -367,7 +381,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Subscribe
     public void userVotedForAppEvent(AppVoteEvent event) {
-        if(event.isVote()) {
+        if (event.isVote()) {
             SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
         }
     }
