@@ -1,5 +1,6 @@
 package com.apphunt.app.utils.ui;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,10 +11,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
 import com.apphunt.app.utils.Constants;
@@ -21,6 +25,9 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.Calendar;
+
+import kr.nectarine.android.fruitygcm.FruityGcmClient;
+import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 
 public class NotificationsUtils {
 
@@ -127,5 +134,32 @@ public class NotificationsUtils {
             return NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_LIGHTS;
         }
         return NotificationCompat.DEFAULT_VIBRATE;
+    }
+
+    public static void updateNotificationIdIfNeeded(final Activity activity) {
+        final String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
+        if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
+            FruityGcmClient.start(activity, Constants.GCM_SENDER_ID, new FruityGcmListener() {
+
+                @Override
+                public void onPlayServiceNotAvailable(boolean b) {
+                }
+
+                @Override
+                public void onDeliverRegistrationId(final String regId, boolean b) {
+                    SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);
+                    User user = new User();
+                    user.setId(userId);
+                    user.setNotificationId(regId);
+                    ApiClient.getClient(activity).updateUser(user);
+
+                }
+
+                @Override
+                public void onRegisterFailed() {
+                }
+            });
+        }
     }
 }

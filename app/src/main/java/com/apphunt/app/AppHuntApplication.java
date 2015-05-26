@@ -22,23 +22,31 @@ public class AppHuntApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         SharedPreferencesHelper.init(this);
+        initNetworking();
+        initAnalytics();
+    }
+
+    private void initAnalytics() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);
         }
+
+        TwitterAuthConfig authConfig =
+                new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
+                        Constants.TWITTER_CONSUMER_SECRET);
+        Fabric.with(this, /*new Crashlytics(),*/ new Twitter(authConfig));
 
         if (BuildConfig.DEBUG) {
             FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
         } else {
             //FlurryAgent.init(this, Constants.FLURRY_API_KEY);
         }
+    }
 
-        TwitterAuthConfig authConfig =
-                new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
-                        Constants.TWITTER_CONSUMER_SECRET);
-
-        Fabric.with(this, /*new Crashlytics(),*/ new Twitter(authConfig));
+    private void initNetworking() {
         VolleyInstance.getInstance(this);
         GsonInstance.init();
     }

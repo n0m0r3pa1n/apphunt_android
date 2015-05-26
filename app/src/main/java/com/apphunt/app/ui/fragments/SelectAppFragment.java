@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +20,10 @@ import com.apphunt.app.api.apphunt.models.Packages;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
-import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
 import com.apphunt.app.utils.InstalledPackagesUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -38,8 +37,6 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     private View view;
     private GridView gridView;
     private UserAppsAdapter userAppsAdapter;
-
-    private OnAppSelectedListener callback;
 
     private List<ApplicationInfo> data;
     private ActionBarActivity activity;
@@ -96,12 +93,6 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
-
-        try {
-            callback = (OnAppSelectedListener) activity;
-        } catch (ClassCastException e) {
-            Log.e(TAG, e.getMessage());
-        }
     }
 
     @Override
@@ -112,7 +103,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        callback.onAppSelected(userAppsAdapter.getItem(position));
+        NavUtils.getInstance(activity).startSaveAppFragment(userAppsAdapter.getItem(position));
     }
 
     @Subscribe

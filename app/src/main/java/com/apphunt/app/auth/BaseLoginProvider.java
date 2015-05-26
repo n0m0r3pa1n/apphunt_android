@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -31,9 +30,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     @Override
     public void logout() {
-        removeSharedPreferences(activity);
+        removeSharedPreferences();
         BusProvider.getInstance().post(new LogoutEvent());
-        ((MainActivity) activity).onUserLogout();
         hideLoginFragment(activity);
     }
 
@@ -44,12 +42,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
         return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
     }
 
-    protected void removeSharedPreferences(Activity activity) {
-        SharedPreferencesHelper.removePreference(Constants.KEY_USER_ID);
-        SharedPreferencesHelper.removePreference(Constants.KEY_EMAIL);
-        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
-    }
-
     @Override
     public void login(User user) {
         onUserCreated(user);
@@ -58,14 +50,20 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     private void onUserCreated(User user) {
         FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
-        saveSharedPreferences(activity, user);
+        saveSharedPreferences(user);
         hideLoginFragment(activity);
     }
 
-    protected void saveSharedPreferences(Activity activity, User user) {
+    protected void saveSharedPreferences(User user) {
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, user.getId());
         SharedPreferencesHelper.setPreference(Constants.KEY_EMAIL, user.getEmail());
         SharedPreferencesHelper.setPreference(Constants.KEY_PROFILE_IMAGE, user.getProfilePicture());
+    }
+
+    protected void removeSharedPreferences() {
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_ID);
+        SharedPreferencesHelper.removePreference(Constants.KEY_EMAIL);
+        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
     }
 
     private void hideLoginFragment(Context ctx) {

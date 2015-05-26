@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments.navigation;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import com.apphunt.app.R;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
@@ -43,6 +45,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+    private static boolean isFirstLaunch = true;
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -61,6 +64,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private static NavigationDrawerFragment instance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,8 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+
+        instance = this;
     }
 
     @Override
@@ -237,5 +243,28 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     @Override
     public void onClick(View view, int position) {
         selectItem(position);
+    }
+
+    public static void setDrawerIndicatorEnabled(boolean isEnabled) {
+        if (isFirstLaunch) {
+            isFirstLaunch = false;
+            return;
+        }
+        ValueAnimator anim;
+        if (isEnabled) {
+            anim = ValueAnimator.ofFloat(0, 1);
+        } else {
+            anim = ValueAnimator.ofFloat(1, 0);
+        }
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                instance.getActionBarDrawerToggle().onDrawerSlide(instance.getDrawerLayout(), slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setDuration(500);
+        anim.start();
     }
 }

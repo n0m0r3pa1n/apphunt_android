@@ -14,7 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.User;
@@ -29,6 +28,7 @@ import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.squareup.otto.Subscribe;
@@ -93,7 +93,7 @@ public class LoginFragment extends BaseFragment {
             public void onClick(View v) {
                 if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
                     LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                    ((MainActivity) activity).setOnBackBlocked(true);
+                    NavUtils.getInstance(activity).setOnBackBlocked(true);
                 }
             }
         });
@@ -172,7 +172,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        ((MainActivity) activity).setOnBackBlocked(false);
+        NavUtils.getInstance(activity).setOnBackBlocked(false);
         BusProvider.getInstance().unregister(this);
     }
 
@@ -208,7 +208,7 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         Toast.makeText(activity, R.string.login_canceled_text, Toast.LENGTH_LONG).show();
-        ((MainActivity) activity).setOnBackBlocked(false);
+        NavUtils.getInstance(activity).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(activity);
     }
 }

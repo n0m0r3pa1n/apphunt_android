@@ -17,7 +17,7 @@ public interface AppHuntApi {
     void createUser(User user);
 
     @PUT("/users/{userId}")
-    void updateUser(String userId, User user);
+    void updateUser(User user);
 
     @GET("/apps")
     void getApps(@Query("userId") String userId, @Query("date") String date, @Query("page") int page,
