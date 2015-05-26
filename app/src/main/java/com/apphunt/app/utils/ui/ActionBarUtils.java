@@ -10,6 +10,7 @@ import android.view.View;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 
 public class ActionBarUtils {
 
@@ -26,7 +27,6 @@ public class ActionBarUtils {
     }
 
     private ActionBarUtils() {
-
     }
 
     public void init(ActionBarActivity activity) {
@@ -35,6 +35,8 @@ public class ActionBarUtils {
         } else {
             activity.findViewById(R.id.shadow).setVisibility(View.GONE);
         }
+
+        configActionBar(activity);
     }
 
     public void configActionBar(Context activity) {
@@ -46,12 +48,12 @@ public class ActionBarUtils {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
             BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
-            ((MainActivity) activity).setDrawerIndicatorEnabled(true);
+            NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
             actionBarActivity.getSupportActionBar().setTitle(fragment.getTitle());
             actionBarActivity.getSupportActionBar().collapseActionView();
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
             actionBarActivity.getSupportActionBar().setTitle(R.string.app_name);
-            ((MainActivity) activity).setDrawerIndicatorEnabled(false);
+            NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
         }
 
         actionBarActivity.supportInvalidateOptionsMenu();

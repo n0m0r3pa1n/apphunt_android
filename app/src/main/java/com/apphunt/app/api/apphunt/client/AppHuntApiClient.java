@@ -47,8 +47,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void updateUser(String userId, User user) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new PutUserRequest(userId, user, listener));
+    public void updateUser(User user) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PutUserRequest(user, listener));
     }
 
     @Override

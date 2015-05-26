@@ -7,8 +7,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserUpdatedApiEvent;
 
 public class PutUserRequest extends BasePostRequest<User>{
-    public PutUserRequest(String userId, Object body, Response.ErrorListener listener) {
-        super(BASE_URL + "/users?userId=" + userId, body, listener);
+    public PutUserRequest(User user, Response.ErrorListener listener) {
+        super(BASE_URL + "/users?userId=" + user.getId(), user, listener);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.apphunt.app;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,14 +17,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.users.UserUpdatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
@@ -36,13 +31,10 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.AppsListFragment;
-import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
-import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
-import com.apphunt.app.ui.interfaces.OnUserAuthListener;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -60,37 +52,54 @@ import java.util.Map;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
-import kr.nectarine.android.fruitygcm.FruityGcmClient;
-import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 
-public class MainActivity extends ActionBarActivity implements
-        OnAppSelectedListener, OnUserAuthListener, NavigationDrawerCallbacks {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
+
     public static final String TAG = MainActivity.class.getSimpleName();
-
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private Toolbar mToolbar;
-
-    private String registrationId;
-    private boolean isBlocked = false;
-    private boolean isFirstLaunch = true;
+    private NavigationDrawerFragment navigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        setSupportActionBar(mToolbar);
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+
+        initUI();
+        initDeepLinking();
+        initNotifications();
+
+        sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+    }
+
+    private void initUI() {
+        initToolbarAndNavigationDrawer();
+
+        ActionBarUtils.getInstance().init(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.container, new AppsListFragment(), Constants.TAG_APPS_LIST_FRAGMENT).commit();
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                ActionBarUtils.getInstance().configActionBar(MainActivity.this);
+            }
+        });
+
+        showStartFragments(getIntent());
+    }
+
+    private void initToolbarAndNavigationDrawer() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(toolbar);
+        navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    if (!mNavigationDrawerFragment.isDrawerOpen()) {
-                        mNavigationDrawerFragment.openDrawer();
+                    if (!navigationDrawerFragment.isDrawerOpen()) {
+                        navigationDrawerFragment.openDrawer();
                     } else {
-                        mNavigationDrawerFragment.closeDrawer();
+                        navigationDrawerFragment.closeDrawer();
                     }
 
                     return;
@@ -99,18 +108,10 @@ public class MainActivity extends ActionBarActivity implements
                 onBackPressed();
             }
         });
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
+        navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
+    }
 
-        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
-
-        if (isStartedFromDeepLink()) {
-            String action = getIntent().getAction();
-            Uri data = getIntent().getData();
-
-            Log.d("DeepLink Action", action);
-            Log.d("DeepLink Data", data.toString());
-        }
-
+    private void initNotifications() {
         String notificationType = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_TYPE);
         if (!TextUtils.isEmpty(notificationType)) {
             Map<String, String> params = new HashMap<>();
@@ -118,41 +119,22 @@ public class MainActivity extends ActionBarActivity implements
             FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
         }
 
-        updateNotificationIdIfNeeded();
+        NotificationsUtils.updateNotificationIdIfNeeded(this);
+    }
 
-        initUI();
+    private void initDeepLinking() {
+        if (isStartedFromDeepLink()) {
+            String action = getIntent().getAction();
+            Uri data = getIntent().getData();
 
-        sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-        showStartFragments(getIntent());
-        ActionBarUtils.getInstance().configActionBar(this);
+            Log.d("DeepLink Action", action);
+            Log.d("DeepLink Data", data.toString());
+        }
     }
 
     private boolean isStartedFromDeepLink() {
         Intent intent = getIntent();
         return intent != null && intent.getAction().equals(Intent.ACTION_VIEW) && intent.getData() != null;
-    }
-
-    public void setDrawerIndicatorEnabled(boolean isEnabled) {
-        if (isFirstLaunch) {
-            isFirstLaunch = false;
-            return;
-        }
-        ValueAnimator anim;
-        if (isEnabled) {
-            anim = ValueAnimator.ofFloat(0, 1);
-        } else {
-            anim = ValueAnimator.ofFloat(1, 0);
-        }
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                mNavigationDrawerFragment.getActionBarDrawerToggle().onDrawerSlide(mNavigationDrawerFragment.getDrawerLayout(), slideOffset);
-            }
-        });
-        anim.setInterpolator(new DecelerateInterpolator());
-        anim.setDuration(500);
-        anim.start();
     }
 
     @Override
@@ -164,19 +146,6 @@ public class MainActivity extends ActionBarActivity implements
     private boolean isStartedFromShareIntent(Intent intent) {
         return Intent.ACTION_SEND.equals(intent.getAction());
     }
-
-    private void initUI() {
-        ActionBarUtils.getInstance().init(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new AppsListFragment(), Constants.TAG_APPS_LIST_FRAGMENT).commit();
-
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                ActionBarUtils.getInstance().configActionBar(MainActivity.this);
-            }
-        });
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -316,6 +285,11 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -326,67 +300,6 @@ public class MainActivity extends ActionBarActivity implements
         }
     }
 
-
-    @Override
-    public void onAppSelected(ApplicationInfo data) {
-        String curFragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
-
-        if (!curFragmentTag.equals(Constants.TAG_SAVE_APP_FRAGMENT)) {
-            Bundle extras = new Bundle();
-            extras.putParcelable(Constants.KEY_DATA, data);
-
-            SaveAppFragment saveAppFragment = new SaveAppFragment();
-            saveAppFragment.setArguments(extras);
-
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
-                    .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
-                    .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
-                    .commit();
-        }
-    }
-
-    public void setOnBackBlocked(boolean isBlocked) {
-        if (isBlocked) {
-            ActionBarUtils.getInstance().hideActionBar(this);
-        } else {
-            ActionBarUtils.getInstance().showActionBar(this);
-        }
-        this.isBlocked = isBlocked;
-    }
-
-    @Override
-    public void onUserLogin() {
-        setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(this);
-
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
-    }
-
-    @Override
-    public void onUserLogout() {
-        setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(this);
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
-    }
-
-
-    @Subscribe
-    public void userVotedForAppEvent(AppVoteEvent event) {
-        if (event.isVote()) {
-            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
-        }
-    }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -396,7 +309,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private void showStartFragments(Intent intent) {
         if (isStartedFromShareIntent(intent)) {
-            NavUtils.startSelectAppFragment(this);
+            NavUtils.getInstance(this).startSelectAppFragment();
         }
     }
 
@@ -410,12 +323,12 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onBackPressed() {
-        if (mNavigationDrawerFragment.isDrawerOpen()) {
-            mNavigationDrawerFragment.closeDrawer();
+        if (navigationDrawerFragment.isDrawerOpen()) {
+            navigationDrawerFragment.closeDrawer();
             return;
         }
 
-        if (!isBlocked) {
+        if (!NavUtils.getInstance(this).isOnBackBlocked()) {
             AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
             if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
                 fragment.showDetails();
@@ -437,37 +350,13 @@ public class MainActivity extends ActionBarActivity implements
         AppSpice.onStop(this);
     }
 
-    public void updateNotificationIdIfNeeded() {
-        final String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
-        if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
-            FruityGcmClient.start(this, Constants.GCM_SENDER_ID, new FruityGcmListener() {
-
-                @Override
-                public void onPlayServiceNotAvailable(boolean b) {
-                }
-
-                @Override
-                public void onDeliverRegistrationId(final String regId, boolean b) {
-                    registrationId = regId;
-                    User user = new User();
-                    user.setNotificationId(regId);
-                    ApiClient.getClient(getApplicationContext()).updateUser(userId, user);
-
-                }
-
-                @Override
-                public void onRegisterFailed() {
-                }
-            });
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void userVotedForAppEvent(AppVoteEvent event) {
+        if (event.isVote()) {
+            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
         }
     }
-
-    @Subscribe
-    public void onUserUpdated(UserUpdatedApiEvent event) {
-        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, registrationId);
-    }
-
 
     @Subscribe
     @SuppressWarnings("unused")
@@ -482,24 +371,29 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Subscribe
-    public void onuserLogin(LoginEvent event) {
-        onUserLogin();
+    @SuppressWarnings("unused")
+    public void onUserLogin(LoginEvent event) {
         supportInvalidateOptionsMenu();
-        updateNotificationIdIfNeeded();
+        NotificationsUtils.updateNotificationIdIfNeeded(this);
+
+        NavUtils.getInstance(this).setOnBackBlocked(false);
+        LoadersUtils.hideBottomLoader(this);
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible()) {
+            fragment.loadData();
+        }
     }
 
     @Subscribe
+    @SuppressWarnings("unused")
     public void onHideFragmentEvent(HideFragmentEvent event) {
         getSupportFragmentManager().popBackStack(event.getTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     @Subscribe
+    @SuppressWarnings("unused")
     public void showNotificationFragment(ShowNotificationEvent event) {
         NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
     }
 }
