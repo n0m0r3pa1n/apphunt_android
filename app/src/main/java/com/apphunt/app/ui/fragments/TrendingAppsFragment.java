@@ -84,10 +84,19 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     @InjectView(R.id.reload)
     Button btnReload;
 
+    public TrendingAppsFragment() {
+        setTitle(R.string.title_home);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_apps_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_trending_apps, container, false);
         ButterKnife.inject(this, view);
         initUi();
         ApiService.getInstance(activity).loadAppsForToday();
@@ -147,11 +156,6 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     public void onAttach(Activity activity) {
         this.activity = (MainActivity) activity;
         super.onAttach(activity);
-    }
-
-    @Override
-    public int getTitle() {
-        return super.getTitle();
     }
 
     @Override

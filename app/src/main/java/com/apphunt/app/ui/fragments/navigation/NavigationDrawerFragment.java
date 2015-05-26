@@ -96,7 +96,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         DrawerItemAdapter adapter = new DrawerItemAdapter(getMenu());
         adapter.setOnItemClickListener(this);
         mDrawerList.setAdapter(adapter);
-        selectItem(mCurrentSelectedPosition + 2);
+
         return view;
     }
 

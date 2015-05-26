@@ -29,6 +29,7 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
+import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
@@ -57,16 +58,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private NavigationDrawerFragment navigationDrawerFragment;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initUI();
         initDeepLinking();
         initNotifications();
-
+        onNavigationDrawerItemSelected(2);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -86,8 +87,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private void initToolbarAndNavigationDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
+
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_drawer);
 
@@ -285,33 +287,35 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        BaseFragment fragment = null;
         switch (position) {
             case Constants.TRENDING_APPS:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TrendingAppsFragment(), Constants.TAG_APPS_LIST_FRAGMENT).commit();
+                fragment = new TrendingAppsFragment();
                 break;
 
             case Constants.TOP_APPS:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TopAppsFragment()).commit();
+                fragment = new TopAppsFragment();
                 break;
 
             case Constants.TOP_HUNTERS:
-
                 break;
 
             case Constants.SETTINGS:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
                         getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
-                    break;
+                    return;
                 getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
                         .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
                         .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
                         .commit();
-                break;
-
+                return;
             case Constants.ABOUT:
-
                 break;
+        }
+        if(fragment != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            toolbar.setTitle(fragment.getTitle());
         }
     }
 
