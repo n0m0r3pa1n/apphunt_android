@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.models;
+package com.apphunt.app.api.apphunt.models.comments;
 
 import java.util.ArrayList;
 

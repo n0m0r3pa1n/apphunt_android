@@ -1,5 +1,6 @@
-package com.apphunt.app.api.apphunt.models;
+package com.apphunt.app.api.apphunt.models.comments;
 
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

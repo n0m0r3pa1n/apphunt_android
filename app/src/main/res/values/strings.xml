@@ -11,6 +11,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_notification">Notification</string>
     <string name="title_app_details">Details</string>
+    <string name="title_top_apps">Top Apps</string>
     <string name="title_close">Close</string>
 
     <string-array name="drawer_menu">

@@ -1,15 +1,17 @@
-package com.apphunt.app.api.apphunt.models;
+package com.apphunt.app.api.apphunt.models.apps;
+
+import com.apphunt.app.api.apphunt.models.comments.Comments;
 
 public class DetailedApp {
-    private App app;
+    private App baseApp;
     private Comments commentsData;
 
-    public App getApp() {
-        return app;
+    public App getBaseApp() {
+        return baseApp;
     }
 
-    public void setApp(App app) {
-        this.app = app;
+    public void setBaseApp(App baseApp) {
+        this.baseApp = baseApp;
     }
 
     public Comments getCommentsData() {
@@ -23,7 +25,7 @@ public class DetailedApp {
     @Override
     public String toString() {
         return "DetailedApp{" +
-                "app=" + app +
+                "app=" + baseApp +
                 ", commentsData=" + commentsData +
                 '}';
     }

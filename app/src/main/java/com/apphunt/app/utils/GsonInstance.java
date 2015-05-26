@@ -18,6 +18,7 @@ public class GsonInstance {
         try {
             return sGson.fromJson(json, classOfT);
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             return null;
         }
     }

@@ -1,7 +1,7 @@
 package com.apphunt.app.api.apphunt.requests;
 
 import com.android.volley.Response;
-import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 
 

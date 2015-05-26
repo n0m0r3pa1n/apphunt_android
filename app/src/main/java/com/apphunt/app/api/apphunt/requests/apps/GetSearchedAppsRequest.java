@@ -1,7 +1,7 @@
 package com.apphunt.app.api.apphunt.requests.apps;
 
 import com.android.volley.Response;
-import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadSearchedAppsApiEvent;

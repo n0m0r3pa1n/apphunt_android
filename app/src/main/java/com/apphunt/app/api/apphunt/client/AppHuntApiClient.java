@@ -1,21 +1,23 @@
 package com.apphunt.app.api.apphunt.client;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
-import com.apphunt.app.api.apphunt.models.NewComment;
-import com.apphunt.app.api.apphunt.models.Packages;
-import com.apphunt.app.api.apphunt.models.SaveApp;
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
+import com.apphunt.app.api.apphunt.models.apps.Packages;
+import com.apphunt.app.api.apphunt.models.apps.SaveApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
@@ -24,6 +26,7 @@ import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
 
@@ -133,7 +136,16 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void downVoteComment(String userId,String commentId) {
+    public void downVoteComment(String userId, String commentId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new DeleteCommentVoteRequest(commentId, userId, listener));
+    }
+
+    @Override
+    public void getTopAppsCollection(String criteria, String userId) {
+        if (LoginProviderFactory.get((Activity) context).isUserLoggedIn()) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, userId, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, listener));
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.api;
 
-import com.apphunt.app.api.apphunt.models.Packages;
+import com.apphunt.app.api.apphunt.models.apps.Packages;
 
 public class PackagesFilteredApiEvent {
     private Packages packages;

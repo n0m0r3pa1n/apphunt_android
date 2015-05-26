@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.ui.auth;
 
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.users.User;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>

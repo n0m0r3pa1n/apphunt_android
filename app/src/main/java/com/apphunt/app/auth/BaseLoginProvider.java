@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
@@ -36,16 +36,26 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     @Override
+    public void login(User user) {
+        onUserCreated(user);
+        BusProvider.getInstance().post(new LoginEvent(user));
+    }
+
+    @Override
+    public User getUser() {
+        User user = new User();
+        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+        user.setEmail(SharedPreferencesHelper.getStringPreference(Constants.KEY_EMAIL));
+        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
+
+        return user;
+    }
+
+    @Override
     public boolean isUserLoggedIn() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         String loginProvider = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER);
         return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
-    }
-
-    @Override
-    public void login(User user) {
-        onUserCreated(user);
-        BusProvider.getInstance().post(new LoginEvent(user));
     }
 
     private void onUserCreated(User user) {

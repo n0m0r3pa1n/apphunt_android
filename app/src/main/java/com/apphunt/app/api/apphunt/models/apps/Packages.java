@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.models;
+package com.apphunt.app.api.apphunt.models.apps;
 
 import com.apphunt.app.utils.Constants;
 

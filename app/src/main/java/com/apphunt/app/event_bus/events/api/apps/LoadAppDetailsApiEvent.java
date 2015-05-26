@@ -1,22 +1,22 @@
 package com.apphunt.app.event_bus.events.api.apps;
 
-import com.apphunt.app.api.apphunt.models.App;
+import com.apphunt.app.api.apphunt.models.apps.App;
 
 /**
  * Created by nmp on 15-5-9.
  */
 public class LoadAppDetailsApiEvent {
-    private App app;
+    private App baseApp;
 
-    public LoadAppDetailsApiEvent(App app) {
-        this.app = app;
+    public LoadAppDetailsApiEvent(App baseApp) {
+        this.baseApp = baseApp;
     }
 
-    public App getApp() {
-        return app;
+    public App getBaseApp() {
+        return baseApp;
     }
 
-    public void setApp(App app) {
-        this.app = app;
+    public void setBaseApp(App baseApp) {
+        this.baseApp = baseApp;
     }
 }

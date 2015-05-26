@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
-import com.apphunt.app.api.apphunt.models.App;
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
@@ -59,7 +59,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     private RelativeLayout.LayoutParams params;
 
-    private App app;
+    private App baseApp;
     private User user;
 
     //region InjectViews
@@ -183,30 +183,30 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @Subscribe
     public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
-        app = event.getApp();
+        baseApp = event.getBaseApp();
         if (!isAdded()) {
             return;
         }
-        if (app != null) {
+        if (baseApp != null) {
 
-            app.setPosition(itemPosition);
-            voteBtn.setApp(app);
+            baseApp.setPosition(itemPosition);
+            voteBtn.setBaseApp(baseApp);
 
             Picasso.with(activity)
-                    .load(app.getCreatedBy().getProfilePicture())
+                    .load(baseApp.getCreatedBy().getProfilePicture())
                     .into(creator);
             creatorName.setText(String.format(getString(R.string.posted_by),
-                    app.getCreatedBy().getUsername()));
+                    baseApp.getCreatedBy().getUsername()));
 
             Picasso.with(activity)
-                    .load(app.getIcon())
+                    .load(baseApp.getIcon())
                     .into(icon);
-            appName.setText(app.getName());
-            appDescription.setText(app.getDescription());
+            appName.setText(baseApp.getName());
+            appDescription.setText(baseApp.getDescription());
 
-            headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(app.getVotesCount()),
-                    Integer.valueOf(app.getVotesCount())));
-            votersAdapter = new VotersAdapter(activity, app.getVotes());
+            headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(baseApp.getVotesCount()),
+                    Integer.valueOf(baseApp.getVotesCount())));
+            votersAdapter = new VotersAdapter(activity, baseApp.getVotes());
             votersAvatars.setAdapter(votersAdapter);
 
             commentsBox.checkIfUserCanComment();
@@ -252,11 +252,11 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void openAppOnGooglePlay() {
-        if (app == null) {
+        if (baseApp == null) {
             Crashlytics.log("App is null!");
             return;
         }
-        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.getShortUrl()));
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baseApp.getShortUrl()));
         marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(marketIntent);
     }

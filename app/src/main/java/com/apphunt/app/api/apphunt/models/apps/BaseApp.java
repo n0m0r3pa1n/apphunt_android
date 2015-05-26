@@ -1,10 +1,18 @@
-package com.apphunt.app.api.apphunt.models;
+package com.apphunt.app.api.apphunt.models.apps;
 
+import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.api.apphunt.models.votes.Vote;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class App {
+/**
+ * * Created by Seishin <atanas@naughtyspirit.co>
+ * * on 5/26/15.
+ * *
+ * * NaughtySpirit 2015
+ */
+public class BaseApp {
     @SerializedName("_id")
     private String id;
     private String name;
@@ -17,7 +25,6 @@ public class App {
     private String shortUrl;
     private String url;
     private boolean hasVoted;
-    private ArrayList<Vote> votes = new ArrayList<>();
     private User createdBy;
     private int commentsCount;
 
@@ -109,14 +116,6 @@ public class App {
         this.createdBy = createdBy;
     }
 
-    public ArrayList<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(ArrayList<Vote> votes) {
-        this.votes = votes;
-    }
-
     public int getCommentsCount() {
         return commentsCount;
     }
@@ -141,7 +140,6 @@ public class App {
                 ", shortUrl='" + shortUrl + '\'' +
                 ", url='" + url + '\'' +
                 ", hasVoted=" + hasVoted +
-                ", votes=" + votes +
                 ", createdBy=" + createdBy +
                 ", commentsCount=" + commentsCount +
                 '}';

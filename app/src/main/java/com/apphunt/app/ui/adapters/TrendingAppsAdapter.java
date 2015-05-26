@@ -26,8 +26,8 @@ import android.widget.Toast;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
-import com.apphunt.app.api.apphunt.models.App;
-import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -126,7 +126,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     .load(app.getCreatedBy().getProfilePicture())
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-            viewHolderItem.vote.setApp(app);
+            viewHolderItem.vote.setBaseApp(app);
 
             View.OnClickListener detailsClickListener = new View.OnClickListener() {
                 @Override

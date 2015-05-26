@@ -8,13 +8,16 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.apphunt.app.utils.GsonInstance;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public abstract class BaseGsonRequest<T> extends Request<T> {
     public static final String TAG = BaseGsonRequest.class.getSimpleName();
     public static String BASE_URL = "http://apphunt.herokuapp.com";
     private NetworkResponse networkResponse;
 
     public BaseGsonRequest(int method, String url, Response.ErrorListener listener) {
-        super(method, url, listener);
+        super(method, encodeUrl(url), listener);
     }
 
     @Override
@@ -27,6 +30,7 @@ public abstract class BaseGsonRequest<T> extends Request<T> {
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch(Exception e) {
             Log.d(TAG, "parseNetworkResponse " + e);
+            e.printStackTrace();
             return null;
         }
     }
@@ -44,4 +48,8 @@ public abstract class BaseGsonRequest<T> extends Request<T> {
 
     @Override
     public abstract void deliverResponse(T response);
+
+    private static String encodeUrl(String url) {
+        return url.replaceAll(" ", "%20");
+    }
 }

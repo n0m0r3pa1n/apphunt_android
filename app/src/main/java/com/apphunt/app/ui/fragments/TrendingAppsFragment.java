@@ -46,7 +46,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class AppsListFragment extends BaseFragment implements AbsListView.OnScrollListener, OnNetworkStateChange {
+public class TrendingAppsFragment extends BaseFragment implements AbsListView.OnScrollListener, OnNetworkStateChange {
 
     private boolean endOfList = false;
     private MainActivity activity;

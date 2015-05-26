@@ -1,6 +1,6 @@
 package com.apphunt.app.auth;
 
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.users.User;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -8,10 +8,8 @@ import com.apphunt.app.api.apphunt.models.User;
  */
 public interface LoginProvider {
     void login(User user);
-
     void logout();
-
+    User getUser();
     boolean isUserLoggedIn();
-
     String getName();
 }

@@ -96,7 +96,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         DrawerItemAdapter adapter = new DrawerItemAdapter(getMenu());
         adapter.setOnItemClickListener(this);
         mDrawerList.setAdapter(adapter);
-        selectItem(mCurrentSelectedPosition);
+        selectItem(mCurrentSelectedPosition + 2);
         return view;
     }
 
@@ -125,11 +125,11 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     }
 
     public int getIcon(int position) {
-        switch(position) {
+        switch(position + 2) {
             case TRENDING_APPS:
                 return R.drawable.ic_home;
             case TOP_HUNTERS:
-                return R.drawable.ice_tophunters;
+                return R.drawable.ic_tophunters;
             case TOP_APPS:
                 return R.drawable.ic_topandroid;
             case SETTINGS:

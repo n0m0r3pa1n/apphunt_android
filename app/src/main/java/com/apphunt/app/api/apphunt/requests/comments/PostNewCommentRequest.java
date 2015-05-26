@@ -1,7 +1,7 @@
 package com.apphunt.app.api.apphunt.requests.comments;
 
 import com.android.volley.Response;
-import com.apphunt.app.api.apphunt.models.NewComment;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;

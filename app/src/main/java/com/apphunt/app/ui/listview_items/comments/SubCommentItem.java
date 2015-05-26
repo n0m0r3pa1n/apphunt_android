@@ -1,6 +1,6 @@
 package com.apphunt.app.ui.listview_items.comments;
 
-import com.apphunt.app.api.apphunt.models.Comment;
+import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.utils.Constants;
 

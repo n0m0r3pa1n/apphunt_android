@@ -8,12 +8,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.User;
-import com.apphunt.app.api.apphunt.models.Vote;
+import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.api.apphunt.models.votes.Vote;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,10 +22,10 @@ import butterknife.InjectView;
 public class VotersAdapter extends BaseAdapter {
 
     private final Context ctx;
-    private ArrayList<Vote> voters = new ArrayList<>();
+    private List<Vote> voters = new ArrayList<>();
     private int maxVotersCount;
 
-    public VotersAdapter(Context ctx, ArrayList<Vote> voters) {
+    public VotersAdapter(Context ctx, List<Vote> voters) {
         this.ctx = ctx;
         this.voters = voters;
 

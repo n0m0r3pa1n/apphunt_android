@@ -11,5 +11,4 @@ public abstract class BaseGetRequest<T> extends BaseGsonRequest<T> {
     public abstract Class<T> getParsedAppClass();
 
     public abstract void deliverResponse(T response);
-
 }

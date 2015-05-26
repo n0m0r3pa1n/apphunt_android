@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.api.votes;
 
-import com.apphunt.app.api.apphunt.models.CommentVote;
+import com.apphunt.app.api.apphunt.models.comments.CommentVote;
 
 /**
  * Created by nmp on 15-5-9.

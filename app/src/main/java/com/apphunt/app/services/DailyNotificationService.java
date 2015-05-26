@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.NotificationReceivedApiEvent;
 import com.apphunt.app.utils.ConnectivityUtils;

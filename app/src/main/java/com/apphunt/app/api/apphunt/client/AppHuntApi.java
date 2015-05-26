@@ -1,9 +1,9 @@
 package com.apphunt.app.api.apphunt.client;
 
-import com.apphunt.app.api.apphunt.models.NewComment;
-import com.apphunt.app.api.apphunt.models.Packages;
-import com.apphunt.app.api.apphunt.models.SaveApp;
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
+import com.apphunt.app.api.apphunt.models.apps.Packages;
+import com.apphunt.app.api.apphunt.models.apps.SaveApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 
 import retrofit.http.DELETE;
 import retrofit.http.GET;
@@ -56,4 +56,6 @@ public interface AppHuntApi {
 
     @DELETE("/comments/votes")
     void downVoteComment(String userId, String commentId);
+
+    void getTopAppsCollection(String criteria, String userId);
 }

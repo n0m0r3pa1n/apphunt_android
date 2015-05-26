@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.api.apps;
 
-import com.apphunt.app.api.apphunt.models.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.AppsList;
 
 public class LoadSearchedAppsApiEvent {
     private AppsList appsList;

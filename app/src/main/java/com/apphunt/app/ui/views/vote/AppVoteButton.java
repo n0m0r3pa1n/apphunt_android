@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.App;
-import com.apphunt.app.api.apphunt.models.Vote;
+import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.votes.Vote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
@@ -29,7 +29,7 @@ import butterknife.OnClick;
 
 public class AppVoteButton extends LinearLayout {
     public static final String TAG = AppVoteButton.class.getSimpleName();
-    private App app;
+    private App baseApp;
     private LayoutInflater inflater;
 
     @InjectView(R.id.vote)
@@ -42,9 +42,9 @@ public class AppVoteButton extends LinearLayout {
         }
     }
 
-    public AppVoteButton(Context context, App app) {
+    public AppVoteButton(Context context, App baseApp) {
         super(context);
-        this.app = app;
+        this.baseApp = baseApp;
         if (!isInEditMode()) {
             init(context);
         }
@@ -107,11 +107,11 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected String getButtonText() {
-        return app.getVotesCount();
+        return baseApp.getVotesCount();
     }
 
-    public void setApp(App app) {
-        this.app = app;
+    public void setBaseApp(App baseApp) {
+        this.baseApp = baseApp;
         updateVoteButton();
     }
 
@@ -133,30 +133,30 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected boolean shouldBeAbleToVote() {
-        return app != null;
+        return baseApp != null;
     }
 
     protected boolean hasVoted() {
-        return app.isHasVoted();
+        return baseApp.isHasVoted();
     }
 
     protected void downVote() {
-        ApiClient.getClient(getContext()).downVote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+        ApiClient.getClient(getContext()).downVote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     protected void vote() {
-        ApiClient.getClient(getContext()).vote(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+        ApiClient.getClient(getContext()).vote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     @Subscribe
     public void onAppVote(AppVoteApiEvent event) {
-        if(!app.getId().equals(event.getVote().getAppId())) {
+        if(!baseApp.getId().equals(event.getVote().getAppId())) {
             return;
         }
         Vote voteResult = event.getVote();
         FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
-        app.setVotesCount(voteResult.getVotes());
-        app.setHasVoted(event.isVote());
+        baseApp.setVotesCount(voteResult.getVotes());
+        baseApp.setHasVoted(event.isVote());
         voteButton.setText(voteResult.getVotes());
         if(event.isVote()) {
             FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
@@ -171,7 +171,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {
-        BusProvider.getInstance().post(new AppVoteEvent(hasVoted, app.getPosition()));
+        BusProvider.getInstance().post(new AppVoteEvent(hasVoted, baseApp.getPosition()));
     }
 
 

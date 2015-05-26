@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -30,7 +29,8 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.ui.fragments.AppsListFragment;
+import com.apphunt.app.ui.fragments.TopAppsFragment;
+import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
@@ -75,7 +75,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initToolbarAndNavigationDrawer();
 
         ActionBarUtils.getInstance().init(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new AppsListFragment(), Constants.TAG_APPS_LIST_FRAGMENT).commit();
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -286,7 +285,34 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
+        switch (position) {
+            case Constants.TRENDING_APPS:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TrendingAppsFragment(), Constants.TAG_APPS_LIST_FRAGMENT).commit();
+                break;
+
+            case Constants.TOP_APPS:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TopAppsFragment()).commit();
+                break;
+
+            case Constants.TOP_HUNTERS:
+
+                break;
+
+            case Constants.SETTINGS:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
+                    break;
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                        .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
+                        .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
+                        .commit();
+                break;
+
+            case Constants.ABOUT:
+
+                break;
+        }
     }
 
     @Override

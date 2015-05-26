@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.apphunt.app.MainActivity;
-import com.apphunt.app.api.apphunt.models.Notification;
+import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
