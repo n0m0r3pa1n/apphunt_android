@@ -1,9 +1,11 @@
 package com.apphunt.app.ui.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -75,7 +77,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 MenuViewHolder menuViewHolder = (MenuViewHolder) holder;
                 DrawerMenu drawerMenu = (DrawerMenu) drawerItem;
                 menuViewHolder.itemTextView.setText(drawerMenu.getText());
-                menuViewHolder.itemTextView.setCompoundDrawablesWithIntrinsicBounds(drawerMenu.getIconRes(), 0, 0, 0);
+                menuViewHolder.itemImageView.setImageResource(drawerMenu.getIconRes());
                 break;
         }
     }
@@ -112,10 +114,12 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static class MenuViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemTextView;
+        private ImageView itemImageView;
 
         public MenuViewHolder(View rootView) {
             super(rootView);
             itemTextView = (TextView) rootView.findViewById(R.id.item);
+            itemImageView = (ImageView) rootView.findViewById(R.id.iv_icon);
         }
     }
 

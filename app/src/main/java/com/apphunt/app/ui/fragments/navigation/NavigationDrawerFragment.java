@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,9 +19,12 @@ import com.apphunt.app.R;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
+import com.apphunt.app.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.apphunt.app.utils.Constants.*;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -108,10 +112,27 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         items.add(new DrawerItem(DrawerItem.Type.HEADER));
         items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
         for (int i = 0; i < menuItems.length; i++) {
-            items.add(new DrawerMenu().setIconRes(R.drawable.ic_menu_check).setText(menuItems[i]));
+            items.add(new DrawerMenu().setIconRes(getIcon(i)).setText(menuItems[i]));
         }
 
         return items;
+    }
+
+    public int getIcon(int position) {
+        switch(position) {
+            case TRENDING_APPS:
+                return R.drawable.ic_home;
+            case TOP_HUNTERS:
+                return R.drawable.ice_tophunters;
+            case TOP_APPS:
+                return R.drawable.ic_topandroid;
+            case SETTINGS:
+                return R.drawable.ic_settings;
+            case ABOUT:
+                return R.drawable.ic_info;
+        }
+
+        return R.drawable.ic_menu_check;
     }
 
     /**

@@ -14,12 +14,10 @@
     <string name="title_close">Close</string>
 
     <string-array name="drawer_menu">
-        <item>Profile options</item>
         <item>Trending Apps</item>
         <item>Top Hunters</item>
         <item>Top Apps</item>
         <item>Settings</item>
-        <item>Help &amp; Feedback</item>
         <item>About AppHunt</item>
     </string-array>
 
