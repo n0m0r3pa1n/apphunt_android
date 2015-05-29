@@ -2,12 +2,19 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -31,9 +38,10 @@ public class TopAppsFragment extends BaseFragment {
     private static final String TAG = TopAppsFragment.class.getSimpleName();
     private Activity activity;
     private View view;
+    private StaggeredGridLayoutManager layoutManager;
 
     @InjectView(R.id.collection_apps_list)
-    ListView collectionAppsList;
+    RecyclerView collectionAppsList;
 
     public TopAppsFragment() {
         setTitle(R.string.title_top_apps);
@@ -50,6 +58,14 @@ public class TopAppsFragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_top_apps, container, false);
         ButterKnife.inject(this, view);
 
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        collectionAppsList.setItemAnimator(new DefaultItemAnimator());
+        collectionAppsList.setLayoutManager(layoutManager);
+        collectionAppsList.setHasFixedSize(true);
+
+
+
         ApiClient.getClient(getActivity()).getTopAppsCollection("top apps for may",
                 LoginProviderFactory.get(getActivity()).getUser().getId());
 
@@ -61,9 +77,7 @@ public class TopAppsFragment extends BaseFragment {
     public void onCollectionReceived(GetTopAppsCollectionEvent event) {
         TopAppsAdapter adapter = new TopAppsAdapter(getActivity(), event.getAppsCollection().getCollections().get(0).getApps());
         collectionAppsList.setAdapter(adapter);
-        Log.e(TAG, event.getAppsCollection().getCollections().get(0).toString());
-
-
+        ((ActionBarActivity) activity).getSupportActionBar().setTitle(event.getAppsCollection().getCollections().get(0).getName());
     }
 
     @Override

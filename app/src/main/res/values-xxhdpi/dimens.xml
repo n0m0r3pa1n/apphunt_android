@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="collection_app_width">175dp</dimen>
+    <dimen name="collection_app_icon_padding">15dp</dimen>
+</resources>

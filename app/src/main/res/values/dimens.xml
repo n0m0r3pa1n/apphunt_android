@@ -134,5 +134,8 @@
     <dimen name="send_comment_height">45dp</dimen>
     <dimen name="dimen_app_list_avatar_creator">30dp</dimen>
     <dimen name="dimen_app_list_creator_name">12sp</dimen>
+    <dimen name="collection_app_margin">10dp</dimen>
+    <dimen name="collection_app_width">150dp</dimen>
+    <dimen name="collection_app_icon_padding">2dp</dimen>
 
 </resources>

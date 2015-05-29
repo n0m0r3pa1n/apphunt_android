@@ -36,6 +36,7 @@ import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
@@ -119,7 +120,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
             Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
 
-            viewHolderItem.title.setText(app.getName());
+            viewHolderItem.title.setText(StringUtils.htmlDecodeString(app.getName()));
             viewHolderItem.description.setText(app.getDescription());
             viewHolderItem.commentsCount.setText(String.valueOf(app.getCommentsCount()));
             Picasso.with(ctx)
