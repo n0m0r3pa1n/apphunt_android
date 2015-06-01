@@ -1,6 +1,7 @@
 package com.apphunt.app.utils.ui;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ public class ActionBarUtils {
     private static final String TAG = ActionBarUtils.class.getName();
 
     private static ActionBarUtils instance;
+    private Activity activity;
 
     public static ActionBarUtils getInstance() {
         if (instance == null) {
@@ -30,6 +32,7 @@ public class ActionBarUtils {
     }
 
     public void init(ActionBarActivity activity) {
+        this.activity = activity;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
         } else {
@@ -65,5 +68,13 @@ public class ActionBarUtils {
 
     public void hideActionBar(ActionBarActivity activity) {
         activity.getSupportActionBar().hide();
+    }
+
+    public void hideAbShadow() {
+        activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+    }
+
+    public void showAbShadow() {
+        activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
     }
 }

@@ -24,6 +24,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.SoundsUtils;
 
@@ -47,7 +48,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ActionBarUtils.getInstance().hideAbShadow();
         setTitle(R.string.title_notification);
         notification = getArguments().getString(Constants.KEY_NOTIFICATION);
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
@@ -164,5 +165,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onDetach() {
         super.onDetach();
         LoadersUtils.hideCenterLoader(activity);
+        ActionBarUtils.getInstance().showAbShadow();
     }
 }

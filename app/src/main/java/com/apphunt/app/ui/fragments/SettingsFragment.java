@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
@@ -35,7 +36,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ActionBarUtils.getInstance().hideAbShadow();
         setTitle(R.string.title_settings);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
     }
@@ -123,6 +124,12 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showAbShadow();
     }
 
     @Override

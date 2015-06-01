@@ -116,9 +116,11 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         List<DrawerItem> items = new ArrayList<DrawerItem>();
         String[] menuItems = getResources().getStringArray(R.array.drawer_menu);
         items.add(new DrawerItem(DrawerItem.Type.HEADER));
-        items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
         for (int i = 0; i < menuItems.length; i++) {
             items.add(new DrawerMenu().setIconRes(getIcon(i)).setText(menuItems[i]));
+            if(menuItems[i].equals(menuItems[2])) {
+                items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
+            }
         }
 
         return items;
