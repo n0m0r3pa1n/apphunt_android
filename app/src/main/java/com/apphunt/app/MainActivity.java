@@ -1,6 +1,10 @@
 package com.apphunt.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +27,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
@@ -36,6 +41,7 @@ import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -132,6 +138,24 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             Log.d("DeepLink Data", data.toString());
         }
     }
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
+
+            if (!ConnectivityUtils.isNetworkAvailable(context)) {
+                if (fragment == null) {
+                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
+                }
+            } else {
+                if (fragment != null) {
+                    getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
+            }
+        }
+    };
 
     private boolean isStartedFromDeepLink() {
         Intent intent = getIntent();
@@ -333,6 +357,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
     }
@@ -346,6 +371,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onPause() {
         super.onPause();
+        unregisterReceiver(networkChangeReceiver);
         BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
 

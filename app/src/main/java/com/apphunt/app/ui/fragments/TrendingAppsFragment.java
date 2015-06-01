@@ -26,6 +26,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadSearchedAppsApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
+import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -46,34 +47,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class TrendingAppsFragment extends BaseFragment implements AbsListView.OnScrollListener, OnNetworkStateChange {
+public class TrendingAppsFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     private boolean endOfList = false;
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
-
-    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
-
-            if (!ConnectivityUtils.isNetworkAvailable(context)) {
-                if (fragment == null) {
-                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
-                }
-
-                btnAddApp.setVisibility(View.INVISIBLE);
-                lvTrendingApps.setVisibility(View.GONE);
-
-                LoadersUtils.showCenterLoader(activity);
-            } else {
-                if (fragment != null) {
-                    activity.getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                onNetworkAvailable();
-            }
-        }
-    };
 
     @InjectView(R.id.trending_list)
     SuperListview lvTrendingApps;
@@ -99,7 +77,6 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
         View view = inflater.inflate(R.layout.fragment_trending_apps, container, false);
         ButterKnife.inject(this, view);
         initUi();
-        ApiService.getInstance(activity).loadAppsForToday();
 
         return view;
     }
@@ -144,15 +121,6 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     }
 
     @Override
-    public void onNetworkAvailable() {
-        if (trendingAppsAdapter.getCount() == 0) {
-            LoadersUtils.hideCenterLoader(activity);
-            btnReload.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    @Override
     public void onAttach(Activity activity) {
         this.activity = (MainActivity) activity;
         super.onAttach(activity);
@@ -181,14 +149,13 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        activity.registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-        activity.unregisterReceiver(networkChangeReceiver);
+
     }
 
     @Subscribe
@@ -217,5 +184,13 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     @Subscribe
     public void onClearSearch(ClearSearchEvent event) {
         trendingAppsAdapter.clearSearch();
+    }
+
+    @Subscribe
+    public void onNetworkStatus(NetworkStatusChangeEvent event) {
+        if(event.isNetworkState()) {
+            trendingAppsAdapter.resetAdapter();
+            ApiService.getInstance(activity).loadAppsForToday();
+        }
     }
 }
