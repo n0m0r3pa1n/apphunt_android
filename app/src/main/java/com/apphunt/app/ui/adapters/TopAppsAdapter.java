@@ -1,25 +1,23 @@
 package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.ui.fragments.AppDetailsFragment;
+import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.StringUtils;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +46,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(TopAppsAdapter.ViewHolder holder, int position) {
-        BaseApp app = apps.get(position);
+        final BaseApp app = apps.get(position);
 
         int appPosition = position + 1;
         String name = StringUtils.htmlDecodeString(app.getName());
@@ -62,6 +60,23 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         
         Picasso.with(context).load(app.getIcon().replace("w300", "w512")).into(holder.icon);
 //        Picasso.with(context).load(app.getCreatedBy().getProfilePicture()).into(holder.createdByIcon);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppDetailsFragment detailsFragment = new AppDetailsFragment();
+
+                Bundle extras = new Bundle();
+                extras.putString(Constants.KEY_APP_ID, app.getId());
+                extras.putString(Constants.KEY_APP_NAME, app.getName());
+                detailsFragment.setArguments(extras);
+
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                        .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                        .commit();
+            }
+        });
     }
 
     @Override
@@ -90,8 +105,6 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
         @InjectView(R.id.icon)
         public ImageView icon;
-
-
 
         @InjectView(R.id.card_view)
         public RelativeLayout cardView;
