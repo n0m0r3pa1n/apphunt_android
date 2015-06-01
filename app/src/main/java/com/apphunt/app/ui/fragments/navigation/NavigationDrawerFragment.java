@@ -127,7 +127,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     }
 
     public int getIcon(int position) {
-        switch(position + 2) {
+        switch(position + 1) {
             case TRENDING_APPS:
                 return R.drawable.ic_home;
             case TOP_HUNTERS:

@@ -1,17 +1,9 @@
 package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,13 +22,11 @@ import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
-import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.LoadersUtils;
-import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
@@ -77,6 +67,7 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
         View view = inflater.inflate(R.layout.fragment_trending_apps, container, false);
         ButterKnife.inject(this, view);
         initUi();
+        ApiService.getInstance(activity).loadAppsForToday();
 
         return view;
     }
@@ -100,6 +91,7 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     public void reloadApps() {
         btnReload.setVisibility(View.GONE);
         trendingAppsAdapter.resetAdapter();
+        ApiService.getInstance(activity).loadAppsForToday();
         btnAddApp.setVisibility(View.VISIBLE);
         lvTrendingApps.setVisibility(View.VISIBLE);
     }
@@ -188,9 +180,9 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     @Subscribe
     public void onNetworkStatus(NetworkStatusChangeEvent event) {
-        if(event.isNetworkState()) {
-            trendingAppsAdapter.resetAdapter();
-            ApiService.getInstance(activity).loadAppsForToday();
+        if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
+            btnReload.setVisibility(View.VISIBLE);
+            lvTrendingApps.setVisibility(View.GONE);
         }
     }
 }

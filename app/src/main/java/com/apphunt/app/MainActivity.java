@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
@@ -65,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public static final String TAG = MainActivity.class.getSimpleName();
     private NavigationDrawerFragment navigationDrawerFragment;
     private Toolbar toolbar;
+    private boolean firstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initUI();
         initDeepLinking();
         initNotifications();
-        onNavigationDrawerItemSelected(2);
+
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -116,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             }
         });
         navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
+        onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
     }
 
     private void initNotifications() {
@@ -371,7 +376,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(networkChangeReceiver);
         BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
 
@@ -403,6 +407,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(networkChangeReceiver);
         AppSpice.onStop(this);
     }
 
