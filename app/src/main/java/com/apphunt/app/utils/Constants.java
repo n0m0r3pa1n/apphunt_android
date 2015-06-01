@@ -94,11 +94,11 @@ public class Constants {
     public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
     public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
 
-    public static final int TRENDING_APPS = 2;
-    public static final int TOP_HUNTERS = 3;
-    public static final int TOP_APPS = 4;
-    public static final int SETTINGS = 5;
-    public static final int ABOUT = 6;
+    public static final int TRENDING_APPS = 1;
+    public static final int TOP_HUNTERS = 2;
+    public static final int TOP_APPS = 3;
+    public static final int SETTINGS = 4;
+    public static final int ABOUT = 5;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

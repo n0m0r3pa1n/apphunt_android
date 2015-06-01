@@ -10,7 +10,7 @@ public class NetworkStatusChangeEvent {
         this.networkState = networkState;
     }
 
-    public boolean isNetworkState() {
+    public boolean isNetworkAvailable() {
         return networkState;
     }
 }
