@@ -4,17 +4,19 @@
     android:layout_width="match_parent" android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/shadow"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ab_shadow_height"
-        android:background="@drawable/bottom_shadow" />
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+    <LinearLayout
+        android:elevation="-10dp"
+        android:layout_width="match_parent" android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include android:id="@+id/toolbar_actionbar" layout="@layout/toolbar_default"
             android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ab_shadow_height"
+            android:background="@drawable/bottom_shadow" />
 
         <FrameLayout
             android:id="@+id/container"
@@ -26,7 +28,7 @@
     <com.apphunt.app.ui.views.ScrimInsetsFrameLayout android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="wrap_content"
         android:fitsSystemWindows="true" android:layout_gravity="start" app:insetForeground="#4000"
-        android:elevation="10dp">
+        android:elevation="0dp">
         <fragment android:id="@+id/fragment_drawer"
             android:name="com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment"
             android:layout_width="@dimen/navigation_drawer_width"
