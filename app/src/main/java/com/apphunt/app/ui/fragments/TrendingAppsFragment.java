@@ -76,6 +76,7 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     public void initUi() {
         ActionBarUtils.getInstance().showActionBarShadow();
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
 
         trendingAppsAdapter = new TrendingAppsAdapter(activity, lvTrendingApps);
         lvTrendingApps.setAdapter(trendingAppsAdapter);

@@ -57,12 +57,19 @@ public class ActionBarUtils {
             actionBarActivity.getSupportActionBar().collapseActionView();
             BusProvider.getInstance().post(new DrawerStatusEvent(true));
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
-            actionBarActivity.getSupportActionBar().setTitle(R.string.app_name);
             NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
             BusProvider.getInstance().post(new DrawerStatusEvent(false));
         }
 
         actionBarActivity.supportInvalidateOptionsMenu();
+    }
+
+    public void setTitle(String title) {
+        ((ActionBarActivity) activity).getSupportActionBar().setTitle(title);
+    }
+
+    public void setTitle(int titleRes) {
+        setTitle(activity.getResources().getString(titleRes));
     }
 
     public void showActionBar(ActionBarActivity activity) {
