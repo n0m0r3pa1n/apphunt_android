@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,15 +17,21 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.apphunt.app.R;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
-import com.apphunt.app.utils.Constants;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.apphunt.app.utils.Constants.*;
+import static com.apphunt.app.utils.Constants.ABOUT;
+import static com.apphunt.app.utils.Constants.SETTINGS;
+import static com.apphunt.app.utils.Constants.TOP_APPS;
+import static com.apphunt.app.utils.Constants.TOP_HUNTERS;
+import static com.apphunt.app.utils.Constants.TRENDING_APPS;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -69,6 +74,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BusProvider.getInstance().register(this);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -227,6 +233,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -245,6 +252,15 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     @Override
     public void onClick(View view, int position) {
         selectItem(position);
+    }
+
+    @Subscribe
+    public void onDrawerStatusEvent(DrawerStatusEvent event) {
+        if(event.shouldLockDrawer()) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        } else {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     public static void setDrawerIndicatorEnabled(boolean isEnabled) {

@@ -8,8 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 
@@ -54,9 +55,11 @@ public class ActionBarUtils {
             NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
             actionBarActivity.getSupportActionBar().setTitle(fragment.getTitle());
             actionBarActivity.getSupportActionBar().collapseActionView();
+            BusProvider.getInstance().post(new DrawerStatusEvent(true));
         } else if (fragmentManager.getBackStackEntryCount() == 0) {
             actionBarActivity.getSupportActionBar().setTitle(R.string.app_name);
             NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
+            BusProvider.getInstance().post(new DrawerStatusEvent(false));
         }
 
         actionBarActivity.supportInvalidateOptionsMenu();
