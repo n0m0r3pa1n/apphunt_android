@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public static final String TAG = MainActivity.class.getSimpleName();
     private NavigationDrawerFragment navigationDrawerFragment;
     private Toolbar toolbar;
-    private boolean firstLaunch = true;
+    private boolean consumedBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,17 +253,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 supportInvalidateOptionsMenu();
                 break;
 
-            case R.id.action_settings:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
-                    break;
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
-                        .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
-                        .commit();
-                break;
-
             case R.id.action_share:
                 if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
                         FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
@@ -320,6 +309,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         switch (position) {
             case Constants.TRENDING_APPS:
                 fragment = new TrendingAppsFragment();
+                consumedBack = true;
                 break;
 
             case Constants.TOP_APPS:
@@ -338,14 +328,25 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                         .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
                         .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
                         .commit();
+
+
+                if (navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS) {
+                    consumedBack = true;
+                } else {
+                    consumedBack = false;
+                }
+
                 return;
             case Constants.ABOUT:
                 break;
         }
-        if(fragment != null) {
+
+        if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             toolbar.setTitle(fragment.getTitle());
         }
+
+        consumedBack = false;
     }
 
     @Override
@@ -388,14 +389,23 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             return;
         }
 
-        if (!NavUtils.getInstance(this).isOnBackBlocked()) {
-            AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-            if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-                fragment.showDetails();
-            } else {
-                super.onBackPressed();
-            }
+        if (NavUtils.getInstance(this).isOnBackBlocked()) {
+            return;
         }
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
+            fragment.showDetails();
+            return;
+        }
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && !consumedBack) {
+            onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
+            consumedBack = true;
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override

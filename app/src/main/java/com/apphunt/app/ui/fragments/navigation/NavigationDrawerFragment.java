@@ -70,6 +70,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private static NavigationDrawerFragment instance;
+    private int selectedPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -209,6 +210,11 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
         ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
+        this.selectedPosition = position;
+    }
+
+    public int getSelectedItemIndex() {
+        return selectedPosition;
     }
 
     public void openDrawer() {
