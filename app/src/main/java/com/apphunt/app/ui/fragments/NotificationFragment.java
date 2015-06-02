@@ -8,7 +8,6 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,12 +20,10 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.smart_rate.SmartRate;
-import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
-import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
-import com.apphunt.app.utils.SoundsUtils;
 
 public class NotificationFragment extends BaseFragment implements OnClickListener {
 
@@ -41,7 +38,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     private Button dismissBtn;
     private Button settingsBtn;
 
-    private OnNetworkStateChange networkStateCallback;
     private ActionBarActivity activity;
     private boolean showRating;
 
@@ -118,12 +114,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dismiss:
-//                if(showSettingsBtn) {
-//                    while (activity.getSupportFragmentManager().getBackStackEntryCount() > 0){
-//                        activity.getSupportFragmentManager().popBackStackImmediate();
-//                    }
-//                } else
-
                 if (showRating) {
                     activity.getSupportFragmentManager().popBackStack();
                     SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
@@ -142,10 +132,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 3 && ConnectivityUtils.isNetworkAvailable(activity)) {
-            networkStateCallback.onNetworkAvailable();
-        }
     }
 
     @Override
@@ -153,12 +139,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
-
-        try {
-            networkStateCallback = (OnNetworkStateChange) activity;
-        } catch (ClassCastException e) {
-            Log.e(TAG, e.getMessage());
-        }
     }
 
     @Override

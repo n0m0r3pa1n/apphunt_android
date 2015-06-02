@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,9 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
@@ -38,10 +35,10 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.BaseFragment;
-import com.apphunt.app.ui.fragments.TopAppsFragment;
-import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
+import com.apphunt.app.ui.fragments.TopAppsFragment;
+import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -69,7 +66,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private NavigationDrawerFragment navigationDrawerFragment;
     private Toolbar toolbar;
     private boolean consumedBack;
-    private boolean isConnected = false;
+    private boolean networkEventIsPosted;
+    private boolean firstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,16 +147,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         @Override
         public void onReceive(Context context, Intent intent) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
-
-            if (!ConnectivityUtils.isNetworkAvailable(context)) {
-                if (fragment == null) {
-                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
-                }
-            } else {
+            if (ConnectivityUtils.isNetworkAvailable(context)) {
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-//                BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
+
+                if (!networkEventIsPosted && !firstTime) {
+                    BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
+                    firstTime = false;
+                }
+
+                networkEventIsPosted = true;
+            } else {
+                if (fragment == null) {
+                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
+                }
             }
         }
     };
