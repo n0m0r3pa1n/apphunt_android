@@ -22,6 +22,7 @@ import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.utils.InstalledPackagesUtils;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
@@ -71,7 +72,8 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initUI() {
-        LoadersUtils.showCenterLoader(activity, R.drawable.loader_white);
+        ActionBarUtils.getInstance().hideActionBarShadow();
+//        LoadersUtils.showCenterLoader(activity, R.drawable.loader_white);
 
         gridView = (GridView) view.findViewById(R.id.gv_apps_list);
         gridView.setOnItemClickListener(this);
@@ -98,7 +100,8 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onDetach() {
         super.onDetach();
-        LoadersUtils.hideCenterLoader(activity);
+        ActionBarUtils.getInstance().showActionBarShadow();
+//        LoadersUtils.hideCenterLoader(activity);
     }
 
     @Override
