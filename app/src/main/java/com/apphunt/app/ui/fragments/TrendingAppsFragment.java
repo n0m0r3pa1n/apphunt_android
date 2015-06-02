@@ -38,8 +38,9 @@ import butterknife.OnClick;
 
 
 public class TrendingAppsFragment extends BaseFragment implements AbsListView.OnScrollListener {
+    public static final String TAG = TrendingAppsFragment.class.getSimpleName();
 
-    private boolean endOfList = false;
+    private boolean isEndOfList = false;
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
 
@@ -120,14 +121,14 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        endOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
+        isEndOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
     }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
-            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
+            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                if (isEndOfList) {
                     LoadersUtils.showBottomLoader(activity,
                             SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
                     FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
