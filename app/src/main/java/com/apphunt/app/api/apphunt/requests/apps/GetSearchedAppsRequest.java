@@ -9,7 +9,7 @@ import com.apphunt.app.utils.Constants;
 
 public class GetSearchedAppsRequest extends BaseGetRequest<AppsList>{
     public GetSearchedAppsRequest(String query, int page, int pageSize, String platform, Response.ErrorListener listener) {
-        super(BASE_URL + "/apps/search?q=" + query + "&page=" + page + "&pageSize=" + pageSize + "&platform=Android" + Constants.PLATFORM, listener);
+        super(BASE_URL + "/apps/search?q=" + query + "&page=" + page + "&pageSize=" + pageSize + "&platform=" + Constants.PLATFORM, listener);
     }
 
     public GetSearchedAppsRequest(String query, String userId, int page, int pageSize, String platform, Response.ErrorListener listener) {
