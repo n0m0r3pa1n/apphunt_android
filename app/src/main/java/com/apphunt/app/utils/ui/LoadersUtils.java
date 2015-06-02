@@ -54,7 +54,7 @@ public class LoadersUtils {
         RelativeLayout bottomLoaderLayout = (RelativeLayout) activity.findViewById(R.id.more_loader_layout);
         GifImageView bottomLoader = (GifImageView) activity.findViewById(R.id.more_loader);
 
-        if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
+        if (bottomLoader != null && bottomLoaderLayout.getVisibility() != View.VISIBLE) {
             if (soundEnabled)
                 SoundsUtils.playSound(activity, R.raw.notification_1);
 
@@ -65,8 +65,7 @@ public class LoadersUtils {
 
     public static void hideBottomLoader(Activity activity) {
         RelativeLayout bottomLoaderLayout = (RelativeLayout) activity.findViewById(R.id.more_loader_layout);
-
-        if (bottomLoaderLayout.getVisibility() == View.VISIBLE) {
+        if (bottomLoaderLayout != null && bottomLoaderLayout.getVisibility() == View.VISIBLE) {
             bottomLoaderLayout.setVisibility(View.GONE);
         }
     }
