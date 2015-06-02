@@ -69,6 +69,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private NavigationDrawerFragment navigationDrawerFragment;
     private Toolbar toolbar;
     private boolean consumedBack;
+    private boolean isConnected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
-                BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
+//                BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
             }
         }
     };
@@ -314,9 +315,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             case Constants.TOP_APPS:
                 fragment = new TopAppsFragment();
+                consumedBack = false;
                 break;
 
             case Constants.TOP_HUNTERS:
+                consumedBack = false;
                 break;
 
             case Constants.SETTINGS:
@@ -338,6 +341,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
                 return;
             case Constants.ABOUT:
+                consumedBack = false;
                 break;
         }
 
@@ -345,8 +349,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             toolbar.setTitle(fragment.getTitle());
         }
-
-        consumedBack = false;
     }
 
     @Override

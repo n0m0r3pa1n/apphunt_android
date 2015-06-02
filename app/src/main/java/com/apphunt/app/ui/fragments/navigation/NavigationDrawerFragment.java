@@ -22,6 +22,7 @@ import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
+import com.apphunt.app.utils.Constants;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private static NavigationDrawerFragment instance;
-    private int selectedPosition;
+    private int selectedPosition = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,9 +142,9 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
                 return R.drawable.ic_tophunters;
             case TOP_APPS:
                 return R.drawable.ic_topandroid;
-            case SETTINGS:
+            case SETTINGS - 1:
                 return R.drawable.ic_settings;
-            case ABOUT:
+            case ABOUT - 1:
                 return R.drawable.ic_info;
         }
 
@@ -199,6 +200,8 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         });
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(Constants.TRENDING_APPS);
     }
 
     private void selectItem(int position) {
