@@ -36,7 +36,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarUtils.getInstance().hideAbShadow();
+        ActionBarUtils.getInstance().hideActionBarShadow();
         setTitle(R.string.title_settings);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
     }
@@ -129,7 +129,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onDetach() {
         super.onDetach();
-        ActionBarUtils.getInstance().showAbShadow();
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 
     @Override

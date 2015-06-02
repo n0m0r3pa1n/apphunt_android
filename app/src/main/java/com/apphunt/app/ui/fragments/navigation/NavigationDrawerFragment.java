@@ -216,6 +216,10 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         this.selectedPosition = position;
     }
 
+    public void markSelectedPosition(int position) {
+        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
+    }
+
     public int getSelectedItemIndex() {
         return selectedPosition;
     }

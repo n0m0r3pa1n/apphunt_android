@@ -26,6 +26,7 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
@@ -74,6 +75,8 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     }
 
     public void initUi() {
+        ActionBarUtils.getInstance().showActionBarShadow();
+
         trendingAppsAdapter = new TrendingAppsAdapter(activity, lvTrendingApps);
         lvTrendingApps.setAdapter(trendingAppsAdapter);
         lvTrendingApps.setOnScrollListener(this);

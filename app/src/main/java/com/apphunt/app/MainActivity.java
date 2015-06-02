@@ -346,6 +346,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
         if (fragment != null) {
+            navigationDrawerFragment.markSelectedPosition(position);
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             toolbar.setTitle(fragment.getTitle());
         }

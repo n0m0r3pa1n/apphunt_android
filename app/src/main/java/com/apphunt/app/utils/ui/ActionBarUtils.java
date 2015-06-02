@@ -73,11 +73,19 @@ public class ActionBarUtils {
         activity.getSupportActionBar().hide();
     }
 
-    public void hideAbShadow() {
-        activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+    public void hideActionBarShadow() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+        } else {
+            ((ActionBarActivity) activity).getSupportActionBar().setElevation(R.dimen.zero_elevation);
+        }
     }
 
-    public void showAbShadow() {
-        activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+    public void showActionBarShadow() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+        } else {
+            ((ActionBarActivity) activity).getSupportActionBar().setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
+        }
     }
 }

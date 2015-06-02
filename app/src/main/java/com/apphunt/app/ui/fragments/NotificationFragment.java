@@ -48,7 +48,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarUtils.getInstance().hideAbShadow();
+        ActionBarUtils.getInstance().hideActionBarShadow();
         setTitle(R.string.title_notification);
         notification = getArguments().getString(Constants.KEY_NOTIFICATION);
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
@@ -165,6 +165,6 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onDetach() {
         super.onDetach();
         LoadersUtils.hideCenterLoader(activity);
-        ActionBarUtils.getInstance().showAbShadow();
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 }

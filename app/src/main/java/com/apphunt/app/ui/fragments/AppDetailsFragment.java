@@ -32,6 +32,7 @@ import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -104,7 +105,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
         appId = getArguments().getString(Constants.KEY_APP_ID);
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
-
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
         FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
@@ -123,6 +123,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void initUI() {
+        ActionBarUtils.getInstance().hideActionBarShadow();
         commentsBox.setBelowId(boxDetails.getId());
         commentsBox.setAppId(appId);
         boxDesc.setOnClickListener(this);
@@ -249,6 +250,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 
     private void openAppOnGooglePlay() {

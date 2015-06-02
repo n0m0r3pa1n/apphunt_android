@@ -138,4 +138,7 @@
     <dimen name="collection_app_width">150dp</dimen>
     <dimen name="collection_app_icon_padding">2dp</dimen>
 
+    <dimen name="zero_elevation">-10dp</dimen>
+    <dimen name="one_elevation">12dp</dimen>
+
 </resources>
