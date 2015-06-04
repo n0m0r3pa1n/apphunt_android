@@ -6,11 +6,17 @@ import java.util.HashMap;
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
+    // User's Keys
     public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_USER_NAME = "user_name";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_USER_EMAIL = "profile_email";
+    public static final String KEY_USER_PROFILE_PICTURE = "profile_picture";
+    public static final String KEY_USER_COVER_PICTURE = "profile_cover_picture";
+    public static final String KEY_USER_TEXT_COLOR = "text_color";
+
     public static final String KEY_NOTIFICATION_ID = "notification_id";
-    //    public static final String KEY_NAME = "name";
-//    public static final String KEY_PROFILE_PICTURE = "profile_picture";
-    public static final String KEY_EMAIL = "profile_email";
+
     public static final String KEY_DATA = "data";
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
@@ -22,7 +28,6 @@ public class Constants {
     public static final String KEY_APP_ID = "app_id";
     public static final String KEY_APP_NAME = "app_name";
     public static final String KEY_ITEM_POSITION = "item_position";
-    public static final String KEY_PROFILE_IMAGE = "profile_image";
     public static final String KEY_NOTIFICATION_TITLE = "notification_title";
     public static final String KEY_NOTIFICATION_MSG = "notification_msg";
     public static final String KEY_SEARCH_QUERY = "search_query";

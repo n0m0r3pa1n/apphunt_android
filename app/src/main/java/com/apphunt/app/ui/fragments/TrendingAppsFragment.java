@@ -37,7 +37,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-
 public class TrendingAppsFragment extends BaseFragment implements AbsListView.OnScrollListener {
     public static final String TAG = TrendingAppsFragment.class.getSimpleName();
 

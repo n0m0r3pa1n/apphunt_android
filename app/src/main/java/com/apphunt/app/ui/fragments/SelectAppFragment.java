@@ -101,6 +101,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
 //        LoadersUtils.hideCenterLoader(activity);
     }
 

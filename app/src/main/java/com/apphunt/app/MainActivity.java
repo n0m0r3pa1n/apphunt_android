@@ -186,14 +186,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-            menu.findItem(R.id.action_login).setVisible(false);
-            menu.findItem(R.id.action_logout).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_login).setVisible(true);
-            menu.findItem(R.id.action_logout).setVisible(false);
-        }
-
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             menu.findItem(R.id.action_search).setVisible(false);
         } else {
@@ -243,20 +235,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_login:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
-                    break;
-
-                LoginUtils.showLoginFragment(this);
-                break;
-
-            case R.id.action_logout:
-                LoginProviderFactory.get(this).logout();
-                FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
-                supportInvalidateOptionsMenu();
-                break;
-
             case R.id.action_share:
                 if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
                         FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {

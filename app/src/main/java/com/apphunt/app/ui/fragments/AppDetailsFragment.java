@@ -169,7 +169,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onVotersReceived(AppVoteEvent event) {
         user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
+        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
 
         if(event.isVote()) {
             votersAdapter.addCreatorIfNotVoter(user);
@@ -256,6 +256,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
     }
 
     private void openAppOnGooglePlay() {
@@ -288,10 +289,4 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public boolean isCommentsBoxOpened() {
         return commentsBox.isCommentsBoxOpened();
     }
-
-//    private void setUpActionBar() {
-//        final ActionBar actionBar = ((ActionBarActivity)activity).getSupportActionBar();
-//        actionBar.setHomeButtonEnabled(true);
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//    }
 }

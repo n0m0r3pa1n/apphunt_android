@@ -45,8 +45,11 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public User getUser() {
         User user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-        user.setEmail(SharedPreferencesHelper.getStringPreference(Constants.KEY_EMAIL));
-        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_PROFILE_IMAGE));
+        user.setEmail(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_EMAIL));
+        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
+        user.setName(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_NAME));
+        user.setUsername(SharedPreferencesHelper.getStringPreference(Constants.KEY_USERNAME));
+        user.setCoverPicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_COVER_PICTURE));
 
         return user;
     }
@@ -66,13 +69,20 @@ public abstract class BaseLoginProvider implements LoginProvider {
 
     protected void saveSharedPreferences(User user) {
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, user.getId());
-        SharedPreferencesHelper.setPreference(Constants.KEY_EMAIL, user.getEmail());
-        SharedPreferencesHelper.setPreference(Constants.KEY_PROFILE_IMAGE, user.getProfilePicture());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_EMAIL, user.getEmail());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_NAME, user.getName());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USERNAME, user.getUsername());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_PROFILE_PICTURE, user.getProfilePicture());
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_COVER_PICTURE, user.getCoverPicture());
     }
 
     protected void removeSharedPreferences() {
         SharedPreferencesHelper.removePreference(Constants.KEY_USER_ID);
-        SharedPreferencesHelper.removePreference(Constants.KEY_EMAIL);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USERNAME);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_NAME);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_EMAIL);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_PROFILE_PICTURE);
+        SharedPreferencesHelper.removePreference(Constants.KEY_USER_COVER_PICTURE);
         SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
     }
 

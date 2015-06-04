@@ -20,13 +20,4 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_login"
-        android:title="@string/action_login"
-        android:visible="false" />
-    <item
-        android:id="@+id/action_logout"
-        android:title="@string/action_logout"
-        android:visible="false"
-        app:showAsAction="never" />
 </menu>

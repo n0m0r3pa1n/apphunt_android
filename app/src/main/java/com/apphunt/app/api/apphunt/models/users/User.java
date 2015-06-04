@@ -16,6 +16,7 @@ public class User {
     private String username;
     private List<String> following;
     private String notificationId;
+    private String coverPicture;
 
     public String getId() {
         return id;
@@ -69,6 +70,34 @@ public class User {
         return username;
     }
 
+    public String getCoverPicture() {
+        return coverPicture;
+    }
+
+    public void setCoverPicture(String coverPicture) {
+        this.coverPicture = coverPicture;
+    }
+
+    public List<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<String> following) {
+        this.following = following;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -78,22 +107,10 @@ public class User {
                 ", profilePicture='" + profilePicture + '\'' +
                 ", loginType='" + loginType + '\'' +
                 ", locale='" + locale + '\'' +
+                ", username='" + username + '\'' +
+                ", following=" + following +
+                ", notificationId='" + notificationId + '\'' +
+                ", coverPicture='" + coverPicture + '\'' +
                 '}';
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFollowing(List<String> following) {
-        this.following = following;
-    }
-
-    public String getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(String notificationId) {
-        this.notificationId = notificationId;
     }
 }

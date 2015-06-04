@@ -27,6 +27,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
@@ -68,10 +69,13 @@ public class LoginFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_login);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
+        ActionBarUtils.getInstance().setTitle(R.string.title_login);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ActionBarUtils.getInstance().hideActionBarShadow();
+
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.inject(this, view);
 
@@ -99,7 +103,7 @@ public class LoginFragment extends BaseFragment {
         });
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
-            public void success(Result<TwitterSession> twitterSessionResult) {
+            public void success(final Result<TwitterSession> twitterSessionResult) {
                 final AppHuntTwitterApiClient appHuntTwitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
                 boolean doNotIncludeEntities = false;
                 boolean skipStatus = true;
@@ -107,14 +111,17 @@ public class LoginFragment extends BaseFragment {
 
                     @Override
                     public void success(Result<com.twitter.sdk.android.core.models.User> userResult) {
-                        com.twitter.sdk.android.core.models.User twitterUser = userResult.data;
+                        final com.twitter.sdk.android.core.models.User twitterUser = userResult.data;
                         user = new User();
                         user.setUsername(twitterUser.screenName);
                         user.setName(twitterUser.name);
-                        user.setProfilePicture(twitterUser.profileImageUrl);
+
+                        String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
+                        user.setProfilePicture(profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
                         Locale locale = getResources().getConfiguration().locale;
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+                        user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
@@ -174,6 +181,8 @@ public class LoginFragment extends BaseFragment {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
         BusProvider.getInstance().unregister(this);
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 
     @Override

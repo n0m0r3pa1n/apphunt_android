@@ -1,20 +1,34 @@
 package com.apphunt.app.ui.adapters;
 
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
+import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
 public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = DrawerItemAdapter.class.getSimpleName();
+    private Context ctx;
     private int mSelectedPosition;
     private View mSelectedView;
 
@@ -22,8 +36,10 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private OnItemClickListener listener;
 
-    public DrawerItemAdapter(List<DrawerItem> drawerItems) {
+    public DrawerItemAdapter(Context ctx, List<DrawerItem> drawerItems) {
+        this.ctx = ctx;
         this.drawerItems = drawerItems;
+        BusProvider.getInstance().register(this);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -34,8 +50,14 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (DrawerItem.Type.values()[viewType]) {
             case HEADER:
-                View headerRootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_header, parent, false);
-                return new HeaderViewHolder(headerRootView);
+                View headerRootView;
+                if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
+                    headerRootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_header, parent, false);
+                    return new HeaderViewHolder(headerRootView);
+                } else {
+                    headerRootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_header_not_logged, parent, false);
+                    return new HeaderLoggedOutViewHolder(headerRootView);
+                }
             case DIVIDER:
                 View dividerRootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_divider, parent, false);
                 return new DividerViewHolder(dividerRootView);
@@ -73,6 +95,34 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         });
         DrawerItem drawerItem = drawerItems.get(position);
         switch (drawerItem.getType()) {
+            case HEADER:
+                if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
+                    User user = LoginProviderFactory.get((Activity) ctx).getUser();
+                    HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+                    Picasso.with(ctx).load(user.getProfilePicture()).into(headerViewHolder.profileImage);
+                    Picasso.with(ctx).load(user.getCoverPicture()).into(headerViewHolder.cover);
+                    headerViewHolder.username.setText(user.getUsername());
+                    headerViewHolder.email.setText(user.getEmail());
+                    headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            LoginProviderFactory.get((Activity) ctx).logout();
+                            FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
+                        }
+                    });
+                } else {
+                    HeaderLoggedOutViewHolder headerViewHolder = (HeaderLoggedOutViewHolder) holder;
+                    Picasso.with(ctx).load(R.drawable.avatar_placeholder).into(headerViewHolder.profileImage);
+                    headerViewHolder.loginButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            LoginUtils.showLoginFragment(ctx);
+                        }
+                    });
+                }
+
+                break;
+
             case MENU:
                 MenuViewHolder menuViewHolder = (MenuViewHolder) holder;
                 DrawerMenu drawerMenu = (DrawerMenu) drawerItem;
@@ -99,8 +149,33 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageView cover;
+        private Target profileImage;
+        private TextView username;
+        private TextView email;
+        private ImageButton logoutButton;
+
         public HeaderViewHolder(View rootView) {
             super(rootView);
+
+            cover = (ImageView) rootView.findViewById(R.id.cover_picture);
+            profileImage = (Target) rootView.findViewById(R.id.profile_image);
+            username = (TextView) rootView.findViewById(R.id.username);
+            email = (TextView) rootView.findViewById(R.id.email);
+            logoutButton = (ImageButton) rootView.findViewById(R.id.logout_button);
+        }
+    }
+
+    private static class HeaderLoggedOutViewHolder extends RecyclerView.ViewHolder {
+
+        private Target profileImage;
+        private Button loginButton;
+
+        public HeaderLoggedOutViewHolder(View rootView) {
+            super(rootView);
+
+            profileImage = (Target) rootView.findViewById(R.id.profile_image);
+            loginButton = (Button) rootView.findViewById(R.id.login_button);
         }
     }
 

@@ -221,7 +221,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void notifyAdapter(AppsList appsList) {
-
         if(isMoreItemsPressed) {
             displayMoreApps(appsList);
             return;

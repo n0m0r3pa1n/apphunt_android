@@ -19,6 +19,8 @@ import android.view.animation.DecelerateInterpolator;
 import com.apphunt.app.R;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
@@ -64,9 +66,10 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
+    private DrawerItemAdapter adapter;
     private RecyclerView mDrawerList;
-    private View mFragmentContainerView;
 
+    private View mFragmentContainerView;
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -101,7 +104,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         mDrawerList.setLayoutManager(layoutManager);
         mDrawerList.setHasFixedSize(true);
 
-        DrawerItemAdapter adapter = new DrawerItemAdapter(getMenu());
+        adapter = new DrawerItemAdapter(getActivity(), getMenu());
         adapter.setOnItemClickListener(this);
         mDrawerList.setAdapter(adapter);
 
@@ -297,5 +300,25 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         anim.setInterpolator(new DecelerateInterpolator());
         anim.setDuration(500);
         anim.start();
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void onUserLogin(LoginEvent event) {
+        adapter = new DrawerItemAdapter(getActivity(), getMenu());
+        adapter.setOnItemClickListener(this);
+
+        mDrawerList.setAdapter(adapter);
+        markSelectedPosition(selectedPosition);
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void onUserLogout(LogoutEvent event) {
+        adapter = new DrawerItemAdapter(getActivity(), getMenu());
+        adapter.setOnItemClickListener(this);
+
+        mDrawerList.setAdapter(adapter);
+        markSelectedPosition(selectedPosition);
     }
 }
