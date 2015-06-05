@@ -6,6 +6,7 @@
     android:layout_height="@dimen/list_item_height"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:elevation="0dp"
     android:padding="5dp">
 
     <android.support.v7.widget.CardView

@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
@@ -43,7 +42,6 @@ import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -192,6 +190,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             menu.findItem(R.id.action_search).setVisible(true);
         }
 
+        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
+            menu.findItem(R.id.action_share).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_share).setVisible(false);
+        }
+
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -246,17 +250,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
                 break;
 
-            case R.id.action_suggest:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
-                    break;
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, new SuggestFragment(), Constants.TAG_SUGGEST_FRAGMENT)
-                        .addToBackStack(Constants.TAG_SUGGEST_FRAGMENT)
-                        .commit();
-                break;
-
             case android.R.id.home:
                 AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
                 if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
@@ -288,6 +281,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         BaseFragment fragment = null;
+        String tag = null;
+        boolean addToBackStack = false;
+
         switch (position) {
             case Constants.TRENDING_APPS:
                 fragment = new TrendingAppsFragment();
@@ -300,36 +296,44 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
 
             case Constants.TOP_HUNTERS:
-                consumedBack = false;
+                break;
+
+            case Constants.SUGGESTIONS:
+                fragment = new SuggestFragment();
+                fragment.setPreviousTitle(toolbar.getTitle().toString());
+
+                tag = Constants.TAG_SUGGEST_FRAGMENT;
+                addToBackStack = true;
+
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 break;
 
             case Constants.SETTINGS:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
-                    return;
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
-                        .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
-                        .commit();
+                fragment = new SettingsFragment();
+                fragment.setPreviousTitle(toolbar.getTitle().toString());
 
+                tag = Constants.TAG_SETTINGS_FRAGMENT;
+                addToBackStack = true;
 
-                if (navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS) {
-                    consumedBack = true;
-                } else {
-                    consumedBack = false;
-                }
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
+                break;
 
-                return;
             case Constants.ABOUT:
-                consumedBack = false;
                 break;
         }
 
-        if (fragment != null) {
+        if (!addToBackStack) {
             navigationDrawerFragment.markSelectedPosition(position);
             getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-            toolbar.setTitle(fragment.getTitle());
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
+                    !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(tag)) {
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                        .add(R.id.container, fragment, tag)
+                        .addToBackStack(tag)
+                        .commit();
+            }
         }
     }
 

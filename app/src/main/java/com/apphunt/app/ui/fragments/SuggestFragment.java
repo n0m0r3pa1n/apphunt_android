@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.apphunt.app.R;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setTitle(R.string.suggest_title);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSuggestion);
+        ActionBarUtils.getInstance().hideActionBarShadow();
     }
 
     @Override
@@ -113,5 +115,12 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
 
     private FragmentManager getSupportFragmentManager() {
         return getActivity().getSupportFragmentManager();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showActionBarShadow();
+        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
     }
 }

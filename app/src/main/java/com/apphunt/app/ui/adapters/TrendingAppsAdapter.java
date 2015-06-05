@@ -51,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -67,7 +68,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     private ArrayList<Item> backup = new ArrayList<>();
 
     private Calendar today = Calendar.getInstance();
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d", Locale.ENGLISH);
 
     private boolean isMoreItemsPressed = false;
 
@@ -136,6 +137,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                         App app = ((AppItem) getItem(position)).getData();
 
                         AppDetailsFragment detailsFragment = new AppDetailsFragment();
+                        detailsFragment.setPreviousTitle(ctx.getString(R.string.title_home));
 
                         Bundle extras = new Bundle();
                         extras.putString(Constants.KEY_APP_ID, app.getId());
@@ -150,7 +152,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }
-
                 }
             };
 
@@ -173,7 +174,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
                     sharingIntent.putExtra(Intent.EXTRA_STREAM, iconUri);
                     ctx.startActivity(Intent.createChooser(sharingIntent, "Share using"));
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     params.put("appId", currApp.getId());
                     FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
                 }
@@ -198,7 +199,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
     public Uri getLocalBitmapUri(ImageView imageView) {
         // Extract Bitmap from ImageView drawable
         Drawable drawable = imageView.getDrawable();
-        Bitmap bmp = null;
+        Bitmap bmp;
         if (drawable instanceof BitmapDrawable){
             bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         } else {
@@ -209,7 +210,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         try {
             File file =  new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-            file.getParentFile().mkdirs();
+//            file.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
@@ -328,16 +329,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
 
         today = Calendar.getInstance();
-    }
-
-    public void resetAdapter(int position) {
-        this.selectedAppPosition = position;
-
-        resetAdapter();
-    }
-
-    public boolean couldLoadMoreApps() {
-        return (backup.size() == 0);
     }
 
     @Override

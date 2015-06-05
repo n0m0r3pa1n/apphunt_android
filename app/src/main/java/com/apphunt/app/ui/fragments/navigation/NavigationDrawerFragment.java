@@ -35,6 +35,7 @@ import static com.apphunt.app.utils.Constants.SETTINGS;
 import static com.apphunt.app.utils.Constants.TOP_APPS;
 import static com.apphunt.app.utils.Constants.TOP_HUNTERS;
 import static com.apphunt.app.utils.Constants.TRENDING_APPS;
+import static com.apphunt.app.utils.Constants.SUGGESTIONS;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -145,6 +146,8 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
                 return R.drawable.ic_tophunters;
             case TOP_APPS:
                 return R.drawable.ic_topandroid;
+            case SUGGESTIONS - 1:
+                return R.drawable.ic_settings;
             case SETTINGS - 1:
                 return R.drawable.ic_settings;
             case ABOUT - 1:

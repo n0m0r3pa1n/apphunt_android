@@ -17,6 +17,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionEvent;
 import com.apphunt.app.ui.adapters.TopAppsAdapter;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -84,6 +85,7 @@ public class TopAppsFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        ActionBarUtils.getInstance().setPreviousTitle();
 
         BusProvider.getInstance().unregister(this);
     }

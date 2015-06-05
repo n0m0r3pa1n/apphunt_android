@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,11 +118,14 @@ public class LoginFragment extends BaseFragment {
                         user.setName(twitterUser.name);
 
                         String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
+                        Log.e(TAG, profileImageUrl);
                         user.setProfilePicture(profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
                         Locale locale = getResources().getConfiguration().locale;
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
+
+                        Log.e(TAG, user.getCoverPicture());
 
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
@@ -181,7 +185,7 @@ public class LoginFragment extends BaseFragment {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
         BusProvider.getInstance().unregister(this);
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
+        ActionBarUtils.getInstance().setPreviousTitle();
         ActionBarUtils.getInstance().showActionBarShadow();
     }
 

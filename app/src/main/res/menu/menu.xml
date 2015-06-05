@@ -11,13 +11,8 @@
         android:actionViewClass="android.support.v7.widget.SearchView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
     <item
-        android:id="@+id/action_suggest"
-        android:icon="@drawable/ic_action_suggest"
-        android:title="@string/action_suggest"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

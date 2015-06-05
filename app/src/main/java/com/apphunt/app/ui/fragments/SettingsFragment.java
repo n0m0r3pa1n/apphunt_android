@@ -130,6 +130,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
+        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
     }
 
     @Override

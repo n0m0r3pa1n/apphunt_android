@@ -31,6 +31,7 @@ public class Constants {
     public static final String KEY_NOTIFICATION_TITLE = "notification_title";
     public static final String KEY_NOTIFICATION_MSG = "notification_msg";
     public static final String KEY_SEARCH_QUERY = "search_query";
+    public static final String KEY_TITLE = "fragment_title";
 
     public static final String PLATFORM = "Android";
 
@@ -52,6 +53,7 @@ public class Constants {
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
     public static final String TAG_APPS_LIST_FRAGMENT = "apps_list_fragment";
+    public static final String TAG_TOP_APPS_FRAGMENT = "top_apps";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
@@ -102,8 +104,9 @@ public class Constants {
     public static final int TRENDING_APPS = 1;
     public static final int TOP_HUNTERS = 2;
     public static final int TOP_APPS = 3;
-    public static final int SETTINGS = 5;
-    public static final int ABOUT = 6;
+    public static final int SUGGESTIONS = 5;
+    public static final int SETTINGS = 6;
+    public static final int ABOUT = 7;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

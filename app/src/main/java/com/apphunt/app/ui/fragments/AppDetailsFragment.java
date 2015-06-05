@@ -3,10 +3,13 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +42,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +114,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
 
         setTitle(R.string.title_app_details);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -256,7 +261,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
+        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
     }
 
     private void openAppOnGooglePlay() {
@@ -288,5 +293,13 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     public boolean isCommentsBoxOpened() {
         return commentsBox.isCommentsBoxOpened();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.e(TAG, item.toString());
+
+        return true;
     }
 }

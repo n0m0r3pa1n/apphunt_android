@@ -18,7 +18,9 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerMenu;
+import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
@@ -30,6 +32,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final String TAG = DrawerItemAdapter.class.getSimpleName();
     private Context ctx;
     private int mSelectedPosition;
+    private int prevSelectedPosition;
     private View mSelectedView;
 
     private final List<DrawerItem> drawerItems;
@@ -77,7 +80,12 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             mSelectedPosition = position;
             mSelectedView = holder.itemView;
-            mSelectedView.setSelected(true);
+
+            if (mSelectedPosition == Constants.SETTINGS - 1 || mSelectedPosition == Constants.SUGGESTIONS - 1) {
+                mSelectedView.setSelected(false);
+            } else {
+                mSelectedView.setSelected(true);
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +95,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mSelectedView.setSelected(false);
                 }
                 mSelectedPosition = position;
+                prevSelectedPosition = mSelectedPosition;
                 mSelectedView = view;
                 view.setSelected(true);
                 if (listener != null)
@@ -100,7 +109,13 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     User user = LoginProviderFactory.get((Activity) ctx).getUser();
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     Picasso.with(ctx).load(user.getProfilePicture()).into(headerViewHolder.profileImage);
-                    Picasso.with(ctx).load(user.getCoverPicture()).into(headerViewHolder.cover);
+
+                    if (user.getCoverPicture() != null && !user.getCoverPicture().isEmpty()) {
+                        Picasso.with(ctx).load(user.getCoverPicture()).into(headerViewHolder.cover);
+                    } else {
+                        Picasso.with(ctx).load(R.drawable.header_bg).into(headerViewHolder.cover);
+                    }
+
                     headerViewHolder.username.setText(user.getUsername());
                     headerViewHolder.email.setText(user.getEmail());
                     headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +160,10 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void selectPosition(int position) {
         mSelectedPosition = position;
         notifyItemChanged(position);
+    }
+
+    public int getPrevSelectedPosition() {
+        return prevSelectedPosition;
     }
 
     private static class HeaderViewHolder extends RecyclerView.ViewHolder {

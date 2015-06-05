@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.apphunt.app.R;
@@ -20,6 +21,7 @@ public class ActionBarUtils {
 
     private static ActionBarUtils instance;
     private Activity activity;
+    private CharSequence previousTitle;
 
     public static ActionBarUtils getInstance() {
         if (instance == null) {
@@ -65,11 +67,16 @@ public class ActionBarUtils {
     }
 
     public void setTitle(String title) {
+        this.previousTitle = ((ActionBarActivity) activity).getSupportActionBar().getTitle();
         ((ActionBarActivity) activity).getSupportActionBar().setTitle(title);
     }
 
     public void setTitle(int titleRes) {
         setTitle(activity.getResources().getString(titleRes));
+    }
+
+    public void setPreviousTitle() {
+        ((ActionBarActivity) activity).getSupportActionBar().setTitle(previousTitle);
     }
 
     public void showActionBar(ActionBarActivity activity) {

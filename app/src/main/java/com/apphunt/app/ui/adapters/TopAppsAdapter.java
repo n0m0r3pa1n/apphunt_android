@@ -3,7 +3,9 @@ package com.apphunt.app.ui.adapters;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,17 +56,21 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         holder.name.setText(name);
         holder.position.setText(appPosition + "");
         holder.createdByName.setText("by " + app.getCreatedBy().getName());
-        //holder.votesCount.setText(app.getVotesCount() + "");
-//        holder.createdByName.setText("by " + app.getCreatedBy().getName());
-//        holder.votesCount.setText(app.getVotesCount() + "");
-        
         Picasso.with(context).load(app.getIcon().replace("w300", "w512")).into(holder.icon);
-//        Picasso.with(context).load(app.getCreatedBy().getProfilePicture()).into(holder.createdByIcon);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AppDetailsFragment detailsFragment = new AppDetailsFragment();
+                String title = context.getString(R.string.title_top_apps);
+
+                try {
+                    title = ((ActionBarActivity) context).getSupportActionBar().getTitle().toString();
+                } catch (NullPointerException e) {
+                    Log.e(TAG, e.getLocalizedMessage());
+                }
+
+                detailsFragment.setPreviousTitle(title);
 
                 Bundle extras = new Bundle();
                 extras.putString(Constants.KEY_APP_ID, app.getId());
@@ -96,10 +102,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
         @InjectView(R.id.created_by)
         public TextView createdByName;
-//
-//        @InjectView(R.id.created_by_icon)
-//        public Target createdByIcon;
-//
+
         @InjectView(R.id.position)
         public TextView position;
 

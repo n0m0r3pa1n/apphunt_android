@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBarActivity;
 import com.apphunt.app.R;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.utils.Constants;
 
 /**
@@ -57,12 +56,6 @@ public class NavUtils {
                     .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
                     .commit();
         }
-    }
-
-    public void startTopAppsFragment() {
-        activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new TopAppsFragment())
-                .commit();
     }
 
     public void setOnBackBlocked(boolean isBlocked) {

@@ -59,7 +59,7 @@
     <dimen name="settings_notification_label_height">30dp</dimen>
     <dimen name="settings_notifications_toggle_width">90dp</dimen>
     <dimen name="settings_notifications_toggle_height">30dp</dimen>
-    <dimen name="listview_elevation">0dp</dimen>
+    <dimen name="listview_elevation">2dp</dimen>
     <dimen name="notification_text">17sp</dimen>
     <dimen name="notification_button_text">17sp</dimen>
     <dimen name="notification_text_margin">10dp</dimen>
