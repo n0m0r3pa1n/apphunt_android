@@ -102,4 +102,8 @@ public class ActionBarUtils {
             ((ActionBarActivity) activity).getSupportActionBar().setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
         }
     }
+
+    public void invalidateOptionsMenu() {
+        ((ActionBarActivity) activity).supportInvalidateOptionsMenu();
+    }
 }

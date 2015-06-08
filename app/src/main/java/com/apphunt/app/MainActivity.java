@@ -239,17 +239,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_share:
-                if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
-                        FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                    shareWithFacebook();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
-                } else {
-                    shareWithLocalApps();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
-                }
-                break;
-
             case android.R.id.home:
                 AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
                 if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
@@ -259,8 +248,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
                 break;
         }
-
-        return true;
+        return false;
     }
 
     private void shareWithLocalApps() {
@@ -322,18 +310,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
         }
 
-        if (!addToBackStack) {
-            navigationDrawerFragment.markSelectedPosition(position);
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
-                    !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(tag)) {
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, fragment, tag)
-                        .addToBackStack(tag)
-                        .commit();
+        try {
+            if (!addToBackStack) {
+                navigationDrawerFragment.markSelectedPosition(position);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+            } else {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
+                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(tag)) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                            .add(R.id.container, fragment, tag)
+                            .addToBackStack(tag)
+                            .commit();
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 
