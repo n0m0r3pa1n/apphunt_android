@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.models.collections;
+package com.apphunt.app.api.apphunt.models.collections.apps;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>

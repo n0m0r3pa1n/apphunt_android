@@ -18,6 +18,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetTopHuntersRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
@@ -147,5 +148,10 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, listener));
         }
+    }
+
+    @Override
+    public void getTopHuntersCollection(String criteria) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetTopHuntersRequest(criteria, listener));
     }
 }
