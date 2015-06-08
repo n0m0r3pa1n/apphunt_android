@@ -3,12 +3,14 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,12 +39,12 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.widget.FacebookDialog;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -262,6 +264,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
         ActionBarUtils.getInstance().setTitle(getPreviousTitle());
+        ActionBarUtils.getInstance().invalidateOptionsMenu();
+
     }
 
     private void openAppOnGooglePlay() {
@@ -297,9 +301,35 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                if (FacebookDialog.canPresentShareDialog(activity.getApplicationContext(),
+                        FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+                    shareWithFacebook();
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
+                } else {
+                    shareWithLocalApps();
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
+                }
+                return true;
 
-        Log.e(TAG, item.toString());
+            default:
+                return false;
+        }
+    }
 
-        return true;
+    private void shareWithLocalApps() {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/html");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
+        startActivity(Intent.createChooser(sharingIntent, "Share using"));
+    }
+
+    private void shareWithFacebook() {
+        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(activity)
+                .setName("AppHunt")
+                .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
+                .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
+        shareDialog.present();
     }
 }
