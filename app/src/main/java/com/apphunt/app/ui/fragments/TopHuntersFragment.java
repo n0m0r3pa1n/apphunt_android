@@ -15,6 +15,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionEvent;
 import com.apphunt.app.ui.adapters.TopHuntersAdapter;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -68,6 +69,8 @@ public class TopHuntersFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+
+        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Subscribe
