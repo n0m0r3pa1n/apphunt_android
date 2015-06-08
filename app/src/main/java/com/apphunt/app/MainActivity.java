@@ -37,6 +37,7 @@ import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
+import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
@@ -296,6 +297,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
 
             case Constants.TOP_HUNTERS:
+                fragment = new TopHuntersFragment();
+                consumedBack = false;
                 break;
 
             case Constants.SUGGESTIONS:
