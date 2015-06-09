@@ -55,7 +55,6 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     public TrendingAppsFragment() {
         setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
-        setIsConsumedBack(true);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -38,8 +40,8 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Hunter hunter = collection.getHunters().get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Hunter hunter = collection.getHunters().get(position);
 
         holder.place.setText(String.valueOf(position + 1));
         holder.name.setText(hunter.getUser().getName());
@@ -48,6 +50,7 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         holder.appsCount.setText(String.valueOf(hunter.getAddedApps()));
         holder.commentsCount.setText(String.valueOf(hunter.getComments()));
         holder.votesCount.setText(String.valueOf(hunter.getVotes()));
+
         Picasso.with(context).load(hunter.getUser().getProfilePicture()).into(holder.picture);
     }
 
@@ -70,7 +73,6 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         @InjectView(R.id.score)
         TextView score;
 
-        @InjectView(R.id.picture)
         Target picture;
 
         @InjectView(R.id.apps_count)
@@ -85,6 +87,7 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            picture = (Target) itemView.findViewById(R.id.picture);
         }
     }
 }

@@ -43,7 +43,6 @@ public class TopAppsFragment extends BaseFragment {
 
     public TopAppsFragment() {
         setFragmentTag(Constants.TAG_TOP_APPS_FRAGMENT);
-        setIsConsumedBack(false);
     }
 
     @Override

@@ -52,11 +52,6 @@ public class TopHuntersFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top_hunters, container, false);
         ButterKnife.inject(this, view);
-
-        collectionHuntersList.setItemAnimator(new DefaultItemAnimator());
-        collectionHuntersList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        collectionHuntersList.setHasFixedSize(true);
-
         return view;
     }
 
@@ -80,6 +75,9 @@ public class TopHuntersFragment extends BaseFragment {
     @Subscribe
     @SuppressWarnings("unused")
     public void onCollectionReceived(GetTopHuntersCollectionEvent event) {
+        collectionHuntersList.setItemAnimator(new DefaultItemAnimator());
+        collectionHuntersList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        collectionHuntersList.setHasFixedSize(true);
         collectionHuntersList.setAdapter(new TopHuntersAdapter(activity, event.getHuntersCollections().getCollections().get(0)));
         ActionBarUtils.getInstance().setTitle(event.getHuntersCollections().getCollections().get(0).getName());
     }

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -40,8 +41,17 @@ public class AvatarImageView extends ImageView implements Target {
 
     @Override
     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadFrom) {
-        bitmap = cropCircle(bitmap.isMutable() ? bitmap : bitmap.copy(Bitmap.Config.ARGB_8888, true));
-        setImageBitmap(bitmap);
+        new AsyncTask<Bitmap, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Bitmap... params) {
+                return cropCircle(params[0].isMutable() ? params[0] : params[0].copy(Bitmap.Config.ARGB_8888, true));
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                setImageBitmap(bitmap);
+            }
+        }.execute(bitmap);
     }
 
     @Override
