@@ -15,6 +15,8 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionEvent;
 import com.apphunt.app.ui.adapters.TopHuntersAdapter;
+import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
@@ -29,20 +31,21 @@ import butterknife.InjectView;
  */
 public class TopHuntersFragment extends BaseFragment {
 
+    private static final String TAG = TopHuntersFragment.class.getSimpleName();
     private Activity activity;
 
     @InjectView(R.id.collection_hunters_list)
     RecyclerView collectionHuntersList;
 
     public TopHuntersFragment() {
-        setTitle(R.string.title_top_hunters);
+        setFragmentTag(Constants.TAG_TOP_HUNTERS_FRAGMENT);
+        setIsConsumedBack(false);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: fix criteria
-        ApiClient.getClient(activity).getTopHuntersCollection("May");
+        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(1));
     }
 
     @Nullable
@@ -63,6 +66,8 @@ public class TopHuntersFragment extends BaseFragment {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);
         this.activity = activity;
+
+        ActionBarUtils.getInstance().setTitle(R.string.title_top_hunters);
     }
 
     @Override
@@ -74,7 +79,9 @@ public class TopHuntersFragment extends BaseFragment {
     }
 
     @Subscribe
+    @SuppressWarnings("unused")
     public void onCollectionReceived(GetTopHuntersCollectionEvent event) {
         collectionHuntersList.setAdapter(new TopHuntersAdapter(activity, event.getHuntersCollections().getCollections().get(0)));
+        ActionBarUtils.getInstance().setTitle(event.getHuntersCollections().getCollections().get(0).getName());
     }
 }

@@ -37,8 +37,9 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBarUtils.getInstance().hideActionBarShadow();
-        setTitle(R.string.title_settings);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
+
+        setFragmentTag(Constants.TAG_SETTINGS_FRAGMENT);
     }
 
     @Override
@@ -124,13 +125,14 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
+        ActionBarUtils.getInstance().setTitle(R.string.title_settings);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
+        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.apphunt.app.R;
@@ -52,10 +51,7 @@ public class ActionBarUtils {
         actionBarActivity.getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (fragmentManager.getBackStackEntryCount() > 0) {
-            String tag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-            BaseFragment fragment = (BaseFragment) fragmentManager.findFragmentByTag(tag);
             NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
-            actionBarActivity.getSupportActionBar().setTitle(fragment.getTitle());
             actionBarActivity.getSupportActionBar().collapseActionView();
             BusProvider.getInstance().post(new DrawerStatusEvent(true));
         } else if (fragmentManager.getBackStackEntryCount() == 0) {

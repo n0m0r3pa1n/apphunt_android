@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -49,7 +48,6 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.facebook.widget.FacebookDialog;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -185,10 +183,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            menu.findItem(R.id.action_search).setVisible(false);
-        } else {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_search).setVisible(false);
         }
 
         if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
@@ -252,61 +250,38 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         return false;
     }
 
-    private void shareWithLocalApps() {
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/html");
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
-        startActivity(Intent.createChooser(sharingIntent, "Share using"));
-    }
-
-    private void shareWithFacebook() {
-        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-                .setName("AppHunt")
-                .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
-                .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
-        shareDialog.present();
-    }
-
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         BaseFragment fragment = null;
-        String tag = null;
         boolean addToBackStack = false;
 
         switch (position) {
             case Constants.TRENDING_APPS:
                 fragment = new TrendingAppsFragment();
-                consumedBack = true;
                 break;
 
             case Constants.TOP_APPS:
                 fragment = new TopAppsFragment();
-                consumedBack = false;
                 break;
 
             case Constants.TOP_HUNTERS:
                 fragment = new TopHuntersFragment();
-                consumedBack = false;
                 break;
 
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
+                fragment.setIsConsumedBack(navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS);
 
-                tag = Constants.TAG_SUGGEST_FRAGMENT;
                 addToBackStack = true;
-
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 break;
 
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
+                fragment.setIsConsumedBack(navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS);
 
-                tag = Constants.TAG_SETTINGS_FRAGMENT;
                 addToBackStack = true;
-
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 break;
 
             case Constants.ABOUT:
@@ -316,14 +291,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         try {
             if (!addToBackStack) {
                 navigationDrawerFragment.markSelectedPosition(position);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
-                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(tag)) {
+                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(fragment.getFragmentTag())) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                            .add(R.id.container, fragment, tag)
-                            .addToBackStack(tag)
+                            .add(R.id.container, fragment, fragment.getFragmentTag())
+                            .addToBackStack(fragment.getFragmentTag())
                             .commit();
                 }
             }
