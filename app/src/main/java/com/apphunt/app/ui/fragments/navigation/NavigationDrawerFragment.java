@@ -157,7 +157,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
             case TOP_APPS:
                 return R.drawable.ic_topandroid;
             case SUGGESTIONS - 1:
-                return R.drawable.ic_settings;
+                return R.drawable.ic_feedback;
             case SETTINGS - 1:
                 return R.drawable.ic_settings;
             case HELP_ADD_APP - 2:
