@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -38,9 +39,10 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.suggest_title);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSuggestion);
         ActionBarUtils.getInstance().hideActionBarShadow();
+
+        setFragmentTag(Constants.TAG_SUGGEST_FRAGMENT);
     }
 
     @Override
@@ -118,9 +120,16 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ActionBarUtils.getInstance().setTitle(R.string.suggest_title);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
+        ActionBarUtils.getInstance().setPreviousTitle();
     }
 }

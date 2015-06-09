@@ -115,7 +115,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         params.put("appId", appId);
         FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
 
-        setTitle(R.string.title_app_details);
+        setFragmentTag(Constants.TAG_APP_DETAILS_FRAGMENT);
         setHasOptionsMenu(true);
     }
 
@@ -257,13 +257,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+
+        ActionBarUtils.getInstance().setTitle(R.string.title_app_details);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(getPreviousTitle());
+        ActionBarUtils.getInstance().setPreviousTitle();
         ActionBarUtils.getInstance().invalidateOptionsMenu();
 
     }

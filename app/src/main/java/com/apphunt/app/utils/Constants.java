@@ -53,7 +53,8 @@ public class Constants {
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
     public static final String TAG_APPS_LIST_FRAGMENT = "apps_list_fragment";
-    public static final String TAG_TOP_APPS_FRAGMENT = "top_apps";
+    public static final String TAG_TOP_APPS_FRAGMENT = "top_apps_fragment";
+    public static final String TAG_TOP_HUNTERS_FRAGMENT = "top_hunters_fragments";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
@@ -109,6 +110,7 @@ public class Constants {
     public static final int HELP_ADD_APP = 9;
     public static final int HELP_APPS_REQUIREMENTS = 10;
     public static final int HELP_TOP_HUNTERS_POINTS = 11;
+
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

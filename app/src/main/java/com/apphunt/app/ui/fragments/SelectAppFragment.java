@@ -20,6 +20,7 @@ import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
+import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.InstalledPackagesUtils;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -46,8 +47,8 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(R.string.title_select_app);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSelectApp);
+        setFragmentTag(Constants.TAG_SELECT_APP_FRAGMENT);
     }
 
     @Override
@@ -95,6 +96,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
+        ActionBarUtils.getInstance().setTitle(R.string.title_select_app);
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +54,8 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     Button btnReload;
 
     public TrendingAppsFragment() {
-        setTitle(R.string.title_home);
+        setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
+        setIsConsumedBack(true);
     }
 
     @Override
@@ -121,6 +121,15 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     public void onAttach(Activity activity) {
         this.activity = (MainActivity) activity;
         super.onAttach(activity);
+
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Override

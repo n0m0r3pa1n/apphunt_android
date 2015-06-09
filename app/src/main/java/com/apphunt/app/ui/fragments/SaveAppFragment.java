@@ -36,6 +36,7 @@ import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StatusCode;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -67,11 +68,13 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_save_app);
+
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
         params.put("appPackage", data.packageName);
         FlurryAgent.logEvent(TrackingEvents.UserViewedAddApp, params);
+
+        setFragmentTag(Constants.TAG_SAVE_APP_FRAGMENT);
     }
 
     @Override
@@ -188,6 +191,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
         this.activity = (ActionBarActivity) activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        ActionBarUtils.getInstance().setTitle(R.string.title_save_app);
     }
 
     @Override
@@ -195,6 +200,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         closeKeyboard(desc);
+
+        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Subscribe

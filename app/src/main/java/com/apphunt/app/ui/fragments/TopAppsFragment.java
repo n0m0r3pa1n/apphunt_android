@@ -17,6 +17,8 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionEvent;
 import com.apphunt.app.ui.adapters.TopAppsAdapter;
+import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
@@ -40,7 +42,8 @@ public class TopAppsFragment extends BaseFragment {
     RecyclerView collectionAppsList;
 
     public TopAppsFragment() {
-        setTitle(R.string.title_top_apps);
+        setFragmentTag(Constants.TAG_TOP_APPS_FRAGMENT);
+        setIsConsumedBack(false);
     }
 
     @Override
@@ -60,8 +63,7 @@ public class TopAppsFragment extends BaseFragment {
         collectionAppsList.setLayoutManager(layoutManager);
         collectionAppsList.setHasFixedSize(true);
 
-        ApiClient.getClient(getActivity()).getTopAppsCollection("top apps for may",
-                LoginProviderFactory.get(getActivity()).getUser().getId());
+        ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(1), LoginProviderFactory.get(getActivity()).getUser().getId());
 
         return view;
     }
@@ -80,6 +82,8 @@ public class TopAppsFragment extends BaseFragment {
 
         this.activity = activity;
         BusProvider.getInstance().register(this);
+
+        ActionBarUtils.getInstance().setTitle(R.string.title_top_apps);
     }
 
     @Override
