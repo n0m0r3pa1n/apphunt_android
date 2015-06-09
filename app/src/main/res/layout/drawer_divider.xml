@@ -8,5 +8,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#B6B6B6"/>
+        android:background="@color/divider_color"/>
 </RelativeLayout>

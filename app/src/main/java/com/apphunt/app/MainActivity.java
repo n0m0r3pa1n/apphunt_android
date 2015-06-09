@@ -39,6 +39,8 @@ import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
+import com.apphunt.app.ui.fragments.help.HelpAddAppFragment;
+import com.apphunt.app.ui.fragments.help.HelpFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -272,7 +274,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         BaseFragment fragment = null;
         String tag = null;
         boolean addToBackStack = false;
-
         switch (position) {
             case Constants.TRENDING_APPS:
                 fragment = new TrendingAppsFragment();
@@ -308,9 +309,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
                 consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 break;
-
-            case Constants.ABOUT:
+            case Constants.HELP_ADD_APP:
+                fragment = new HelpAddAppFragment();
+                consumedBack = false;
                 break;
+//TODO Add 3 more cases for help
+//            case Constants.HELP:
+//                fragment = new HelpFragment();
+//                consumedBack = false;
+//                break;
         }
 
         try {

@@ -17,6 +17,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.ui.models.DrawerItem;
+import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
@@ -68,6 +69,13 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 View menuRootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_menu, parent, false);
                 menuRootView.setBackgroundResource(R.drawable.row_selector);
                 return new MenuViewHolder(menuRootView);
+            case SUBMENU:
+                View subMenuView = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_submenu, parent, false);
+                subMenuView.setBackgroundResource(R.drawable.row_selector);
+                return new SubMenuViewHolder(subMenuView);
+            case LABEL:
+                View label = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_label, parent, false);
+                return new LabelViewHolder(label);
             default: return null;
         }
     }
@@ -144,6 +152,11 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 menuViewHolder.itemTextView.setText(drawerMenu.getText());
                 menuViewHolder.itemImageView.setImageResource(drawerMenu.getIconRes());
                 break;
+            case LABEL:
+                LabelViewHolder labelViewHolder = (LabelViewHolder) holder;
+                DrawerLabel label = (DrawerLabel) drawerItem;
+                labelViewHolder.label.setText(label.getLabel());
+                break;
         }
     }
 
@@ -214,6 +227,20 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(rootView);
             itemTextView = (TextView) rootView.findViewById(R.id.item);
             itemImageView = (ImageView) rootView.findViewById(R.id.iv_icon);
+        }
+    }
+
+    private static class SubMenuViewHolder extends MenuViewHolder {
+        public SubMenuViewHolder(View rootView) {
+            super(rootView);
+        }
+    }
+
+    private static class LabelViewHolder extends RecyclerView.ViewHolder {
+        private TextView label;
+        public LabelViewHolder(View itemView) {
+            super(itemView);
+            label = (TextView) itemView.findViewById(R.id.label);
         }
     }
 

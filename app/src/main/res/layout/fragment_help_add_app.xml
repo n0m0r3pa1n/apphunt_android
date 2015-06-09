@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/HelpAddAppText"
+            android:text="To add APP is really easy. Be sure to choose app which is quite new or updated soon. Try to offer something new and unknown to other hunters. Just follow these steps:"
+            />
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Step 1: Press the red add button "
+            style="@style/HelpAddAppText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                style="@style/HelpAddAppText"
+                android:text="Press this red button on the home screen" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/alert_color"
+            android:layout_marginTop="10dp"
+            android:elevation="0dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_warning"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+
+                android:text="The app you want to add must be installed on your device"
+                style="@style/HelpAddAppText"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Step2: Choose the app from the list"
+            style="@style/HelpAddAppText"/>
+
+        <TextView
+            android:text="Available apps on your device are visualized in a list. Select the one you want to add by pressing it"
+            style="@style/HelpAddAppText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/alert_color"
+            android:layout_marginTop="10dp"
+            android:elevation="0dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_warning"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+
+                android:text="If you don't find the app, then it is already added in AppHunt by another hunter"
+                style="@style/HelpAddAppText"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Step3: Write short description"
+            style="@style/HelpAddAppText"/>
+
+        <TextView
+            android:text="Write short description about the app in English - why is the app interesting for you, how you use it, why it will be useful for other hunters. This description should be between 50 and 100 symbols. When you are ready just press the SAVE button."
+            style="@style/HelpAddAppText"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/alert_color"
+            android:layout_marginTop="10dp"
+            android:elevation="0dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_warning"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+
+                android:text="If you are not logged in, the app will be be added with @TheAppHunt user"
+                style="@style/HelpAddAppText"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:textStyle="bold"
+            android:text="Step4: Wait for approval"
+            style="@style/HelpAddAppText"/>
+
+        <TextView
+            android:text="AppHunt team then checks if the app meets all requirements and approves or rejects it. In case the app is approved, you will receive a notification."
+            style="@style/HelpAddAppText"/>
+    </LinearLayout>
+</ScrollView>

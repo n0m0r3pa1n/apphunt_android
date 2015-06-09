@@ -2,7 +2,7 @@ package com.apphunt.app.ui.models;
 
 public class DrawerItem {
 
-    public static enum Type {HEADER, MENU, DIVIDER}
+    public static enum Type {HEADER, MENU, DIVIDER, SUBMENU, LABEL}
 
     private final Type type;
 

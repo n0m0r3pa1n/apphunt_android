@@ -27,6 +27,12 @@
 
     <color name="list_item_divider">#1e1e92d4</color>
 
+    <color name="help_secondary_color">#9a9a9a</color>
+
+    <color name="divider_color">#1f000000</color>
+
+    <color name="alert_color">#fff59d</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#C8FFFFFF</color>

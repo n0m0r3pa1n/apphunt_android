@@ -106,7 +106,9 @@ public class Constants {
     public static final int TOP_APPS = 3;
     public static final int SUGGESTIONS = 5;
     public static final int SETTINGS = 6;
-    public static final int ABOUT = 7;
+    public static final int HELP_ADD_APP = 9;
+    public static final int HELP_APPS_REQUIREMENTS = 10;
+    public static final int HELP_TOP_HUNTERS_POINTS = 11;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
+import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
 import com.apphunt.app.utils.Constants;
 import com.squareup.otto.Subscribe;
@@ -30,7 +32,9 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.apphunt.app.utils.Constants.ABOUT;
+import static com.apphunt.app.utils.Constants.HELP_ADD_APP;
+import static com.apphunt.app.utils.Constants.HELP_APPS_REQUIREMENTS;
+import static com.apphunt.app.utils.Constants.HELP_TOP_HUNTERS_POINTS;
 import static com.apphunt.app.utils.Constants.SETTINGS;
 import static com.apphunt.app.utils.Constants.TOP_APPS;
 import static com.apphunt.app.utils.Constants.TOP_HUNTERS;
@@ -129,6 +133,12 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
         String[] menuItems = getResources().getStringArray(R.array.drawer_menu);
         items.add(new DrawerItem(DrawerItem.Type.HEADER));
         for (int i = 0; i < menuItems.length; i++) {
+            if(i == menuItems.length - 4) {
+                items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
+                items.add(new DrawerLabel(menuItems[i]));
+                continue;
+            }
+
             items.add(new DrawerMenu().setIconRes(getIcon(i)).setText(menuItems[i]));
             if(menuItems[i].equals(menuItems[2])) {
                 items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
@@ -150,8 +160,12 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
                 return R.drawable.ic_settings;
             case SETTINGS - 1:
                 return R.drawable.ic_settings;
-            case ABOUT - 1:
-                return R.drawable.ic_info;
+            case HELP_ADD_APP - 2:
+                return R.drawable.ic_help_item;
+            case HELP_APPS_REQUIREMENTS - 2:
+                return R.drawable.ic_help_item;
+            case HELP_TOP_HUNTERS_POINTS - 2:
+                return R.drawable.ic_help_item;
         }
 
         return R.drawable.ic_menu_check;

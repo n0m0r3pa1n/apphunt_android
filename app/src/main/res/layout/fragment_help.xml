@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/add_app_item">
+
+            <ImageView
+                android:id="@+id/add_app_help_icon"
+                style="@style/HelpItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_help_item" />
+
+            <TextView
+                android:id="@+id/add_new_app_text"
+                style="@style/HelpItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/add_app_help_icon"
+                android:text="@string/how_to_add_new_app" />
+
+            <View
+                style="@style/HelpItemSeparator"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/add_new_app_text"
+                android:layout_alignStart="@id/add_new_app_text"
+                android:layout_below="@id/add_app_help_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/requirements_item">
+
+            <ImageView
+                android:id="@+id/apps_requirements_help_icon"
+                style="@style/HelpItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_help_item" />
+
+            <TextView
+                android:id="@+id/apps_requirements_text"
+                style="@style/HelpItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/apps_requirements_help_icon"
+                android:text="@string/apps_requirements" />
+
+            <View
+                style="@style/HelpItemSeparator"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/apps_requirements_text"
+                android:layout_alignStart="@id/apps_requirements_text"
+                android:layout_below="@id/apps_requirements_help_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/top_hunters_item">
+
+            <ImageView
+                android:id="@+id/top_hunters_points_icon"
+                style="@style/HelpItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_help_item" />
+
+            <TextView
+                android:id="@+id/top_hunters_text"
+                style="@style/HelpItemText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/top_hunters_points_icon"
+                android:text="@string/top_hunters_points" />
+
+            <View
+                style="@style/HelpItemSeparator"
+                android:layout_width="wrap_content"
+                android:layout_alignLeft="@id/top_hunters_text"
+                android:layout_alignStart="@id/top_hunters_text"
+                android:layout_below="@id/top_hunters_points_icon" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
