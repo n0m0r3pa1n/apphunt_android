@@ -273,14 +273,24 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             Crashlytics.log("App is null!");
             return;
         }
-        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baseApp.getShortUrl()));
+
+        String appPackageName = baseApp.getPackageName();
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baseApp.getPackageName()));
         marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(marketIntent);
+        try {
+            marketIntent.setData(Uri.parse("market://details?id=" + appPackageName));
+            startActivity(marketIntent);
+        } catch (android.content.ActivityNotFoundException anfe) {
+            marketIntent.setData(Uri.parse(baseApp.getUrl()));
+            startActivity(marketIntent);
+        }
     }
 
     private boolean userHasPermissions() {
         return LoginProviderFactory.get(activity).isUserLoggedIn();
     }
+
+
 
     @Override
     public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
