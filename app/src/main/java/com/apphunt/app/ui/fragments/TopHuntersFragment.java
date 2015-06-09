@@ -39,7 +39,6 @@ public class TopHuntersFragment extends BaseFragment {
 
     public TopHuntersFragment() {
         setFragmentTag(Constants.TAG_TOP_HUNTERS_FRAGMENT);
-        setIsConsumedBack(false);
     }
 
     @Override

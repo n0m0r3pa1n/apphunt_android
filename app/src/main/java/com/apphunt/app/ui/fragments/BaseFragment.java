@@ -7,7 +7,6 @@ public class BaseFragment extends Fragment {
     private int title;
     private String previousTitle;
     private String fragmentTag;
-    private boolean consumedBack = false;
 
     public int getTitle() {
         return title;
@@ -31,13 +30,5 @@ public class BaseFragment extends Fragment {
 
     public void setFragmentTag(String fragmentTag) {
         this.fragmentTag = fragmentTag;
-    }
-
-    public boolean isConsumedBack() {
-        return consumedBack;
-    }
-
-    public void setIsConsumedBack(boolean consumedBack) {
-        this.consumedBack = consumedBack;
     }
 }

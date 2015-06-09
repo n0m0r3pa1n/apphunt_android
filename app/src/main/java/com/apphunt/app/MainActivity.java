@@ -38,8 +38,8 @@ import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
-import com.apphunt.app.ui.fragments.help.HelpAddAppFragment;
-import com.apphunt.app.ui.fragments.help.HelpFragment;
+import com.apphunt.app.ui.fragments.help.AddAppFragment;
+import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -272,27 +272,29 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                fragment.setIsConsumedBack(navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS);
-
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
 
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                fragment.setIsConsumedBack(navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS);
-
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
             case Constants.HELP_ADD_APP:
-                fragment = new HelpAddAppFragment();
-                consumedBack = false;
+                fragment = new AddAppFragment();
                 break;
-//TODO Add 3 more cases for help
-//            case Constants.HELP:
-//                fragment = new HelpFragment();
-//                consumedBack = false;
-//                break;
+            case Constants.HELP_TOP_HUNTERS_POINTS:
+                fragment = new com.apphunt.app.ui.fragments.help.TopHuntersFragment();
+                break;
+            case Constants.HELP_APPS_REQUIREMENTS:
+                fragment = new AppsRequirementsFragment();
+                break;
+        }
+
+        if(position != Constants.TRENDING_APPS) {
+            consumedBack = false;
         }
 
         try {
