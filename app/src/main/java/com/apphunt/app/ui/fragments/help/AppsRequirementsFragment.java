@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
 
@@ -19,7 +21,8 @@ import butterknife.ButterKnife;
 public class AppsRequirementsFragment extends BaseFragment {
 
     public AppsRequirementsFragment() {
-        setTitle(R.string.title_help);
+        setTitle(R.string.apps_requirements);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedHelpAppsRequirements);
     }
     @Override
     public void onAttach(Activity activity) {

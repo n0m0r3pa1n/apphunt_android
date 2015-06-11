@@ -18,8 +18,6 @@ public interface TrackingEvents {
     String UserRequestedMoreApps = "user.requested.more.apps";
     String UserStartedAppFromNotification = "user.started.app.from.notification";
     String AppShowedNotification = "app.showed.notification";
-    String UserVotedAppFromDetails = "user.voted.app.from.details";
-    String UserDownVotedAppFromDetails = "user.down.voted.app.from.details";
     String UserSentComment = "user.sent.comment";
     String UserSentReplyComment = "user.sent.reply.comment";
     String UserVotedComment = "user.voted.comment";
@@ -42,4 +40,10 @@ public interface TrackingEvents {
     String UserSkippedLoginWhenAddApp = "user.skipped.login.when.add.app";
     String UserSearchedForApp = "user.searched.for.app";
     String UserSharedApp = "user.shared.app";
+    String UserViewedTopApps = "user.viewed.top.apps";
+    String UserViewedTopHunters = "user.viewed.top.hunters";
+    String UserViewedHelpAddApp = "user.viewed.help.add.app";
+    String UserViewedHelpAppsRequirements = "user.viewed.help.apps.requirements";
+    String UserViewedHelpTopHuntersPoints = "user.viewed.help.top.hunters.points";
+    String UserOpenedAppDetailsFromTopApps = "user.opened.apps.details.from.top.apps";
 }

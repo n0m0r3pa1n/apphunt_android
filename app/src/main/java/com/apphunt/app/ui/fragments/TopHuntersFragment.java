@@ -17,7 +17,9 @@ import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionE
 import com.apphunt.app.ui.adapters.TopHuntersAdapter;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.StringUtils;
+import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -39,6 +41,7 @@ public class TopHuntersFragment extends BaseFragment {
 
     public TopHuntersFragment() {
         setFragmentTag(Constants.TAG_TOP_HUNTERS_FRAGMENT);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedTopHunters);
     }
 
     @Override

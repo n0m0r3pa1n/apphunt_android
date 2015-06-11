@@ -18,6 +18,8 @@ import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.StringUtils;
+import com.apphunt.app.utils.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
                 AppDetailsFragment detailsFragment = new AppDetailsFragment();
                 String title = context.getString(R.string.title_top_apps);
 

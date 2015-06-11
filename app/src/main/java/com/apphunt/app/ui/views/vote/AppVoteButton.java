@@ -154,16 +154,15 @@ public class AppVoteButton extends LinearLayout {
             return;
         }
         Vote voteResult = event.getVote();
-        FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
         baseApp.setVotesCount(voteResult.getVotes());
         baseApp.setHasVoted(event.isVote());
         voteButton.setText(voteResult.getVotes());
         if(event.isVote()) {
-            FlurryAgent.logEvent(TrackingEvents.UserVotedAppFromDetails);
+            FlurryAgent.logEvent(TrackingEvents.UserVotedApp);
             voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
             voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
         } else {
-            FlurryAgent.logEvent(TrackingEvents.UserDownVotedAppFromDetails);
+            FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp);
             voteButton.setBackgroundResource(R.drawable.btn_vote);
             voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
         }

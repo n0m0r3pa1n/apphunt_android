@@ -71,9 +71,11 @@ public class CommentVoteButton extends AppVoteButton {
         comment.setVotesCount(vote.getVotesCount());
         voteButton.setText(String.valueOf(vote.getVotesCount()));
         if(event.isVote()) {
+            FlurryAgent.logEvent(TrackingEvents.UserVotedComment);
             voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
             voteButton.setBackgroundResource(R.drawable.btn_voted);
         } else {
+            FlurryAgent.logEvent(TrackingEvents.UserDownVotedComment);
             voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
             voteButton.setBackgroundResource(R.drawable.btn_vote);
         }
