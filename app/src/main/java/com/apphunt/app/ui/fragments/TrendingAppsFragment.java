@@ -19,6 +19,7 @@ import com.apphunt.app.event_bus.events.api.apps.LoadAppsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadSearchedAppsApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
+import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -32,6 +33,7 @@ import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
+import com.twitter.sdk.android.core.models.Search;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -189,6 +191,15 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
     @Subscribe
     public void onClearSearch(ClearSearchEvent event) {
         trendingAppsAdapter.clearSearch();
+    }
+
+    @Subscribe
+    public void onSearchStatusChanged(SearchStatusEvent event) {
+        if(event.isSearching()) {
+            lvTrendingApps.setOnScrollListener(null);
+        } else {
+            lvTrendingApps.setOnScrollListener(this);
+        }
     }
 
     @Subscribe

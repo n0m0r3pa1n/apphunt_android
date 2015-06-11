@@ -26,6 +26,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
+import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
@@ -204,6 +205,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
+                BusProvider.getInstance().post(new SearchStatusEvent(true));
                 ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
                         Constants.PLATFORM);
 
@@ -213,6 +215,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if(TextUtils.isEmpty(s)) {
+                    BusProvider.getInstance().post(new SearchStatusEvent(false));
+                }
                 return false;
             }
         });
