@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="15dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/HelpText"
-        android:text="1. The app should be relatively new or updated soon "/>
+        android:text="1. The app should be relatively new or updated soon " />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/HelpText"
-        android:text="2. The app should have some new, unknown or useful features"/>
+        android:text="2. The app should have some new, unknown or useful features" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/HelpText"
-        android:text="3. App's description should be meaningful and written in English"/>
+        android:text="3. App's description should be meaningful and written in English" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/HelpText"
-        android:text="4. App's description should be between 50 and 100 symbols"/>
+        android:text="4. App's description should be between 50 and 100 symbols" />
 
 </LinearLayout>
