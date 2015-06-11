@@ -3,12 +3,8 @@ package com.apphunt.app.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
@@ -35,6 +31,7 @@ import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.TrackingEvents;
@@ -44,9 +41,6 @@ import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -168,7 +162,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Uri iconUri = getLocalBitmapUri(iconImageView);
+                    Uri iconUri = ImageUtils.getLocalBitmapUri(iconImageView);
                     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                     sharingIntent.setType("*/*");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
@@ -194,31 +188,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
         }
 
         return view;
-    }
-
-    public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
-        Drawable drawable = imageView.getDrawable();
-        Bitmap bmp;
-        if (drawable instanceof BitmapDrawable){
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        } else {
-            return null;
-        }
-        // Store image to default external storage directory
-        Uri bmpUri = null;
-        try {
-            File file =  new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-//            file.getParentFile().mkdirs();
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-            bmpUri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmpUri;
     }
 
     public void notifyAdapter(AppsList appsList) {

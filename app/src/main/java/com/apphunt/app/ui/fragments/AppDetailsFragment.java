@@ -5,12 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,11 +31,11 @@ import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.crashlytics.android.Crashlytics;
-import com.facebook.widget.FacebookDialog;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -178,7 +174,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
 
-        if(event.isVote()) {
+        if (event.isVote()) {
             votersAdapter.addCreatorIfNotVoter(user);
 
         } else {
@@ -225,7 +221,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        if(event.shouldReload()) {
+        if (event.shouldReload()) {
             commentsBox.resetComments(event.getComments());
         } else {
             commentsBox.setComments(event.getComments());
@@ -236,6 +232,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.box_desc:
+                if (baseApp == null) {
+                    return;
+                }
                 Map<String, String> params = new HashMap<>();
                 params.put("appId", appId);
                 FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
@@ -293,10 +292,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
 
-
     @Override
     public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
-        if(isBoxFullscreen) {
+        if (isBoxFullscreen) {
             boxDetails.setVisibility(View.GONE);
         } else {
             boxDetails.setVisibility(View.VISIBLE);
@@ -315,14 +313,8 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                if (FacebookDialog.canPresentShareDialog(activity.getApplicationContext(),
-                        FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                    shareWithFacebook();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
-                } else {
-                    shareWithLocalApps();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
-                }
+                shareWithLocalApps();
+                FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
                 return true;
 
             default:
@@ -331,17 +323,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     }
 
     private void shareWithLocalApps() {
+        final String message = baseApp.getName() + ". " + baseApp.getDescription() + " " + baseApp.getShortUrl();
+        Uri iconUri = ImageUtils.getLocalBitmapUri(icon);
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/html");
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
-        startActivity(Intent.createChooser(sharingIntent, "Share using"));
-    }
-
-    private void shareWithFacebook() {
-        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(activity)
-                .setName("AppHunt")
-                .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
-                .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
-        shareDialog.present();
+        sharingIntent.setType("*/*");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, iconUri);
+        activity.startActivity(Intent.createChooser(sharingIntent, "Share using"));
+        Map<String, String> params = new HashMap<>();
+        params.put("appId", baseApp.getId());
+        FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
     }
 }

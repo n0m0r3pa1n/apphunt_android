@@ -106,6 +106,7 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
                     params.put("suggestion", messageText.toString());
                     FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
                     Toast.makeText(getActivity(), R.string.feedback_send, Toast.LENGTH_LONG).show();
+                    getSupportFragmentManager().popBackStack();
                 }
                 break;
 
