@@ -265,7 +265,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setPreviousTitle();
+        ActionBarUtils.getInstance().setTitle(R.string.title_home);
         ActionBarUtils.getInstance().invalidateOptionsMenu();
 
     }

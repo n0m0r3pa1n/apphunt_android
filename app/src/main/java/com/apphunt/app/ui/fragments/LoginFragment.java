@@ -68,9 +68,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_login);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
-        ActionBarUtils.getInstance().setTitle(R.string.title_login);
     }
 
     @Override
@@ -118,14 +116,11 @@ public class LoginFragment extends BaseFragment {
                         user.setName(twitterUser.name);
 
                         String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
-                        Log.e(TAG, profileImageUrl);
                         user.setProfilePicture(profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
                         Locale locale = getResources().getConfiguration().locale;
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
-
-                        Log.e(TAG, user.getCoverPicture());
 
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
@@ -178,6 +173,7 @@ public class LoginFragment extends BaseFragment {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
         BusProvider.getInstance().register(this);
+        ActionBarUtils.getInstance().setTitle(R.string.title_login);
     }
 
     @Override
@@ -186,7 +182,11 @@ public class LoginFragment extends BaseFragment {
         NavUtils.getInstance(activity).setOnBackBlocked(false);
         BusProvider.getInstance().unregister(this);
         ActionBarUtils.getInstance().setPreviousTitle();
-        ActionBarUtils.getInstance().showActionBarShadow();
+
+
+        if (!ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_app_details))) {
+            ActionBarUtils.getInstance().showActionBarShadow();
+        }
     }
 
     @Override

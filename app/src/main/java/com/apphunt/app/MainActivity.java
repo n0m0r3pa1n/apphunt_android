@@ -154,7 +154,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
                 if (!networkEventIsPosted && !firstTime) {
                     BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
-                    firstTime = false;
                 }
 
                 networkEventIsPosted = true;

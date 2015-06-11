@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,9 +205,12 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     @Subscribe
     public void onNetworkStatus(NetworkStatusChangeEvent event) {
+        Log.e(TAG, "" + event.isNetworkAvailable());
         if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
             btnReload.setVisibility(View.VISIBLE);
             lvTrendingApps.setVisibility(View.GONE);
+        } else {
+            reloadApps();
         }
     }
 }

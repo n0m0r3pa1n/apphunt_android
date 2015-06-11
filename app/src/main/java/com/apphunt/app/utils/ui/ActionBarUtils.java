@@ -75,6 +75,10 @@ public class ActionBarUtils {
         ((ActionBarActivity) activity).getSupportActionBar().setTitle(previousTitle);
     }
 
+    public CharSequence getPreviousTitle() {
+        return previousTitle;
+    }
+
     public void showActionBar(ActionBarActivity activity) {
         activity.getSupportActionBar().show();
     }
