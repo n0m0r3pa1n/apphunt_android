@@ -66,8 +66,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private NavigationDrawerFragment navigationDrawerFragment;
     private Toolbar toolbar;
     private boolean consumedBack;
-    private boolean networkEventIsPosted;
-    private boolean firstTime = true;
+    private Boolean hasInternet = null;
+    boolean isNetworkChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,27 +143,38 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
     }
 
+
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
             if (ConnectivityUtils.isNetworkAvailable(context)) {
+                setHasInternet(true);
+
                 if (fragment != null) {
                     getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }
 
-                if (!networkEventIsPosted && !firstTime) {
+                if (isNetworkChanged) {
                     BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
                 }
-
-                networkEventIsPosted = true;
             } else {
+                setHasInternet(false);
                 if (fragment == null) {
                     NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
                 }
             }
         }
     };
+
+    private void setHasInternet(boolean hasInternet) {
+        if (this.hasInternet == null || this.hasInternet == hasInternet) {
+            isNetworkChanged = false;
+        } else if (this.hasInternet != hasInternet) {
+            isNetworkChanged = true;
+        }
+        this.hasInternet = hasInternet;
+    }
 
     private boolean isStartedFromDeepLink() {
         Intent intent = getIntent();
@@ -214,7 +225,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if(TextUtils.isEmpty(s)) {
+                if (TextUtils.isEmpty(s)) {
                     BusProvider.getInstance().post(new SearchStatusEvent(false));
                 }
                 return false;
@@ -297,8 +308,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
         }
 
-        if(position != Constants.TRENDING_APPS) {
+        if (position != Constants.TRENDING_APPS) {
             consumedBack = false;
+        } else {
+            consumedBack = true;
         }
 
         try {
