@@ -313,8 +313,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                shareWithLocalApps();
-                FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
+                if(baseApp != null) {
+                    shareWithLocalApps();
+                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
+                }
                 return true;
 
             default:

@@ -70,9 +70,8 @@ public class TopHuntersFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
-
         ActionBarUtils.getInstance().setPreviousTitle();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Subscribe

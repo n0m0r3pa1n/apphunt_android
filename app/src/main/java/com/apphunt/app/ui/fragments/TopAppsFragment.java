@@ -81,7 +81,6 @@ public class TopAppsFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = activity;
         BusProvider.getInstance().register(this);
 
