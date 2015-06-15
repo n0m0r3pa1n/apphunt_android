@@ -51,6 +51,7 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -329,7 +330,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Crashlytics.getInstance().core.logException(e);
         }
     }
 
