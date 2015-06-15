@@ -184,7 +184,8 @@ public class LoginFragment extends BaseFragment {
         ActionBarUtils.getInstance().setPreviousTitle();
 
 
-        if (!ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_app_details))) {
+        if (!ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_app_details)) &&
+                !ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_save_app))) {
             ActionBarUtils.getInstance().showActionBarShadow();
         }
     }
