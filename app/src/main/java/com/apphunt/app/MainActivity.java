@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private boolean isStartedFromDeepLink() {
         Intent intent = getIntent();
-        return intent != null && intent.getAction().equals(Intent.ACTION_VIEW) && intent.getData() != null;
+        return intent != null && Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null;
     }
 
     @Override
