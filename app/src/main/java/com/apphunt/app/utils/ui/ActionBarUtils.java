@@ -11,8 +11,8 @@ import android.view.View;
 import com.apphunt.app.R;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
-import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.crashlytics.android.Crashlytics;
 
 public class ActionBarUtils {
 
@@ -68,7 +68,11 @@ public class ActionBarUtils {
     }
 
     public void setTitle(int titleRes) {
-        setTitle(activity.getResources().getString(titleRes));
+        try {
+            setTitle(activity.getResources().getString(titleRes));
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     public void setPreviousTitle() {
