@@ -116,13 +116,19 @@ public class TrendingAppsAdapter extends BaseAdapter {
             Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
 
             viewHolderItem.title.setText(StringUtils.htmlDecodeString(app.getName()));
-            viewHolderItem.description.setText(app.getDescription());
-            viewHolderItem.commentsCount.setText(String.valueOf(app.getCommentsCount()));
+            viewHolderItem.category.setText(app.getCategory());
             Picasso.with(ctx)
                     .load(app.getCreatedBy().getProfilePicture())
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
             viewHolderItem.vote.setBaseApp(app);
+
+            viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(ctx, "Clicked!", Toast.LENGTH_LONG).show();
+                }
+            });
 
             View.OnClickListener detailsClickListener = new View.OnClickListener() {
                 @Override
@@ -151,28 +157,6 @@ public class TrendingAppsAdapter extends BaseAdapter {
 
             viewHolderItem.layout.setOnClickListener(null);
             viewHolderItem.layout.setOnClickListener(detailsClickListener);
-
-            viewHolderItem.details.setOnClickListener(null);
-            viewHolderItem.details.setOnClickListener(detailsClickListener);
-
-            viewHolderItem.share.setOnClickListener(null);
-            final ImageView iconImageView = viewHolderItem.icon;
-            final App currApp = ((AppItem)items.get(position)).getData();
-            final String message = viewHolderItem.title.getText() + ". " + viewHolderItem.description.getText() + " " + app.getShortUrl();
-            viewHolderItem.share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Uri iconUri = ImageUtils.getLocalBitmapUri(iconImageView);
-                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                    sharingIntent.setType("*/*");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-                    sharingIntent.putExtra(Intent.EXTRA_STREAM, iconUri);
-                    ctx.startActivity(Intent.createChooser(sharingIntent, "Share using"));
-                    Map<String, String> params = new HashMap<>();
-                    params.put("appId", currApp.getId());
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
-                }
-            });
 
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue() && viewHolderSeparator != null) {
             viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
@@ -336,11 +320,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         @InjectView(R.id.app_name)
         TextView title;
 
-        @InjectView(R.id.description)
-        TextView description;
-
-        @InjectView(R.id.comments_count)
-        TextView commentsCount;
+        @InjectView(R.id.category)
+        TextView category;
 
         @InjectView(R.id.creator_avatar)
         Target creatorImageView;
@@ -351,11 +332,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
         @InjectView(R.id.btn_vote)
         AppVoteButton vote;
 
-        @InjectView(R.id.btn_details)
-        Button details;
-
-        @InjectView(R.id.btn_share)
-        Button share;
+        @InjectView(R.id.add_to_collection)
+        ImageButton addToCollection;
 
         public ViewHolderItem(View view) {
             ButterKnife.inject(this, view);

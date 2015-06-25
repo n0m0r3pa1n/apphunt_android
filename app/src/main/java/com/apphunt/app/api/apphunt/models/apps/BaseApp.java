@@ -27,6 +27,7 @@ public class BaseApp {
     private boolean hasVoted;
     private User createdBy;
     private int commentsCount;
+    private String category = "Tools";
 
     public int getPosition() {
         return position;
@@ -128,13 +129,22 @@ public class BaseApp {
         this.votesCount = votesCount;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "App{" +
+        return "BaseApp{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", icon='" + icon + '\'' +
+                ", position=" + position +
                 ", packageName='" + packageName + '\'' +
                 ", votesCount=" + votesCount +
                 ", shortUrl='" + shortUrl + '\'' +
@@ -142,6 +152,7 @@ public class BaseApp {
                 ", hasVoted=" + hasVoted +
                 ", createdBy=" + createdBy +
                 ", commentsCount=" + commentsCount +
+                ", category='" + category + '\'' +
                 '}';
     }
 }
