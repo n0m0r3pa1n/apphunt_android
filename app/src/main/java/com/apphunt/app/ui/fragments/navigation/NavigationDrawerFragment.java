@@ -32,6 +32,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.apphunt.app.utils.Constants.COLLECTIONS;
 import static com.apphunt.app.utils.Constants.HELP_ADD_APP;
 import static com.apphunt.app.utils.Constants.HELP_APPS_REQUIREMENTS;
 import static com.apphunt.app.utils.Constants.HELP_TOP_HUNTERS_POINTS;
@@ -140,7 +141,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
             }
 
             items.add(new DrawerMenu().setIconRes(getIcon(i)).setText(menuItems[i]));
-            if(menuItems[i].equals(menuItems[2])) {
+            if(menuItems[i].equals(menuItems[3])) {
                 items.add(new DrawerItem(DrawerItem.Type.DIVIDER));
             }
         }
@@ -155,6 +156,8 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
             case TOP_HUNTERS:
                 return R.drawable.ic_tophunters;
             case TOP_APPS:
+                return R.drawable.ic_topandroid;
+            case COLLECTIONS:
                 return R.drawable.ic_topandroid;
             case SUGGESTIONS - 1:
                 return R.drawable.ic_feedback;

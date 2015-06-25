@@ -34,6 +34,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
@@ -276,7 +277,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.TRENDING_APPS:
                 fragment = new TrendingAppsFragment();
                 break;
-
             case Constants.TOP_APPS:
                 fragment = new TopAppsFragment();
                 break;
@@ -284,7 +284,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.TOP_HUNTERS:
                 fragment = new TopHuntersFragment();
                 break;
-
+            case Constants.COLLECTIONS:
+                fragment = new CollectionsFragment();
+                break;
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
@@ -321,7 +323,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
-                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(fragment.getFragmentTag())) {
+                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1)
+                                .getName().equals(fragment.getFragmentTag())) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
                             .add(R.id.container, fragment, fragment.getFragmentTag())

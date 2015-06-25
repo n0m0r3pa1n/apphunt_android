@@ -15,19 +15,20 @@
         android:layoutAnimation="@anim/list_view_entry"
         android:paddingTop="7dp" />
 
-    <com.shamanland.fab.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:elevation="6dp"
+        app:pressedTranslationZ="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:layout_marginTop="@dimen/add_btn_margin_top"
-        android:elevation="@dimen/add_btn_elevation"
         android:src="@drawable/ic_add_white"
-        app:floatingActionButtonColor="@color/bg_fab"
-        app:floatingActionButtonSize="normal" />
+        app:backgroundTint="@color/bg_fab"/>
 
     <RelativeLayout
         android:id="@+id/more_loader_layout"

@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -32,7 +33,6 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
-import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.core.models.Search;
 
