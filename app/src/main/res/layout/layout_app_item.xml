@@ -3,7 +3,7 @@
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     android:layout_width="fill_parent"
-    android:layout_height="@dimen/list_item_height"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
     android:elevation="0dp"
@@ -21,9 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_margin="15dp">
 
             <ImageView
                 android:id="@+id/app_icon"
@@ -47,16 +45,17 @@
                 android:layout_width="@dimen/list_item_vote_size"
                 android:layout_height="@dimen/list_item_vote_size"
                 android:layout_alignParentRight="true"
-                />
+                android:gravity="right" />
 
             <ImageButton
                 android:id="@+id/add_to_collection"
                 android:layout_width="@dimen/list_item_add_to_collection_size"
                 android:layout_height="@dimen/list_item_add_to_collection_size"
-                android:background="@drawable/ic_feedback"
+                android:background="@drawable/ic_add_to_collection"
                 android:layout_alignParentBottom="true"
-                android:layout_alignLeft="@+id/btn_vote"
-                android:layout_alignStart="@+id/btn_vote" />
+                android:layout_alignRight="@+id/btn_vote"
+                android:layout_alignEnd="@+id/btn_vote"
+                android:layout_marginRight="@dimen/list_item_add_to_collection_margin_left"/>
 
             <TextView
                 android:id="@+id/category"
@@ -64,14 +63,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/app_name"
                 android:layout_toRightOf="@+id/app_icon"
-                android:textSize="@dimen/list_item_name" />
+                android:textSize="@dimen/list_item_category" />
 
             <LinearLayout
                 android:id="@+id/creator_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
                 android:layout_marginTop="7dp"
+                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/category"
                 android:layout_toRightOf="@id/app_icon"
                 android:orientation="horizontal">

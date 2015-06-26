@@ -24,6 +24,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -35,6 +36,7 @@ import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.ui.AddToCollectionUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
@@ -126,7 +128,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(ctx, "Clicked!", Toast.LENGTH_LONG).show();
+                    AddToCollectionUtils.getInstance().presentSelectCollectionFragment((FragmentActivity) ctx, app);
                 }
             });
 

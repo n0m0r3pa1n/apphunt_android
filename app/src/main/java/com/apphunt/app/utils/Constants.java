@@ -54,7 +54,9 @@ public class Constants {
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
     public static final String TAG_APPS_LIST_FRAGMENT = "apps_list_fragment";
     public static final String TAG_TOP_APPS_FRAGMENT = "top_apps_fragment";
-    public static final String TAG_TOP_HUNTERS_FRAGMENT = "top_hunters_fragments";
+    public static final String TAG_TOP_HUNTERS_FRAGMENT = "top_hunters_fragment";
+    public static final String TAG_SELECT_COLLECTION_FRAGMENT = "select_collection_fragment";
+    public static final String TAG_CREATE_COLLECTION_FRAGMENT = "create_collection_fragment";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
