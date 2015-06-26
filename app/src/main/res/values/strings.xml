@@ -13,6 +13,9 @@
     <string name="title_app_details">Details</string>
     <string name="title_top_apps">Top Apps</string>
     <string name="title_close">Close</string>
+    <string name="title_all_collection">All Collections</string>
+    <string name="title_favourite_collection">Favourite Collections</string>
+    <string name="title_my_collection">My Collections</string>
 
     <string-array name="drawer_menu">
         <item>Trending Apps</item>
@@ -117,4 +120,5 @@
     <string name="how_to_add_new_app">How to add new app</string>
     <string name="apps_requirements">Apps Requirements</string>
     <string name="top_hunters_points">Top Hunters Points</string>
+
 </resources>
