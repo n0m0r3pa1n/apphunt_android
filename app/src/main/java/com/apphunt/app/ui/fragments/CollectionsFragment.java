@@ -26,6 +26,8 @@ public class CollectionsFragment extends BaseFragment {
     @InjectView(R.id.tabLayout)
     TabLayout tabLayout;
 
+    private TabLayout.Tab previousSelectedTab;
+
     PagerAdapter pagerAdapter;
 
     @Nullable
@@ -33,20 +35,20 @@ public class CollectionsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.inject(this, view);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_collecton_select).setTag(0));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_collecton_not_select).setTag(1));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_collecton_not_select).setTag(2));
-        pagerAdapter = new CollectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        initTabs();
+
         pagerAdapter = new CollectionsPagerAdapter(getActivity().getSupportFragmentManager());
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         pager.setAdapter(pagerAdapter);
 
-
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Object tag = tab.getTag();
+                int tag = (Integer)tab.getTag();
+                setTabSelectedIcon(tab);
                 pager.setCurrentItem((Integer) tag);
+                resetTabIcon(previousSelectedTab);
+                previousSelectedTab = tab;
             }
 
             @Override
@@ -60,5 +62,47 @@ public class CollectionsFragment extends BaseFragment {
             }
         });
         return view;
+    }
+
+
+
+    private void initTabs() {
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_collecton_not_select).setTag(0));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_not_select).setTag(1));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_mycollection_not_select).setTag(2));
+        previousSelectedTab = tabLayout.getTabAt(0);
+        setTabSelectedIcon(previousSelectedTab);
+    }
+
+    private void resetTabIcon(TabLayout.Tab tab) {
+        if(tab == null)
+            return;
+        int tag = (int) tab.getTag();
+        switch(tag) {
+            case 0:
+                tab.setIcon(R.drawable.ic_collecton_not_select);
+                break;
+            case 1:
+                tab.setIcon(R.drawable.ic_favorite_not_select);
+                break;
+            case 2:
+                tab.setIcon(R.drawable.ic_mycollection_not_select);
+                break;
+        }
+    }
+
+    private void setTabSelectedIcon(TabLayout.Tab tab) {
+        int tag = (int) tab.getTag();
+        switch(tag) {
+            case 0:
+                tab.setIcon(R.drawable.ic_collecton_select);
+                break;
+            case 1:
+                tab.setIcon(R.drawable.ic_favorite_select);
+                break;
+            case 2:
+                tab.setIcon(R.drawable.ic_mycollection_select);
+                break;
+        }
     }
 }
