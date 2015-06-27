@@ -46,4 +46,6 @@ public interface TrackingEvents {
     String UserViewedHelpAppsRequirements = "user.viewed.help.apps.requirements";
     String UserViewedHelpTopHuntersPoints = "user.viewed.help.top.hunters.points";
     String UserOpenedAppDetailsFromTopApps = "user.opened.apps.details.from.top.apps";
+    String UserVotedCollection = "user.voted.collection";
+    String UserDownVotedCollection = "user.down.voted.collection";
 }

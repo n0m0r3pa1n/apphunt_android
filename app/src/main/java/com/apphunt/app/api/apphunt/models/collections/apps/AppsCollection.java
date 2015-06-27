@@ -1,6 +1,7 @@
 package com.apphunt.app.api.apphunt.models.collections.apps;
 
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -19,8 +20,12 @@ public class AppsCollection {
     private String picture;
     private String name;
     private String description;
-    private List<BaseApp> apps = new ArrayList<>();
+    private boolean hasVoted;
+    private int votesCount;
 
+    private User createdBy;
+
+    private List<BaseApp> apps = new ArrayList<>();
     public String getId() {
         return id;
     }
@@ -53,12 +58,36 @@ public class AppsCollection {
         this.description = description;
     }
 
+    public boolean hasUserVoted() {
+        return hasVoted;
+    }
+
+    public void setHasVoted(boolean hasVoted) {
+        this.hasVoted = hasVoted;
+    }
+
+    public int getVotesCount() {
+        return votesCount;
+    }
+
+    public void setVotesCount(int votesCount) {
+        this.votesCount = votesCount;
+    }
+
     public List<BaseApp> getApps() {
         return apps;
     }
 
     public void setApps(List<BaseApp> apps) {
         this.apps = apps;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override

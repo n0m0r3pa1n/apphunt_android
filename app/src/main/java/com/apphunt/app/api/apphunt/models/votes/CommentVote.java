@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.models.comments;
+package com.apphunt.app.api.apphunt.models.votes;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>

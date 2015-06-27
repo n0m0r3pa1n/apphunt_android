@@ -3,14 +3,14 @@ package com.apphunt.app.api.apphunt.models.votes;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
-public class Vote {
+public class AppVote {
     private String userId;
     private String appId;
     @SerializedName("votesCount")
     private String votes;
     private User user;
 
-    public Vote(String userId) {
+    public AppVote(String userId) {
         this.userId = userId;
     }
 
