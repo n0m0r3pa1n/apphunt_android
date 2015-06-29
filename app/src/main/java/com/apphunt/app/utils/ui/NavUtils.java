@@ -3,10 +3,14 @@ package com.apphunt.app.utils.ui;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
+import com.apphunt.app.ui.fragments.collection_creator.CreateCollectionFragment;
+import com.apphunt.app.ui.fragments.collection_creator.SelectCollectionFragment;
 import com.apphunt.app.utils.Constants;
 
 /**
@@ -15,10 +19,10 @@ import com.apphunt.app.utils.Constants;
 public class NavUtils {
 
     private static NavUtils instance;
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
     private boolean isBlocked = false;
 
-    public static NavUtils getInstance(ActionBarActivity activity) {
+    public static NavUtils getInstance(AppCompatActivity activity) {
         if (instance == null) {
             instance = new NavUtils(activity);
         }
@@ -26,7 +30,7 @@ public class NavUtils {
         return instance;
     }
 
-    private NavUtils(ActionBarActivity activity) {
+    private NavUtils(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -58,11 +62,28 @@ public class NavUtils {
         }
     }
 
+    public void presentSelectCollectionFragment(App app) {
+        SelectCollectionFragment fragment = new SelectCollectionFragment();
+        fragment.setSelectedApp(app);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, Constants.TAG_SELECT_COLLECTION_FRAGMENT)
+                .addToBackStack(Constants.TAG_SELECT_COLLECTION_FRAGMENT)
+                .commit();
+    }
+
+    public void presentCreateCollectionFragment() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new CreateCollectionFragment(), Constants.TAG_CREATE_COLLECTION_FRAGMENT)
+                .addToBackStack(Constants.TAG_CREATE_COLLECTION_FRAGMENT)
+                .commit();
+    }
+
     public void setOnBackBlocked(boolean isBlocked) {
         if (isBlocked) {
-            ActionBarUtils.getInstance().hideActionBar(activity);
+            ActionBarUtils.getInstance().hideActionBar((ActionBarActivity) activity);
         } else {
-            ActionBarUtils.getInstance().showActionBar(activity);
+            ActionBarUtils.getInstance().showActionBar((ActionBarActivity) activity);
         }
         this.isBlocked = isBlocked;
     }
