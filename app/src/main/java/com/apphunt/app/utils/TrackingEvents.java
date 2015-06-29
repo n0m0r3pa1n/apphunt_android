@@ -48,4 +48,6 @@ public interface TrackingEvents {
     String UserOpenedAppDetailsFromTopApps = "user.opened.apps.details.from.top.apps";
     String UserVotedCollection = "user.voted.collection";
     String UserDownVotedCollection = "user.down.voted.collection";
+    String UserFavouritedCollection = "user.favourited.collection";
+    String UserUnfavouritedCollection = "user.unfavourited.collection";
 }

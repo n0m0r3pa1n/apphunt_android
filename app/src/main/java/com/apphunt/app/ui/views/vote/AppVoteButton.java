@@ -38,7 +38,7 @@ public class AppVoteButton extends LinearLayout {
     public AppVoteButton(Context context) {
         super(context);
         if (!isInEditMode()) {
-            init(context);
+            init();
         }
     }
 
@@ -46,21 +46,21 @@ public class AppVoteButton extends LinearLayout {
         super(context);
         this.baseApp = baseApp;
         if (!isInEditMode()) {
-            init(context);
+            init();
         }
     }
 
     public AppVoteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
-            init(context);
+            init();
         }
     }
 
     public AppVoteButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (!isInEditMode()) {
-            init(context);
+            init();
         }
     }
 
@@ -84,7 +84,7 @@ public class AppVoteButton extends LinearLayout {
         return inflater;
     }
 
-    protected void init(Context context) {
+    protected void init() {
         View view = getLayoutInflater().inflate(R.layout.view_vote_button, this, true);
         ButterKnife.inject(this, view);
         if(!shouldBeAbleToVote()) {

@@ -225,4 +225,6 @@ public class LoginFragment extends BaseFragment {
         NavUtils.getInstance(activity).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(activity);
     }
+
+
 }

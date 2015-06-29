@@ -45,4 +45,6 @@ public interface AppHuntApi {
     void voteCollection(String userId, String collectionId);
 
     void downVoteCollection(String userId, String collectionId);
+
+    void getMyCollections(String userId, int page, int pageSize);
 }
