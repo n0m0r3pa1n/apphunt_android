@@ -98,7 +98,7 @@ public class BaseApp {
         this.url = url;
     }
 
-    public boolean isHasVoted() {
+    public boolean hasVoted() {
         return hasVoted;
     }
 

@@ -22,7 +22,7 @@ public class GetAppCommentsRequest extends BaseGetRequest<Comments> {
     }
 
     @Override
-    public Class<Comments> getParsedAppClass() {
+    public Class<Comments> getParsedClass() {
         return Comments.class;
     }
 

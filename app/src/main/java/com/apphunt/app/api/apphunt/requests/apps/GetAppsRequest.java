@@ -17,7 +17,7 @@ public class GetAppsRequest extends BaseGetRequest<AppsList> {
     }
 
     @Override
-    public Class<AppsList> getParsedAppClass() {
+    public Class<AppsList> getParsedClass() {
         return AppsList.class;
     }
 

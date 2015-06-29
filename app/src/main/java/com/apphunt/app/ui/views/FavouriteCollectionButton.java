@@ -1,56 +1,51 @@
 package com.apphunt.app.ui.views;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.api.apphunt.models.votes.CollectionVote;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.votes.CollectionVoteApiEvent;
 import com.apphunt.app.utils.Constants;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
-import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-/**
- * Created by nmp on 15-6-29.
- */
-public class FavouriteButton extends LinearLayout {
+public class FavouriteCollectionButton extends LinearLayout {
 
     private AppsCollection collection;
     private LayoutInflater inflater;
 
-    @InjectView(R.id.favouriteButton)
+    @InjectView(R.id.favourite_button)
     ToggleButton favouriteButton;
 
-    public FavouriteButton(Context context) {
+    public FavouriteCollectionButton(Context context) {
         super(context);
         if (!isInEditMode()) {
             init();
         }
     }
 
-    public FavouriteButton(Context context, AttributeSet attrs) {
+    public FavouriteCollectionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init();
         }
     }
 
-    public FavouriteButton(Context context, AttributeSet attrs, int defStyle) {
+    public FavouriteCollectionButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (!isInEditMode()) {
             init();
@@ -62,6 +57,7 @@ public class FavouriteButton extends LinearLayout {
         ButterKnife.inject(this, view);
     }
 
+
     protected LayoutInflater getLayoutInflater() {
         if(inflater == null) {
             inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,19 +68,36 @@ public class FavouriteButton extends LinearLayout {
 
     public void setCollection(AppsCollection collection) {
         this.collection = collection;
-
+        favouriteButton.setChecked(collection.isFavourite());
     }
 
-    protected void favourite() {
+    @OnClick(R.id.favourite_button)
+    public void vote(View view) {
+        if(!LoginProviderFactory.get((Activity) getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(getContext());
+            return;
+        }
+
+        if(collection == null)
+            return;
+
+        if(collection.isFavourite()) {
+            unfavourite();
+        } else {
+            favourite();
+        }
+    }
+
+    private void favourite() {
         FlurryAgent.logEvent(TrackingEvents.UserFavouritedCollection);
-        ApiClient.getClient(getContext()).voteCollection(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                collection.getId());
+        ApiClient.getClient(getContext()).favouriteCollection(collection.getId(),
+                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
-    protected void unfavourite() {
+    private void unfavourite() {
         FlurryAgent.logEvent(TrackingEvents.UserUnfavouritedCollection);
-        ApiClient.getClient(getContext()).downVoteCollection(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                collection.getId());
+        ApiClient.getClient(getContext()).unfavouriteCollection(collection.getId(),
+                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     @Override

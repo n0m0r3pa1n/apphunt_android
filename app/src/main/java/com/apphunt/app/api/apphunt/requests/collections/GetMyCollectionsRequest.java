@@ -16,7 +16,7 @@ public class GetMyCollectionsRequest extends BaseGetRequest<AppsCollections> {
     }
 
     @Override
-    public Class<AppsCollections> getParsedAppClass() {
+    public Class<AppsCollections> getParsedClass() {
         return AppsCollections.class;
     }
 

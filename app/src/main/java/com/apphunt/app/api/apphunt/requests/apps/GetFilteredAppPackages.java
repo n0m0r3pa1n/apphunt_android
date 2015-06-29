@@ -22,7 +22,7 @@ public class GetFilteredAppPackages extends BasePostRequest<Packages> {
     }
 
     @Override
-    public Class<Packages> getParsedAppClass() {
+    public Class<Packages> getParsedClass() {
         return Packages.class;
     }
 

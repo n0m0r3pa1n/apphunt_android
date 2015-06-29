@@ -16,7 +16,7 @@ public class PostAppRequest extends BasePostRequest<JSONObject> {
     }
 
     @Override
-    public Class<JSONObject> getParsedAppClass() {
+    public Class<JSONObject> getParsedClass() {
         return JSONObject.class;
     }
 

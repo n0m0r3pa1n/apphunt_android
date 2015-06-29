@@ -20,7 +20,7 @@ public class PostCollectionVoteRequest extends BasePostRequest<CollectionVote> {
     }
 
     @Override
-    public Class<CollectionVote> getParsedAppClass() {
+    public Class<CollectionVote> getParsedClass() {
         return CollectionVote.class;
     }
 

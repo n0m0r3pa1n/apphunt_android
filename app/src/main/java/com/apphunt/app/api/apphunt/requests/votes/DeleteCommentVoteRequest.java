@@ -16,7 +16,7 @@ public class DeleteCommentVoteRequest extends BaseGsonRequest<CommentVote>{
     }
 
     @Override
-    public Class<CommentVote> getParsedAppClass() {
+    public Class<CommentVote> getParsedClass() {
         return CommentVote.class;
     }
 

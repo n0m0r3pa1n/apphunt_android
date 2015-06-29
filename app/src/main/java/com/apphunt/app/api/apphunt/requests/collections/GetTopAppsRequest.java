@@ -23,7 +23,7 @@ public class GetTopAppsRequest extends BaseGetRequest<AppsCollections> {
     }
 
     @Override
-    public Class<AppsCollections> getParsedAppClass() {
+    public Class<AppsCollections> getParsedClass() {
         return AppsCollections.class;
     }
 

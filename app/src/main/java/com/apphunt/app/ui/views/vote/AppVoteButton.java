@@ -19,8 +19,6 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -137,7 +135,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected boolean hasVoted() {
-        return baseApp.isHasVoted();
+        return baseApp.hasVoted();
     }
 
     protected void downVote() {

@@ -15,7 +15,7 @@ public class PostNewCommentRequest extends BasePostRequest<NewComment> {
     }
 
     @Override
-    public Class<NewComment> getParsedAppClass() {
+    public Class<NewComment> getParsedClass() {
         return NewComment.class;
     }
 

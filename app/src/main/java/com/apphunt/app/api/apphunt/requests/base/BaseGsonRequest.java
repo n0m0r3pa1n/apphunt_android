@@ -8,9 +8,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.apphunt.app.utils.GsonInstance;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 public abstract class BaseGsonRequest<T> extends Request<T> {
     public static final String TAG = BaseGsonRequest.class.getSimpleName();
     public static String BASE_URL = "http://apphunt-dev.herokuapp.com";
@@ -20,13 +17,14 @@ public abstract class BaseGsonRequest<T> extends Request<T> {
         super(method, encodeUrl(url), listener);
     }
 
+
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         networkResponse = response;
         try {
             String json = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-            return Response.success(GsonInstance.fromJson(json, getParsedAppClass()),
+            return Response.success(GsonInstance.fromJson(json, getParsedClass()),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch(Exception e) {
             Log.d(TAG, "parseNetworkResponse " + e);
@@ -44,7 +42,7 @@ public abstract class BaseGsonRequest<T> extends Request<T> {
         return "application/json";
     }
 
-    public abstract Class<T> getParsedAppClass();
+    public abstract Class<T> getParsedClass();
 
     @Override
     public abstract void deliverResponse(T response);

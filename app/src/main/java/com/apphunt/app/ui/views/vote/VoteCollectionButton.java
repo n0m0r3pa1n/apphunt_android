@@ -21,21 +21,21 @@ import com.squareup.otto.Subscribe;
 /**
  * Created by nmp on 15-6-26.
  */
-public class CollectionVoteButton extends AppVoteButton {
+public class VoteCollectionButton extends AppVoteButton {
     private AppsCollection collection;
-    public CollectionVoteButton(Context context) {
+    public VoteCollectionButton(Context context) {
         super(context);
     }
 
-    public CollectionVoteButton(Context context, App baseApp) {
+    public VoteCollectionButton(Context context, App baseApp) {
         super(context, baseApp);
     }
 
-    public CollectionVoteButton(Context context, AttributeSet attrs) {
+    public VoteCollectionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CollectionVoteButton(Context context, AttributeSet attrs, int defStyle) {
+    public VoteCollectionButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

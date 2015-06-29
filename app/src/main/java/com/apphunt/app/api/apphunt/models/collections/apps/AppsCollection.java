@@ -21,6 +21,7 @@ public class AppsCollection {
     private String name;
     private String description;
     private boolean hasVoted;
+    private boolean isFavourite;
     private int votesCount;
 
     private User createdBy;
@@ -88,6 +89,14 @@ public class AppsCollection {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
     }
 
     @Override

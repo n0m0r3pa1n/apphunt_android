@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,8 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
-import com.apphunt.app.ui.views.vote.CollectionVoteButton;
+import com.apphunt.app.ui.views.FavouriteCollectionButton;
+import com.apphunt.app.ui.views.vote.VoteCollectionButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -59,6 +58,7 @@ public class CollectionsAdapter extends BaseAdapter {
         viewHolder.name.setText(appsCollection.getName());
         viewHolder.createdBy.setText(appsCollection.getCreatedBy().getName());
         viewHolder.voteButton.setCollection(appsCollection);
+        viewHolder.favouriteButton.setCollection(appsCollection);
 
         Picasso.with(parent.getContext())
                 .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -80,7 +80,10 @@ public class CollectionsAdapter extends BaseAdapter {
         TextView createdBy;
 
         @InjectView(R.id.vote_btn)
-        CollectionVoteButton voteButton;
+        VoteCollectionButton voteButton;
+
+        @InjectView(R.id.favourite_collection)
+        FavouriteCollectionButton favouriteButton;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

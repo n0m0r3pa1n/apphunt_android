@@ -12,7 +12,7 @@ public class GetTopHuntersRequest extends BaseGetRequest<HuntersCollections> {
     }
 
     @Override
-    public Class<HuntersCollections> getParsedAppClass() {
+    public Class<HuntersCollections> getParsedClass() {
         return HuntersCollections.class;
     }
 

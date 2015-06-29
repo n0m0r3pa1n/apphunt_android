@@ -15,7 +15,7 @@ public class PostCommentVoteRequest extends BasePostRequest<CommentVote> {
     }
 
     @Override
-    public Class<CommentVote> getParsedAppClass() {
+    public Class<CommentVote> getParsedClass() {
         return CommentVote.class;
     }
 

@@ -12,7 +12,7 @@ public class PostUserRequest extends BasePostRequest<User>{
     }
 
     @Override
-    public Class<User> getParsedAppClass() {
+    public Class<User> getParsedClass() {
         return User.class;
     }
 

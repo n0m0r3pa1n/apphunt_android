@@ -17,10 +17,12 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetMyCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopHuntersRequest;
+import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
@@ -181,5 +183,15 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getMyCollections(String userId, int page, int pageSize) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetMyCollectionsRequest(userId, page, pageSize, listener));
+    }
+
+    @Override
+    public void favouriteCollection(String collectionId, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new FavouriteCollectionRequest(collectionId, userId, listener));
+    }
+
+    @Override
+    public void unfavouriteCollection(String collectionId, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new UnfavouriteCollectionRequest(collectionId, userId, listener));
     }
 }

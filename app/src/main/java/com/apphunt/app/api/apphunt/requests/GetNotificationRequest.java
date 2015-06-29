@@ -11,7 +11,7 @@ public class GetNotificationRequest extends BaseGetRequest<Notification> {
     }
 
     @Override
-    public Class<Notification> getParsedAppClass() {
+    public Class<Notification> getParsedClass() {
         return Notification.class;
     }
 

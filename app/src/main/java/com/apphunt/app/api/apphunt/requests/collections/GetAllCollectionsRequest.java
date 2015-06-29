@@ -1,8 +1,6 @@
 package com.apphunt.app.api.apphunt.requests.collections;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
-import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
@@ -21,7 +19,7 @@ public class GetAllCollectionsRequest extends BaseGetRequest<AppsCollections> {
     }
 
     @Override
-    public Class<AppsCollections> getParsedAppClass() {
+    public Class<AppsCollections> getParsedClass() {
         return AppsCollections.class;
     }
 

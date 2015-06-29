@@ -8,7 +8,7 @@ public abstract class BaseGetRequest<T> extends BaseGsonRequest<T> {
         super(Method.GET, url, listener);
     }
 
-    public abstract Class<T> getParsedAppClass();
+    public abstract Class<T> getParsedClass();
 
     public abstract void deliverResponse(T response);
 }

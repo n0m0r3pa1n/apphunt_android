@@ -15,7 +15,7 @@ public class DeleteAppVoteRequest extends BaseGsonRequest<AppVote> {
     }
 
     @Override
-    public Class<AppVote> getParsedAppClass() {
+    public Class<AppVote> getParsedClass() {
         return AppVote.class;
     }
 

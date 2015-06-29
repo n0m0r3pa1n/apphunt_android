@@ -9,21 +9,17 @@ import com.apphunt.app.utils.GsonInstance;
 import java.io.UnsupportedEncodingException;
 
 
-public abstract class BasePostRequest<T> extends BaseGsonRequest<T> {
-    public static final String TAG = BasePostRequest.class.getSimpleName();
+public abstract class BasePutRequest<T> extends BaseGsonRequest<T> {
+    public static final String TAG = BasePutRequest.class.getSimpleName();
     private static final String PROTOCOL_CHARSET = "utf-8";
-
-    private static final String PROTOCOL_CONTENT_TYPE =
-            String.format("application/json; charset=%s", PROTOCOL_CHARSET);
 
     private String body = null;
 
-    public BasePostRequest(String url, Object body, Response.ErrorListener listener) {
-        super(Method.POST, url, listener);
+    public BasePutRequest(String url, Object body, Response.ErrorListener listener) {
+        super(Method.PUT, url, listener);
         if(body != null) {
             this.body = GsonInstance.toJson(body);
         }
-        Log.d(TAG, "BasePostRequest ");
     }
 
     public abstract Class<T> getParsedClass();
