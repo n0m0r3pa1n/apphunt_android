@@ -4,20 +4,25 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -53,22 +58,14 @@ public class SelectCollectionFragment extends Fragment {
     private void initUI() {
         ButterKnife.inject(this, view);
 
-
-
-        // TODO: Test reason
-        ArrayList<AppsCollection> appsCollections = new ArrayList<>();
-        AppsCollection col1 = new AppsCollection();
-        col1.setName("Test 1");
-        appsCollections.add(col1);
-
-        AppsCollection col2 = new AppsCollection();
-        col2.setName("Test 2");
-        appsCollections.add(col2);
+        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
+        }
 
         collectionsList.setItemAnimator(new DefaultItemAnimator());
         collectionsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         collectionsList.setHasFixedSize(true);
-        collectionsList.setAdapter(new SelectCollectionAdapter(activity, appsCollections));
+
     }
 
     @OnClick(R.id.add_collection)
@@ -80,15 +77,24 @@ public class SelectCollectionFragment extends Fragment {
         this.app = selectedApp;
     }
 
+    @Subscribe
+    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+        Log.e("bla", "called");
+        collectionsList.setAdapter(new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections()));
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         this.activity = activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+
+        BusProvider.getInstance().unregister(this);
     }
 }

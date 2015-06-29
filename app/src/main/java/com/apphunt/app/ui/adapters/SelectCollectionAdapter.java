@@ -11,6 +11,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -23,9 +24,9 @@ import butterknife.ButterKnife;
 public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollectionAdapter.ViewHolder> {
 
     private Context ctx;
-    private ArrayList<AppsCollection> collections = new ArrayList<>();
+    private List<AppsCollection> collections = new ArrayList<>();
 
-    public SelectCollectionAdapter(Context ctx, ArrayList<AppsCollection> collections) {
+    public SelectCollectionAdapter(Context ctx, List<AppsCollection> collections) {
         this.ctx = ctx;
         this.collections = collections;
     }
