@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -20,3 +21,94 @@
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>
+=======
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    cardview:cardCornerRadius="2dp"
+    cardview:cardUseCompatPadding="true">
+
+
+
+    <LinearLayout
+        android:background="@drawable/collection_pic"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:background="#CC818181"
+            >
+
+            <TextView
+                android:id="@+id/collection_name"
+                android:text="Plache mi se"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/collection_name"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp">
+
+                <com.apphunt.app.ui.widgets.AvatarImageView
+                    android:id="@+id/created_by_image"
+                    android:src="@drawable/ic_add"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    />
+
+                <TextView
+                    android:id="@+id/created_by"
+                    android:text="Janet Perkins"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="8dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <com.apphunt.app.ui.views.vote.CollectionVoteButton
+                android:id="@+id/vote_btn"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_gravity="top|right"
+        android:src="@drawable/ic_favorite_not_select"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</android.support.v7.widget.CardView>
+
+>>>>>>> 1a788eca6a75fa9add334e2b75168c61986a15af

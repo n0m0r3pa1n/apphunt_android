@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
-import com.apphunt.app.api.apphunt.models.votes.Vote;
+import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -22,10 +22,10 @@ import butterknife.InjectView;
 public class VotersAdapter extends BaseAdapter {
 
     private final Context ctx;
-    private List<Vote> voters = new ArrayList<>();
+    private List<AppVote> voters = new ArrayList<>();
     private int maxVotersCount;
 
-    public VotersAdapter(Context ctx, List<Vote> voters) {
+    public VotersAdapter(Context ctx, List<AppVote> voters) {
         this.ctx = ctx;
         this.voters = voters;
 
@@ -56,7 +56,7 @@ public class VotersAdapter extends BaseAdapter {
         }
 
         String avatarUrl = "";
-        User user = ((Vote) getItem(position)).getUser();
+        User user = ((AppVote) getItem(position)).getUser();
         if (user != null) {
             avatarUrl = user.getProfilePicture();
         }
@@ -107,14 +107,14 @@ public class VotersAdapter extends BaseAdapter {
     public void addCreatorIfNotVoter(User user) {
         boolean isVoter = false;
 
-        for (Vote vote : voters) {
+        for (AppVote vote : voters) {
             if (vote.getUser().getId().equals(user.getId())) {
                 isVoter = true;
             }
         }
 
         if (!isVoter) {
-            Vote vote = new Vote(user.getId());
+            AppVote vote = new AppVote(user.getId());
             vote.setUser(user);
             voters.add(vote);
             notifyDataSetChanged();
@@ -122,7 +122,7 @@ public class VotersAdapter extends BaseAdapter {
     }
 
     public void removeCreator(User user) {
-        for (Vote vote : voters) {
+        for (AppVote vote : voters) {
             if (vote.getUser().getId().equals(user.getId())) {
                 voters.remove(vote);
                 notifyDataSetChanged();

@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
-import com.apphunt.app.api.apphunt.models.votes.Vote;
+import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
@@ -153,19 +153,12 @@ public class AppVoteButton extends LinearLayout {
         if(!baseApp.getId().equals(event.getVote().getAppId())) {
             return;
         }
-        Vote voteResult = event.getVote();
+        AppVote voteResult = event.getVote();
         baseApp.setVotesCount(voteResult.getVotes());
         baseApp.setHasVoted(event.isVote());
         voteButton.setText(voteResult.getVotes());
-        if(event.isVote()) {
-            FlurryAgent.logEvent(TrackingEvents.UserVotedApp);
-            voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
-            voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
-        } else {
-            FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp);
-            voteButton.setBackgroundResource(R.drawable.btn_vote);
-            voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
-        }
+        updateVoteButton();
+
         postUserVotedEvent(event.isVote());
     }
 

@@ -1,13 +1,13 @@
 package com.apphunt.app.api.apphunt.requests.votes;
 
 import com.android.volley.Response;
-import com.apphunt.app.api.apphunt.models.votes.Vote;
+import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 
 
-public class PostAppVoteRequest extends BasePostRequest<Vote> {
+public class PostAppVoteRequest extends BasePostRequest<AppVote> {
     private final String appId;
 
     public PostAppVoteRequest(String appId, String userId, Object body, Response.ErrorListener listener) {
@@ -16,12 +16,12 @@ public class PostAppVoteRequest extends BasePostRequest<Vote> {
     }
 
     @Override
-    public Class<Vote> getParsedAppClass() {
-        return Vote.class;
+    public Class<AppVote> getParsedAppClass() {
+        return AppVote.class;
     }
 
     @Override
-    public void deliverResponse(Vote response) {
+    public void deliverResponse(AppVote response) {
         response.setAppId(appId);
         BusProvider.getInstance().post(new AppVoteApiEvent(response, true));
     }

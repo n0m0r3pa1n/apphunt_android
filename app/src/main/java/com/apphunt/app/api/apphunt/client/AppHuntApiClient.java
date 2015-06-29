@@ -17,6 +17,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopHuntersRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
@@ -24,8 +25,10 @@ import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
+import com.apphunt.app.api.apphunt.requests.votes.DeleteCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
+import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
@@ -153,5 +156,24 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getTopHuntersCollection(String criteria) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetTopHuntersRequest(criteria, listener));
+    }
+
+    @Override
+    public void getAllCollections(String userId, int page, int pageSize) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(userId, page, pageSize, listener));
+        }
+    }
+
+    @Override
+    public void voteCollection(String userId, String collectionId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostCollectionVoteRequest(collectionId, userId, listener));
+    }
+
+    @Override
+    public void downVoteCollection(String userId, String collectionId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new DeleteCollectionVoteRequest(collectionId, userId, listener));
     }
 }

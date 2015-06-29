@@ -39,4 +39,10 @@ public interface AppHuntApi {
     void getTopAppsCollection(String criteria, String userId);
 
     void getTopHuntersCollection(String criteria);
+
+    void getAllCollections(String userId, int page, int pageSize);
+
+    void voteCollection(String userId, String collectionId);
+
+    void downVoteCollection(String userId, String collectionId);
 }

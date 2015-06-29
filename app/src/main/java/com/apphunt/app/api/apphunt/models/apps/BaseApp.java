@@ -1,10 +1,7 @@
 package com.apphunt.app.api.apphunt.models.apps;
 
 import com.apphunt.app.api.apphunt.models.users.User;
-import com.apphunt.app.api.apphunt.models.votes.Vote;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -149,7 +146,7 @@ public class BaseApp {
                 ", votesCount=" + votesCount +
                 ", shortUrl='" + shortUrl + '\'' +
                 ", url='" + url + '\'' +
-                ", hasVoted=" + hasVoted +
+                ", hasUserVoted=" + hasVoted +
                 ", createdBy=" + createdBy +
                 ", commentsCount=" + commentsCount +
                 ", category='" + category + '\'' +
