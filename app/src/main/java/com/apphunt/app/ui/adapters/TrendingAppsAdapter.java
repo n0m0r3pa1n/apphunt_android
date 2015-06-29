@@ -2,17 +2,15 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +22,6 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
-import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -32,12 +29,11 @@ import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.TrackingEvents;
-import com.apphunt.app.utils.ui.AddToCollectionUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
@@ -46,9 +42,7 @@ import com.squareup.picasso.Target;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -128,7 +122,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AddToCollectionUtils.getInstance().presentSelectCollectionFragment((FragmentActivity) ctx, app);
+                    NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
                 }
             });
 
