@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,8 @@ public class SelectCollectionFragment extends Fragment {
     private void initUI() {
         ButterKnife.inject(this, view);
 
+
+
         // TODO: Test reason
         ArrayList<AppsCollection> appsCollections = new ArrayList<>();
         AppsCollection col1 = new AppsCollection();
@@ -61,6 +65,9 @@ public class SelectCollectionFragment extends Fragment {
         col2.setName("Test 2");
         appsCollections.add(col2);
 
+        collectionsList.setItemAnimator(new DefaultItemAnimator());
+        collectionsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        collectionsList.setHasFixedSize(true);
         collectionsList.setAdapter(new SelectCollectionAdapter(activity, appsCollections));
     }
 

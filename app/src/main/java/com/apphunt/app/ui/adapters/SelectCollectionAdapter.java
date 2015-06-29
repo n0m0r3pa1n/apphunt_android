@@ -2,6 +2,7 @@ package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.layout_collection_item, parent, false);
+
+        Log.e("bla", "" + collections.size());
 
         return new ViewHolder(view);
     }
