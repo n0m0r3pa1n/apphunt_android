@@ -28,6 +28,10 @@ public class CollectionsAdapter extends BaseAdapter {
         this.appsCollections = appsCollections;
     }
 
+    public void updateData(List<AppsCollection> appsCollections) {
+        this.appsCollections = appsCollections;
+    }
+
     @Override
     public int getCount() {
         return appsCollections.size();
@@ -41,6 +45,28 @@ public class CollectionsAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void removeCollection(String id) {
+        for(int i=0; i < appsCollections.size(); i++) {
+            AppsCollection collection = appsCollections.get(i);
+            if(collection.getId().equals(id)) {
+                appsCollections.remove(i);
+                //notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
+    public void setIsFavouriteCollection(String collectionId, boolean isFavourite) {
+        for(int i=0; i < appsCollections.size(); i++) {
+            AppsCollection collection = appsCollections.get(i);
+            if(collection.getId().equals(collectionId)) {
+                collection.setIsFavourite(isFavourite);
+                notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     @Override

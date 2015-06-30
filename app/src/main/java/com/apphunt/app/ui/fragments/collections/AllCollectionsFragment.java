@@ -11,7 +11,6 @@ import android.widget.ListView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
 import com.apphunt.app.ui.adapters.CollectionsAdapter;
@@ -29,17 +28,7 @@ public class AllCollectionsFragment extends BaseFragment {
     @InjectView(R.id.all_collections)
     ListView allCollections;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        BusProvider.getInstance().unregister(this);
-    }
+   private CollectionsAdapter adapter;
 
     @Nullable
     @Override
@@ -58,11 +47,33 @@ public class AllCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onAllCollectionsReceived(GetAllCollectionsEvent event) {
-        allCollections.setAdapter(new CollectionsAdapter(event.getAppsCollection().getCollections()));
+        if(adapter == null) {
+            adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
+            allCollections.setAdapter(adapter);
+        } else {
+            adapter.updateData(event.getAppsCollection().getCollections());
+        }
     }
+
+//    @Subscribe
+//    public void onCollectionUnfavourited(UnfavouriteCollectionEvent event) {
+//        adapter.setIsFavouriteCollection(event.getCollectionId(), false);
+//    }
 
     @Override
     public int getTitle() {
         return R.string.title_all_collection;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        BusProvider.getInstance().unregister(this);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
@@ -21,9 +22,8 @@ import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
-public class FavouriteCollectionButton extends LinearLayout {
+public class FavouriteCollectionButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
 
     private AppsCollection collection;
     private LayoutInflater inflater;
@@ -55,6 +55,7 @@ public class FavouriteCollectionButton extends LinearLayout {
     protected void init() {
         View view = getLayoutInflater().inflate(R.layout.view_favourite, this, true);
         ButterKnife.inject(this, view);
+        favouriteButton.setOnCheckedChangeListener(this);
     }
 
 
@@ -69,23 +70,6 @@ public class FavouriteCollectionButton extends LinearLayout {
     public void setCollection(AppsCollection collection) {
         this.collection = collection;
         favouriteButton.setChecked(collection.isFavourite());
-    }
-
-    @OnClick(R.id.favourite_button)
-    public void vote(View view) {
-        if(!LoginProviderFactory.get((Activity) getContext()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(getContext());
-            return;
-        }
-
-        if(collection == null)
-            return;
-
-        if(collection.isFavourite()) {
-            unfavourite();
-        } else {
-            favourite();
-        }
     }
 
     private void favourite() {
@@ -110,5 +94,22 @@ public class FavouriteCollectionButton extends LinearLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(!LoginProviderFactory.get((Activity) getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(getContext());
+            return;
+        }
+
+        if(collection == null)
+            return;
+
+        if(isChecked) {
+            unfavourite();
+        } else {
+            favourite();
+        }
     }
 }
