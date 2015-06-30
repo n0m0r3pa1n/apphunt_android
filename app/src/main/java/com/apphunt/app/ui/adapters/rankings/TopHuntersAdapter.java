@@ -1,18 +1,15 @@
-package com.apphunt.app.ui.adapters;
+package com.apphunt.app.ui.adapters.rankings;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.hunters.Hunter;
 import com.apphunt.app.api.apphunt.models.collections.hunters.HuntersCollection;
-import com.apphunt.app.utils.StringUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

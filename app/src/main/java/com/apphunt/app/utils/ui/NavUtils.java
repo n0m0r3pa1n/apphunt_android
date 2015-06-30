@@ -9,8 +9,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.collection_creator.CreateCollectionFragment;
-import com.apphunt.app.ui.fragments.collection_creator.SelectCollectionFragment;
+import com.apphunt.app.ui.fragments.collections.create.CreateCollectionFragment;
+import com.apphunt.app.ui.fragments.collections.create.SelectCollectionFragment;
 import com.apphunt.app.utils.Constants;
 
 /**

@@ -3,24 +3,20 @@ package com.apphunt.app.ui.fragments.collections;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
-import com.apphunt.app.ui.adapters.CollectionsAdapter;
+import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.ui.views.ScrollListView;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -67,7 +63,7 @@ public class AllCollectionsFragment extends BaseFragment {
     public void onCollectionsReceived(GetAllCollectionsEvent event) {
         allCollections.hideBottomLoader();
         if(adapter == null) {
-            adapter = new CollectionsAdapter(getActivity(), event.getAppsCollection().getCollections());
+            adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();

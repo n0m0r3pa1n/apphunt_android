@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.adapters.CollectionsPagerAdapter;
+import com.apphunt.app.ui.adapters.collections.CollectionsPagerAdapter;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 
 import butterknife.ButterKnife;

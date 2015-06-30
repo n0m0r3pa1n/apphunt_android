@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.adapters;
+package com.apphunt.app.ui.adapters.rankings;
 
 import android.content.Context;
 import android.os.Bundle;

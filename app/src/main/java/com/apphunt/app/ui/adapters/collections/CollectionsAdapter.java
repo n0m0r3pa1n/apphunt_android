@@ -1,50 +1,45 @@
-package com.apphunt.app.ui.adapters;
+package com.apphunt.app.ui.adapters.collections;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.views.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.VoteCollectionButton;
-import com.apphunt.app.utils.LoginUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import junit.runner.Version;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 
 /**
  * Created by nmp on 15-6-26.
  */
 public class CollectionsAdapter extends BaseAdapter {
     public static final String TAG = CollectionsAdapter.class.getSimpleName();
+    private int layout;
 
     private List<AppsCollection> appsCollections;
-    private Context context;
 
-    public CollectionsAdapter(Context context, List<AppsCollection> appsCollections) {
+    public CollectionsAdapter(List<AppsCollection> appsCollections) {
         this.appsCollections = appsCollections;
-        this.context = context;
+    }
+
+    public CollectionsAdapter(int layout, List<AppsCollection> appsCollections) {
+        this.appsCollections = appsCollections;
+        this.layout = layout;
     }
 
     public void updateData(List<AppsCollection> appsCollections) {
@@ -83,7 +78,8 @@ public class CollectionsAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         final AppsCollection appsCollection = appsCollections.get(position);
         if(convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_collection_item, parent, false);
+            int layoutId = layout != 0 ? layout : R.layout.layout_collection_item;
+            convertView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -94,7 +90,9 @@ public class CollectionsAdapter extends BaseAdapter {
         viewHolder.name.setText(appsCollection.getName());
         viewHolder.createdBy.setText(appsCollection.getCreatedBy().getName());
         viewHolder.voteButton.setCollection(appsCollection);
-        viewHolder.favouriteButton.setCollection(appsCollection);
+        if(viewHolder.favouriteButton != null) {
+            viewHolder.favouriteButton.setCollection(appsCollection);
+        }
 
         Picasso.with(parent.getContext())
                 .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -153,6 +151,7 @@ public class CollectionsAdapter extends BaseAdapter {
         @InjectView(R.id.vote_btn)
         VoteCollectionButton voteButton;
 
+        @Optional
         @InjectView(R.id.favourite_collection)
         FavouriteCollectionButton favouriteButton;
 

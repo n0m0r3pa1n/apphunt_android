@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.collection_creator;
+package com.apphunt.app.ui.fragments.collections.create;
 
 import android.app.Activity;
 import android.os.Bundle;
