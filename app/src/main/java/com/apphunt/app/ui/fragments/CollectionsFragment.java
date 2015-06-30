@@ -80,7 +80,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     private void initTabs() {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_collecton_not_select).setTag(0));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_not_select).setTag(1));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_mycollection_not_select).setTag(2));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_mycollection_not_select_one).setTag(2));
         previousSelectedTab = tabLayout.getTabAt(0);
         setTabSelectedIcon(previousSelectedTab);
         updateActionBarTitle(0);
@@ -98,7 +98,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
                 tab.setIcon(R.drawable.ic_favorite_not_select);
                 break;
             case 2:
-                tab.setIcon(R.drawable.ic_mycollection_not_select);
+                tab.setIcon(R.drawable.ic_mycollection_not_select_one);
                 break;
         }
     }
@@ -113,7 +113,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
                 tab.setIcon(R.drawable.ic_favorite_select);
                 break;
             case 2:
-                tab.setIcon(R.drawable.ic_mycollection_select);
+                tab.setIcon(R.drawable.ic_mycollection_select_one);
                 break;
         }
     }

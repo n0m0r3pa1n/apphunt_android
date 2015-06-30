@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
@@ -199,8 +200,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void favouriteCollection(String collectionId, String userId) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new FavouriteCollectionRequest(collectionId, userId, listener));
+    public void favouriteCollection(AppsCollection collection, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new FavouriteCollectionRequest(collection, userId, listener));
     }
 
     @Override

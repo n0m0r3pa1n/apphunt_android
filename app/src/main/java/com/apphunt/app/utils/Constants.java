@@ -114,6 +114,8 @@ public class Constants {
     public static final int HELP_APPS_REQUIREMENTS = 11;
     public static final int HELP_TOP_HUNTERS_POINTS = 12;
 
+    public static final int PAGE_SIZE = 5;
+
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

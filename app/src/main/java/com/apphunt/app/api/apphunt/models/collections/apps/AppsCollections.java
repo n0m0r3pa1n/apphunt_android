@@ -10,6 +10,7 @@ import java.util.List;
  * * NaughtySpirit 2015
  */
 public class AppsCollections {
+    private int totalCount;
 
     private List<AppsCollection> collections = new ArrayList<>();
 
@@ -23,5 +24,13 @@ public class AppsCollections {
 
     public void setCollections(List<AppsCollection> collections) {
         this.collections = collections;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 }
