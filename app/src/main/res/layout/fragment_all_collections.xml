@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ListView
+    <com.apphunt.app.ui.views.ScrollListView
         android:id="@+id/all_collections"
-        android:padding="5dp"
-        android:dividerHeight="0dp"
-        android:divider="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-
-</LinearLayout>
+        android:layout_height="match_parent" />
+</RelativeLayout>

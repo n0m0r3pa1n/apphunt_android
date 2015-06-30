@@ -3,6 +3,7 @@ package com.apphunt.app.ui.views;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -14,17 +15,21 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
 import com.apphunt.app.utils.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.TrackingEvents;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-public class FavouriteCollectionButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
-
+public class FavouriteCollectionButton extends LinearLayout{
+    public static final String TAG = FavouriteCollectionButton.class.getSimpleName();
     private AppsCollection collection;
     private LayoutInflater inflater;
 
@@ -55,7 +60,7 @@ public class FavouriteCollectionButton extends LinearLayout implements CompoundB
     protected void init() {
         View view = getLayoutInflater().inflate(R.layout.view_favourite, this, true);
         ButterKnife.inject(this, view);
-        favouriteButton.setOnCheckedChangeListener(this);
+
     }
 
 
@@ -72,18 +77,6 @@ public class FavouriteCollectionButton extends LinearLayout implements CompoundB
         favouriteButton.setChecked(collection.isFavourite());
     }
 
-    private void favourite() {
-        FlurryAgent.logEvent(TrackingEvents.UserFavouritedCollection);
-        ApiClient.getClient(getContext()).favouriteCollection(collection.getId(),
-                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-    }
-
-    private void unfavourite() {
-        FlurryAgent.logEvent(TrackingEvents.UserUnfavouritedCollection);
-        ApiClient.getClient(getContext()).unfavouriteCollection(collection.getId(),
-                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -96,8 +89,8 @@ public class FavouriteCollectionButton extends LinearLayout implements CompoundB
         BusProvider.getInstance().unregister(this);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    @OnClick(R.id.favourite_button)
+    public void onFavouriteButtonClicked() {
         if(!LoginProviderFactory.get((Activity) getContext()).isUserLoggedIn()) {
             LoginUtils.showLoginFragment(getContext());
             return;
@@ -106,10 +99,42 @@ public class FavouriteCollectionButton extends LinearLayout implements CompoundB
         if(collection == null)
             return;
 
-        if(isChecked) {
-            unfavourite();
-        } else {
+        if(!collection.isFavourite()) {
+            collection.setIsFavourite(true);
             favourite();
+        } else {
+            collection.setIsFavourite(false);
+            unfavourite();
         }
+    }
+
+    @Subscribe
+    public void onFavouriteCollection(FavouriteCollectionEvent event) {
+        if(!event.getCollection().getId().equals(collection.getId())){
+            return;
+        }
+
+        favouriteButton.setChecked(true);
+    }
+
+    @Subscribe
+    public void onUnfavouriteCollection(UnfavouriteCollectionEvent event) {
+        if(!event.getCollectionId().equals(collection.getId())){
+            return;
+        }
+        favouriteButton.setChecked(false);
+    }
+
+    private void favourite() {
+        FlurryAgent.logEvent(TrackingEvents.UserFavouritedCollection);
+        ApiClient.getClient(getContext()).favouriteCollection(collection,
+                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+    }
+
+    private void unfavourite() {
+        FlurryAgent.logEvent(TrackingEvents.UserUnfavouritedCollection);
+        Log.d(TAG, "unfavourite " + collection.getId());
+        ApiClient.getClient(getContext()).unfavouriteCollection(collection.getId(),
+                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 }

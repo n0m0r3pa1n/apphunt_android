@@ -1,9 +1,10 @@
 package com.apphunt.app.api.apphunt.client;
 
-import com.apphunt.app.api.apphunt.models.collections.NewCollection;
-import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
+import com.apphunt.app.api.apphunt.models.collections.NewCollection;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 
 public interface AppHuntApi {
@@ -53,7 +54,7 @@ public interface AppHuntApi {
 
     void getMyCollections(String userId, int page, int pageSize);
 
-    void favouriteCollection(String collectionId, String userId);
+    void favouriteCollection(AppsCollection collection, String userId);
 
     void unfavouriteCollection(String collectionId, String userId);
 }

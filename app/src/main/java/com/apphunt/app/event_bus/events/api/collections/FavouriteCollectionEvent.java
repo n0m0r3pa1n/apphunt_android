@@ -1,22 +1,24 @@
 package com.apphunt.app.event_bus.events.api.collections;
 
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+
 /**
  * Created by nmp on 15-6-29.
  */
 public class FavouriteCollectionEvent {
     private int statusCode;
-    private String collectionId;
+    private AppsCollection collection;
 
-    public FavouriteCollectionEvent(String collectionId, int statusCode) {
+    public FavouriteCollectionEvent(AppsCollection collection, int statusCode) {
         this.statusCode = statusCode;
-        this.collectionId = collectionId;
+        this.collection = collection;
     }
 
     public int getStatusCode() {
         return statusCode;
     }
 
-    public String getCollectionId() {
-        return collectionId;
+    public AppsCollection getCollection() {
+        return collection;
     }
 }
