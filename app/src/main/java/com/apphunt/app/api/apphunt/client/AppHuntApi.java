@@ -36,6 +36,8 @@ public interface AppHuntApi {
 
     void downVoteComment(String userId, String commentId);
 
+    void createCollection(String userId, String name, String description, String pictureUrl);
+
     void getTopAppsCollection(String criteria, String userId);
 
     void getTopHuntersCollection(String criteria);
