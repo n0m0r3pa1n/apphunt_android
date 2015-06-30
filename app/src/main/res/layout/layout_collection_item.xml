@@ -10,7 +10,7 @@
     cardview:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:background="@drawable/banner"
+        android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:orientation="vertical">

@@ -2,12 +2,18 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -18,6 +24,8 @@ import com.apphunt.app.ui.views.vote.VoteCollectionButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import junit.runner.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +100,30 @@ public class CollectionsAdapter extends BaseAdapter {
                 .load(appsCollection.getCreatedBy().getProfilePicture())
                 .into(viewHolder.createdByImage);
 
+        Picasso.with(parent.getContext())
+                .load(R.drawable.banner)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        BitmapDrawable ob = new BitmapDrawable(parent.getContext().getResources(), bitmap);
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                            viewHolder.banner.setBackground(ob);
+                        } else {
+                            viewHolder.banner.setBackgroundDrawable(ob);
+                        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+
         return convertView;
     }
 
@@ -106,6 +138,9 @@ public class CollectionsAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        @InjectView(R.id.banner)
+        LinearLayout banner;
+
         @InjectView(R.id.collection_name)
         TextView name;
 

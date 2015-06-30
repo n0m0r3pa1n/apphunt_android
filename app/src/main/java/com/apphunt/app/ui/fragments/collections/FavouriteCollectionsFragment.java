@@ -3,11 +3,9 @@ package com.apphunt.app.ui.fragments.collections;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -19,9 +17,8 @@ import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEve
 import com.apphunt.app.ui.adapters.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
+import com.apphunt.app.ui.views.ScrollListView;
 import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -34,9 +31,8 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     public static final String TAG = FavouriteCollectionsFragment.class.getSimpleName();
     private CollectionsAdapter adapter;
     @InjectView(R.id.all_collections)
-    ListView allCollections;
+    ScrollListView allCollections;
     private int currentPage = 0;
-    private int totalCount = 0;
 
     @Override
     public int getTitle() {
@@ -51,17 +47,12 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         View view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 
-        allCollections.setOnScrollListener(new EndlessScrollListener(new EndlessScrollListener.OnEndReachedListener() {
+        allCollections.setOnEndReachedListener(new EndlessScrollListener.OnEndReachedListener() {
             @Override
             public void onEndReached() {
-                if(adapter.getCount() >= totalCount) {
-                    return;
-                }
-                LoadersUtils.showBottomLoader(getActivity(),
-                        SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
                 getFavouriteCollections();
             }
-        }));
+        });
         return view;
     }
 
@@ -87,7 +78,6 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionFavourited(FavouriteCollectionEvent event) {
-        Log.d(TAG + "onFavourited", event.getCollection().getId());
         adapter.addCollection(event.getCollection());
     }
 
@@ -98,11 +88,10 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onFavouriteCollectionReceived(GetFavouriteCollectionsEvent event) {
-        LoadersUtils.hideBottomLoader(getActivity());
+        allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(getActivity(), event.getAppsCollection().getCollections());
-            allCollections.setAdapter(adapter);
-            totalCount = event.getAppsCollection().getTotalCount();
+            allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();
             adapter.addAllCollections(event.getAppsCollection().getCollections());
