@@ -58,9 +58,10 @@ public class SelectCollectionFragment extends Fragment {
     private void initUI() {
         ButterKnife.inject(this, view);
 
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
-        }
+//        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+//            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
+            ApiClient.getClient(activity).getMyCollections("5517b7ad8dffc3030010f80b", 1, 10);
+//        }
 
         collectionsList.setItemAnimator(new DefaultItemAnimator());
         collectionsList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -79,7 +80,6 @@ public class SelectCollectionFragment extends Fragment {
 
     @Subscribe
     public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
-        Log.e("bla", "called");
         collectionsList.setAdapter(new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections()));
     }
 

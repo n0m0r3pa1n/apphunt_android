@@ -1,5 +1,6 @@
 package com.apphunt.app.api.apphunt.client;
 
+import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
@@ -36,7 +37,7 @@ public interface AppHuntApi {
 
     void downVoteComment(String userId, String commentId);
 
-    void createCollection(String userId, String name, String description, String pictureUrl);
+    void createCollection(NewCollection collection);
 
     void getTopAppsCollection(String criteria, String userId);
 

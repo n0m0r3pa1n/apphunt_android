@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
+import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
@@ -150,9 +151,9 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void createCollection(String userId, String name, String description, String pictureUrl) {
+    public void createCollection(NewCollection collection) {
         VolleyInstance.getInstance(context).addToRequestQueue(
-                new PostCollectionRequest(userId, name, description, pictureUrl, listener));
+                new PostCollectionRequest(collection, listener));
     }
 
     @Override
