@@ -16,7 +16,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;

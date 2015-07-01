@@ -26,15 +26,14 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.utils.ConnectivityUtils;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.otto.Subscribe;
-import com.twitter.sdk.android.core.models.Search;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

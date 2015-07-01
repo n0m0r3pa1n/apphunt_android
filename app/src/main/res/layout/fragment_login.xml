@@ -19,7 +19,7 @@
         android:layout_above="@+id/login_button"/>
 
 
-    <com.apphunt.app.ui.CustomTwitterLoginButton
+    <com.apphunt.app.ui.views.CustomTwitterLoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

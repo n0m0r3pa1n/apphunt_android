@@ -46,7 +46,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp">
 
-                <com.apphunt.app.ui.widgets.AvatarImageView
+                <com.apphunt.app.ui.views.widgets.AvatarImageView
                     android:id="@+id/created_by_image"
                     android:src="@drawable/ic_add"
                     android:layout_width="30dp"

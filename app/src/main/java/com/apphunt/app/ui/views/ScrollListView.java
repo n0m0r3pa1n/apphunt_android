@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.SoundsUtils;
 

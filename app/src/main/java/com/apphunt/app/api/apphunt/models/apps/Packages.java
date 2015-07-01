@@ -1,6 +1,6 @@
 package com.apphunt.app.api.apphunt.models.apps;
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 
 import java.util.ArrayList;
 

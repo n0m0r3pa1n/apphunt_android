@@ -2,18 +2,14 @@ package com.apphunt.app.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.ui.views.vote.VoteCollectionButton;
-import com.apphunt.app.ui.widgets.AvatarImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

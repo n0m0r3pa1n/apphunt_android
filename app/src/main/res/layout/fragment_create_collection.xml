@@ -8,7 +8,7 @@
     android:background="@color/bg_secondary"
     android:clickable="true">
 
-    <com.apphunt.app.ui.widgets.CustomTextInputLayout
+    <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
         android:id="@+id/collection_name_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:ems="10"
             android:textSize="15sp"
             android:hint="New collection name"/>
-    </com.apphunt.app.ui.widgets.CustomTextInputLayout>
+    </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view_set_banner"
@@ -60,7 +60,7 @@
 
         </android.support.v7.widget.CardView>
 
-    <com.apphunt.app.ui.widgets.CustomTextInputLayout
+    <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
         android:id="@+id/collection_desc_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             android:ems="10"
             android:textSize="15sp"
             android:hint="Write a description"/>
-    </com.apphunt.app.ui.widgets.CustomTextInputLayout>
+    </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
     <me.gujun.android.taggroup.TagGroup
         app:atg_isAppendMode="true"

@@ -3,7 +3,7 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.content.Context;
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
 /**

@@ -19,8 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 

@@ -11,7 +11,7 @@ import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.collections.create.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.create.SelectCollectionFragment;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 
 /**
  * Created by nmp on 15-5-9.

@@ -18,7 +18,7 @@ import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.ui.views.ScrollListView;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;

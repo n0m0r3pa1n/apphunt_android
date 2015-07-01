@@ -4,14 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
-import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.votes.CommentVote;
 import com.apphunt.app.event_bus.events.api.votes.CommentVoteApiEvent;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 

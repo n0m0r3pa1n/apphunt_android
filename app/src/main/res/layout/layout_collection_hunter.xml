@@ -33,7 +33,7 @@
                 android:paddingRight="20dp"
                 android:text="1"/>
 
-            <com.apphunt.app.ui.widgets.AvatarImageView
+            <com.apphunt.app.ui.views.widgets.AvatarImageView
                 android:id="@+id/picture"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

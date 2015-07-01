@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.widgets;
+package com.apphunt.app.ui.views.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

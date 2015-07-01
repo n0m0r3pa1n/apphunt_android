@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.apphunt.app.constants.Constants;
+
 public class SharedPreferencesHelper {
 
     private static SharedPreferences sharedPreferences;

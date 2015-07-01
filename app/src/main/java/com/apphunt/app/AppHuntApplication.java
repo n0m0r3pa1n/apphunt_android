@@ -4,7 +4,7 @@ import android.app.Application;
 import android.text.TextUtils;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;

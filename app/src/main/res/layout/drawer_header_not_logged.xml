@@ -6,7 +6,7 @@
     android:paddingBottom="10dp"
     android:background="@drawable/header_bg">
 
-    <com.apphunt.app.ui.widgets.AvatarImageView
+    <com.apphunt.app.ui.views.widgets.AvatarImageView
         android:id="@+id/profile_image"
         android:layout_width="50dp"
         android:layout_height="50dp"

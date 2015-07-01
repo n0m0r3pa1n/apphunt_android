@@ -1,4 +1,4 @@
-package com.apphunt.app.ui;
+package com.apphunt.app.ui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

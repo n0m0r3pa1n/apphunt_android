@@ -15,11 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
 public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {

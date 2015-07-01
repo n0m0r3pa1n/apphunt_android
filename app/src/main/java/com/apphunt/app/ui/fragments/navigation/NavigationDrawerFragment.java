@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,21 +25,21 @@ import com.apphunt.app.ui.adapters.DrawerItemAdapter;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.apphunt.app.utils.Constants.COLLECTIONS;
-import static com.apphunt.app.utils.Constants.HELP_ADD_APP;
-import static com.apphunt.app.utils.Constants.HELP_APPS_REQUIREMENTS;
-import static com.apphunt.app.utils.Constants.HELP_TOP_HUNTERS_POINTS;
-import static com.apphunt.app.utils.Constants.SETTINGS;
-import static com.apphunt.app.utils.Constants.TOP_APPS;
-import static com.apphunt.app.utils.Constants.TOP_HUNTERS;
-import static com.apphunt.app.utils.Constants.TRENDING_APPS;
-import static com.apphunt.app.utils.Constants.SUGGESTIONS;
+import static com.apphunt.app.constants.Constants.COLLECTIONS;
+import static com.apphunt.app.constants.Constants.HELP_ADD_APP;
+import static com.apphunt.app.constants.Constants.HELP_APPS_REQUIREMENTS;
+import static com.apphunt.app.constants.Constants.HELP_TOP_HUNTERS_POINTS;
+import static com.apphunt.app.constants.Constants.SETTINGS;
+import static com.apphunt.app.constants.Constants.TOP_APPS;
+import static com.apphunt.app.constants.Constants.TOP_HUNTERS;
+import static com.apphunt.app.constants.Constants.TRENDING_APPS;
+import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

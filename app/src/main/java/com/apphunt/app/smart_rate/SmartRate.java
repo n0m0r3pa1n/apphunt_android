@@ -18,7 +18,7 @@ import com.apphunt.app.smart_rate.listeners.OnNoClickListener;
 import com.apphunt.app.smart_rate.listeners.OnSendClickListener;
 import com.apphunt.app.smart_rate.listeners.OnYesClickListener;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.apphunt.app.utils;
+package com.apphunt.app.constants;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>

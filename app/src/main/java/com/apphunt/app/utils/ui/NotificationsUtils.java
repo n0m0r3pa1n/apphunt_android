@@ -20,7 +20,7 @@ import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 

@@ -5,7 +5,7 @@ import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadSearchedAppsApiEvent;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 
 public class GetSearchedAppsRequest extends BaseGetRequest<AppsList>{
     public GetSearchedAppsRequest(String query, int page, int pageSize, String platform, Response.ErrorListener listener) {

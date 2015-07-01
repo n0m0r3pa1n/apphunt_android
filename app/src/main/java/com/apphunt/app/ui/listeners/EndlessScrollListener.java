@@ -2,10 +2,6 @@ package com.apphunt.app.ui.listeners;
 
 import android.widget.AbsListView;
 
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.ui.LoadersUtils;
-
 /**
  * Created by nmp on 15-6-30.
  */

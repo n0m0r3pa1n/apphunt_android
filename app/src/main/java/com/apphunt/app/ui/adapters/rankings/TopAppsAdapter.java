@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.StringUtils;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 

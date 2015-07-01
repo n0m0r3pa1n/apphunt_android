@@ -1,4 +1,4 @@
-package com.apphunt.app.utils;
+package com.apphunt.app.constants;
 
 
 import java.util.HashMap;

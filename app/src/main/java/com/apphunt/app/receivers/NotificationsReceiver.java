@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 

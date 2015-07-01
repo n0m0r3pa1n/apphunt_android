@@ -2,7 +2,7 @@ package com.apphunt.app.api.apphunt.client;
 
 import android.content.Context;
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
 import java.text.SimpleDateFormat;

@@ -75,7 +75,7 @@
                 android:layout_toRightOf="@id/app_icon"
                 android:orientation="horizontal">
 
-                <com.apphunt.app.ui.widgets.AvatarImageView
+                <com.apphunt.app.ui.views.widgets.AvatarImageView
                     android:id="@+id/creator_avatar"
                     android:layout_width="@dimen/dimen_app_list_avatar_creator"
                     android:layout_height="@dimen/dimen_app_list_avatar_creator"
