@@ -9,7 +9,7 @@ import com.apphunt.app.event_bus.events.api.users.UserUpdatedApiEvent;
 
 public class PutUserRequest extends BasePutRequest<User> {
     public PutUserRequest(User user, Response.ErrorListener listener) {
-        super(BASE_URL + "/users?userId=" + user.getId(), user, listener);
+        super(BASE_URL + "/users/" + user.getId(), user, listener);
     }
 
     @Override

@@ -32,6 +32,7 @@ public class Constants {
     public static final String KEY_NOTIFICATION_MSG = "notification_msg";
     public static final String KEY_SEARCH_QUERY = "search_query";
     public static final String KEY_TITLE = "fragment_title";
+    public static final String KEY_COLLECTION = "collection";
 
     public static final String PLATFORM = "Android";
 
@@ -57,6 +58,7 @@ public class Constants {
     public static final String TAG_TOP_HUNTERS_FRAGMENT = "top_hunters_fragment";
     public static final String TAG_SELECT_COLLECTION_FRAGMENT = "select_collection_fragment";
     public static final String TAG_CREATE_COLLECTION_FRAGMENT = "create_collection_fragment";
+    public static final String TAG_COLLECTION_DETAILS = "collection_details_fragment";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;

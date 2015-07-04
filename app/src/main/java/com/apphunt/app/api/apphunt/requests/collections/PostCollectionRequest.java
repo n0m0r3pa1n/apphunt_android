@@ -7,9 +7,6 @@ import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
 
-/**
- * Created by nmp on 15-6-30.
- */
 public class PostCollectionRequest extends BasePostRequest<AppsCollection> {
     public PostCollectionRequest(NewCollection collection, Response.ErrorListener listener) {
         super(BASE_URL + "/app-collections", collection, listener);

@@ -3,84 +3,89 @@ package com.apphunt.app.ui.fragments.collections;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
-import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
-import com.apphunt.app.ui.listeners.EndlessScrollListener;
-import com.apphunt.app.ui.views.ScrollListView;
-import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
- * Created by nmp on 15-6-26.
+ * * Created by Seishin <atanas@naughtyspirit.co>
+ * * on 6/26/15.
+ * *
+ * * NaughtySpirit 2015
  */
-public class MyCollectionsFragment extends BaseFragment {
+public class MyCollectionsFragment extends BaseFragment implements OnItemClickListener {
 
-    int currentPage = 0;
+    private AppCompatActivity activity;
+    private View view;
+    private App app;
 
-    private CollectionsAdapter adapter;
+    private String appId;
 
-    @InjectView(R.id.all_collections)
-    ScrollListView allCollections;
+    @InjectView(R.id.collections_list)
+    RecyclerView collectionsList;
+    private SelectCollectionAdapter selectCollectionAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getMyCollections();
+        view = inflater.inflate(R.layout.fragment_select_collection, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_all_collections, container, false);
-        ButterKnife.inject(this, view);
+        initUI();
 
-        allCollections.setOnEndReachedListener(new EndlessScrollListener.OnEndReachedListener() {
-            @Override
-            public void onEndReached() {
-                getMyCollections();
-            }
-        });
         return view;
     }
 
-    private void getMyCollections() {
+    private void initUI() {
+        ButterKnife.inject(this, view);
+
         if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            currentPage++;
-            ApiClient.getClient(getActivity()).getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(),
-                    currentPage, Constants.PAGE_SIZE);
+            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
         }
+
+        collectionsList.setItemAnimator(new DefaultItemAnimator());
+        collectionsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        collectionsList.setHasFixedSize(true);
+    }
+
+    public void setSelectedApp(App selectedApp) {
+        this.app = selectedApp;
     }
 
     @Subscribe
-    public void onMyCollectionsReceived(GetMyCollectionsEvent event) {
-        allCollections.hideBottomLoader();
-        if(adapter == null) {
-            adapter = new CollectionsAdapter(R.layout.layout_my_collection_item,
-                    event.getAppsCollection().getCollections());
-            allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
-        } else {
-            int currentSize = adapter.getCount();
-            adapter.addAllCollections(event.getAppsCollection().getCollections());
-            allCollections.smoothScrollToPosition(currentSize);
-        }
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.title_my_collection;
+    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+        selectCollectionAdapter = new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections());
+        selectCollectionAdapter.setOnItemClickListener(this);
+        collectionsList.setAdapter(selectCollectionAdapter);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        this.activity = (AppCompatActivity) activity;
         BusProvider.getInstance().register(this);
     }
 
@@ -88,5 +93,31 @@ public class MyCollectionsFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_my_collections;
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        if(app != null) {
+            ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
+                    new String[] {app.getId()});
+        } else {
+            CollectionDetailsFragment fragment = new CollectionDetailsFragment(selectCollectionAdapter.getCollection(position));
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, fragment, Constants.TAG_COLLECTION_DETAILS)
+                    .commit();
+        }
+    }
+
+    @Subscribe
+    public void onUpdateCollection(UpdateCollectionEvent event) {
+        if(event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
+            activity.getSupportFragmentManager().popBackStack();
+        }
     }
 }

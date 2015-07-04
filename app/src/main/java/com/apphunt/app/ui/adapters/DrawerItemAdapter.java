@@ -14,13 +14,14 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -242,7 +243,5 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface OnItemClickListener {
-        void onClick(View view, int position);
-    }
+
 }

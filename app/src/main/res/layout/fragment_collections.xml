@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,9 +14,27 @@
         app:tabSelectedTextColor="@android:color/white"
         />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_collection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/add_btn_margin_bottom"
+        android:layout_marginRight="@dimen/add_btn_margin_right"
+        android:layout_marginTop="@dimen/add_btn_margin_top"
+        android:src="@drawable/ic_add_white"
+        app:backgroundTint="@color/bg_fab"
+        app:elevation="5dp"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/collection_tabs"
+        android:elevation="1dp"
+        android:layout_below="@id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+</RelativeLayout>

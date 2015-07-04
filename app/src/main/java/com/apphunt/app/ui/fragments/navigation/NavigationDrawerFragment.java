@@ -22,6 +22,7 @@ import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
@@ -46,7 +47,7 @@ import static com.apphunt.app.constants.Constants.SUGGESTIONS;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment implements DrawerItemAdapter.OnItemClickListener {
+public class NavigationDrawerFragment extends Fragment implements OnItemClickListener {
     public static final String TAG = NavigationDrawerFragment.class.getSimpleName();
     /**
      * Remember the position of the selected item.

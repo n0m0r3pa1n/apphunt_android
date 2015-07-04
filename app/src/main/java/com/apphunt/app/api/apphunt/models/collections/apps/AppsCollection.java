@@ -1,5 +1,7 @@
 package com.apphunt.app.api.apphunt.models.collections.apps;
 
+import android.os.Parcelable;
+
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;

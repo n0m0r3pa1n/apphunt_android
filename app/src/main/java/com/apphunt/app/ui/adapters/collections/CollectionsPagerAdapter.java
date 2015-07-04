@@ -25,7 +25,8 @@ public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
                 break;
             case 1: fragment = new FavouriteCollectionsFragment();
                 break;
-            case 2: fragment = new MyCollectionsFragment();
+            case 2:
+                fragment = new MyCollectionsFragment();
                 break;
         }
 

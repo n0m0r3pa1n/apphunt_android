@@ -3,6 +3,7 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,6 +27,7 @@ import com.apphunt.app.api.apphunt.requests.collections.GetMyCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopHuntersRequest;
 import com.apphunt.app.api.apphunt.requests.collections.PostCollectionRequest;
+import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
@@ -40,6 +42,11 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 
 public class AppHuntApiClient implements AppHuntApi {
@@ -208,5 +215,13 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void unfavouriteCollection(String collectionId, String userId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new UnfavouriteCollectionRequest(collectionId, userId, listener));
+    }
+
+    @Override
+    public void updateCollection(String collectionId, String[] appIds) {
+        HashMap<String, String[]> body = new HashMap<>();
+        body.put("apps", appIds);
+
+        VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(collectionId, body, listener));
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -29,10 +31,15 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
 
     private Context ctx;
     private List<AppsCollection> collections = new ArrayList<>();
+    private OnItemClickListener listener;
 
     public SelectCollectionAdapter(Context ctx, List<AppsCollection> collections) {
         this.ctx = ctx;
         this.collections = collections;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -43,13 +50,21 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         AppsCollection collection = collections.get(position);
 
         holder.name.setText(collection.getName());
         holder.createdBy.setText(collection.getCreatedBy().getUsername());
+        holder.votesCount.setText(collection.getVotesCount() + "");
         Picasso.with(ctx).load(collection.getPicture()).into(holder.createdByAvatar);
         Picasso.with(ctx).load(collection.getPicture()).into(holder.banner);
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(v, position);
+            }
+        });
     }
 
     @Override
@@ -57,8 +72,18 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
         return collections.size();
     }
 
+    public String getCollectionId(int position) {
+        return collections.get(position).getId();
+    }
+
+    public AppsCollection getCollection(int position) {
+        return collections.get(position);
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @InjectView(R.id.card_view)
+        View layout;
 
         @InjectView(R.id.banner)
         ImageView banner;
@@ -71,6 +96,9 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.votes_count)
+        TextView votesCount;
 
         public ViewHolder(View view) {
             super(view);

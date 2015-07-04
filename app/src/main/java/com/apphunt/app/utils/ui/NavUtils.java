@@ -9,8 +9,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.collections.create.CreateCollectionFragment;
-import com.apphunt.app.ui.fragments.collections.create.SelectCollectionFragment;
+import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
+import com.apphunt.app.ui.fragments.collections.MyCollectionsFragment;
 import com.apphunt.app.constants.Constants;
 
 /**
@@ -63,7 +63,7 @@ public class NavUtils {
     }
 
     public void presentSelectCollectionFragment(App app) {
-        SelectCollectionFragment fragment = new SelectCollectionFragment();
+        MyCollectionsFragment fragment = new MyCollectionsFragment();
         fragment.setSelectedApp(app);
 
         activity.getSupportFragmentManager().beginTransaction()
