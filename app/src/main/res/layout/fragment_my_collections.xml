@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="1dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_secondary"
+    android:clickable="true">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/collections_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/list_divider_height"
+        android:elevation="@dimen/listview_elevation"
+        android:layoutAnimation="@anim/list_view_entry"
+        android:padding="8dp" />
+
+</RelativeLayout>

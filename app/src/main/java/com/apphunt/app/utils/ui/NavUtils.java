@@ -12,6 +12,7 @@ import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.MyCollectionsFragment;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 
 /**
  * Created by nmp on 15-5-9.
@@ -63,7 +64,7 @@ public class NavUtils {
     }
 
     public void presentSelectCollectionFragment(App app) {
-        MyCollectionsFragment fragment = new MyCollectionsFragment();
+        SelectCollectionFragment fragment = new SelectCollectionFragment();
         fragment.setSelectedApp(app);
 
         activity.getSupportFragmentManager().beginTransaction()

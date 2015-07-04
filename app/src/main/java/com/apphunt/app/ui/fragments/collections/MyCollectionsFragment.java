@@ -23,12 +23,10 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
-import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -51,7 +49,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_select_collection, container, false);
+        view = inflater.inflate(R.layout.fragment_my_collections, container, false);
 
         initUI();
 
