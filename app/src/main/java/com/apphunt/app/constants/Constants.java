@@ -33,6 +33,7 @@ public class Constants {
     public static final String KEY_SEARCH_QUERY = "search_query";
     public static final String KEY_TITLE = "fragment_title";
     public static final String KEY_COLLECTION = "collection";
+    public static final String KEY_SHOW_SHADOW = "show_shadow";;
 
     public static final String PLATFORM = "Android";
 
@@ -117,7 +118,6 @@ public class Constants {
     public static final int HELP_TOP_HUNTERS_POINTS = 12;
 
     public static final int PAGE_SIZE = 5;
-
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),
