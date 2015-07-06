@@ -5,6 +5,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * *
  * * NaughtySpirit 2015
  */
-public class AppsCollection {
+public class AppsCollection implements Serializable {
 
     @SerializedName("_id")
     private String id;

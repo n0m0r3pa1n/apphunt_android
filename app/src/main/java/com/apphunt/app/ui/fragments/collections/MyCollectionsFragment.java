@@ -117,9 +117,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
             ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
                     new String[] {app.getId()});
         } else {
-            CollectionDetailsFragment fragment = new CollectionDetailsFragment(selectCollectionAdapter.getCollection(position));
+            CollectionDetailsFragment fragment = CollectionDetailsFragment.newInstance(selectCollectionAdapter.getCollection(position));
             getActivity().getSupportFragmentManager()
-                    .beginTransaction()
+                    .beginTransaction().addToBackStack(Constants.TAG_COLLECTION_DETAILS)
                     .add(R.id.container, fragment, Constants.TAG_COLLECTION_DETAILS)
                     .commit();
         }
