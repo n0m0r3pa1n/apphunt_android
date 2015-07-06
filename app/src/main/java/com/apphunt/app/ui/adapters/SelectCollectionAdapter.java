@@ -56,7 +56,7 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
         holder.name.setText(collection.getName());
         holder.createdBy.setText(collection.getCreatedBy().getUsername());
         holder.votesCount.setText(collection.getVotesCount() + "");
-        Picasso.with(ctx).load(collection.getPicture()).into(holder.createdByAvatar);
+        Picasso.with(ctx).load(collection.getCreatedBy().getProfilePicture()).into(holder.createdByAvatar);
         Picasso.with(ctx).load(collection.getPicture()).into(holder.banner);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
