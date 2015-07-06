@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_secondary"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/bg_secondary">
 
     <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="6dp"
-        app:elevation="4dp"
-        app:pressedTranslationZ="12dp"
+        app:elevation="3dp"
+        app:rippleColor="@color/bg_fab"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:src="@drawable/ic_add_white"
-        app:backgroundTint="@color/bg_fab" />
+        app:backgroundTint="@color/bg_fab"
+        app:borderWidth="0dp"/>
 
     <fragment
         android:layout_width="match_parent"
