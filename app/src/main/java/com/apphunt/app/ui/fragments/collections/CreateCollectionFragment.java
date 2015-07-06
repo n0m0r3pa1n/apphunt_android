@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,8 +98,7 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
                 collection.setName(collectionName.getText().toString());
                 collection.setDescription(collectionDesc.getText().toString());
                 collection.setPicture("http://1.bp.blogspot.com/-Bi4mi7nN3Zg/T2HOV6mAHtI/AAAAAAAAAfA/YOh046D0Xa8/s1600/Beautiful_Nature_1280x1024_Wallpaper.jpg");
-//                collection.setUserId(LoginProviderFactory.get(activity).getUser().getId());
-                collection.setUserId("5517b7ad8dffc3030010f80b");
+                collection.setUserId(LoginProviderFactory.get(activity).getUser().getId());
 
                 ApiClient.getClient(activity).createCollection(collection);
 
@@ -113,7 +113,7 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
-        Log.e("bla", event.getAppsCollection().toString());
+        ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -133,4 +133,6 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
 
         BusProvider.getInstance().unregister(this);
     }
+
+
 }

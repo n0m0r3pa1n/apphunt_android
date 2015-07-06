@@ -18,6 +18,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
@@ -59,13 +60,17 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     private void initUI() {
         ButterKnife.inject(this, view);
 
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
-        }
+        getCollections();
 
         collectionsList.setItemAnimator(new DefaultItemAnimator());
         collectionsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         collectionsList.setHasFixedSize(true);
+    }
+
+    private void getCollections() {
+        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(), 1, 10);
+        }
     }
 
     public void setSelectedApp(App selectedApp) {
@@ -117,5 +122,10 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
         if(event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
             activity.getSupportFragmentManager().popBackStack();
         }
+    }
+
+    @Subscribe
+    public void onCollectionCreateSuccess(CreateCollectionEvent event) {
+        getCollections();
     }
 }
