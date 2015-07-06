@@ -16,6 +16,8 @@
     <string name="title_all_collection">All Collections</string>
     <string name="title_favourite_collection">Favourite Collections</string>
     <string name="title_my_collection">My Collections</string>
+    <string name="title_my_collections">My Collections</string>
+    <string name="title_create_collection">Create Collection</string>
 
     <string-array name="drawer_menu">
         <item>Trending Apps</item>
@@ -120,6 +122,5 @@
     <string name="how_to_add_new_app">How to add new app</string>
     <string name="apps_requirements">Apps Requirements</string>
     <string name="top_hunters_points">Top Hunters Points</string>
-    <string name="title_my_collections">My Collections</string>
 
 </resources>

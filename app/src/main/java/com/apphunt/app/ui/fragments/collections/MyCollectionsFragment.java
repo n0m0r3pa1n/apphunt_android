@@ -24,6 +24,7 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -59,6 +60,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void initUI() {
         ButterKnife.inject(this, view);
+        ActionBarUtils.getInstance().setTitle(R.string.title_my_collections);
 
         getCollections();
 
@@ -96,6 +98,12 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+        ActionBarUtils.getInstance().showActionBarShadow();
+
+        if (app != null) {
+        } else {
+            ActionBarUtils.getInstance().setTitle(R.string.title_home);
+        }
     }
 
     @Override

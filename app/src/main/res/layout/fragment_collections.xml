@@ -15,11 +15,13 @@
         />
 
     <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:elevation="6dp"
+        app:elevation="4dp"
+        app:borderWidth="0dp"
         app:pressedTranslationZ="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -27,8 +29,7 @@
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:layout_marginTop="@dimen/add_btn_margin_top"
         android:src="@drawable/ic_add_white"
-        app:backgroundTint="@color/bg_fab"
-        app:elevation="5dp"/>
+        app:backgroundTint="@color/bg_fab"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/collection_tabs"

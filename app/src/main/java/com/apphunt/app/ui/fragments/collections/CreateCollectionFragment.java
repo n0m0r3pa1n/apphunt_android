@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +22,9 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.squareup.otto.Subscribe;
 
 import me.gujun.android.taggroup.TagGroup;
@@ -32,7 +35,7 @@ import me.gujun.android.taggroup.TagGroup;
  * *
  * * NaughtySpirit 2015
  */
-public class CreateCollectionFragment extends Fragment implements OnClickListener {
+public class CreateCollectionFragment extends BaseFragment implements OnClickListener {
 
     private Activity activity;
     private View view;
@@ -55,6 +58,8 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
     }
 
     public void initUI() {
+        ActionBarUtils.getInstance().setTitle(R.string.title_create_collection);
+
         collectionNameLayout = (TextInputLayout) view.findViewById(R.id.collection_name_layout);
         collectionName = (EditText) view.findViewById(R.id.collection_name);
 
@@ -114,6 +119,7 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
         ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
+        NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, "You collection was successfully created!", false, false, false);
     }
 
     @Override
@@ -130,9 +136,10 @@ public class CreateCollectionFragment extends Fragment implements OnClickListene
     public void onDetach() {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        ActionBarUtils.getInstance().hideActionBarShadow();
+        ActionBarUtils.getInstance().setPreviousTitle();
 
         BusProvider.getInstance().unregister(this);
     }
-
 
 }

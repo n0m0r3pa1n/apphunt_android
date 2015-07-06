@@ -75,11 +75,16 @@ public class NotificationsUtils {
     }
 
     public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
+        showNotificationFragment(activity, message, showSettingsAction, showRating, true);
+    }
+
+    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating, boolean showShadow) {
         try {
             Bundle extras = new Bundle();
             extras.putString(Constants.KEY_NOTIFICATION, message);
             extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
             extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
+            extras.putBoolean(Constants.KEY_SHOW_SHADOW, showShadow);
             NotificationFragment notificationFragment = new NotificationFragment();
             notificationFragment.setArguments(extras);
 

@@ -40,6 +40,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
 
     private ActionBarActivity activity;
     private boolean showRating;
+    private boolean showShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         notification = getArguments().getString(Constants.KEY_NOTIFICATION);
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
         showRating = getArguments().getBoolean(Constants.KEY_SHOW_RATING);
+        showShadow = getArguments().getBoolean(Constants.KEY_SHOW_SHADOW);
     }
 
     @Override
@@ -145,6 +147,11 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onDetach() {
         super.onDetach();
         LoadersUtils.hideCenterLoader(activity);
-        ActionBarUtils.getInstance().showActionBarShadow();
+
+        if (showShadow) {
+            ActionBarUtils.getInstance().showActionBarShadow();
+        } else {
+            ActionBarUtils.getInstance().hideActionBarShadow();
+        }
     }
 }
