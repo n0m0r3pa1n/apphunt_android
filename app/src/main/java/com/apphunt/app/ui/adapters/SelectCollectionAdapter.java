@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.ui.views.CollectionView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -19,7 +20,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnItemClick;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -53,13 +53,8 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     public void onBindViewHolder(ViewHolder holder, final int position) {
         AppsCollection collection = collections.get(position);
 
-        holder.name.setText(collection.getName());
-        holder.createdBy.setText(collection.getCreatedBy().getUsername());
-        holder.votesCount.setText(collection.getVotesCount() + "");
-        Picasso.with(ctx).load(collection.getPicture()).into(holder.createdByAvatar);
-        Picasso.with(ctx).load(collection.getPicture()).into(holder.banner);
-
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+        holder.collectionView.setCollection(collection);
+        holder.collectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onClick(v, position);
@@ -82,23 +77,8 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.card_view)
-        View layout;
-
-        @InjectView(R.id.banner)
-        ImageView banner;
-
-        @InjectView(R.id.collection_name)
-        TextView name;
-
-        @InjectView(R.id.created_by_image)
-        Target createdByAvatar;
-
-        @InjectView(R.id.created_by)
-        TextView createdBy;
-
-        @InjectView(R.id.votes_count)
-        TextView votesCount;
+        @InjectView(R.id.collection_view)
+        CollectionView collectionView;
 
         public ViewHolder(View view) {
             super(view);

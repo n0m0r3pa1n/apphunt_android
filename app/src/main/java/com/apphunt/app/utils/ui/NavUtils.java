@@ -64,8 +64,7 @@ public class NavUtils {
     }
 
     public void presentSelectCollectionFragment(App app) {
-        SelectCollectionFragment fragment = new SelectCollectionFragment();
-        fragment.setSelectedApp(app);
+        SelectCollectionFragment fragment = SelectCollectionFragment.newInstance(app);
 
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, fragment, Constants.TAG_SELECT_COLLECTION_FRAGMENT)

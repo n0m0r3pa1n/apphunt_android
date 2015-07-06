@@ -1,9 +1,8 @@
 package com.apphunt.app.api.apphunt.models.collections.apps;
 
-import android.os.Parcelable;
-
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.constants.Constants;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -22,10 +21,11 @@ public class AppsCollection {
     private String picture;
     private String name;
     private String description;
+    @SerializedName("status")
+    private Constants.CollectionStatus status;
     private boolean hasVoted;
     private boolean isFavourite;
     private int votesCount;
-
     private User createdBy;
 
     private List<BaseApp> apps = new ArrayList<>();
@@ -59,6 +59,14 @@ public class AppsCollection {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Constants.CollectionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(Constants.CollectionStatus status) {
+        this.status = status;
     }
 
     public boolean hasUserVoted() {

@@ -1,6 +1,8 @@
 package com.apphunt.app.constants;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 
 public class Constants {
@@ -117,6 +119,7 @@ public class Constants {
     public static final int HELP_TOP_HUNTERS_POINTS = 12;
 
     public static final int PAGE_SIZE = 5;
+    public static final int MIN_COLLECTION_APPS_SIZE = 4;
 
 
     public enum ItemType {
@@ -130,6 +133,23 @@ public class Constants {
         }
 
         public int getValue() {
+            return value;
+        }
+    }
+
+    public enum CollectionStatus {
+        @SerializedName("draft")
+        DRAFT("draft"),
+        @SerializedName("public")
+        PUBLIC("public");
+
+        private String value;
+
+        CollectionStatus(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
             return value;
         }
     }
