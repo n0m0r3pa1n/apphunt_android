@@ -11,11 +11,11 @@ import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
  */
 public class GetAllCollectionsRequest extends BaseGetRequest<AppsCollections> {
     public GetAllCollectionsRequest(int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize, listener);
+        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&status=public", listener);
     }
 
     public GetAllCollectionsRequest(String userId, int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&userId=" + userId, listener);
+        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&userId=" + userId + "&status=public", listener);
     }
 
     @Override

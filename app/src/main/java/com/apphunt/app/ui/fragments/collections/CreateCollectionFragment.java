@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +22,7 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.squareup.otto.Subscribe;
 
 import me.gujun.android.taggroup.TagGroup;

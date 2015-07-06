@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments.collections;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -126,6 +128,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
+        NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, "You collection was successfully created!", false, false);
         getCollections();
     }
 }
