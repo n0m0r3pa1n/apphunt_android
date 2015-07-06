@@ -3,13 +3,15 @@ package com.apphunt.app.api.apphunt.models.apps;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
  * * on 5/26/15.
  * *
  * * NaughtySpirit 2015
  */
-public class BaseApp {
+public class BaseApp implements Serializable {
     @SerializedName("_id")
     private String id;
     private String name;

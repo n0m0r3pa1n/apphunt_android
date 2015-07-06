@@ -6,13 +6,19 @@
 
     <com.apphunt.app.ui.views.CollectionView
         android:id="@+id/collection"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <GridView
         android:id="@+id/collection_apps"
+        android:layout_below="@id/collection"
+        android:numColumns="2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:padding="5dp">
 
     </GridView>
 

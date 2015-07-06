@@ -9,6 +9,7 @@ import android.widget.GridView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.views.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -47,7 +48,9 @@ public class CollectionDetailsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_collection_details, container, false);
         ButterKnife.inject(this, view);
 
-        collection.setCollection((AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY));
+        appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
+        collection.setCollection(appsCollection);
+        collectionApps.setAdapter(new CollectionAppsAdapter(getActivity(), appsCollection.getApps()));
 
         ActionBarUtils.getInstance().setTitle("Collection");
 

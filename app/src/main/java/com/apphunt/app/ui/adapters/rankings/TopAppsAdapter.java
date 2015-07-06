@@ -43,7 +43,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
     @Override
     public TopAppsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_collection_app, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_collection_top_apps_item, parent, false);
 
         return new ViewHolder(view);
     }

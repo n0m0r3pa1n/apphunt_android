@@ -42,8 +42,8 @@
 
             <com.apphunt.app.ui.views.vote.AppVoteButton
                 android:id="@+id/btn_vote"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
                 android:layout_alignParentRight="true"
                 android:gravity="right" />
 

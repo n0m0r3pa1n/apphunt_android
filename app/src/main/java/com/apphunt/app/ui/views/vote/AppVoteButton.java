@@ -96,7 +96,7 @@ public class AppVoteButton extends LinearLayout {
     protected void updateVoteButton() {
         if (hasVoted()) {
             voteButton.setTextColor(getResources().getColor(R.color.bg_secondary));
-            voteButton.setBackgroundResource(R.drawable.btn_voted_v2);
+            voteButton.setBackgroundResource(R.drawable.btn_voted);
         } else {
             voteButton.setTextColor(getResources().getColor(R.color.bg_primary));
             voteButton.setBackgroundResource(R.drawable.btn_vote);

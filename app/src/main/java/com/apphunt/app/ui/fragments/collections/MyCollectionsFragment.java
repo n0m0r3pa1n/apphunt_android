@@ -25,6 +25,7 @@ import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -117,11 +118,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
             ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
                     new String[] {app.getId()});
         } else {
-            CollectionDetailsFragment fragment = CollectionDetailsFragment.newInstance(selectCollectionAdapter.getCollection(position));
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction().addToBackStack(Constants.TAG_COLLECTION_DETAILS)
-                    .add(R.id.container, fragment, Constants.TAG_COLLECTION_DETAILS)
-                    .commit();
+            NavUtils.getInstance(activity).presentCollectionDetailsFragment(selectCollectionAdapter.getCollection(position));
         }
     }
 

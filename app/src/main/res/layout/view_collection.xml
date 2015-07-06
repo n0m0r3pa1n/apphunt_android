@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/apps_left"
             android:visibility="invisible"
-            android:background="@color/collection_background"
+            android:background="@color/collection_transparent_background"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
@@ -33,6 +33,7 @@
             android:textSize="20sp"/>
 
         <View
+            android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/white" />
@@ -43,7 +44,7 @@
             android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingTop="4dp"
-            android:background="@color/collection_background"
+            android:background="@color/collection_transparent_background"
             >
 
             <TextView

@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
+import com.apphunt.app.ui.fragments.collections.CollectionDetailsFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.MyCollectionsFragment;
 import com.apphunt.app.constants.Constants;
@@ -86,6 +88,14 @@ public class NavUtils {
             ActionBarUtils.getInstance().showActionBar((ActionBarActivity) activity);
         }
         this.isBlocked = isBlocked;
+    }
+
+    public void presentCollectionDetailsFragment(AppsCollection appsCollection) {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, CollectionDetailsFragment.newInstance(appsCollection),
+                        Constants.TAG_COLLECTION_DETAILS)
+                .addToBackStack(Constants.TAG_COLLECTION_DETAILS)
+                .commit();
     }
 
     public boolean isOnBackBlocked() {

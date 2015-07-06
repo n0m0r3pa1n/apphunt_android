@@ -44,6 +44,9 @@ public class CollectionView extends RelativeLayout {
     @InjectView(R.id.collection_status)
     ImageView status;
 
+    @InjectView(R.id.separator)
+    View separator;
+
     public CollectionView(Context context) {
         super(context);
         if(!isInEditMode()) {
@@ -81,15 +84,12 @@ public class CollectionView extends RelativeLayout {
 
     public void setCollection(AppsCollection collection) {
         if(collection.getStatus() == CollectionStatus.DRAFT) {
-            appsLeft.setVisibility(View.VISIBLE);
             int appsLeftCount = MIN_COLLECTION_APPS_SIZE - collection.getApps().size();
             String text = "You need " + getResources().getQuantityString(R.plurals.appsLeft, appsLeftCount, appsLeftCount);
             appsLeft.setText(text);
-            status.setVisibility(View.VISIBLE);
-            votesCount.setVisibility(View.INVISIBLE);
+            setVisibilityWhenDraft();
         } else {
-            appsLeft.setVisibility(View.INVISIBLE);
-            status.setVisibility(View.INVISIBLE);
+            setVisibilityWhenPublic();
         }
 
         name.setText(collection.getName());
@@ -97,5 +97,19 @@ public class CollectionView extends RelativeLayout {
         votesCount.setText(collection.getVotesCount() + "");
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
         Picasso.with(getContext()).load(collection.getPicture()).into(banner);
+    }
+
+    private void setVisibilityWhenPublic() {
+        appsLeft.setVisibility(View.INVISIBLE);
+        status.setVisibility(View.INVISIBLE);
+        separator.setVisibility(View.INVISIBLE);
+        votesCount.setVisibility(View.VISIBLE);
+    }
+
+    private void setVisibilityWhenDraft() {
+        appsLeft.setVisibility(View.VISIBLE);
+        status.setVisibility(View.VISIBLE);
+        separator.setVisibility(View.VISIBLE);
+        votesCount.setVisibility(View.INVISIBLE);
     }
 }
