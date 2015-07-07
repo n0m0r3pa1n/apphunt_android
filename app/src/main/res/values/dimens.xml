@@ -143,5 +143,6 @@
 
     <dimen name="zero_elevation">-10dp</dimen>
     <dimen name="one_elevation">12dp</dimen>
+    <dimen name="login_message_padding">40dp</dimen>
 
 </resources>

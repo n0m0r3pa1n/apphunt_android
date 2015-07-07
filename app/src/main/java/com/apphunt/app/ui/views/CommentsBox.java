@@ -153,7 +153,7 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
 
     @OnClick(R.id.label_comment)
     public void showLoginFragment() {
-        LoginUtils.showLoginFragment(getContext());
+        LoginUtils.showLoginFragment(getContext(), false, R.string.login_info_comment);
     }
 
     @OnClick(R.id.hide_comments)
@@ -164,7 +164,7 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
     @OnClick(R.id.send_comment)
     public void sendComment() {
         if (!userHasPermissions()) {
-            LoginUtils.showLoginFragment(getContext());
+            LoginUtils.showLoginFragment(getContext(), false, R.string.login_info_comment);
             return;
         }
 

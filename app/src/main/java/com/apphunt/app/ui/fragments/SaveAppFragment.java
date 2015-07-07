@@ -161,10 +161,10 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         int currPercent = random.nextInt(100) + 1;
         if(currPercent <= Constants.USER_SKIP_LOGIN_PERCENTAGE) {
             FlurryAgent.logEvent(TrackingEvents.AppShowedSkippableLogin);
-            LoginUtils.showSkippableLoginFragment(getActivity());
+            LoginUtils.showLoginFragment(getActivity(), true, R.string.login_info_save);
         } else {
             FlurryAgent.logEvent(TrackingEvents.AppShowedRegularLogin);
-            LoginUtils.showLoginFragment(getActivity());
+            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_save);
         }
     }
 

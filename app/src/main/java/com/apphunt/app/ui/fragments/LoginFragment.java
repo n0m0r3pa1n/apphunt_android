@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apphunt.app.R;
@@ -52,13 +53,16 @@ public class LoginFragment extends BaseFragment {
     private static final String TAG = LoginFragment.class.getName();
 
     private ActionBarActivity activity;
-
     private User user;
+
+    @InjectView(R.id.login_message)
+    TextView loginMessage;
 
     @InjectView(R.id.login_button)
     TwitterLoginButton loginButton;
 
     private boolean canBeSkipped = false;
+    private String message;
 
     public void setCanBeSkipped(boolean canBeSkipped) {
         this.canBeSkipped = canBeSkipped;
@@ -76,6 +80,8 @@ public class LoginFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.inject(this, view);
+
+        loginMessage.setText(message);
 
         Button notNowButton = (Button) view.findViewById(R.id.not_now);
         notNowButton.setVisibility(View.GONE);
@@ -226,4 +232,11 @@ public class LoginFragment extends BaseFragment {
     }
 
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMessage(int messageRes) {
+        setMessage(getString(messageRes));
+    }
 }
