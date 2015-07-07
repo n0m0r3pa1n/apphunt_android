@@ -90,6 +90,9 @@
             </LinearLayout>
 
             <TextView
+                android:background="@drawable/btn_vote_disable"
+                android:textColor="@color/bg_primary"
+                android:textSize="18dp"
                 android:id="@+id/votes_count"
                 android:layout_centerVertical="true"
                 android:gravity="center"

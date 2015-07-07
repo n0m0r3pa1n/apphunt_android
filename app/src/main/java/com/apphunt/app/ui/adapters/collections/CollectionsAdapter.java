@@ -1,17 +1,11 @@
 package com.apphunt.app.ui.adapters.collections;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -27,7 +21,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.Optional;
 
 /**
  * Created by nmp on 15-6-26.
@@ -83,11 +76,12 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        convertView.setOnClickListener(null);
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.getInstance((AppCompatActivity) parent.getContext())
-                        .presentCollectionDetailsFragment(appsCollection);
+                        .presentViewCollectionFragment(appsCollection);
             }
         });
         viewHolder.name.setText(appsCollection.getName());

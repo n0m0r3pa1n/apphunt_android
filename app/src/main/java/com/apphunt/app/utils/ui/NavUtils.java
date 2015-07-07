@@ -10,9 +10,8 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.collections.CollectionDetailsFragment;
+import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
-import com.apphunt.app.ui.fragments.collections.MyCollectionsFragment;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 
@@ -90,9 +89,9 @@ public class NavUtils {
         this.isBlocked = isBlocked;
     }
 
-    public void presentCollectionDetailsFragment(AppsCollection appsCollection) {
+    public void presentViewCollectionFragment(AppsCollection appsCollection) {
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, CollectionDetailsFragment.newInstance(appsCollection),
+                .add(R.id.container, ViewCollectionFragment.newInstance(appsCollection),
                         Constants.TAG_COLLECTION_DETAILS)
                 .addToBackStack(Constants.TAG_COLLECTION_DETAILS)
                 .commit();

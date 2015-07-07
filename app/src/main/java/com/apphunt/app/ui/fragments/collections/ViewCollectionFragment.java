@@ -2,6 +2,7 @@ package com.apphunt.app.ui.fragments.collections;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import butterknife.InjectView;
 /**
  * Created by nmp on 15-7-3.
  */
-public class CollectionDetailsFragment extends BaseFragment {
+public class ViewCollectionFragment extends BaseFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
 
     @InjectView(R.id.collection)
@@ -29,13 +30,16 @@ public class CollectionDetailsFragment extends BaseFragment {
     @InjectView(R.id.collection_apps)
     GridView collectionApps;
 
+    @InjectView(R.id.edit_collection)
+    FloatingActionButton editCollection;
+
     private AppsCollection appsCollection;
 
-    public CollectionDetailsFragment() {
+    public ViewCollectionFragment() {
     }
 
-    public static CollectionDetailsFragment newInstance(AppsCollection appsCollection) {
-        CollectionDetailsFragment fragment = new CollectionDetailsFragment();
+    public static ViewCollectionFragment newInstance(AppsCollection appsCollection) {
+        ViewCollectionFragment fragment = new ViewCollectionFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(APPS_COLLECTION_KEY, appsCollection);
         fragment.setArguments(bundle);
@@ -45,12 +49,16 @@ public class CollectionDetailsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_collection_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
         collection.setCollection(appsCollection);
         collectionApps.setAdapter(new CollectionAppsAdapter(getActivity(), appsCollection.getApps()));
+
+        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+            editCollection.setVisibility(View.VISIBLE);
+        }
 
         ActionBarUtils.getInstance().setTitle("Collection");
 

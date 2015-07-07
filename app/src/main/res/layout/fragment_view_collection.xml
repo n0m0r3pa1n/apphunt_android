@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_secondary">
+
+    <com.apphunt.app.ui.views.CollectionView
+        android:id="@+id/collection"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/edit_collection"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:elevation="4dp"
+        app:borderWidth="0dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/add_btn_margin_bottom"
+        android:layout_marginRight="@dimen/add_btn_margin_right"
+        android:layout_marginTop="@dimen/add_btn_margin_top"
+        android:src="@drawable/ic_edit_collection"
+        app:backgroundTint="@color/bg_fab"/>
+
+    <GridView
+        android:id="@+id/collection_apps"
+        android:layout_below="@id/collection"
+        android:numColumns="2"
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:padding="5dp">
+
+    </GridView>
+
+
+</RelativeLayout>

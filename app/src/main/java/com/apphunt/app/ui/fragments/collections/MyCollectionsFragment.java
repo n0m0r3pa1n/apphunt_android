@@ -15,7 +15,6 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
@@ -118,7 +117,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
             ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
                     new String[] {app.getId()});
         } else {
-            NavUtils.getInstance(activity).presentCollectionDetailsFragment(selectCollectionAdapter.getCollection(position));
+            NavUtils.getInstance(activity).presentViewCollectionFragment(selectCollectionAdapter.getCollection(position));
         }
     }
 

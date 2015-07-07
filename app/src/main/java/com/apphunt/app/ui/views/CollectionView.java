@@ -2,6 +2,7 @@ package com.apphunt.app.ui.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.util.ResourceBundle;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,21 +53,21 @@ public class CollectionView extends RelativeLayout {
     public CollectionView(Context context) {
         super(context);
         if(!isInEditMode()) {
-            init();
+            init(null);
         }
     }
 
     public CollectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if(!isInEditMode()) {
-            init();
+            init(attrs);
         }
     }
 
     public CollectionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if(!isInEditMode()) {
-            init();
+            init(attrs);
         }
     }
 
@@ -72,11 +75,11 @@ public class CollectionView extends RelativeLayout {
     public CollectionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         if(!isInEditMode()) {
-            init();
+            init(attrs);
         }
     }
 
-    private void init() {
+    private void init(AttributeSet attrs) {
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_collection, this, true);
         ButterKnife.inject(this, view);

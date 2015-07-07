@@ -12,6 +12,7 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.NavUtils;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -35,6 +36,7 @@ public class SelectCollectionFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
+        ButterKnife.inject(this, view);
         MyCollectionsFragment fragment = new MyCollectionsFragment();
         fragment.setSelectedApp((App) getArguments().getSerializable(APP_KEY));
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.my_collections_container, fragment).commit();
