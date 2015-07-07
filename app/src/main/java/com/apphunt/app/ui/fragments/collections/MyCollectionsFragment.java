@@ -99,11 +99,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
         super.onDetach();
         BusProvider.getInstance().unregister(this);
         ActionBarUtils.getInstance().showActionBarShadow();
-
-        if (app != null) {
-        } else {
-            ActionBarUtils.getInstance().setTitle(R.string.title_home);
-        }
     }
 
     @Override

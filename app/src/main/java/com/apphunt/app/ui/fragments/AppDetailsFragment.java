@@ -192,7 +192,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             return;
         }
         if (baseApp != null) {
-
             baseApp.setPosition(itemPosition);
             voteBtn.setBaseApp(baseApp);
 

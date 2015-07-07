@@ -161,7 +161,7 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void postUserVotedEvent(boolean hasVoted) {
-        BusProvider.getInstance().post(new AppVoteEvent(hasVoted, baseApp.getPosition()));
+        BusProvider.getInstance().post(new AppVoteEvent(hasVoted));
     }
 
 

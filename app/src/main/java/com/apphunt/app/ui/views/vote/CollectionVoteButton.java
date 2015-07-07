@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
+import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
@@ -18,21 +19,22 @@ import com.squareup.otto.Subscribe;
 /**
  * Created by nmp on 15-6-26.
  */
-public class VoteCollectionButton extends AppVoteButton {
+public class CollectionVoteButton extends AppVoteButton {
     private AppsCollection collection;
-    public VoteCollectionButton(Context context) {
+
+    public CollectionVoteButton(Context context) {
         super(context);
     }
 
-    public VoteCollectionButton(Context context, App baseApp) {
+    public CollectionVoteButton(Context context, App baseApp) {
         super(context, baseApp);
     }
 
-    public VoteCollectionButton(Context context, AttributeSet attrs) {
+    public CollectionVoteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public VoteCollectionButton(Context context, AttributeSet attrs, int defStyle) {
+    public CollectionVoteButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
