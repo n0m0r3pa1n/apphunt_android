@@ -19,10 +19,13 @@
         app:backgroundTint="@color/bg_fab"
         app:borderWidth="0dp"/>
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/my_collections_container"
-        android:elevation="1dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:elevation="1dp"
+        android:clickable="true"
+        android:scrollbars="vertical"
+        android:fitsSystemWindows="true"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

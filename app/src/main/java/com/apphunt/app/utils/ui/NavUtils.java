@@ -2,12 +2,15 @@ package com.apphunt.app.utils.ui;
 
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
@@ -92,8 +95,28 @@ public class NavUtils {
     public void presentViewCollectionFragment(AppsCollection appsCollection) {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, ViewCollectionFragment.newInstance(appsCollection),
+<<<<<<< HEAD
                         Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
+=======
+                        Constants.TAG_COLLECTION_DETAILS)
+                .addToBackStack("AAA")
+                .commit();
+    }
+
+    public void presentAppDetailsFragment(BaseApp app) {
+        AppDetailsFragment detailsFragment = new AppDetailsFragment();
+        detailsFragment.setPreviousTitle(activity.getString(R.string.title_home));
+
+        Bundle extras = new Bundle();
+        extras.putString(Constants.KEY_APP_ID, app.getId());
+        extras.putString(Constants.KEY_APP_NAME, app.getName());
+        detailsFragment.setArguments(extras);
+
+        ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+>>>>>>> f77ac0998415232d08c82b413d31045bc1f8818b
                 .commit();
     }
 

@@ -1,6 +1,8 @@
 package com.apphunt.app.ui.adapters.collections;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,9 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.views.FavouriteCollectionButton;
-import com.apphunt.app.ui.views.vote.VoteCollectionButton;
+import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -76,8 +79,7 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        convertView.setOnClickListener(null);
-        convertView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavUtils.getInstance((AppCompatActivity) parent.getContext())
@@ -88,6 +90,9 @@ public class CollectionsAdapter extends BaseAdapter {
         viewHolder.createdBy.setText(appsCollection.getCreatedBy().getName());
         viewHolder.voteButton.setCollection(appsCollection);
         viewHolder.favouriteButton.setCollection(appsCollection);
+        if(appsCollection.isOwnedByCurrentUser((Activity) parent.getContext())) {
+            viewHolder.favouriteButton.setVisibility(View.GONE);
+        }
 
         Picasso.with(parent.getContext())
                 .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -96,30 +101,6 @@ public class CollectionsAdapter extends BaseAdapter {
         Picasso.with(parent.getContext())
                 .load(appsCollection.getPicture())
                 .into(viewHolder.banner);
-
-//        Picasso.with(parent.getContext())
-//                .load(appsCollection.getPicture())
-//                .into(new Target() {
-//                    @Override
-//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                            viewHolder.banner.setBackground(new BitmapDrawable(parent.getResources(), bitmap));
-//                        } else {
-//                            viewHolder.banner.setBackgroundDrawable(new BitmapDrawable(parent.getResources(), bitmap));
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                    }
-//                });
-
         return convertView;
     }
 
@@ -139,6 +120,9 @@ public class CollectionsAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        @InjectView(R.id.card_view)
+        CardView cardView;
+
         @InjectView(R.id.banner_background)
         ImageView banner;
 
@@ -152,7 +136,7 @@ public class CollectionsAdapter extends BaseAdapter {
         TextView createdBy;
 
         @InjectView(R.id.vote_btn)
-        VoteCollectionButton voteButton;
+        CollectionVoteButton voteButton;
 
         @InjectView(R.id.favourite_collection)
         FavouriteCollectionButton favouriteButton;

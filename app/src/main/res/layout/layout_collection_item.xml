@@ -37,7 +37,6 @@
 
             <TextView
                 android:id="@+id/collection_name"
-                android:text="Plache mi se"
                 android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +69,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <com.apphunt.app.ui.views.vote.VoteCollectionButton
+            <com.apphunt.app.ui.views.vote.CollectionVoteButton
                 android:id="@+id/vote_btn"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp"

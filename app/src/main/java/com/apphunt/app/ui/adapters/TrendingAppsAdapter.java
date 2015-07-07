@@ -131,20 +131,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     try {
                         App app = ((AppItem) getItem(position)).getData();
-
-                        AppDetailsFragment detailsFragment = new AppDetailsFragment();
-                        detailsFragment.setPreviousTitle(ctx.getString(R.string.title_home));
-
-                        Bundle extras = new Bundle();
-                        extras.putString(Constants.KEY_APP_ID, app.getId());
-                        extras.putString(Constants.KEY_APP_NAME, app.getName());
-                        extras.putInt(Constants.KEY_ITEM_POSITION, position);
-                        detailsFragment.setArguments(extras);
-
-                        ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                                .commit();
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                     }

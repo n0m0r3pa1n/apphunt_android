@@ -3,9 +3,11 @@ package com.apphunt.app.ui.fragments.collections;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.apphunt.app.R;
@@ -14,6 +16,7 @@ import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.views.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,11 +56,18 @@ public class ViewCollectionFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
-        collection.setCollection(appsCollection);
+        collection.setCollection(appsCollection, true);
         collectionApps.setAdapter(new CollectionAppsAdapter(getActivity(), appsCollection.getApps()));
+        collectionApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NavUtils.getInstance((AppCompatActivity) getActivity()).presentAppDetailsFragment(appsCollection.getApps().get(position));
+            }
+        });
 
         if(appsCollection.isOwnedByCurrentUser(getActivity())) {
             editCollection.setVisibility(View.VISIBLE);
+
         }
 
         ActionBarUtils.getInstance().setTitle("Collection");

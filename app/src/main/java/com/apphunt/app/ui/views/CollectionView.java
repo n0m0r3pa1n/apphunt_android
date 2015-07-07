@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.views;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -24,6 +26,8 @@ import butterknife.InjectView;
 import static com.apphunt.app.constants.Constants.*;
 
 public class CollectionView extends RelativeLayout {
+    private boolean areButtonsEnabled;
+
     LayoutInflater inflater;
 
     @InjectView(R.id.apps_left)
@@ -41,14 +45,17 @@ public class CollectionView extends RelativeLayout {
     @InjectView(R.id.created_by)
     TextView createdBy;
 
-    @InjectView(R.id.votes_count)
-    TextView votesCount;
-
     @InjectView(R.id.collection_status)
     ImageView status;
 
     @InjectView(R.id.separator)
     View separator;
+
+    @InjectView(R.id.vote_btn)
+    CollectionVoteButton voteButton;
+
+    @InjectView(R.id.favourite_collection)
+    FavouriteCollectionButton favouriteButton;
 
     public CollectionView(Context context) {
         super(context);
@@ -83,21 +90,36 @@ public class CollectionView extends RelativeLayout {
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_collection, this, true);
         ButterKnife.inject(this, view);
+
+        TypedArray array = getContext().getTheme().obtainStyledAttributes(attrs,
+                R.styleable.CollectionView, 0, 0);
+
+        areButtonsEnabled= array.getBoolean(R.styleable.CollectionView_buttonsEnabled, true);
     }
 
-    public void setCollection(AppsCollection collection) {
+
+    public void setCollection(AppsCollection collection, boolean areButtonsEnabled) {
+        this.areButtonsEnabled = areButtonsEnabled;
+
         if(collection.getStatus() == CollectionStatus.DRAFT) {
             int appsLeftCount = MIN_COLLECTION_APPS_SIZE - collection.getApps().size();
             String text = "You need " + getResources().getQuantityString(R.plurals.appsLeft, appsLeftCount, appsLeftCount);
             appsLeft.setText(text);
             setVisibilityWhenDraft();
         } else {
+            if(collection.isOwnedByCurrentUser((Activity) getContext())) {
+                favouriteButton.setVisibility(View.INVISIBLE);
+            } else {
+                favouriteButton.setVisibility(View.VISIBLE);
+            }
+
             setVisibilityWhenPublic();
         }
 
+        favouriteButton.setCollection(collection);
+        voteButton.setCollection(collection);
         name.setText(collection.getName());
         createdBy.setText(collection.getCreatedBy().getUsername());
-        votesCount.setText(collection.getVotesCount() + "");
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
         Picasso.with(getContext()).load(collection.getPicture()).into(banner);
     }
@@ -106,13 +128,15 @@ public class CollectionView extends RelativeLayout {
         appsLeft.setVisibility(View.INVISIBLE);
         status.setVisibility(View.INVISIBLE);
         separator.setVisibility(View.INVISIBLE);
-        votesCount.setVisibility(View.VISIBLE);
+        if(areButtonsEnabled) {
+            voteButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setVisibilityWhenDraft() {
         appsLeft.setVisibility(View.VISIBLE);
         status.setVisibility(View.VISIBLE);
         separator.setVisibility(View.VISIBLE);
-        votesCount.setVisibility(View.INVISIBLE);
+        voteButton.setVisibility(View.INVISIBLE);
     }
 }

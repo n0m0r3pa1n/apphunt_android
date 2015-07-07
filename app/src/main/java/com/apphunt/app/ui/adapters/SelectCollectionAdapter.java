@@ -29,6 +29,7 @@ import butterknife.InjectView;
  */
 public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollectionAdapter.ViewHolder> {
 
+    private boolean enableButtons;
     private Context ctx;
     private List<AppsCollection> collections = new ArrayList<>();
     private OnItemClickListener listener;
@@ -36,6 +37,13 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     public SelectCollectionAdapter(Context ctx, List<AppsCollection> collections) {
         this.ctx = ctx;
         this.collections = collections;
+        this.enableButtons = true;
+    }
+
+    public SelectCollectionAdapter(Context ctx, boolean enableButtons, List<AppsCollection> collections) {
+        this.ctx = ctx;
+        this.collections = collections;
+        this.enableButtons = enableButtons;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -52,8 +60,7 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         AppsCollection collection = collections.get(position);
-
-        holder.collectionView.setCollection(collection);
+        holder.collectionView.setCollection(collection, false);
         holder.collectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
