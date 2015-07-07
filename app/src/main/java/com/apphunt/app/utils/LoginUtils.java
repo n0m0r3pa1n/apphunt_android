@@ -2,6 +2,7 @@ package com.apphunt.app.utils;
 
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
@@ -9,18 +10,19 @@ import com.apphunt.app.ui.fragments.LoginFragment;
 
 public class LoginUtils {
 
-    public static void showLoginFragment(Context ctx) {
-        show(ctx, false);
+    public static void showLoginFragment(Context ctx, boolean canBeSkipped) {
+        showLoginFragment(ctx, canBeSkipped, null);
     }
 
-    public static void showSkippableLoginFragment(Context ctx) {
-        show(ctx, true);
+    public static void showLoginFragment(Context ctx, boolean canBeSkipped, int messageRes) {
+        showLoginFragment(ctx, canBeSkipped, ctx.getString(messageRes));
     }
 
-
-    private static void show(Context ctx, boolean canBeSkipped) {
+    public static void showLoginFragment(Context ctx, boolean canBeSkipped, String message) {
         LoginFragment loginFragment = new LoginFragment();
         loginFragment.setCanBeSkipped(canBeSkipped);
+        loginFragment.setMessage(TextUtils.isEmpty(message) ? ctx.getString(R.string.login_info_text) : message);
+
         ((ActionBarActivity) ctx).getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)

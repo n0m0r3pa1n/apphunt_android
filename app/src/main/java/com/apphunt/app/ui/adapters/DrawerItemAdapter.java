@@ -138,7 +138,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     headerViewHolder.loginButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            LoginUtils.showLoginFragment(ctx);
+                            LoginUtils.showLoginFragment(ctx, false);
                         }
                     });
                 }

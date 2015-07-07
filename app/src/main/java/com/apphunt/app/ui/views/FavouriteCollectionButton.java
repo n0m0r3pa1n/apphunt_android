@@ -91,7 +91,7 @@ public class FavouriteCollectionButton extends LinearLayout{
     @OnClick(R.id.favourite_button)
     public void onFavouriteButtonClicked() {
         if(!LoginProviderFactory.get((Activity) getContext()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(getContext());
+            LoginUtils.showLoginFragment(getContext(), false, R.string.login_info_fav_collection);
             return;
         }
 
