@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -11,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.constants.Constants;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.adapters.collections.CollectionsPagerAdapter;
-import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 
@@ -141,7 +140,11 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     @OnClick(R.id.add_collection)
     public void openCreateCollectionFragment() {
-        NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
+        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
+        } else {
+            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_create_collection);
+        }
     }
 
     private void updateActionBarTitle(int position) {
