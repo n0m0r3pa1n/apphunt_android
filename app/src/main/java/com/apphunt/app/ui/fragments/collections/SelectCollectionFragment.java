@@ -14,9 +14,12 @@ import android.widget.ListView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
@@ -39,6 +42,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     RecyclerView myCollections;
 
     private SelectCollectionAdapter selectCollectionAdapter;
+    private BaseApp app;
 
     public static SelectCollectionFragment newInstance(App app) {
         SelectCollectionFragment fragment = new SelectCollectionFragment();
@@ -55,6 +59,9 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
         ButterKnife.inject(this, view);
         ApiClient.getClient(getActivity()).getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
+
+        app = (BaseApp) getArguments().getSerializable(APP_KEY);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myCollections.setLayoutManager(layoutManager);
@@ -91,6 +98,16 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Override
     public void onClick(View view, int position) {
+        if(app != null) {
+            ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
+                    new String[]{app.getId()});
+        }
+    }
 
+    @Subscribe
+    public void onUpdateCollection(UpdateCollectionEvent event) {
+        if(event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
     }
 }
