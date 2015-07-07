@@ -125,13 +125,14 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     @Subscribe
     public void onLoginSuccess(LoginEvent event) {
         currentPage = 0;
+        allCollections.setAdapter(null, 0);
         getFavouriteCollections();
     }
 
     @Subscribe
     public void onLogoutSuccess(LogoutEvent event) {
         allCollections.removeAllViews();
-        allCollections.setAdapter(null, 0);
+        currentPage = 0;
         adapter = null;
         vsNoCollection.setVisibility(View.VISIBLE);
     }

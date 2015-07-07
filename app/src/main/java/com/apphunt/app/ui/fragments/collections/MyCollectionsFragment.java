@@ -15,6 +15,7 @@ import android.view.ViewStub;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
@@ -43,7 +44,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private AppCompatActivity activity;
     private View view;
-    private App app;
 
     private String appId;
     private SelectCollectionAdapter selectCollectionAdapter;
@@ -84,10 +84,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
         }
     }
 
-    public void setSelectedApp(App selectedApp) {
-        this.app = selectedApp;
-    }
-
     @Subscribe
     public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
         if (event.getAppsCollection().getTotalCount() > 0) {
@@ -123,11 +119,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Override
     public void onClick(View view, int position) {
-        if (app != null) {
-            ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
-                    new String[] {app.getId()});
-        } else {
-            NavUtils.getInstance(activity).presentViewCollectionFragment(selectCollectionAdapter.getCollection(position));
+        AppsCollection collection = selectCollectionAdapter.getCollection(position);
+        if (collection.getApps().size() > 0) {
+            NavUtils.getInstance(activity).presentViewCollectionFragment(collection);
         }
     }
 
