@@ -10,13 +10,13 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
+import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
 
 /**
  * Created by nmp on 15-5-9.
@@ -95,12 +95,8 @@ public class NavUtils {
     public void presentViewCollectionFragment(AppsCollection appsCollection) {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, ViewCollectionFragment.newInstance(appsCollection),
-<<<<<<< HEAD
                         Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
-=======
-                        Constants.TAG_COLLECTION_DETAILS)
-                .addToBackStack("AAA")
                 .commit();
     }
 
@@ -116,7 +112,6 @@ public class NavUtils {
         ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
->>>>>>> f77ac0998415232d08c82b413d31045bc1f8818b
                 .commit();
     }
 
