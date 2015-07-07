@@ -77,8 +77,8 @@ public class TrendingAppsAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        ViewHolderItem viewHolderItem = null;
 
-            ViewHolderItem viewHolderItem = null;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {

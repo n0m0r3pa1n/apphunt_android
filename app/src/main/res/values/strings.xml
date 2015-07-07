@@ -126,5 +126,6 @@
     <string name="how_to_add_new_app">How to add new app</string>
     <string name="apps_requirements">Apps Requirements</string>
     <string name="top_hunters_points">Top Hunters Points</string>
+    <string name="title_choose_collection_banner">Choose a banner</string>
 
 </resources>

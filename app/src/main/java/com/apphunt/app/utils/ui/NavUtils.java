@@ -92,8 +92,8 @@ public class NavUtils {
     public void presentViewCollectionFragment(AppsCollection appsCollection) {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, ViewCollectionFragment.newInstance(appsCollection),
-                        Constants.TAG_COLLECTION_DETAILS)
-                .addToBackStack(Constants.TAG_COLLECTION_DETAILS)
+                        Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
+                .addToBackStack(Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
                 .commit();
     }
 

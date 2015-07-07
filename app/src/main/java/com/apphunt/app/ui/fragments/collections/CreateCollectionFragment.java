@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,14 +19,19 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
-import me.gujun.android.taggroup.TagGroup;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -35,17 +39,29 @@ import me.gujun.android.taggroup.TagGroup;
  * *
  * * NaughtySpirit 2015
  */
-public class CreateCollectionFragment extends BaseFragment implements OnClickListener {
+public class CreateCollectionFragment extends BaseFragment {
 
     private Activity activity;
     private View view;
-    private TextInputLayout collectionNameLayout;
-    private TextInputLayout collectionDescLayout;
-    private EditText collectionName;
-    private EditText collectionDesc;
-    private TagGroup tagGroup;
-    private Button saveCollection;
-    private ImageButton chooseBanner;
+    private String bannerUrl;
+
+    @InjectView(R.id.collection_name_layout)
+    TextInputLayout collectionNameLayout;
+
+    @InjectView(R.id.collection_desc_layout)
+    TextInputLayout collectionDescLayout;
+
+    @InjectView(R.id.collection_name)
+    EditText collectionName;
+
+    @InjectView(R.id.collection_desc)
+    EditText collectionDesc;
+
+    @InjectView(R.id.collection_save)
+    Button saveCollection;
+
+    @InjectView(R.id.choose_banner)
+    ImageButton chooseBanner;
 
     @Nullable
     @Override
@@ -58,68 +74,44 @@ public class CreateCollectionFragment extends BaseFragment implements OnClickLis
     }
 
     public void initUI() {
+        ButterKnife.inject(this, view);
         ActionBarUtils.getInstance().setTitle(R.string.title_create_collection);
-
-        collectionNameLayout = (TextInputLayout) view.findViewById(R.id.collection_name_layout);
-        collectionName = (EditText) view.findViewById(R.id.collection_name);
-
-        collectionDescLayout = (TextInputLayout) view.findViewById(R.id.collection_desc_layout);
-        collectionDesc = (EditText) view.findViewById(R.id.collection_desc);
 
         collectionNameLayout.setErrorEnabled(true);
         collectionDescLayout.setErrorEnabled(true);
-
-        saveCollection = (Button) view.findViewById(R.id.collection_save);
-        chooseBanner = (ImageButton) view.findViewById(R.id.choose_banner);
-
-        saveCollection.setOnClickListener(this);
-        chooseBanner.setOnClickListener(this);
-
-        tagGroup = (TagGroup) view.findViewById(R.id.tag_group);
-        tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
-            @Override
-            public void onTagClick(String s) {
-
-            }
-        });
-        tagGroup.setOnTagChangeListener(new TagGroup.OnTagChangeListener() {
-            @Override
-            public void onAppend(TagGroup tagGroup, String s) {
-
-            }
-
-            @Override
-            public void onDelete(TagGroup tagGroup, String s) {
-
-            }
-        });
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.collection_save:
-                NewCollection collection = new NewCollection();
-                collection.setName(collectionName.getText().toString());
-                collection.setDescription(collectionDesc.getText().toString());
-                collection.setPicture("http://1.bp.blogspot.com/-Bi4mi7nN3Zg/T2HOV6mAHtI/AAAAAAAAAfA/YOh046D0Xa8/s1600/Beautiful_Nature_1280x1024_Wallpaper.jpg");
-                collection.setUserId(LoginProviderFactory.get(activity).getUser().getId());
+    @OnClick(R.id.choose_banner)
+    public void onChooseBannerClick() {
+        ChooseCollectionBannerFragment fragment = new ChooseCollectionBannerFragment();
+        ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .add(R.id.container, fragment, Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
+                .addToBackStack(Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
+                .commit();
+    }
 
-                ApiClient.getClient(activity).createCollection(collection);
+    @OnClick(R.id.collection_save)
+    public void onSaveCollectionClick() {
+        NewCollection collection = new NewCollection();
+        collection.setName(collectionName.getText().toString());
+        collection.setDescription(collectionDesc.getText().toString());
+        collection.setPicture(bannerUrl);
+        collection.setUserId(LoginProviderFactory.get(activity).getUser().getId());
 
-                break;
-
-            case R.id.choose_banner:
-
-                break;
-
-        }
+        ApiClient.getClient(activity).createCollection(collection);
     }
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
         ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
         NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, "You collection was successfully created!", false, false, false);
+    }
+
+    @Subscribe
+    public void onCollectionBannerSelected(CollectionBannerSelectedEvent event) {
+        bannerUrl = event.getBanner().getBannerUrl();
+        Picasso.with(activity).load(bannerUrl).placeholder(R.drawable.collection_placeholder).into(chooseBanner);
     }
 
     @Override
@@ -133,6 +125,12 @@ public class CreateCollectionFragment extends BaseFragment implements OnClickLis
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -141,5 +139,4 @@ public class CreateCollectionFragment extends BaseFragment implements OnClickLis
 
         BusProvider.getInstance().unregister(this);
     }
-
 }

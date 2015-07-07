@@ -33,8 +33,7 @@
             android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingTop="4dp"
-            android:background="#CC818181"
-            >
+            android:background="#CC818181">
 
             <TextView
                 android:id="@+id/collection_name"
