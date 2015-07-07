@@ -15,6 +15,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
@@ -58,7 +59,8 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
         ButterKnife.inject(this, view);
-        ApiClient.getClient(getActivity()).getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
+        ApiClient.getClient(getActivity())
+                .getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
 
         app = (BaseApp) getArguments().getSerializable(APP_KEY);
 
@@ -99,8 +101,9 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Override
     public void onClick(View view, int position) {
         if(app != null) {
-            ApiClient.getClient(getActivity()).updateCollection(selectCollectionAdapter.getCollectionId(position),
-                    new String[]{app.getId()});
+            AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
+            appsCollection.getApps().add(app);
+            ApiClient.getClient(getActivity()).updateCollection(appsCollection);
         }
     }
 

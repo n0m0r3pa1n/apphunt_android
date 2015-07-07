@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
@@ -46,7 +47,12 @@ import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.*;
 
 
 public class AppHuntApiClient implements AppHuntApi {
@@ -218,10 +224,17 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void updateCollection(String collectionId, String[] appIds) {
-        HashMap<String, String[]> body = new HashMap<>();
-        body.put("apps", appIds);
+    public void updateCollection(AppsCollection appsCollection) {
+        List<String> appIds = new ArrayList<>();
+        for (BaseApp baseApp : appsCollection.getApps()) {
+            appIds.add(baseApp.getId());
+        }
 
-        VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(collectionId, body, listener));
+        Map<String, UpdateCollectionModel> map = new HashMap<>();
+        map.put("collection", new UpdateCollectionModel(appIds, appsCollection.getName(),
+                appsCollection.getDescription(), appsCollection.getPicture()));
+
+        VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(appsCollection.getId(),
+                map, listener));
     }
 }

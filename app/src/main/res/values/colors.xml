@@ -33,6 +33,8 @@
 
     <color name="alert_color">#fff59d</color>
 
+   <color name="save_collection_color">#43A047</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#C8FFFFFF</color>

@@ -5,15 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
-import com.apphunt.app.ui.views.CollectionView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.apphunt.app.ui.views.collection.CollectionView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +56,7 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         AppsCollection collection = collections.get(position);
-        holder.collectionView.setCollection(collection, false);
+        holder.collectionView.setCollection(collection, enableButtons);
         holder.collectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments.collections;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,21 +12,28 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
+import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
-import com.apphunt.app.ui.views.CollectionView;
+import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by nmp on 15-7-3.
  */
 public class ViewCollectionFragment extends BaseFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
+
+    private boolean isEdit;
 
     @InjectView(R.id.collection)
     CollectionView collection;
@@ -37,6 +45,7 @@ public class ViewCollectionFragment extends BaseFragment {
     FloatingActionButton editCollection;
 
     private AppsCollection appsCollection;
+    private CollectionAppsAdapter collectionAppsAdapter;
 
     public ViewCollectionFragment() {
     }
@@ -56,8 +65,9 @@ public class ViewCollectionFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
+        collectionAppsAdapter = new CollectionAppsAdapter(getActivity(), appsCollection.getApps());
+        collectionApps.setAdapter(collectionAppsAdapter);
         collection.setCollection(appsCollection, true);
-        collectionApps.setAdapter(new CollectionAppsAdapter(getActivity(), appsCollection.getApps()));
         collectionApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,12 +77,33 @@ public class ViewCollectionFragment extends BaseFragment {
 
         if(appsCollection.isOwnedByCurrentUser(getActivity())) {
             editCollection.setVisibility(View.VISIBLE);
-
         }
 
         ActionBarUtils.getInstance().setTitle("Collection");
 
         return view;
+    }
+
+    @OnClick(R.id.edit_collection)
+    public void editCollection() {
+        if(isEdit) {
+            collectionAppsAdapter.setEditable(false);
+            BusProvider.getInstance().post(new SaveCollectionEvent());
+            editCollection.setImageResource(R.drawable.btn_edit);
+            editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.bg_fab)));
+            appsCollection.setName(collection.getCollection().getName());
+            appsCollection.setApps(collection.getCollection().getApps());
+            ApiClient.getClient(getActivity()).updateCollection(appsCollection);
+        } else {
+            collectionAppsAdapter.setEditable(true);
+            BusProvider.getInstance().post(new EditCollectionEvent());
+            editCollection.setImageResource(R.drawable.btn_ok);
+            editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.save_collection_color)));
+        }
+
+        isEdit = !isEdit;
+
+
     }
 
     @Override

@@ -22,10 +22,16 @@ public class CollectionAppsAdapter extends BaseAdapter {
     private List<BaseApp> apps;
     private Context context;
     private LayoutInflater inflater;
+    private boolean isEdit = false;
     public CollectionAppsAdapter(Context context, List<BaseApp> apps) {
         this.apps = apps;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setEditable(boolean isEdit) {
+        this.isEdit = isEdit;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,7 +50,7 @@ public class CollectionAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         BaseApp app = apps.get(position);
         if(convertView == null) {
@@ -57,6 +63,18 @@ public class CollectionAppsAdapter extends BaseAdapter {
 
         viewHolder.title.setText(app.getName());
         viewHolder.createdBy.setText(app.getCreatedBy().getName());
+        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apps.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+        if(isEdit) {
+            viewHolder.delete.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.delete.setVisibility(View.INVISIBLE);
+        }
         Picasso.with(context).load(app.getIcon()).into(viewHolder.icon);
 
         return convertView;
@@ -71,6 +89,9 @@ public class CollectionAppsAdapter extends BaseAdapter {
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.delete)
+        ImageView delete;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

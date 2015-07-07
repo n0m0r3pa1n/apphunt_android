@@ -5,7 +5,7 @@
     android:clickable="true"
     android:background="@color/bg_secondary">
 
-    <com.apphunt.app.ui.views.CollectionView
+    <com.apphunt.app.ui.views.collection.CollectionView
         android:id="@+id/collection"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:layout_marginTop="@dimen/add_btn_margin_top"
-        android:src="@drawable/ic_edit_collection"
+        android:src="@drawable/btn_edit"
         app:backgroundTint="@color/bg_fab"/>
 
     <GridView

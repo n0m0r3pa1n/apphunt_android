@@ -204,7 +204,6 @@ public class TrendingAppsFragment extends BaseFragment implements AbsListView.On
 
     @Subscribe
     public void onNetworkStatus(NetworkStatusChangeEvent event) {
-        Log.e(TAG, "" + event.isNetworkAvailable());
         if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
             btnReload.setVisibility(View.VISIBLE);
             lvTrendingApps.setVisibility(View.GONE);
