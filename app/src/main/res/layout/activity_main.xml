@@ -1,47 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
-    android:fitsSystemWindows="true"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/drawer"
+    android:layout_width="match_parent" android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
+    <LinearLayout
         android:elevation="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
-            app:elevation="0dp"
-            android:elevation="0dp"
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            style="@style/ToolBarStyle"
             android:layout_width="match_parent"
+            app:layout_collapseMode="pin"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            <LinearLayout
-                android:orientation="vertical"
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:background="?attr/colorPrimary"
+            android:minHeight="@dimen/abc_action_bar_default_height_material" />
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                     />
-
-                <View
-                    android:id="@+id/shadow"
-                    android:elevation="0dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/ab_shadow_height"
-                    android:background="@drawable/bottom_shadow"
-                    />
-            </LinearLayout>
-
-        </android.support.design.widget.AppBarLayout>
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ab_shadow_height"
+            android:background="@drawable/bottom_shadow" />
 
         <FrameLayout
             android:id="@+id/container"
@@ -49,7 +31,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 
 
     <com.apphunt.app.ui.views.ScrimInsetsFrameLayout android:id="@+id/scrimInsetsFrameLayout"

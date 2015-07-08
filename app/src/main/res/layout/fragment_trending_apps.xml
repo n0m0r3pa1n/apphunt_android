@@ -4,31 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.quentindommerc.superlistview.SuperListview
-        android:id="@+id/trending_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/more_loader_layout"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_divider_height"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:elevation="@dimen/listview_elevation"
-        android:layoutAnimation="@anim/list_view_entry"
-        android:paddingTop="7dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trending_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/more_loader_layout"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/list_divider_height"
+            app:layout_behavior="com.apphunt.app.ui.listeners.ScrollAwareFABBehaviour"
+            android:layoutAnimation="@anim/list_view_entry"
+            android:paddingTop="7dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_app"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:elevation="4dp"
-        app:borderWidth="0dp"
-        app:pressedTranslationZ="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:layout_marginTop="@dimen/add_btn_margin_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:elevation="4dp"
+        app:borderWidth="0dp"
+        app:pressedTranslationZ="12dp"
         android:src="@drawable/ic_add_white"
         app:backgroundTint="@color/bg_fab"/>
 

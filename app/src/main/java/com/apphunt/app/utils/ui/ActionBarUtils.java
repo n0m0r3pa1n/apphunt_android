@@ -95,7 +95,7 @@ public class ActionBarUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             activity.findViewById(R.id.shadow).setVisibility(View.GONE);
         } else {
-            activity.findViewById(R.id.appbar).setElevation(R.dimen.zero_elevation);
+            activity.findViewById(R.id.toolbar).setElevation(R.dimen.zero_elevation);
         }
     }
 
@@ -103,7 +103,7 @@ public class ActionBarUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
         } else {
-            activity.findViewById(R.id.appbar).setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
+            activity.findViewById(R.id.toolbar).setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
         }
     }
 
