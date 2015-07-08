@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -21,8 +22,10 @@ import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -85,16 +88,16 @@ public class ViewCollectionFragment extends BaseFragment {
 
         description.setText(appsCollection.getDescription());
 
-//        collectionApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                NavUtils.getInstance((AppCompatActivity) getActivity()).presentAppDetailsFragment(appsCollection.getApps().get(position));
-//            }
-//        });
+        collectionAppsAdapter.setListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                NavUtils.getInstance((AppCompatActivity) getActivity()).presentAppDetailsFragment(appsCollection.getApps().get(position));
+            }
+        });
 
-//        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
             editCollection.setVisibility(View.VISIBLE);
-//        }
+        }
 
         ActionBarUtils.getInstance().setTitle("Collection");
 

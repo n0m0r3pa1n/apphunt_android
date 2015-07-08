@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.adapters.collections;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
     private Context context;
     private LayoutInflater inflater;
     private boolean isEdit = false;
+    private OnItemClickListener listener;
+
     public CollectionAppsAdapter(Context context, List<BaseApp> apps) {
         this.apps = apps;
         this.context = context;
@@ -33,15 +37,9 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public int getCount() {
-//        return apps.size();
-//    }
-//
-//    @Override
-//    public BaseApp getItem(int position) {
-//        return apps.get(position);
-//    }
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -63,12 +61,20 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
                 notifyDataSetChanged();
             }
         });
+
+
         if(isEdit) {
             holder.delete.setVisibility(View.VISIBLE);
         } else {
             holder.delete.setVisibility(View.INVISIBLE);
         }
         Picasso.with(context).load(app.getIcon()).into(holder.icon);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(v, position);
+            }
+        });
 
     }
 
@@ -82,38 +88,10 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
         return apps.size();
     }
 
-//    @Override
-//    public View getView(final int position, View convertView, ViewGroup parent) {
-//        ViewHolder viewHolder = null;
-//        BaseApp app = apps.get(position);
-//        if(convertView == null) {
-//            convertView = inflater.inflate(R.layout.layout_collection_app, parent, false);
-//            viewHolder = new ViewHolder(convertView);
-//            convertView.setTag(viewHolder);
-//        } else {
-//            viewHolder = (ViewHolder) convertView.getTag();
-//        }
-//
-//        viewHolder.title.setText(app.getName());
-//        viewHolder.createdBy.setText(app.getCreatedBy().getName());
-//        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                apps.remove(position);
-//                notifyDataSetChanged();
-//            }
-//        });
-//        if(isEdit) {
-//            viewHolder.delete.setVisibility(View.VISIBLE);
-//        } else {
-//            viewHolder.delete.setVisibility(View.INVISIBLE);
-//        }
-//        Picasso.with(context).load(app.getIcon()).into(viewHolder.icon);
-//
-//        return convertView;
-//    }
-
     static class ViewHolder extends RecyclerView.ViewHolder{
+        @InjectView(R.id.card_view)
+        CardView cardView;
+
         @InjectView(R.id.icon)
         ImageView icon;
 
