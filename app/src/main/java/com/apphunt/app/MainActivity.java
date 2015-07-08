@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private void initToolbarAndNavigationDrawer() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         navigationDrawerFragment = (NavigationDrawerFragment)
