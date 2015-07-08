@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/bg_secondary">
 
-    <com.apphunt.app.ui.views.collection.CollectionView
-        android:id="@+id/collection"
-        android:layout_alignParentTop="true"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/collection_apps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:elevation="1dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.apphunt.app.ui.views.collection.CollectionView
+            android:id="@+id/collection"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+        <TextView
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/description"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,18 +57,6 @@
         android:src="@drawable/btn_edit"
         app:backgroundTint="@color/bg_fab"/>
 
-    <GridView
-        android:id="@+id/collection_apps"
-        android:layout_below="@id/collection"
-        android:numColumns="2"
-        android:elevation="2dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:padding="5dp">
-
-    </GridView>
 
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

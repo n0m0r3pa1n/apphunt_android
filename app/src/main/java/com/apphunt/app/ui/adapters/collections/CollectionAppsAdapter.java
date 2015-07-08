@@ -1,15 +1,14 @@
 package com.apphunt.app.ui.adapters.collections;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +17,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CollectionAppsAdapter extends BaseAdapter {
+public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAdapter.ViewHolder> {
     private List<BaseApp> apps;
     private Context context;
     private LayoutInflater inflater;
@@ -34,14 +33,43 @@ public class CollectionAppsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+//    @Override
+//    public int getCount() {
+//        return apps.size();
+//    }
+//
+//    @Override
+//    public BaseApp getItem(int position) {
+//        return apps.get(position);
+//    }
+
     @Override
-    public int getCount() {
-        return apps.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_collection_app, parent, false);
+
+        return new ViewHolder(view);
     }
 
     @Override
-    public BaseApp getItem(int position) {
-        return apps.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        BaseApp app = apps.get(position);
+
+        holder.title.setText(app.getName());
+        holder.createdBy.setText(app.getCreatedBy().getName());
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                apps.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+        if(isEdit) {
+            holder.delete.setVisibility(View.VISIBLE);
+        } else {
+            holder.delete.setVisibility(View.INVISIBLE);
+        }
+        Picasso.with(context).load(app.getIcon()).into(holder.icon);
+
     }
 
     @Override
@@ -50,37 +78,42 @@ public class CollectionAppsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        BaseApp app = apps.get(position);
-        if(convertView == null) {
-            convertView = inflater.inflate(R.layout.layout_collection_app, parent, false);
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-
-        viewHolder.title.setText(app.getName());
-        viewHolder.createdBy.setText(app.getCreatedBy().getName());
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                apps.remove(position);
-                notifyDataSetChanged();
-            }
-        });
-        if(isEdit) {
-            viewHolder.delete.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.delete.setVisibility(View.INVISIBLE);
-        }
-        Picasso.with(context).load(app.getIcon()).into(viewHolder.icon);
-
-        return convertView;
+    public int getItemCount() {
+        return apps.size();
     }
 
-    static class ViewHolder {
+//    @Override
+//    public View getView(final int position, View convertView, ViewGroup parent) {
+//        ViewHolder viewHolder = null;
+//        BaseApp app = apps.get(position);
+//        if(convertView == null) {
+//            convertView = inflater.inflate(R.layout.layout_collection_app, parent, false);
+//            viewHolder = new ViewHolder(convertView);
+//            convertView.setTag(viewHolder);
+//        } else {
+//            viewHolder = (ViewHolder) convertView.getTag();
+//        }
+//
+//        viewHolder.title.setText(app.getName());
+//        viewHolder.createdBy.setText(app.getCreatedBy().getName());
+//        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                apps.remove(position);
+//                notifyDataSetChanged();
+//            }
+//        });
+//        if(isEdit) {
+//            viewHolder.delete.setVisibility(View.VISIBLE);
+//        } else {
+//            viewHolder.delete.setVisibility(View.INVISIBLE);
+//        }
+//        Picasso.with(context).load(app.getIcon()).into(viewHolder.icon);
+//
+//        return convertView;
+//    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder{
         @InjectView(R.id.icon)
         ImageView icon;
 
@@ -94,6 +127,7 @@ public class CollectionAppsAdapter extends BaseAdapter {
         ImageView delete;
 
         public ViewHolder(View view) {
+            super(view);
             ButterKnife.inject(this, view);
         }
     }
