@@ -37,6 +37,18 @@
             android:id="@+id/description"
             app:layout_scrollFlags="scroll|enterAlways"/>
 
+        <EditText
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_description"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton

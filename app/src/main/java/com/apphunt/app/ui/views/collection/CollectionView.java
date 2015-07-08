@@ -121,6 +121,10 @@ public class CollectionView extends RelativeLayout {
 
     @Subscribe
     public void onEditCollection(EditCollectionEvent event) {
+        if(!appsCollection.getId().equals(event.getCollectionId())) {
+            return;
+        }
+
         name.setVisibility(View.INVISIBLE);
         editName.setVisibility(View.VISIBLE);
         editName.setText(appsCollection.getName());
@@ -128,6 +132,10 @@ public class CollectionView extends RelativeLayout {
 
     @Subscribe
     public void onSaveCollection(SaveCollectionEvent event) {
+        if(!appsCollection.getId().equals(event.getCollectionId())) {
+            return;
+        }
+
         appsCollection.setName(editName.getText().toString());
         name.setText(appsCollection.getName());
         name.setVisibility(View.VISIBLE);

@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -43,6 +44,9 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @InjectView(R.id.description)
     TextView description;
+
+    @InjectView(R.id.edit_description)
+    EditText editDescription;
 
     @InjectView(R.id.edit_collection)
     FloatingActionButton editCollection;
@@ -100,28 +104,38 @@ public class ViewCollectionFragment extends BaseFragment {
     @OnClick(R.id.edit_collection)
     public void editCollection() {
         if(isEdit) {
+            String desc = editDescription.getText().toString();
+            editDescription.setVisibility(View.GONE);
+            description.setText(desc);
             collectionAppsAdapter.setEditable(false);
-            BusProvider.getInstance().post(new SaveCollectionEvent());
+            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
             editCollection.setImageResource(R.drawable.btn_edit);
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.bg_fab)));
+
+            appsCollection.setDescription(desc);
             appsCollection.setName(collection.getCollection().getName());
             appsCollection.setApps(collection.getCollection().getApps());
+
             ApiClient.getClient(getActivity()).updateCollection(appsCollection);
         } else {
             collectionAppsAdapter.setEditable(true);
-            BusProvider.getInstance().post(new EditCollectionEvent());
+            description.setVisibility(View.GONE);
+            editDescription.setText(appsCollection.getDescription());
+            editDescription.setVisibility(View.VISIBLE);
+            BusProvider.getInstance().post(new EditCollectionEvent(appsCollection.getId()));
             editCollection.setImageResource(R.drawable.btn_ok);
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.save_collection_color)));
         }
 
         isEdit = !isEdit;
-
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().setPreviousTitle();
+        if(!isEdit) {
+            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
+        }
     }
 }
