@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.ListView;
 
 import com.apphunt.app.R;
@@ -19,6 +20,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
@@ -41,6 +43,9 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @InjectView(R.id.my_collections_container)
     RecyclerView myCollections;
+
+    @InjectView(R.id.vs_no_collection)
+    ViewStub vsNoCollection;
 
     private SelectCollectionAdapter selectCollectionAdapter;
     private BaseApp app;
@@ -74,9 +79,14 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Subscribe
     public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
-        selectCollectionAdapter = new SelectCollectionAdapter(getActivity(), event.getAppsCollection().getCollections());
-        selectCollectionAdapter.setOnItemClickListener(this);
-        myCollections.setAdapter(selectCollectionAdapter);
+        if(event.getAppsCollection().getTotalCount() == 0) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        } else {
+            vsNoCollection.setVisibility(View.GONE);
+            selectCollectionAdapter = new SelectCollectionAdapter(getActivity(), event.getAppsCollection().getCollections());
+            selectCollectionAdapter.setOnItemClickListener(this);
+            myCollections.setAdapter(selectCollectionAdapter);
+        }
     }
 
     @Override
@@ -112,5 +122,11 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         if(event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
+    }
+
+    @Subscribe
+    public void onCollectionCreated(CreateCollectionEvent event) {
+        ApiClient.getClient(getActivity())
+                .getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
     }
 }

@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * * NaughtySpirit 2015
  */
 public class CollectionBannersList {
-    private ArrayList<CollectionBanner> banners = new ArrayList<>();
+    private ArrayList<String> banners = new ArrayList<>();
 
-    public ArrayList<CollectionBanner> getBanners() {
+    public ArrayList<String> getBanners() {
         return banners;
     }
 
-    public void setBanners(ArrayList<CollectionBanner> banners) {
+    public void setBanners(ArrayList<String> banners) {
         this.banners = banners;
     }
 

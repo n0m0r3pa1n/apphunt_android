@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBanner;
 import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBannersList;
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +27,7 @@ public class CollectionBannersAdapter extends BaseAdapter {
     private static final String TAG = CollectionBannersAdapter.class.getSimpleName();
 
     private Context ctx;
-    private ArrayList<CollectionBanner> banners = new ArrayList<>();
+    private ArrayList<String> banners = new ArrayList<>();
 
     public CollectionBannersAdapter(Context ctx, CollectionBannersList banners) {
         this.ctx = ctx;
@@ -50,7 +49,7 @@ public class CollectionBannersAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Picasso.with(ctx).load(getItem(position).getBannerUrl()).into(viewHolder.bannerImage);
+        Picasso.with(ctx).load(getItem(position)).into(viewHolder.bannerImage);
 
         return view;
     }
@@ -61,7 +60,7 @@ public class CollectionBannersAdapter extends BaseAdapter {
     }
 
     @Override
-    public CollectionBanner getItem(int i) {
+    public String getItem(int i) {
         return banners.get(i);
     }
 

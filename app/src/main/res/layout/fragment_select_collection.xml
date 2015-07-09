@@ -28,4 +28,12 @@
         android:fitsSystemWindows="true"
         android:layout_height="match_parent"/>
 
+    <ViewStub
+        android:id="@+id/vs_no_collection"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout="@layout/layout_no_collection"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

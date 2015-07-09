@@ -23,6 +23,7 @@ import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetCollectionBannersRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetFavouriteCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetMyCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
@@ -238,6 +239,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void deleteCollection(String collectionId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new DeleteCollectionRequest(collectionId, listener));
+    }
+
+    @Override
+    public void getBanners() {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionBannersRequest(listener));
     }
 
 

@@ -110,7 +110,7 @@ public class CreateCollectionFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionBannerSelected(CollectionBannerSelectedEvent event) {
-        bannerUrl = event.getBanner().getBannerUrl();
+        bannerUrl = event.getBannerUrl();
         Picasso.with(activity).load(bannerUrl).placeholder(R.drawable.collection_placeholder).into(chooseBanner);
     }
 

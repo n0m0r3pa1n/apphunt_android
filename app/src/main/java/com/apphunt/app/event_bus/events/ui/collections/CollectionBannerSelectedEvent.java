@@ -1,7 +1,5 @@
 package com.apphunt.app.event_bus.events.ui.collections;
 
-import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBanner;
-
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
  * * on 7/7/15.
@@ -10,17 +8,17 @@ import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBanner;
  */
 public class CollectionBannerSelectedEvent {
 
-    private CollectionBanner banner;
+    private String banner;
 
-    public CollectionBannerSelectedEvent(CollectionBanner banner) {
+    public CollectionBannerSelectedEvent(String banner) {
         this.banner = banner;
     }
 
-    public CollectionBanner getBanner() {
+    public String getBannerUrl() {
         return banner;
     }
 
-    public void setBanner(CollectionBanner banner) {
+    public void setBanner(String banner) {
         this.banner = banner;
     }
 }
