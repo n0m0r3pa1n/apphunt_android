@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_margin="15dp">
+            android:layout_margin="5dp">
 
             <ImageView
                 android:id="@+id/app_icon"
@@ -64,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/app_name"
                 android:layout_toRightOf="@+id/app_icon"
+                android:layout_marginTop="3dp"
                 android:textSize="@dimen/list_item_category" />
 
             <LinearLayout
@@ -72,8 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@id/app_icon"
-                android:orientation="horizontal"
-                android:layout_below="@+id/btn_vote">
+                android:orientation="horizontal">
 
                 <com.apphunt.app.ui.views.widgets.AvatarImageView
                     android:id="@+id/creator_avatar"

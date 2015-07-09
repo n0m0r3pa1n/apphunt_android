@@ -4,6 +4,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -26,7 +27,7 @@ public class BaseApp implements Serializable {
     private boolean hasVoted;
     private User createdBy;
     private int commentsCount;
-    private String category = "Tools";
+    private ArrayList<String> categories = new ArrayList<>();
 
     public int getPosition() {
         return position;
@@ -128,12 +129,12 @@ public class BaseApp implements Serializable {
         this.votesCount = votesCount;
     }
 
-    public String getCategory() {
-        return category;
+    public ArrayList<String> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategories(ArrayList<String> categories) {
+        this.categories = categories;
     }
 
     @Override
@@ -151,7 +152,6 @@ public class BaseApp implements Serializable {
                 ", hasUserVoted=" + hasVoted +
                 ", createdBy=" + createdBy +
                 ", commentsCount=" + commentsCount +
-                ", category='" + category + '\'' +
                 '}';
     }
 }

@@ -25,8 +25,8 @@
     <dimen name="list_item_icon_margin_left">7dp</dimen>
     <dimen name="list_item_icon_margin_right">15dp</dimen>
     <dimen name="list_item_icon_size">75dp</dimen>
-    <dimen name="list_item_name">16sp</dimen>
-    <dimen name="list_item_category">12sp</dimen>
+    <dimen name="list_item_name">17sp</dimen>
+    <dimen name="list_item_category">14sp</dimen>
     <dimen name="list_item_desc">14sp</dimen>
     <dimen name="list_item_vote_size">40dp</dimen>
     <dimen name="list_item_vote_margin">7dp</dimen>
