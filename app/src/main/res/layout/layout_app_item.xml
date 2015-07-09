@@ -11,7 +11,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         cardview:cardCornerRadius="2dp"
@@ -38,6 +38,7 @@
                 android:layout_toRightOf="@+id/app_icon"
                 android:layout_toStartOf="@+id/btn_vote"
                 android:layout_toLeftOf="@+id/btn_vote"
+                android:paddingRight="5dp"
                 android:textSize="@dimen/list_item_name" />
 
             <com.apphunt.app.ui.views.vote.AppVoteButton
@@ -47,15 +48,15 @@
                 android:layout_alignParentRight="true"
                 android:gravity="right" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/add_to_collection"
-                android:layout_width="@dimen/list_item_add_to_collection_size"
-                android:layout_height="@dimen/list_item_add_to_collection_size"
-                android:background="@drawable/ic_add_to_collection"
-                android:layout_alignParentBottom="true"
-                android:layout_alignRight="@+id/btn_vote"
-                android:layout_alignEnd="@+id/btn_vote"
-                android:layout_marginRight="@dimen/list_item_add_to_collection_margin_left"/>
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:layout_alignParentRight="true"
+                android:drawableBottom="@drawable/ic_add_to_collection"
+                android:drawablePadding="5dp"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/btn_vote"/>
 
             <TextView
                 android:id="@+id/category"
@@ -69,11 +70,10 @@
                 android:id="@+id/creator_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@+id/category"
                 android:layout_toRightOf="@id/app_icon"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_below="@+id/btn_vote">
 
                 <com.apphunt.app.ui.views.widgets.AvatarImageView
                     android:id="@+id/creator_avatar"
