@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -296,7 +297,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         AppVoteButton vote;
 
         @InjectView(R.id.add_to_collection)
-        ImageButton addToCollection;
+        Button addToCollection;
 
         public ViewHolderItem(View view) {
             super(view);
