@@ -129,5 +129,6 @@
     <string name="top_hunters_points">Top Hunters Points</string>
     <string name="title_choose_collection_banner">Choose a banner</string>
     <string name="no_collection_text">Create your own collection</string>
+    <string name="delete_collection_menu_title">Delete</string>
 
 </resources>
