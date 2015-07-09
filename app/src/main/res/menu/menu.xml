@@ -15,4 +15,13 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_delete_collection"
+        android:icon="@drawable/btn_delete"
+        android:title="@string/delete_collection_menu_title"
+        android:showAsAction="collapseActionView|always"
+        app:showAsAction="collapseActionView|always"
+        android:visible="false"
+        />
 </menu>

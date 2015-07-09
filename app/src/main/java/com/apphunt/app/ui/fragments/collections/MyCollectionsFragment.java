@@ -14,7 +14,6 @@ import android.view.ViewStub;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
@@ -129,6 +128,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public void onUpdateCollection(UpdateCollectionEvent event) {
         if (event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
             activity.getSupportFragmentManager().popBackStack();
+//            getCollections();
         }
     }
 

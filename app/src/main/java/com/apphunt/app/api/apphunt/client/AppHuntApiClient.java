@@ -3,7 +3,6 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,6 +20,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetFavouriteCollectionsRequest;
@@ -44,15 +44,12 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.*;
+import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.UpdateCollectionModel;
 
 
 public class AppHuntApiClient implements AppHuntApi {
@@ -237,4 +234,11 @@ public class AppHuntApiClient implements AppHuntApi {
         VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(appsCollection.getId(),
                 map, listener));
     }
+
+    @Override
+    public void deleteCollection(String collectionId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new DeleteCollectionRequest(collectionId, listener));
+    }
+
+
 }

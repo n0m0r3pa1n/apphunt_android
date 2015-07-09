@@ -8,7 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -74,6 +78,8 @@ public class ViewCollectionFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
 
+        setHasOptionsMenu(true);
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
 
@@ -102,6 +108,33 @@ public class ViewCollectionFragment extends BaseFragment {
         ActionBarUtils.getInstance().setTitle("Collection");
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
+        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+            deleteCollectionAction.setVisible(true);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_collection:
+                Log.d("AAAAA", "delete");
+                ApiClient.getClient(getActivity()).deleteCollection(appsCollection.getId());
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
     }
 
     @OnClick(R.id.edit_collection)
