@@ -10,6 +10,13 @@
         app:showAsAction="collapseActionView|ifRoom"
         android:actionViewClass="android.support.v7.widget.SearchView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
+
+    <item
+        android:id="@+id/action_add_to_collection"
+        android:icon="@drawable/ic_ab_add_to_collection"
+        android:title="@string/action_add_to_collection"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_action_share"
@@ -23,10 +30,4 @@
         android:showAsAction="collapseActionView|always"
         app:showAsAction="collapseActionView|always"
         android:visible="false" />
-
-    <item
-        android:id="@+id/action_add_to_collection"
-        android:icon="@drawable/ic_add_to_collection"
-        android:title="@string/action_add_to_collection"
-        app:showAsAction="always" />
 </menu>
