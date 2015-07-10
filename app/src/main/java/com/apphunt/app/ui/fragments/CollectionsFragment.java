@@ -29,7 +29,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     @InjectView(R.id.collection_tabs)
     ViewPager pager;
 
-    //@InjectView(R.id.tabLayout)
+    @InjectView(R.id.tabs)
     TabLayout tabLayout;
 
     private TabLayout.Tab previousSelectedTab;
@@ -42,7 +42,6 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.inject(this, view);
         pagerAdapter = new CollectionsPagerAdapter(getActivity().getSupportFragmentManager());
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         initTabs();
 
         pager.setOffscreenPageLimit(3);

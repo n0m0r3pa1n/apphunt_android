@@ -1,9 +1,8 @@
-package com.apphunt.app.ui.fragments.collections;
+package com.apphunt.app.ui.fragments.collections.tabs;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetFavouriteCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
@@ -92,6 +92,9 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     public void onCollectionFavourited(FavouriteCollectionEvent event) {
         if (adapter != null) {
             adapter.addCollection(event.getCollection());
+            if(adapter.getCount() > 0) {
+                vsNoCollection.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -99,27 +102,36 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     public void onCollectionUnfavourited(UnfavouriteCollectionEvent event) {
         if (adapter != null) {
             adapter.removeCollection(event.getCollectionId());
+            if(adapter.getCount() == 0) {
+                vsNoCollection.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Subscribe
     public void onFavouriteCollectionReceived(GetFavouriteCollectionsEvent event) {
         allCollections.hideBottomLoader();
-        if (event.getAppsCollection().getCollections().size() == 0) {
-            vsNoCollection.setVisibility(View.VISIBLE);
-            return;
-        }
 
         if (adapter == null) {
             adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
-            vsNoCollection.setVisibility(View.GONE);
         } else {
             int currentSize = adapter.getCount();
             adapter.addAllCollections(event.getAppsCollection().getCollections());
             allCollections.smoothScrollToPosition(currentSize);
+        }
+
+        if (event.getAppsCollection().getCollections().size() == 0) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        } else {
             vsNoCollection.setVisibility(View.GONE);
         }
+    }
+
+    @Subscribe
+    public void onCollectionDeleted(DeleteCollectionEvent event) {
+        String collectionId = event.getCollectionId();
+        adapter.removeCollection(collectionId);
     }
 
     @Subscribe

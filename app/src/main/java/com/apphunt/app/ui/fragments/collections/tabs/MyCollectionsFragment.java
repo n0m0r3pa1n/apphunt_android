@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.collections;
+package com.apphunt.app.ui.fragments.collections.tabs;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -85,10 +86,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Subscribe
     public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+        selectCollectionAdapter = new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections());
         if (event.getAppsCollection().getTotalCount() > 0) {
             vsNoCollection.setVisibility(View.GONE);
-
-            selectCollectionAdapter = new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections());
             selectCollectionAdapter.setOnItemClickListener(this);
             collectionsList.setAdapter(selectCollectionAdapter);
         } else {
@@ -132,7 +132,18 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
-        getCollections();
+        selectCollectionAdapter.addCollection(event.getAppsCollection());
+        vsNoCollection.setVisibility(View.GONE);
+    }
+
+    @Subscribe
+    public void onCollectionDeleted(DeleteCollectionEvent event) {
+        String collectionId = event.getCollectionId();
+        selectCollectionAdapter.removeCollection(collectionId);
+        activity.getSupportFragmentManager().popBackStack();
+        if(selectCollectionAdapter.getItemCount() == 0) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        }
     }
 
     @Subscribe

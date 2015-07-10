@@ -15,8 +15,10 @@ import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
  */
 public class DeleteCollectionRequest extends BaseGsonRequest<AppsCollection> {
 
+    private String collectionId;
     public DeleteCollectionRequest(String collectionId, Response.ErrorListener listener) {
         super(Method.DELETE, BASE_URL + "/app-collections?collectionId=" + collectionId, listener);
+        this.collectionId = collectionId;
     }
 
 
@@ -27,6 +29,6 @@ public class DeleteCollectionRequest extends BaseGsonRequest<AppsCollection> {
 
     @Override
     public void deliverResponse(AppsCollection response) {
-        BusProvider.getInstance().post(new DeleteCollectionEvent());
+        BusProvider.getInstance().post(new DeleteCollectionEvent(collectionId));
     }
 }

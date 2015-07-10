@@ -46,6 +46,17 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
         this.listener = listener;
     }
 
+    public void removeCollection(String id) {
+        for(int i=0; i < collections.size(); i++) {
+            AppsCollection collection = collections.get(i);
+            if(collection.getId().equals(id)) {
+                collections.remove(i);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.layout_select_collection_item, parent, false);
@@ -76,6 +87,11 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
 
     public AppsCollection getCollection(int position) {
         return collections.get(position);
+    }
+
+    public void addCollection(AppsCollection appsCollection) {
+        collections.add(appsCollection);
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
