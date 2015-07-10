@@ -1,9 +1,8 @@
-package com.apphunt.app.ui.fragments.collections;
+package com.apphunt.app.ui.fragments.collections.tabs;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetFavouriteCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
@@ -126,6 +126,12 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         } else {
             vsNoCollection.setVisibility(View.GONE);
         }
+    }
+
+    @Subscribe
+    public void onCollectionDeleted(DeleteCollectionEvent event) {
+        String collectionId = event.getCollectionId();
+        adapter.removeCollection(collectionId);
     }
 
     @Subscribe

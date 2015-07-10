@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.collections;
+package com.apphunt.app.ui.fragments.collections.tabs;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,13 +11,13 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.ui.views.ScrollListView;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -74,6 +74,12 @@ public class AllCollectionsFragment extends BaseFragment {
         }
     }
 
+    @Subscribe
+    public void onCollectionDeleted(DeleteCollectionEvent event) {
+        String collectionId = event.getCollectionId();
+        adapter.removeCollection(collectionId);
+    }
+
     @Override
     public int getTitle() {
         return R.string.title_all_collection;
@@ -90,4 +96,6 @@ public class AllCollectionsFragment extends BaseFragment {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
     }
+
+
 }

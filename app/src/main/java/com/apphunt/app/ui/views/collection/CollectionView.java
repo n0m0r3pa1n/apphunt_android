@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +16,21 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
+import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
 import com.apphunt.app.ui.views.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.util.ResourceBundle;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 import static com.apphunt.app.constants.Constants.*;
 
@@ -66,6 +69,9 @@ public class CollectionView extends RelativeLayout {
 
     @InjectView(R.id.favourite_collection)
     FavouriteCollectionButton favouriteButton;
+
+    @InjectView(R.id.edit_banner)
+    ImageView editBanner;
 
     public CollectionView(Context context) {
         super(context);
@@ -126,6 +132,7 @@ public class CollectionView extends RelativeLayout {
         }
 
         name.setVisibility(View.INVISIBLE);
+        editBanner.setVisibility(View.VISIBLE);
         editName.setVisibility(View.VISIBLE);
         editName.setText(appsCollection.getName());
     }
@@ -139,8 +146,28 @@ public class CollectionView extends RelativeLayout {
         appsCollection.setName(editName.getText().toString());
         name.setText(appsCollection.getName());
         name.setVisibility(View.VISIBLE);
+        editBanner.setVisibility(View.GONE);
         editName.setVisibility(View.GONE);
     }
+
+    @Subscribe
+    public void onCollectionBannerSelected(CollectionBannerSelectedEvent event) {
+        String bannerUrl = event.getBannerUrl();
+        Picasso.with(getContext()).load(bannerUrl).placeholder(R.drawable.collection_placeholder).into(banner);
+        appsCollection.setPicture(bannerUrl);
+    }
+
+    @OnClick(R.id.edit_banner)
+    public void editBanner() {
+        ChooseCollectionBannerFragment fragment = new ChooseCollectionBannerFragment();
+        ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .add(R.id.container, fragment, Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
+                .addToBackStack(Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
+                .commit();
+    }
+
+
 
 
     public void setCollection(AppsCollection collection, boolean areButtonsEnabled) {

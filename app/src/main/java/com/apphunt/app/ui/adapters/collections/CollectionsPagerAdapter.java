@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.apphunt.app.ui.fragments.BaseFragment;
-import com.apphunt.app.ui.fragments.collections.AllCollectionsFragment;
-import com.apphunt.app.ui.fragments.collections.FavouriteCollectionsFragment;
-import com.apphunt.app.ui.fragments.collections.MyCollectionsFragment;
+import com.apphunt.app.ui.fragments.collections.tabs.AllCollectionsFragment;
+import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragment;
+import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
 
 /**
  * Created by nmp on 15-6-25.
