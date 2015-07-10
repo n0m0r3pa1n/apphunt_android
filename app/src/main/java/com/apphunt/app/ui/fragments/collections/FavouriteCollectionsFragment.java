@@ -92,6 +92,9 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     public void onCollectionFavourited(FavouriteCollectionEvent event) {
         if (adapter != null) {
             adapter.addCollection(event.getCollection());
+            if(adapter.getCount() > 0) {
+                vsNoCollection.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -99,25 +102,28 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     public void onCollectionUnfavourited(UnfavouriteCollectionEvent event) {
         if (adapter != null) {
             adapter.removeCollection(event.getCollectionId());
+            if(adapter.getCount() == 0) {
+                vsNoCollection.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Subscribe
     public void onFavouriteCollectionReceived(GetFavouriteCollectionsEvent event) {
         allCollections.hideBottomLoader();
-        if (event.getAppsCollection().getCollections().size() == 0) {
-            vsNoCollection.setVisibility(View.VISIBLE);
-            return;
-        }
 
         if (adapter == null) {
             adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
-            vsNoCollection.setVisibility(View.GONE);
         } else {
             int currentSize = adapter.getCount();
             adapter.addAllCollections(event.getAppsCollection().getCollections());
             allCollections.smoothScrollToPosition(currentSize);
+        }
+
+        if (event.getAppsCollection().getCollections().size() == 0) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        } else {
             vsNoCollection.setVisibility(View.GONE);
         }
     }
