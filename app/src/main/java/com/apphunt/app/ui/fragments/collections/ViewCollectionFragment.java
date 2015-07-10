@@ -58,8 +58,8 @@ public class ViewCollectionFragment extends BaseFragment {
     @InjectView(R.id.edit_collection)
     FloatingActionButton editCollection;
 
-    @InjectView(R.id.vs_no_collection)
-    ViewStub vsNoCollection;
+    @InjectView(R.id.empty_view)
+    ViewStub emptyView;
 
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
@@ -104,12 +104,12 @@ public class ViewCollectionFragment extends BaseFragment {
             }
         });
 
-        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if (appsCollection.isOwnedByCurrentUser(getActivity())) {
             editCollection.setVisibility(View.VISIBLE);
         }
 
-        if(appsCollection.getApps().size() == 0) {
-            vsNoCollection.setVisibility(View.VISIBLE);
+        if (appsCollection.getApps().size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
         }
 
         ActionBarUtils.getInstance().setTitle("Collection");
