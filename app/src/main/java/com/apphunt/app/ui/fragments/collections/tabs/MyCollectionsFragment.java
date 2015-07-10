@@ -125,7 +125,8 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @Subscribe
     public void onUpdateCollection(UpdateCollectionEvent event) {
         if (event.getAppsCollection() != null) {
-//            activity.getSupportFragmentManager().popBackStack();
+            selectCollectionAdapter.removeCollection(event.getAppsCollection().getId());
+            selectCollectionAdapter.addCollection(event.getAppsCollection());
 //            getCollections();
         }
     }

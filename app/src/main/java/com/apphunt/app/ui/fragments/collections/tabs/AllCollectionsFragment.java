@@ -9,16 +9,22 @@ import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.ui.views.ScrollListView;
 import com.apphunt.app.constants.Constants;
+import com.google.android.gms.common.api.Api;
 import com.squareup.otto.Subscribe;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,8 +38,10 @@ public class AllCollectionsFragment extends BaseFragment {
     @InjectView(R.id.all_collections)
     ScrollListView allCollections;
 
-    private CollectionsAdapter adapter;
     private int currentPage = 0;
+    private String userId = null;
+    private CollectionsAdapter adapter;
+    private List<AppsCollection> appCollections;
 
     @Nullable
     @Override
@@ -63,6 +71,7 @@ public class AllCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionsReceived(GetAllCollectionsEvent event) {
+        appCollections = event.getAppsCollection().getCollections();
         allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
@@ -78,6 +87,14 @@ public class AllCollectionsFragment extends BaseFragment {
     public void onCollectionDeleted(DeleteCollectionEvent event) {
         String collectionId = event.getCollectionId();
         adapter.removeCollection(collectionId);
+    }
+
+    @Subscribe
+    public void onCollectionEdit(UpdateCollectionEvent event) {
+        currentPage = 0;
+        adapter = null;
+        allCollections.resetListView();
+        loadMoreCollections();
     }
 
     @Override
@@ -96,6 +113,4 @@ public class AllCollectionsFragment extends BaseFragment {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
     }
-
-
 }

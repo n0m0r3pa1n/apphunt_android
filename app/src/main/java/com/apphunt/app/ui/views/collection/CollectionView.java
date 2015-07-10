@@ -161,12 +161,6 @@ public class CollectionView extends RelativeLayout {
         editBanner.setVisibility(View.GONE);
         editName.setVisibility(View.GONE);
 
-//        appsCollection.setName(newCollection.getName());
-//        appsCollection.setDescription(newCollection.getDescription());
-//        appsCollection.setApps(newCollection.getApps());
-//        appsCollection.setPicture(newCollection.getPicture());
-//        appsCollection.setStatus(newCollection.getStatus());
-
         setCollection(newCollection, areButtonsEnabled);
     }
 

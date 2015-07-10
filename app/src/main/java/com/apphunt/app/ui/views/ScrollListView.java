@@ -89,6 +89,10 @@ public class ScrollListView extends LinearLayout {
         this.totalItemsCount = totalItemsCount;
     }
 
+    public void resetListView() {
+        listView.setAdapter(null);
+    }
+
     public void smoothScrollToPosition(int position) {
         listView.smoothScrollToPosition(position);
     }
