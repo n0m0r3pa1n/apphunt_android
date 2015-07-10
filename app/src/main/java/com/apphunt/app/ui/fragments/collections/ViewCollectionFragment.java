@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -57,6 +58,9 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @InjectView(R.id.edit_collection)
     FloatingActionButton editCollection;
+
+    @InjectView(R.id.edit_banner)
+    ImageButton editBanner;
 
     @InjectView(R.id.empty_view)
     ViewStub emptyView;
@@ -148,6 +152,7 @@ public class ViewCollectionFragment extends BaseFragment {
         if(isEdit) {
             String desc = editDescription.getText().toString();
             editDescription.setVisibility(View.GONE);
+            editBanner.setVisibility(View.GONE);
             description.setVisibility(View.VISIBLE);
             description.setText(desc);
             collectionAppsAdapter.setEditable(false);
@@ -170,6 +175,7 @@ public class ViewCollectionFragment extends BaseFragment {
             }
 
             collectionAppsAdapter.setEditable(true);
+            editBanner.setVisibility(View.VISIBLE);
             description.setVisibility(View.GONE);
             editDescription.setText(appsCollection.getDescription());
             editDescription.setVisibility(View.VISIBLE);
