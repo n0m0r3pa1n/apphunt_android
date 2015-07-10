@@ -148,6 +148,7 @@ public class ViewCollectionFragment extends BaseFragment {
         if(isEdit) {
             String desc = editDescription.getText().toString();
             editDescription.setVisibility(View.GONE);
+            description.setVisibility(View.VISIBLE);
             description.setText(desc);
             collectionAppsAdapter.setEditable(false);
             BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
@@ -159,7 +160,15 @@ public class ViewCollectionFragment extends BaseFragment {
             appsCollection.setApps(collection.getCollection().getApps());
 
             ApiClient.getClient(getActivity()).updateCollection(appsCollection);
+
+            if (appsCollection.getApps().size() == 0) {
+                emptyView.setVisibility(View.VISIBLE);
+            }
         } else {
+            if (emptyView.getVisibility() == View.VISIBLE) {
+                emptyView.setVisibility(View.GONE);
+            }
+
             collectionAppsAdapter.setEditable(true);
             description.setVisibility(View.GONE);
             editDescription.setText(appsCollection.getDescription());

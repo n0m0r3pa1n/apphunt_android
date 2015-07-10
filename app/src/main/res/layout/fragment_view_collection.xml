@@ -52,6 +52,7 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:visibility="gone"
+                android:maxLength="100"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
         </android.support.design.widget.AppBarLayout>

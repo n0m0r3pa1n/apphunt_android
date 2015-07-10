@@ -125,7 +125,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @Subscribe
     public void onUpdateCollection(UpdateCollectionEvent event) {
         if (event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
-            activity.getSupportFragmentManager().popBackStack();
+//            activity.getSupportFragmentManager().popBackStack();
 //            getCollections();
         }
     }

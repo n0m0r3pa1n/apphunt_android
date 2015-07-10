@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textSize="15sp"
+            android:maxLength="100"
             android:hint="Write a description"/>
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
