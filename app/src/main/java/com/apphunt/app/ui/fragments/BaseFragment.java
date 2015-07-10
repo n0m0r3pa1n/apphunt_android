@@ -1,6 +1,8 @@
 package com.apphunt.app.ui.fragments;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.view.inputmethod.InputMethodManager;
 
 public class BaseFragment extends Fragment {
 
@@ -30,5 +32,10 @@ public class BaseFragment extends Fragment {
 
     public void setFragmentTag(String fragmentTag) {
         this.fragmentTag = fragmentTag;
+    }
+
+    protected void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
     }
 }
