@@ -9,22 +9,23 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class PutCollectionsRequest extends BasePutRequest<JSONObject> {
-    public PutCollectionsRequest(String collectionId, Object body, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections/" + collectionId, body, listener);
-
+public class PutCollectionsRequest extends BasePutRequest<AppsCollection> {
+    public PutCollectionsRequest(String collectionId, String userId, Map<String, UpdateCollectionModel> body, Response.ErrorListener listener) {
+        super(BASE_URL + "/app-collections/" + collectionId +"?userId="  + userId, body, listener);
     }
 
     @Override
-    public Class<JSONObject> getParsedClass() {
-        return JSONObject.class;
+    public Class<AppsCollection> getParsedClass() {
+        return AppsCollection.class;
     }
 
     @Override
-    public void deliverResponse(JSONObject response) {
-        BusProvider.getInstance().post(new UpdateCollectionEvent(getRawResponse().statusCode));
+    public void deliverResponse(AppsCollection response) {
+        BusProvider.getInstance().post(new UpdateCollectionEvent(response));
     }
 
     public static class UpdateCollectionModel {

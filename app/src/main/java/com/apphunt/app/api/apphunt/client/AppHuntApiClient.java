@@ -222,7 +222,7 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void updateCollection(AppsCollection appsCollection) {
+    public void updateCollection(String userId, AppsCollection appsCollection) {
         List<String> appIds = new ArrayList<>();
         for (BaseApp baseApp : appsCollection.getApps()) {
             appIds.add(baseApp.getId());
@@ -232,7 +232,7 @@ public class AppHuntApiClient implements AppHuntApi {
         map.put("collection", new UpdateCollectionModel(appIds, appsCollection.getName(),
                 appsCollection.getDescription(), appsCollection.getPicture()));
 
-        VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(appsCollection.getId(),
+        VolleyInstance.getInstance(context).addToRequestQueue(new PutCollectionsRequest(appsCollection.getId(), userId,
                 map, listener));
     }
 

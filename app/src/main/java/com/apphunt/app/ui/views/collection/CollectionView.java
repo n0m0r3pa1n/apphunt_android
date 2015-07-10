@@ -16,11 +16,12 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
-import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
 import com.apphunt.app.ui.views.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
@@ -32,6 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.*;
 import static com.apphunt.app.constants.Constants.*;
 
 public class CollectionView extends RelativeLayout {
@@ -50,7 +52,7 @@ public class CollectionView extends RelativeLayout {
     TextView name;
 
     @InjectView(R.id.edit_collection_name)
-    EditText editName;
+    public EditText editName;
 
     @InjectView(R.id.created_by_image)
     Target createdByAvatar;
@@ -136,18 +138,36 @@ public class CollectionView extends RelativeLayout {
         editName.setVisibility(View.VISIBLE);
         editName.setText(appsCollection.getName());
     }
-
+//    @Subscribe
+//    public void onSaveCollection(SaveCollectionEvent event) {
+//        if(!appsCollection.getId().equals(event.getCollectionId())) {
+//            return;
+//        }
+//
+//        appsCollection.setName(editName.getText().toString());
+//        name.setText(appsCollection.getName());
+//        name.setVisibility(View.VISIBLE);
+//        editBanner.setVisibility(View.GONE);
+//        editName.setVisibility(View.GONE);
+//    }
     @Subscribe
-    public void onSaveCollection(SaveCollectionEvent event) {
-        if(!appsCollection.getId().equals(event.getCollectionId())) {
+    public void onCollectionUpdate(UpdateCollectionEvent event) {
+        AppsCollection newCollection = event.getAppsCollection();
+        if (!newCollection.getId().equals(appsCollection.getId())) {
             return;
         }
 
-        appsCollection.setName(editName.getText().toString());
-        name.setText(appsCollection.getName());
         name.setVisibility(View.VISIBLE);
         editBanner.setVisibility(View.GONE);
         editName.setVisibility(View.GONE);
+
+//        appsCollection.setName(newCollection.getName());
+//        appsCollection.setDescription(newCollection.getDescription());
+//        appsCollection.setApps(newCollection.getApps());
+//        appsCollection.setPicture(newCollection.getPicture());
+//        appsCollection.setStatus(newCollection.getStatus());
+
+        setCollection(newCollection, areButtonsEnabled);
     }
 
     @Subscribe
@@ -167,12 +187,10 @@ public class CollectionView extends RelativeLayout {
                 .commit();
     }
 
-
-
-
     public void setCollection(AppsCollection collection, boolean areButtonsEnabled) {
-        this.areButtonsEnabled = areButtonsEnabled;
         this.appsCollection = collection;
+        this.areButtonsEnabled = areButtonsEnabled;
+
         if(collection.getStatus() == CollectionStatus.DRAFT) {
             int appsLeftCount = MIN_COLLECTION_APPS_SIZE - collection.getApps().size();
             String text = "You need " + getResources().getQuantityString(R.plurals.appsLeft, appsLeftCount, appsLeftCount);

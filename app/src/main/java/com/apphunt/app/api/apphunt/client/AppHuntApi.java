@@ -58,7 +58,7 @@ public interface AppHuntApi {
 
     void unfavouriteCollection(String collectionId, String userId);
 
-    void updateCollection(AppsCollection appsCollection);
+    void updateCollection(String userId, AppsCollection appsCollection);
 
     void deleteCollection(String collectionId);
 

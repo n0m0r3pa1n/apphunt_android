@@ -113,13 +113,13 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         if(app != null) {
             AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
             appsCollection.getApps().add(app);
-            ApiClient.getClient(getActivity()).updateCollection(appsCollection);
+            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(), appsCollection);
         }
     }
 
     @Subscribe
     public void onUpdateCollection(UpdateCollectionEvent event) {
-        if(event.getStatusCode() == StatusCode.SUCCESS.getCode()) {
+        if(event.getAppsCollection() != null) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }

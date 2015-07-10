@@ -21,9 +21,9 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
-import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
@@ -41,10 +41,10 @@ import butterknife.OnClick;
 public class ViewCollectionFragment extends BaseFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
 
-    private boolean isEdit;
+    private boolean isSave;
 
     @InjectView(R.id.collection)
-    CollectionView collection;
+    CollectionView collectionView;
 
     @InjectView(R.id.collection_apps)
     RecyclerView collectionApps;
@@ -93,7 +93,7 @@ public class ViewCollectionFragment extends BaseFragment {
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
         collectionAppsAdapter = new CollectionAppsAdapter(getActivity(), appsCollection.getApps());
         collectionApps.setAdapter(collectionAppsAdapter);
-        collection.setCollection(appsCollection, true);
+        collectionView.setCollection(appsCollection, true);
 
         description.setText(appsCollection.getDescription());
 
@@ -145,20 +145,21 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @OnClick(R.id.edit_collection)
     public void editCollection() {
-        if(isEdit) {
+        if(isSave) {
             String desc = editDescription.getText().toString();
             editDescription.setVisibility(View.GONE);
             description.setText(desc);
+
             collectionAppsAdapter.setEditable(false);
-            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
+
             editCollection.setImageResource(R.drawable.btn_edit);
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.bg_fab)));
 
             appsCollection.setDescription(desc);
-            appsCollection.setName(collection.getCollection().getName());
-            appsCollection.setApps(collection.getCollection().getApps());
+            appsCollection.setName(collectionView.editName.getText().toString());
+            appsCollection.setApps(collectionAppsAdapter.getItems());
 
-            ApiClient.getClient(getActivity()).updateCollection(appsCollection);
+            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(), appsCollection);
         } else {
             collectionAppsAdapter.setEditable(true);
             description.setVisibility(View.GONE);
@@ -169,15 +170,12 @@ public class ViewCollectionFragment extends BaseFragment {
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.save_collection_color)));
         }
 
-        isEdit = !isEdit;
+        isSave = !isSave;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().setPreviousTitle();
-        if(!isEdit) {
-            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
-        }
     }
 }
