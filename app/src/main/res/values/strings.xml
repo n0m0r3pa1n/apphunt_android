@@ -131,5 +131,6 @@
     <string name="no_collection_text">Create your own collection</string>
     <string name="delete_collection_menu_title">Delete</string>
     <string name="no_apps_in_collection">Go to Trending apps list and choose your apps</string>
+    <string name="action_add_to_collection">Add to collection</string>
 
 </resources>

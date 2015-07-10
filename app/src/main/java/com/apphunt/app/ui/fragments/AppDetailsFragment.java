@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -316,6 +318,10 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
                     shareWithLocalApps();
                     FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
                 }
+                return true;
+
+            case R.id.action_add_to_collection:
+                NavUtils.getInstance((AppCompatActivity) activity).presentSelectCollectionFragment(baseApp);
                 return true;
 
             default:
