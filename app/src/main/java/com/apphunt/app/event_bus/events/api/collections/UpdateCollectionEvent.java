@@ -1,13 +1,15 @@
 package com.apphunt.app.event_bus.events.api.collections;
 
-public class UpdateCollectionEvent {
-    private int statusCode;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 
-    public UpdateCollectionEvent(int statusCode) {
-        this.statusCode = statusCode;
+public class UpdateCollectionEvent {
+    private final AppsCollection appsCollection;
+
+    public UpdateCollectionEvent(AppsCollection appsCollection) {
+        this.appsCollection = appsCollection;
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    public AppsCollection getAppsCollection() {
+        return appsCollection;
     }
 }

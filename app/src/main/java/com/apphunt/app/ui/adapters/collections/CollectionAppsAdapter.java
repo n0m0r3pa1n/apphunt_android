@@ -88,6 +88,10 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
         return apps.size();
     }
 
+    public List<BaseApp> getItems() {
+        return apps;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder{
         @InjectView(R.id.card_view)
         CardView cardView;

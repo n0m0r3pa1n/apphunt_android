@@ -19,14 +19,15 @@ import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
-import com.apphunt.app.event_bus.events.ui.collections.SaveCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
@@ -44,8 +45,10 @@ import butterknife.OnClick;
 public class ViewCollectionFragment extends BaseFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
 
+    private boolean isSave;
+
     @InjectView(R.id.collection)
-    CollectionView collection;
+    CollectionView collectionView;
 
     @InjectView(R.id.collection_apps)
     RecyclerView collectionApps;
@@ -61,14 +64,13 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @InjectView(R.id.edit_banner)
     ImageButton editBanner;
-
+    
     @InjectView(R.id.empty_view)
     ViewStub emptyView;
 
-    private Activity activity;
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
-    private boolean isEdit;
+    private Activity activity;
 
     public ViewCollectionFragment() {
     }
@@ -97,20 +99,20 @@ public class ViewCollectionFragment extends BaseFragment {
         collectionApps.setHasFixedSize(true);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
-        collectionAppsAdapter = new CollectionAppsAdapter(getActivity(), appsCollection.getApps());
+        collectionAppsAdapter = new CollectionAppsAdapter(activity, appsCollection.getApps());
         collectionApps.setAdapter(collectionAppsAdapter);
-        collection.setCollection(appsCollection, true);
+        collectionView.setCollection(appsCollection, true);
 
         description.setText(appsCollection.getDescription());
 
         collectionAppsAdapter.setListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                NavUtils.getInstance((AppCompatActivity) getActivity()).presentAppDetailsFragment(appsCollection.getApps().get(position));
+                NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position));
             }
         });
 
-        if (appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if (appsCollection.isOwnedByCurrentUser(activity)) {
             editCollection.setVisibility(View.VISIBLE);
         }
 
@@ -127,7 +129,7 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
-        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }
 
@@ -137,7 +139,7 @@ public class ViewCollectionFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
-                ApiClient.getClient(getActivity()).deleteCollection(appsCollection.getId());
+                ApiClient.getClient(activity).deleteCollection(appsCollection.getId());
                 return true;
 
         }
@@ -151,22 +153,23 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @OnClick(R.id.edit_collection)
     public void editCollection() {
-        if(isEdit) {
+        if(isSave) {
             String desc = editDescription.getText().toString();
             editDescription.setVisibility(View.GONE);
             editBanner.setVisibility(View.GONE);
             description.setVisibility(View.VISIBLE);
             description.setText(desc);
+
             collectionAppsAdapter.setEditable(false);
-            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
+
             editCollection.setImageResource(R.drawable.btn_edit);
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.bg_fab)));
 
             appsCollection.setDescription(desc);
-            appsCollection.setName(collection.getCollection().getName());
-            appsCollection.setApps(collection.getCollection().getApps());
+            appsCollection.setName(collectionView.editName.getText().toString());
+            appsCollection.setApps(collectionAppsAdapter.getItems());
 
-            ApiClient.getClient(getActivity()).updateCollection(appsCollection);
+            ApiClient.getClient(activity).updateCollection(LoginProviderFactory.get(activity).getUser().getId(), appsCollection);
 
             if (appsCollection.getApps().size() == 0) {
                 emptyView.setVisibility(View.VISIBLE);
@@ -186,13 +189,12 @@ public class ViewCollectionFragment extends BaseFragment {
             editCollection.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.save_collection_color)));
         }
 
-        isEdit = !isEdit;
+        isSave = !isSave;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = activity;
     }
 
@@ -200,9 +202,6 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().setPreviousTitle();
-        if(!isEdit) {
-            BusProvider.getInstance().post(new SaveCollectionEvent(appsCollection.getId()));
-        }
 
         hideSoftKeyboard();
     }
