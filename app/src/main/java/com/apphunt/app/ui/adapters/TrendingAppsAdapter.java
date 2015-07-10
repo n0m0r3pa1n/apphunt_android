@@ -209,7 +209,9 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
 
             viewHolderItem.title.setText(StringUtils.htmlDecodeString(app.getName()));
-            viewHolderItem.category.setText(app.getCategories().get(0));
+            if(!app.getCategories().isEmpty()) {
+                viewHolderItem.category.setText(app.getCategories().get(0));
+            }
             Picasso.with(ctx)
                     .load(app.getCreatedBy().getProfilePicture())
                     .into(viewHolderItem.creatorImageView);

@@ -8,13 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -57,6 +57,9 @@ public class ViewCollectionFragment extends BaseFragment {
 
     @InjectView(R.id.edit_collection)
     FloatingActionButton editCollection;
+
+    @InjectView(R.id.vs_no_collection)
+    ViewStub vsNoCollection;
 
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
@@ -105,6 +108,10 @@ public class ViewCollectionFragment extends BaseFragment {
             editCollection.setVisibility(View.VISIBLE);
         }
 
+        if(appsCollection.getApps().size() == 0) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        }
+
         ActionBarUtils.getInstance().setTitle("Collection");
 
         return view;
@@ -124,7 +131,6 @@ public class ViewCollectionFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
-                Log.d("AAAAA", "delete");
                 ApiClient.getClient(getActivity()).deleteCollection(appsCollection.getId());
                 return true;
 

@@ -119,9 +119,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @Override
     public void onClick(View view, int position) {
         AppsCollection collection = selectCollectionAdapter.getCollection(position);
-        if (collection.getApps().size() > 0) {
-            NavUtils.getInstance(activity).presentViewCollectionFragment(collection);
-        }
+        NavUtils.getInstance(activity).presentViewCollectionFragment(collection);
     }
 
     @Subscribe
