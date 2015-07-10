@@ -22,6 +22,11 @@
         android:title="@string/delete_collection_menu_title"
         android:showAsAction="collapseActionView|always"
         app:showAsAction="collapseActionView|always"
-        android:visible="false"
-        />
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_add_to_collection"
+        android:icon="@drawable/ic_add_to_collection"
+        android:title="@string/action_add_to_collection"
+        app:showAsAction="always" />
 </menu>

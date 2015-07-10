@@ -44,8 +44,7 @@
             android:layout_weight="3"
             android:paddingLeft="16dp"
             android:paddingTop="2dp"
-            android:background="@color/collection_transparent_background"
-            >
+            android:background="@color/collection_transparent_background">
 
             <EditText
                 android:id="@+id/edit_collection_name"
@@ -113,12 +112,12 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/edit_banner"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_banner"
+        android:background="@drawable/ic_edit_banner"
         android:layout_gravity="top|right"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"/>

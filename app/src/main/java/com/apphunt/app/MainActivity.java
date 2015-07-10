@@ -206,8 +206,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
             menu.findItem(R.id.action_share).setVisible(true);
+            menu.findItem(R.id.action_add_to_collection).setVisible(true);
         } else {
             menu.findItem(R.id.action_share).setVisible(false);
+            menu.findItem(R.id.action_add_to_collection).setVisible(false);
         }
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));

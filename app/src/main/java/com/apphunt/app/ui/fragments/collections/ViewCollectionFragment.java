@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments.collections;
 
+import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -58,11 +62,15 @@ public class ViewCollectionFragment extends BaseFragment {
     @InjectView(R.id.edit_collection)
     FloatingActionButton editCollection;
 
-    @InjectView(R.id.vs_no_collection)
-    ViewStub vsNoCollection;
+    @InjectView(R.id.edit_banner)
+    ImageButton editBanner;
+    
+    @InjectView(R.id.empty_view)
+    ViewStub emptyView;
 
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
+    private Activity activity;
 
     public ViewCollectionFragment() {
     }
@@ -91,7 +99,7 @@ public class ViewCollectionFragment extends BaseFragment {
         collectionApps.setHasFixedSize(true);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
-        collectionAppsAdapter = new CollectionAppsAdapter(getActivity(), appsCollection.getApps());
+        collectionAppsAdapter = new CollectionAppsAdapter(activity, appsCollection.getApps());
         collectionApps.setAdapter(collectionAppsAdapter);
         collectionView.setCollection(appsCollection, true);
 
@@ -100,16 +108,16 @@ public class ViewCollectionFragment extends BaseFragment {
         collectionAppsAdapter.setListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                NavUtils.getInstance((AppCompatActivity) getActivity()).presentAppDetailsFragment(appsCollection.getApps().get(position));
+                NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position));
             }
         });
 
-        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if (appsCollection.isOwnedByCurrentUser(activity)) {
             editCollection.setVisibility(View.VISIBLE);
         }
 
-        if(appsCollection.getApps().size() == 0) {
-            vsNoCollection.setVisibility(View.VISIBLE);
+        if (appsCollection.getApps().size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
         }
 
         ActionBarUtils.getInstance().setTitle("Collection");
@@ -121,7 +129,7 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
-        if(appsCollection.isOwnedByCurrentUser(getActivity())) {
+        if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }
 
@@ -131,7 +139,7 @@ public class ViewCollectionFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
-                ApiClient.getClient(getActivity()).deleteCollection(appsCollection.getId());
+                ApiClient.getClient(activity).deleteCollection(appsCollection.getId());
                 return true;
 
         }
@@ -148,6 +156,8 @@ public class ViewCollectionFragment extends BaseFragment {
         if(isSave) {
             String desc = editDescription.getText().toString();
             editDescription.setVisibility(View.GONE);
+            editBanner.setVisibility(View.GONE);
+            description.setVisibility(View.VISIBLE);
             description.setText(desc);
 
             collectionAppsAdapter.setEditable(false);
@@ -159,9 +169,18 @@ public class ViewCollectionFragment extends BaseFragment {
             appsCollection.setName(collectionView.editName.getText().toString());
             appsCollection.setApps(collectionAppsAdapter.getItems());
 
-            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(), appsCollection);
+            ApiClient.getClient(activity).updateCollection(LoginProviderFactory.get(activity).getUser().getId(), appsCollection);
+
+            if (appsCollection.getApps().size() == 0) {
+                emptyView.setVisibility(View.VISIBLE);
+            }
         } else {
+            if (emptyView.getVisibility() == View.VISIBLE) {
+                emptyView.setVisibility(View.GONE);
+            }
+
             collectionAppsAdapter.setEditable(true);
+            editBanner.setVisibility(View.VISIBLE);
             description.setVisibility(View.GONE);
             editDescription.setText(appsCollection.getDescription());
             editDescription.setVisibility(View.VISIBLE);
@@ -174,8 +193,16 @@ public class ViewCollectionFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().setPreviousTitle();
+
+        hideSoftKeyboard();
     }
 }
