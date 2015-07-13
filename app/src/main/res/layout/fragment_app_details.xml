@@ -20,7 +20,7 @@
             android:paddingLeft="@dimen/details_box_name_padding"
             android:elevation="0dp">
 
-            <com.apphunt.app.ui.views.widgets.AvatarImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/creator_avatar"
                 android:layout_width="@dimen/details_avatar_creator"
                 android:layout_height="@dimen/details_avatar_creator"

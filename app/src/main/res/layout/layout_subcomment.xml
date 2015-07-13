@@ -9,7 +9,7 @@
     android:paddingBottom="5dp"
     android:elevation="0dp">
 
-    <com.apphunt.app.ui.views.widgets.AvatarImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"

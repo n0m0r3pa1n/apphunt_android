@@ -34,7 +34,6 @@ import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -214,6 +214,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             Picasso.with(ctx)
                     .load(app.getCreatedBy().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
             viewHolderItem.vote.setBaseApp(app);
@@ -290,7 +291,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView category;
 
         @InjectView(R.id.creator_avatar)
-        Target creatorImageView;
+        CircleImageView creatorImageView;
 
         @InjectView(R.id.creator_name)
         TextView creatorUsername;

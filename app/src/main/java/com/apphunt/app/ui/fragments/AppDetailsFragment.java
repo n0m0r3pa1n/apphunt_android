@@ -24,6 +24,8 @@ import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
@@ -31,23 +33,21 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AppDetailsFragment extends BaseFragment implements OnClickListener, CommentsBox.OnDisplayCommentBox {
 
@@ -78,7 +78,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     TextView appDescription;
 
     @InjectView(R.id.creator_avatar)
-    Target creator;
+    CircleImageView creator;
 
     @InjectView(R.id.vote_btn)
     AppVoteButton voteBtn;

@@ -12,18 +12,17 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.views.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by nmp on 15-6-26.
@@ -96,6 +95,7 @@ public class CollectionsAdapter extends BaseAdapter {
 
         Picasso.with(parent.getContext())
                 .load(appsCollection.getCreatedBy().getProfilePicture())
+                .placeholder(R.drawable.placeholder_avatar)
                 .into(viewHolder.createdByImage);
 
         Picasso.with(parent.getContext())
@@ -130,7 +130,7 @@ public class CollectionsAdapter extends BaseAdapter {
         TextView name;
 
         @InjectView(R.id.created_by_image)
-        Target createdByImage;
+        CircleImageView createdByImage;
 
         @InjectView(R.id.created_by)
         TextView createdBy;

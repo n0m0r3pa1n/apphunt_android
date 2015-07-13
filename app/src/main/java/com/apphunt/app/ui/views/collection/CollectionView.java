@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
@@ -27,14 +26,14 @@ import com.apphunt.app.ui.views.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.*;
-import static com.apphunt.app.constants.Constants.*;
+import static com.apphunt.app.constants.Constants.CollectionStatus;
+import static com.apphunt.app.constants.Constants.MIN_COLLECTION_APPS_SIZE;
 
 public class CollectionView extends RelativeLayout {
     private boolean areButtonsEnabled;
@@ -55,7 +54,7 @@ public class CollectionView extends RelativeLayout {
     public EditText editName;
 
     @InjectView(R.id.created_by_image)
-    Target createdByAvatar;
+    CircleImageView createdByAvatar;
 
     @InjectView(R.id.created_by)
     TextView createdBy;

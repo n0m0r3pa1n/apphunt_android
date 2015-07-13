@@ -28,6 +28,8 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = DrawerItemAdapter.class.getSimpleName();
     private Context ctx;
@@ -199,13 +201,13 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private static class HeaderLoggedOutViewHolder extends RecyclerView.ViewHolder {
 
-        private Target profileImage;
+        private CircleImageView profileImage;
         private Button loginButton;
 
         public HeaderLoggedOutViewHolder(View rootView) {
             super(rootView);
 
-            profileImage = (Target) rootView.findViewById(R.id.profile_image);
+            profileImage = (CircleImageView) rootView.findViewById(R.id.profile_image);
             loginButton = (Button) rootView.findViewById(R.id.login_button);
         }
     }

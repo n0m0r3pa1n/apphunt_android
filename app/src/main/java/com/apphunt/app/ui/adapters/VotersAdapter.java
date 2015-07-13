@@ -11,13 +11,13 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VotersAdapter extends BaseAdapter {
 
@@ -63,13 +63,13 @@ public class VotersAdapter extends BaseAdapter {
 
         if (TextUtils.isEmpty(avatarUrl)) {
             Picasso.with(ctx)
-                    .load(R.drawable.avatar_placeholder)
-                    .placeholder(R.drawable.avatar_placeholder)
+                    .load(R.drawable.placeholder_avatar)
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolder.avatar);
         } else {
             Picasso.with(ctx)
                     .load(avatarUrl)
-                    .placeholder(R.drawable.avatar_placeholder)
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolder.avatar);
         }
 
@@ -97,7 +97,7 @@ public class VotersAdapter extends BaseAdapter {
 
     static class ViewHolder {
         @InjectView(R.id.avatar)
-        Target avatar;
+        CircleImageView avatar;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

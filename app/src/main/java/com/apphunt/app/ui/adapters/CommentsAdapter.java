@@ -15,19 +15,19 @@ import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.views.vote.CommentVoteButton;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentsAdapter extends BaseAdapter {
     public static final String TAG = CommentsAdapter.class.getSimpleName();
@@ -82,6 +82,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             Picasso.with(ctx)
                     .load(comment.getUser().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(commentViewHolder.avatar);
 
             commentViewHolder.name.setText(comment.getUser().getUsername());
@@ -99,6 +100,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             Picasso.with(ctx)
                     .load(comment.getUser().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(subCommentViewHolder.avatar);
 
             subCommentViewHolder.name.setText(comment.getUser().getUsername());
@@ -185,7 +187,7 @@ public class CommentsAdapter extends BaseAdapter {
         RelativeLayout layout;
 
         @InjectView(R.id.avatar)
-        Target avatar;
+        CircleImageView avatar;
 
         @InjectView(R.id.name)
         TextView name;

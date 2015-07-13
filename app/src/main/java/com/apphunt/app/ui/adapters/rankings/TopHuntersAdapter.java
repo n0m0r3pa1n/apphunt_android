@@ -11,10 +11,10 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.hunters.Hunter;
 import com.apphunt.app.api.apphunt.models.collections.hunters.HuntersCollection;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by nmp on 15-6-8.
@@ -48,7 +48,10 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         holder.commentsCount.setText(String.valueOf(hunter.getComments()));
         holder.votesCount.setText(String.valueOf(hunter.getVotes()));
 
-        Picasso.with(context).load(hunter.getUser().getProfilePicture()).into(holder.picture);
+        Picasso.with(context)
+                .load(hunter.getUser().getProfilePicture())
+                .placeholder(R.drawable.placeholder_avatar)
+                .into(holder.picture);
     }
 
     @Override
@@ -70,7 +73,8 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         @InjectView(R.id.score)
         TextView score;
 
-        Target picture;
+        @InjectView(R.id.picture)
+        CircleImageView picture;
 
         @InjectView(R.id.apps_count)
         TextView appsCount;
@@ -84,7 +88,6 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            picture = (Target) itemView.findViewById(R.id.picture);
         }
     }
 }
