@@ -178,7 +178,11 @@ public class LoginFragment extends BaseFragment {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
         BusProvider.getInstance().register(this);
-        ActionBarUtils.getInstance().setTitle(R.string.title_login);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_login;
     }
 
     @Override
@@ -186,13 +190,6 @@ public class LoginFragment extends BaseFragment {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
         BusProvider.getInstance().unregister(this);
-        ActionBarUtils.getInstance().setPreviousTitle();
-
-
-        if (!ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_app_details)) &&
-                !ActionBarUtils.getInstance().getPreviousTitle().equals(getString(R.string.title_save_app))) {
-            ActionBarUtils.getInstance().showActionBarShadow();
-        }
     }
 
     @Override

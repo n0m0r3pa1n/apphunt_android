@@ -24,6 +24,7 @@ import android.view.View;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
+import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
@@ -91,7 +92,27 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                ActionBarUtils.getInstance().configActionBar(MainActivity.this);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
+                    getSupportActionBar().collapseActionView();
+                    BusProvider.getInstance().post(new DrawerStatusEvent(true));
+                } else if (fragmentManager.getBackStackEntryCount() == 0) {
+                    NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
+                    BusProvider.getInstance().post(new DrawerStatusEvent(false));
+                }
+
+                BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
+                if(fragment.getTitle() == 0) {
+                    getSupportActionBar().setTitle(fragment.getStringTitle());
+                } else {
+                    getSupportActionBar().setTitle(fragment.getTitle());
+                }
+
+                supportInvalidateOptionsMenu();
             }
         });
 
@@ -323,8 +344,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
         previousPosition = position;
 
+
         try {
             if (!addToBackStack) {
+                getSupportActionBar().setTitle(fragment.getTitle());
                 navigationDrawerFragment.markSelectedPosition(position);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
             } else {

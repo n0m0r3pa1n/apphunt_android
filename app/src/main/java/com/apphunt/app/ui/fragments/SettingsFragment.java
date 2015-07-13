@@ -125,14 +125,17 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
-        ActionBarUtils.getInstance().setTitle(R.string.title_settings);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_settings;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Override

@@ -258,14 +258,17 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         super.onAttach(activity);
         this.activity = activity;
 
-        ActionBarUtils.getInstance().setTitle(R.string.title_app_details);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_app_details;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
         ActionBarUtils.getInstance().invalidateOptionsMenu();
 
     }

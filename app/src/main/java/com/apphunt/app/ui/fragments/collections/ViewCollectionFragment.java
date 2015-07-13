@@ -118,9 +118,12 @@ public class ViewCollectionFragment extends BaseFragment {
             emptyView.setVisibility(View.VISIBLE);
         }
 
-        ActionBarUtils.getInstance().setTitle("Collection");
-
         return view;
+    }
+
+    @Override
+    public String getStringTitle() {
+        return appsCollection.getName();
     }
 
     @Override
@@ -199,8 +202,6 @@ public class ViewCollectionFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
-
         hideSoftKeyboard();
     }
 }

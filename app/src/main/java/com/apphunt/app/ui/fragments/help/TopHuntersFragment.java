@@ -23,12 +23,6 @@ public class TopHuntersFragment extends BaseFragment {
         setTitle(R.string.top_hunters_points);
         FlurryAgent.logEvent(TrackingEvents.UserViewedHelpTopHuntersPoints);
     }
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ActionBarUtils.getInstance().setTitle(R.string.top_hunters_points);
-    }
 
     @Nullable
     @Override
@@ -40,8 +34,7 @@ public class TopHuntersFragment extends BaseFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
+    public int getTitle() {
+        return R.string.top_hunters_points;
     }
 }

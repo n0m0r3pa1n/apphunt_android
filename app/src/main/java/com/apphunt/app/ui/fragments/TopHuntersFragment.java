@@ -35,6 +35,7 @@ public class TopHuntersFragment extends BaseFragment {
 
     private static final String TAG = TopHuntersFragment.class.getSimpleName();
     private Activity activity;
+    private String title;
 
     @InjectView(R.id.collection_hunters_list)
     RecyclerView collectionHuntersList;
@@ -63,14 +64,11 @@ public class TopHuntersFragment extends BaseFragment {
         super.onAttach(activity);
         BusProvider.getInstance().register(this);
         this.activity = activity;
-
-        ActionBarUtils.getInstance().setTitle(R.string.title_top_hunters);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
         BusProvider.getInstance().unregister(this);
     }
 
@@ -81,6 +79,12 @@ public class TopHuntersFragment extends BaseFragment {
         collectionHuntersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         collectionHuntersList.setHasFixedSize(true);
         collectionHuntersList.setAdapter(new TopHuntersAdapter(activity, event.getHuntersCollections().getCollections().get(0)));
-        ActionBarUtils.getInstance().setTitle(event.getHuntersCollections().getCollections().get(0).getName());
+        title = event.getHuntersCollections().getCollections().get(0).getName();
+        ActionBarUtils.getInstance().setTitle(title);
+    }
+
+    @Override
+    public String getStringTitle() {
+        return title;
     }
 }

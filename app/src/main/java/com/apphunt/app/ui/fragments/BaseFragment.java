@@ -9,6 +9,9 @@ public class BaseFragment extends Fragment {
     private int title;
     private String previousTitle;
     private String fragmentTag;
+    public String getStringTitle() {
+        return "";
+    };
 
     public int getTitle() {
         return title;

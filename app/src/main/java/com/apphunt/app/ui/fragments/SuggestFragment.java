@@ -121,16 +121,13 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ActionBarUtils.getInstance().setTitle(R.string.suggest_title);
+    public int getTitle() {
+        return R.string.suggest_title;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 }

@@ -62,9 +62,11 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     private void initUI() {
         ButterKnife.inject(this, view);
         ActionBarUtils.getInstance().setTitle(R.string.title_choose_collection_banner);
+    }
 
-        // TODO: Test until server logic is created
-
+    @Override
+    public int getTitle() {
+        return R.string.title_choose_collection_banner;
     }
 
     @Override
@@ -103,6 +105,5 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
         super.onDetach();
 
         BusProvider.getInstance().unregister(this);
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 }

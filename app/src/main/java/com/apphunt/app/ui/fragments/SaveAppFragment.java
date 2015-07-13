@@ -192,7 +192,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         this.activity = (ActionBarActivity) activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        ActionBarUtils.getInstance().setTitle(R.string.title_save_app);
         ActionBarUtils.getInstance().hideActionBarShadow();
     }
 
@@ -202,8 +201,12 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         closeKeyboard(desc);
 
-        ActionBarUtils.getInstance().setTitle(R.string.title_select_app);
         ActionBarUtils.getInstance().hideActionBarShadow();
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_save_app;
     }
 
     @Subscribe

@@ -24,11 +24,10 @@ public class AppsRequirementsFragment extends BaseFragment {
         setTitle(R.string.apps_requirements);
         FlurryAgent.logEvent(TrackingEvents.UserViewedHelpAppsRequirements);
     }
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
 
-        ActionBarUtils.getInstance().setTitle(R.string.apps_requirements);
+    @Override
+    public int getTitle() {
+        return R.string.apps_requirements;
     }
 
     @Nullable
@@ -38,11 +37,5 @@ public class AppsRequirementsFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         return view;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 }

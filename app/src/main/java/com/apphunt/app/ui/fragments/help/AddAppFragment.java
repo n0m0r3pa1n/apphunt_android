@@ -31,7 +31,11 @@ public class AddAppFragment extends BaseFragment {
         super.onAttach(activity);
 
         this.activity = activity;
-        ActionBarUtils.getInstance().setTitle(R.string.how_to_add_new_app);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.how_to_add_new_app;
     }
 
     @Nullable
@@ -41,11 +45,5 @@ public class AddAppFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         return view;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 }

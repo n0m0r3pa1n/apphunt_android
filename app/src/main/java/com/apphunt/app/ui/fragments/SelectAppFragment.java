@@ -96,15 +96,17 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
-        ActionBarUtils.getInstance().setTitle(R.string.title_select_app);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
-//        LoadersUtils.hideCenterLoader(activity);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_select_app;
     }
 
     @Override

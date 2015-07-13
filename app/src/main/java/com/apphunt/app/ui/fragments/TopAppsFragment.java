@@ -39,6 +39,7 @@ public class TopAppsFragment extends BaseFragment {
     private Activity activity;
     private View view;
     private StaggeredGridLayoutManager layoutManager;
+    private String title;
 
     @InjectView(R.id.collection_apps_list)
     RecyclerView collectionAppsList;
@@ -75,7 +76,8 @@ public class TopAppsFragment extends BaseFragment {
     public void onCollectionReceived(GetTopAppsCollectionEvent event) {
         TopAppsAdapter adapter = new TopAppsAdapter(getActivity(), event.getAppsCollection().getCollections().get(0).getApps());
         collectionAppsList.setAdapter(adapter);
-        ((ActionBarActivity) activity).getSupportActionBar().setTitle(event.getAppsCollection().getCollections().get(0).getName());
+        title = event.getAppsCollection().getCollections().get(0).getName();
+        ActionBarUtils.getInstance().setTitle(title);
     }
 
     @Override
@@ -83,15 +85,16 @@ public class TopAppsFragment extends BaseFragment {
         super.onAttach(activity);
         this.activity = activity;
         BusProvider.getInstance().register(this);
-
-        ActionBarUtils.getInstance().setTitle(R.string.title_top_apps);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        ActionBarUtils.getInstance().setPreviousTitle();
-
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public String getStringTitle() {
+        return title;
     }
 }

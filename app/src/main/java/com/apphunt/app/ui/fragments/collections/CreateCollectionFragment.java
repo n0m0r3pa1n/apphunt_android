@@ -81,6 +81,11 @@ public class CreateCollectionFragment extends BaseFragment {
         collectionDescLayout.setErrorEnabled(true);
     }
 
+    @Override
+    public int getTitle() {
+        return R.string.title_create_collection;
+    }
+
     @OnClick(R.id.choose_banner)
     public void onChooseBannerClick() {
         ChooseCollectionBannerFragment fragment = new ChooseCollectionBannerFragment();
@@ -135,7 +140,6 @@ public class CreateCollectionFragment extends BaseFragment {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ActionBarUtils.getInstance().hideActionBarShadow();
-        ActionBarUtils.getInstance().setPreviousTitle();
 
         BusProvider.getInstance().unregister(this);
     }

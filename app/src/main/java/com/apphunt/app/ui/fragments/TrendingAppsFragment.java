@@ -113,7 +113,6 @@ public class TrendingAppsFragment extends BaseFragment {
 
     public void initUi() {
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
         rvTrendingApps.setItemAnimator(new DefaultItemAnimator());
         mLayoutManager = new LinearLayoutManager(getActivity());
         rvTrendingApps.setLayoutManager(mLayoutManager);
@@ -133,6 +132,11 @@ public class TrendingAppsFragment extends BaseFragment {
             }
         });
 
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_home;
     }
 
     @OnClick(R.id.reload)
@@ -164,15 +168,11 @@ public class TrendingAppsFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         this.activity = (MainActivity) activity;
         super.onAttach(activity);
-
-        ActionBarUtils.getInstance().setTitle(R.string.title_home);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
-        ActionBarUtils.getInstance().setPreviousTitle();
     }
 
     @Override

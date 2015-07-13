@@ -20,7 +20,6 @@ public class ActionBarUtils {
 
     private static ActionBarUtils instance;
     private Activity activity;
-    private CharSequence previousTitle;
 
     public static ActionBarUtils getInstance() {
         if (instance == null) {
@@ -63,7 +62,6 @@ public class ActionBarUtils {
     }
 
     public void setTitle(String title) {
-        this.previousTitle = ((ActionBarActivity) activity).getSupportActionBar().getTitle();
         ((ActionBarActivity) activity).getSupportActionBar().setTitle(title);
     }
 
@@ -73,14 +71,6 @@ public class ActionBarUtils {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-    }
-
-    public void setPreviousTitle() {
-        ((ActionBarActivity) activity).getSupportActionBar().setTitle(previousTitle);
-    }
-
-    public CharSequence getPreviousTitle() {
-        return previousTitle;
     }
 
     public void showActionBar(ActionBarActivity activity) {

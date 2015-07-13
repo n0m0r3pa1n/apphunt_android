@@ -46,7 +46,7 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBarUtils.getInstance().hideActionBarShadow();
-        setTitle(R.string.title_notification);
+
         notification = getArguments().getString(Constants.KEY_NOTIFICATION);
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
         showRating = getArguments().getBoolean(Constants.KEY_SHOW_RATING);
@@ -60,6 +60,11 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         initUI();
 
         return view;
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_notification;
     }
 
     private void initUI() {

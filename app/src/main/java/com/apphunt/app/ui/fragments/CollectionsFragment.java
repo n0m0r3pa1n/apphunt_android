@@ -33,6 +33,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     private TabLayout.Tab previousSelectedTab;
 
     private CollectionsPagerAdapter pagerAdapter;
+    private int title;
 
     @Nullable
     @Override
@@ -76,7 +77,6 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-
     }
 
     private void initTabs() {
@@ -145,6 +145,12 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     }
 
     private void updateActionBarTitle(int position) {
-        ActionBarUtils.getInstance().setTitle(((BaseFragment)pagerAdapter.getItem(position)).getTitle());
+        title = ((BaseFragment)pagerAdapter.getItem(position)).getTitle();
+        ActionBarUtils.getInstance().setTitle(title);
+    }
+
+    @Override
+    public int getTitle() {
+        return title;
     }
 }
