@@ -24,10 +24,11 @@ import com.apphunt.app.ui.models.DrawerMenu;
 import com.apphunt.app.utils.LoginUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -180,68 +181,78 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return prevSelectedPosition;
     }
 
-    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+    static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView cover;
-        private Target profileImage;
-        private TextView username;
-        private TextView email;
-        private ImageButton logoutButton;
+        @InjectView(R.id.cover_picture)
+        ImageView cover;
+
+        @InjectView(R.id.profile_image)
+        CircleImageView profileImage;
+
+        @InjectView(R.id.username)
+        TextView username;
+
+        @InjectView(R.id.email)
+        TextView email;
+
+        @InjectView(R.id.logout_button)
+        ImageButton logoutButton;
 
         public HeaderViewHolder(View rootView) {
             super(rootView);
-
-            cover = (ImageView) rootView.findViewById(R.id.cover_picture);
-            profileImage = (Target) rootView.findViewById(R.id.profile_image);
-            username = (TextView) rootView.findViewById(R.id.username);
-            email = (TextView) rootView.findViewById(R.id.email);
-            logoutButton = (ImageButton) rootView.findViewById(R.id.logout_button);
+            ButterKnife.inject(this, rootView);
         }
     }
 
-    private static class HeaderLoggedOutViewHolder extends RecyclerView.ViewHolder {
+    static class HeaderLoggedOutViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView profileImage;
-        private Button loginButton;
+        @InjectView(R.id.profile_image)
+        CircleImageView profileImage;
+
+        @InjectView(R.id.login_button)
+        Button loginButton;
 
         public HeaderLoggedOutViewHolder(View rootView) {
             super(rootView);
-
-            profileImage = (CircleImageView) rootView.findViewById(R.id.profile_image);
-            loginButton = (Button) rootView.findViewById(R.id.login_button);
+            ButterKnife.inject(this, rootView);
         }
     }
 
-    private static class DividerViewHolder extends RecyclerView.ViewHolder {
+    static class DividerViewHolder extends RecyclerView.ViewHolder {
 
         public DividerViewHolder(View rootView) {
             super(rootView);
         }
     }
 
-    private static class MenuViewHolder extends RecyclerView.ViewHolder {
+    static class MenuViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView itemTextView;
-        private ImageView itemImageView;
+        @InjectView(R.id.item)
+        TextView itemTextView;
+
+        @InjectView(R.id.iv_icon)
+        ImageView itemImageView;
 
         public MenuViewHolder(View rootView) {
             super(rootView);
-            itemTextView = (TextView) rootView.findViewById(R.id.item);
-            itemImageView = (ImageView) rootView.findViewById(R.id.iv_icon);
+            ButterKnife.inject(this, rootView);
         }
     }
 
-    private static class SubMenuViewHolder extends MenuViewHolder {
+    static class SubMenuViewHolder extends MenuViewHolder {
         public SubMenuViewHolder(View rootView) {
             super(rootView);
         }
     }
 
-    private static class LabelViewHolder extends RecyclerView.ViewHolder {
-        private TextView label;
+    static class LabelViewHolder extends RecyclerView.ViewHolder {
+
+        @InjectView(R.id.label)
+        TextView label;
+
         public LabelViewHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.label);
+            ButterKnife.inject(this, itemView);
         }
     }
 
