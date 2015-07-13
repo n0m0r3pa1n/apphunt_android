@@ -9,22 +9,18 @@ import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
-import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
-import com.apphunt.app.ui.views.ScrollListView;
+import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.apphunt.app.constants.Constants;
-import com.google.android.gms.common.api.Api;
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,7 +46,7 @@ public class AllCollectionsFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
-        allCollections.setOnEndReachedListener(new EndlessScrollListener.OnEndReachedListener() {
+        allCollections.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
                 loadMoreCollections();

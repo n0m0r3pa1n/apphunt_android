@@ -6,15 +6,10 @@
     android:background="@color/bg_secondary"
     android:clickable="true">
 
-    <android.support.v7.widget.RecyclerView
+    <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/collections_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_divider_height"
-        android:elevation="@dimen/listview_elevation"
-        android:layoutAnimation="@anim/list_view_entry"
-        android:padding="8dp"/>
+        android:layout_height="match_parent" />
 
     <ViewStub
         android:id="@+id/vs_no_collection"

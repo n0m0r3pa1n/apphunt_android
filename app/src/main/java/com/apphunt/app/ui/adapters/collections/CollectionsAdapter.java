@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.ui.views.FavouriteCollectionButton;
+import com.apphunt.app.ui.views.collection.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;

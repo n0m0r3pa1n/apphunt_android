@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.apphunt.app.ui.views.ScrollListView
+    <com.apphunt.app.ui.views.containers.ScrollListView
         android:id="@+id/all_collections"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

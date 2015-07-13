@@ -2,6 +2,8 @@ package com.apphunt.app.ui.listeners;
 
 import android.widget.AbsListView;
 
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+
 /**
  * Created by nmp on 15-6-30.
  */
@@ -34,7 +36,5 @@ public class EndlessScrollListener implements AbsListView.OnScrollListener {
         this.listener = listener;
     }
 
-    public interface OnEndReachedListener {
-        void onEndReached();
-    }
+
 }

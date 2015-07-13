@@ -22,8 +22,9 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
-import com.apphunt.app.ui.views.ScrollListView;
+import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -63,7 +64,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
         getFavouriteCollections();
 
-        allCollections.setOnEndReachedListener(new EndlessScrollListener.OnEndReachedListener() {
+        allCollections.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
                 getFavouriteCollections();

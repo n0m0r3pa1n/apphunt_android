@@ -80,7 +80,7 @@
         </RelativeLayout>
 
     </LinearLayout>
-    <com.apphunt.app.ui.views.FavouriteCollectionButton
+    <com.apphunt.app.ui.views.collection.FavouriteCollectionButton
         android:id="@+id/favourite_collection"
         android:layout_gravity="top|right"
         android:layout_marginTop="8dp"

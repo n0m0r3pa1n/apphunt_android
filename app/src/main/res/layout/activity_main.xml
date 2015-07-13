@@ -36,7 +36,8 @@
     </LinearLayout>
 
 
-    <com.apphunt.app.ui.views.ScrimInsetsFrameLayout android:id="@+id/scrimInsetsFrameLayout"
+    <com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout
+        android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="wrap_content"
         android:fitsSystemWindows="true" android:layout_gravity="start" app:insetForeground="#4000"
         android:elevation="1dp">
@@ -45,7 +46,7 @@
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent" android:fitsSystemWindows="true"
             app:layout="@layout/fragment_navigation_drawer" />
-    </com.apphunt.app.ui.views.ScrimInsetsFrameLayout>
+    </com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/loader"

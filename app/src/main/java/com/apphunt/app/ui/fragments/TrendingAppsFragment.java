@@ -62,7 +62,7 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @InjectView(R.id.reload)
     Button btnReload;
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager layoutManager;
 
     private OnScrollListener onScrollListener = new OnScrollListener() {
         @Override
@@ -83,9 +83,9 @@ public class TrendingAppsFragment extends BaseFragment {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            visibleItemCount = mLayoutManager.getChildCount();
-            totalItemCount = mLayoutManager.getItemCount();
-            pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+            visibleItemCount = layoutManager.getChildCount();
+            totalItemCount = layoutManager.getItemCount();
+            pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
             isEndOfList = (pastVisiblesItems + visibleItemCount) == totalItemCount;
         }
@@ -114,8 +114,8 @@ public class TrendingAppsFragment extends BaseFragment {
     public void initUi() {
         ActionBarUtils.getInstance().showActionBarShadow();
         rvTrendingApps.setItemAnimator(new DefaultItemAnimator());
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        rvTrendingApps.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(getActivity());
+        rvTrendingApps.setLayoutManager(layoutManager);
         rvTrendingApps.setHasFixedSize(true);
 
         trendingAppsAdapter = new TrendingAppsAdapter(activity, rvTrendingApps);

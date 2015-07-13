@@ -47,14 +47,24 @@ public class SelectCollectionAdapter extends RecyclerView.Adapter<SelectCollecti
     }
 
     public void removeCollection(String id) {
+        AppsCollection removedCollection = null;
         for(int i=0; i < collections.size(); i++) {
             AppsCollection collection = collections.get(i);
             if(collection.getId().equals(id)) {
-                collections.remove(i);
-                notifyDataSetChanged();
+                removedCollection = collection;
                 break;
             }
         }
+
+        if(removedCollection != null) {
+            collections.remove(removedCollection);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addAllCollections(List<AppsCollection> collections) {
+        this.collections.addAll(collections);
+        notifyDataSetChanged();
     }
 
     @Override

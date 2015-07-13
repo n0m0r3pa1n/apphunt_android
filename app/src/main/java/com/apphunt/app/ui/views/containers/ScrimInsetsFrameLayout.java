@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.views;
+package com.apphunt.app.ui.views.containers;
 
 
 import android.content.Context;
