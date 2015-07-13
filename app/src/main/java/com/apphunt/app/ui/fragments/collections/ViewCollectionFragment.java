@@ -103,7 +103,8 @@ public class ViewCollectionFragment extends BaseFragment {
         collectionApps.setHasFixedSize(true);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
-        collectionAppsAdapter = new CollectionAppsAdapter(activity, appsCollection.getApps());
+        List<BaseApp> apps = new ArrayList<>(appsCollection.getApps());
+        collectionAppsAdapter = new CollectionAppsAdapter(activity, apps);
         collectionApps.setAdapter(collectionAppsAdapter);
         collectionView.setCollection(appsCollection, true);
 
