@@ -38,7 +38,10 @@ public class AllCollectionsFragment extends BaseFragment {
     private int currentPage = 0;
     private String userId = null;
     private CollectionsAdapter adapter;
-    private List<AppsCollection> appCollections;
+
+    public static AllCollectionsFragment newInstance() {
+        return new AllCollectionsFragment();
+    }
 
     @Nullable
     @Override
@@ -68,7 +71,6 @@ public class AllCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionsReceived(GetAllCollectionsEvent event) {
-        appCollections = event.getAppsCollection().getCollections();
         allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
@@ -88,6 +90,10 @@ public class AllCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionEdit(UpdateCollectionEvent event) {
+        if(!event.isSuccess()) {
+            return;
+        }
+
         currentPage = 0;
         adapter = null;
         allCollections.resetListView();

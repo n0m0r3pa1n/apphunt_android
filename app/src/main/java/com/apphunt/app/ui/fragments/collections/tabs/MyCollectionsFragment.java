@@ -15,6 +15,7 @@ import android.view.ViewStub;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
@@ -31,6 +32,8 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -46,13 +49,18 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     private View view;
 
     private String appId;
+    private List<AppsCollection> collections;
+
     private SelectCollectionAdapter selectCollectionAdapter;
 
     @InjectView(R.id.collections_list)
     RecyclerView collectionsList;
-
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
+
+    public static MyCollectionsFragment newInstance() {
+        return new MyCollectionsFragment();
+    }
 
     @Nullable
     @Override
@@ -84,18 +92,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
         }
     }
 
-    @Subscribe
-    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
-        selectCollectionAdapter = new SelectCollectionAdapter(activity, event.getAppsCollection().getCollections());
-        if (event.getAppsCollection().getTotalCount() > 0) {
-            vsNoCollection.setVisibility(View.GONE);
-            selectCollectionAdapter.setOnItemClickListener(this);
-            collectionsList.setAdapter(selectCollectionAdapter);
-        } else {
-            vsNoCollection.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -117,22 +113,37 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Override
     public void onClick(View view, int position) {
-        AppsCollection collection = selectCollectionAdapter.getCollection(position);
-        NavUtils.getInstance(activity).presentViewCollectionFragment(collection);
+        NavUtils.getInstance(activity).presentViewCollectionFragment(collections.get(position));
+    }
+
+    @Subscribe
+    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+        collections = event.getAppsCollection().getCollections();
+        selectCollectionAdapter = new SelectCollectionAdapter(activity, collections);
+        if (event.getAppsCollection().getTotalCount() > 0) {
+            vsNoCollection.setVisibility(View.GONE);
+            selectCollectionAdapter.setOnItemClickListener(this);
+            collectionsList.setAdapter(selectCollectionAdapter);
+        } else {
+            vsNoCollection.setVisibility(View.VISIBLE);
+        }
     }
 
     @Subscribe
     public void onUpdateCollection(UpdateCollectionEvent event) {
-        if (event.getAppsCollection() != null) {
-            selectCollectionAdapter.removeCollection(event.getAppsCollection().getId());
-            selectCollectionAdapter.addCollection(event.getAppsCollection());
-//            getCollections();
+        if (event.getAppsCollection() != null && event.isSuccess()) {
+            selectCollectionAdapter = null;
+            getCollections();
         }
     }
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
         selectCollectionAdapter.addCollection(event.getAppsCollection());
+        if(collectionsList.getAdapter() == null) {
+            collectionsList.setAdapter(selectCollectionAdapter);
+            selectCollectionAdapter.setOnItemClickListener(this);
+        }
         vsNoCollection.setVisibility(View.GONE);
     }
 

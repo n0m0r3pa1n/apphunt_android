@@ -50,6 +50,10 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         return R.string.title_favourite_collection;
     }
 
+    public static FavouriteCollectionsFragment newInstance() {
+        return new FavouriteCollectionsFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         vsNoCollection.setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.text)).setText(getResources().getString(R.string.no_favourite_collections));
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {

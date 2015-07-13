@@ -22,9 +22,11 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -32,6 +34,10 @@ import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -203,5 +209,8 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         hideSoftKeyboard();
+        if(isSave) {
+            BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
+        }
     }
 }

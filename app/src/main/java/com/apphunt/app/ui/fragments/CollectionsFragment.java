@@ -40,7 +40,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.inject(this, view);
-        pagerAdapter = new CollectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
         initTabs();
 
         pager.setOffscreenPageLimit(1);

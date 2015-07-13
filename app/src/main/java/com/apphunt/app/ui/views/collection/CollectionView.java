@@ -137,18 +137,7 @@ public class CollectionView extends RelativeLayout {
         editName.setVisibility(View.VISIBLE);
         editName.setText(appsCollection.getName());
     }
-//    @Subscribe
-//    public void onSaveCollection(SaveCollectionEvent event) {
-//        if(!appsCollection.getId().equals(event.getCollectionId())) {
-//            return;
-//        }
-//
-//        appsCollection.setName(editName.getText().toString());
-//        name.setText(appsCollection.getName());
-//        name.setVisibility(View.VISIBLE);
-//        editBanner.setVisibility(View.GONE);
-//        editName.setVisibility(View.GONE);
-//    }
+
     @Subscribe
     public void onCollectionUpdate(UpdateCollectionEvent event) {
         AppsCollection newCollection = event.getAppsCollection();
