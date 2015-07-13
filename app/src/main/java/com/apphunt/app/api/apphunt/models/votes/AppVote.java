@@ -3,7 +3,9 @@ package com.apphunt.app.api.apphunt.models.votes;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.google.gson.annotations.SerializedName;
 
-public class AppVote {
+import java.io.Serializable;
+
+public class AppVote implements Serializable {
     private String userId;
     private String appId;
     @SerializedName("votesCount")

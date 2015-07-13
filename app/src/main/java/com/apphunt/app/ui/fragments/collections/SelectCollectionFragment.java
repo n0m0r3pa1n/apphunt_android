@@ -59,6 +59,11 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         return fragment;
     }
 
+    @Override
+    public int getTitle() {
+        return R.string.title_select_collection;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

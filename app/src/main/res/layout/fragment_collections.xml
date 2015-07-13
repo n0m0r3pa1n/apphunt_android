@@ -27,7 +27,7 @@
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
         android:layout_marginTop="@dimen/add_btn_margin_top"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/ic_ab_add_to_collection"
         app:backgroundTint="@color/bg_fab"/>
 
     <android.support.v4.view.ViewPager

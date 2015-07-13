@@ -34,7 +34,7 @@
         app:elevation="4dp"
         app:borderWidth="0dp"
         app:pressedTranslationZ="12dp"
-        android:src="@drawable/ic_add_white"
+        android:src="@drawable/btn_add_app"
         app:backgroundTint="@color/bg_fab"/>
 
     <RelativeLayout
