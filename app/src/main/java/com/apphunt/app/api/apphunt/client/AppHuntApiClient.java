@@ -25,6 +25,7 @@ import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionReque
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetCollectionBannersRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetFavouriteCollectionsRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetMyAvailableCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetMyCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopAppsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetTopHuntersRequest;
@@ -209,6 +210,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getMyCollections(String userId, int page, int pageSize) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetMyCollectionsRequest(userId, page, pageSize, listener));
+    }
+
+    @Override
+    public void getMyAvailableCollections(String userId, String appId, int page, int pageSize) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetMyAvailableCollectionsRequest(userId, appId, page, pageSize, listener));
     }
 
     @Override

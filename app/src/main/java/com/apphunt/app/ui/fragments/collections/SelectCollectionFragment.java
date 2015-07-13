@@ -21,6 +21,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
@@ -69,10 +70,10 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
         ButterKnife.inject(this, view);
-        ApiClient.getClient(getActivity())
-                .getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
 
         app = (BaseApp) getArguments().getSerializable(APP_KEY);
+        ApiClient.getClient(getActivity())
+                .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(),1, 5);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -83,7 +84,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     }
 
     @Subscribe
-    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+    public void onMyCollectionsReceive(GetMyAvailableCollectionsEvent event) {
         if(event.getAppsCollection().getTotalCount() == 0) {
             vsNoCollection.setVisibility(View.VISIBLE);
         } else {
@@ -132,6 +133,6 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Subscribe
     public void onCollectionCreated(CreateCollectionEvent event) {
         ApiClient.getClient(getActivity())
-                .getMyCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), 1, 5);
+                .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(), 1, 5);
     }
 }

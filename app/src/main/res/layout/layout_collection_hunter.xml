@@ -110,7 +110,7 @@
                     android:id="@+id/ic_comments_count"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:background="@drawable/ic_comment"
+                    android:background="@drawable/ic_message"
                     android:layout_toRightOf="@+id/comments_count"
                     android:layout_marginLeft="3dp"
                     />

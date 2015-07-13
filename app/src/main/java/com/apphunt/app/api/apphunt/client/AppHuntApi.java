@@ -54,6 +54,8 @@ public interface AppHuntApi {
 
     void getMyCollections(String userId, int page, int pageSize);
 
+    void getMyAvailableCollections(String userId, String appId, int page, int pageSize);
+
     void favouriteCollection(AppsCollection collection, String userId);
 
     void unfavouriteCollection(String collectionId, String userId);
