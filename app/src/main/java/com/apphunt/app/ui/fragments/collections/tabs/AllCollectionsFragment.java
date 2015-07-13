@@ -106,8 +106,8 @@ public class AllCollectionsFragment extends BaseFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         BusProvider.getInstance().unregister(this);
     }
 }
