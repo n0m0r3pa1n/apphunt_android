@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_secondary">
 
     <android.support.design.widget.FloatingActionButton
@@ -19,14 +20,11 @@
         app:backgroundTint="@color/bg_fab"
         app:borderWidth="0dp"/>
 
-    <android.support.v7.widget.RecyclerView
+    <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/my_collections_container"
-        android:layout_width="match_parent"
         android:elevation="1dp"
-        android:clickable="true"
-        android:scrollbars="vertical"
-        android:fitsSystemWindows="true"
-        android:layout_height="match_parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <ViewStub
         android:id="@+id/vs_no_collection"

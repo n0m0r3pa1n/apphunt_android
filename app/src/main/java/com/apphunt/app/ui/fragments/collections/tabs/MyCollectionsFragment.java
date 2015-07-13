@@ -84,7 +84,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
             @Override
             public void onEndReached() {
                 getCollections();
-                Log.d(TAG, "onEndReached " + currentPage);
             }
         });
     }

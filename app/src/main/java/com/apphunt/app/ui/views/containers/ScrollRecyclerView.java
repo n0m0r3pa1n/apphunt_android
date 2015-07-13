@@ -128,6 +128,7 @@ public class ScrollRecyclerView extends LinearLayout {
 
     public void resetAdapter() {
         adapter = null;
+        recyclerView.removeAllViews();
         recyclerView.setAdapter(null);
     }
 

@@ -18,6 +18,7 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
@@ -26,7 +27,9 @@ import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
@@ -41,9 +44,10 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     public static final String TAG = SelectCollectionFragment.class.getSimpleName();
 
     private static final String APP_KEY = "App";
+    private int currentPage = 0;
 
     @InjectView(R.id.my_collections_container)
-    RecyclerView myCollections;
+    ScrollRecyclerView myCollections;
 
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
@@ -72,26 +76,40 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         ButterKnife.inject(this, view);
 
         app = (BaseApp) getArguments().getSerializable(APP_KEY);
-        ApiClient.getClient(getActivity())
-                .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(),1, 5);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        myCollections.setLayoutManager(layoutManager);
-        myCollections.setHasFixedSize(true);
+        getMyAvailableCollections();
+        myCollections.setOnEndReachedListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                getMyAvailableCollections();
+            }
+        });
 
         return view;
     }
 
+    private void getMyAvailableCollections() {
+        currentPage++;
+        ApiClient.getClient(getActivity())
+                .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(), currentPage,
+                        Constants.PAGE_SIZE);
+    }
+
     @Subscribe
     public void onMyCollectionsReceive(GetMyAvailableCollectionsEvent event) {
+        myCollections.hideBottomLoader();
+
+        if(selectCollectionAdapter == null) {
+            selectCollectionAdapter = new SelectCollectionAdapter(getActivity(), event.getAppsCollection().getCollections());
+            selectCollectionAdapter.setOnItemClickListener(this);
+            myCollections.setAdapter(selectCollectionAdapter, event.getAppsCollection().getTotalCount());
+        } else {
+            selectCollectionAdapter.addAllCollections(event.getAppsCollection().getCollections());
+        }
+
         if(event.getAppsCollection().getTotalCount() == 0) {
             vsNoCollection.setVisibility(View.VISIBLE);
         } else {
             vsNoCollection.setVisibility(View.GONE);
-            selectCollectionAdapter = new SelectCollectionAdapter(getActivity(), event.getAppsCollection().getCollections());
-            selectCollectionAdapter.setOnItemClickListener(this);
-            myCollections.setAdapter(selectCollectionAdapter);
         }
     }
 
@@ -119,7 +137,8 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         if(app != null) {
             AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
             appsCollection.getApps().add(app);
-            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(), appsCollection);
+            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(),
+                    appsCollection);
         }
     }
 
@@ -132,7 +151,9 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Subscribe
     public void onCollectionCreated(CreateCollectionEvent event) {
-        ApiClient.getClient(getActivity())
-                .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(), 1, 5);
+        currentPage = 0;
+        selectCollectionAdapter = null;
+        myCollections.resetAdapter();
+        getMyAvailableCollections();
     }
 }
