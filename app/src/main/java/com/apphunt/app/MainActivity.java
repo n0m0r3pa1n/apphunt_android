@@ -70,6 +70,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private boolean consumedBack;
     private Boolean hasInternet = null;
     boolean isNetworkChanged = false;
+    private int previousPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,6 +274,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        if(previousPosition == position) {
+            return;
+        }
+
         BaseFragment fragment = null;
         boolean addToBackStack = false;
         switch (position) {
@@ -282,7 +287,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.TOP_APPS:
                 fragment = new TopAppsFragment();
                 break;
-
             case Constants.TOP_HUNTERS:
                 fragment = new TopHuntersFragment();
                 break;
@@ -295,7 +299,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
-
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
@@ -318,6 +321,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         } else {
             consumedBack = true;
         }
+        previousPosition = position;
 
         try {
             if (!addToBackStack) {

@@ -132,5 +132,6 @@
     <string name="delete_collection_menu_title">Delete</string>
     <string name="no_apps_in_collection">Go to Trending apps list and choose your apps</string>
     <string name="action_add_to_collection">Add to collection</string>
+    <string name="no_favourite_collections">Favourite a collection to appear here</string>
 
 </resources>

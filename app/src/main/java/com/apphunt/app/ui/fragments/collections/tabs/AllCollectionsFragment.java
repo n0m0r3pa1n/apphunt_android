@@ -29,9 +29,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by nmp on 15-6-26.
- */
 public class AllCollectionsFragment extends BaseFragment {
     public static final String TAG = AllCollectionsFragment.class.getSimpleName();
 

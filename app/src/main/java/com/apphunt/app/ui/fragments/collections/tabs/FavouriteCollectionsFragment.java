@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -42,6 +43,8 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
 
+    View view;
+
     @Override
     public int getTitle() {
         return R.string.title_favourite_collection;
@@ -51,7 +54,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
+        view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 
         getFavouriteCollections();
@@ -70,10 +73,19 @@ public class FavouriteCollectionsFragment extends BaseFragment {
             currentPage++;
             ApiClient.getClient(getActivity()).getFavouriteCollections(
                     LoginProviderFactory.get(getActivity()).getUser().getId(), currentPage, Constants.PAGE_SIZE);
-            vsNoCollection.setVisibility(View.GONE);
+            hideEmptyView();
         } else {
-            vsNoCollection.setVisibility(View.VISIBLE);
+            showEmptyView();
         }
+    }
+
+    private void hideEmptyView() {
+        vsNoCollection.setVisibility(View.GONE);
+    }
+
+    private void showEmptyView() {
+        vsNoCollection.setVisibility(View.VISIBLE);
+        ((TextView) view.findViewById(R.id.text)).setText(getResources().getString(R.string.no_favourite_collections));
     }
 
     @Override
@@ -83,8 +95,8 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         BusProvider.getInstance().unregister(this);
     }
 
@@ -93,7 +105,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         if (adapter != null) {
             adapter.addCollection(event.getCollection());
             if(adapter.getCount() > 0) {
-                vsNoCollection.setVisibility(View.GONE);
+                hideEmptyView();
             }
         }
     }
@@ -103,7 +115,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         if (adapter != null) {
             adapter.removeCollection(event.getCollectionId());
             if(adapter.getCount() == 0) {
-                vsNoCollection.setVisibility(View.VISIBLE);
+                showEmptyView();
             }
         }
     }
@@ -122,9 +134,9 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         }
 
         if (event.getAppsCollection().getCollections().size() == 0) {
-            vsNoCollection.setVisibility(View.VISIBLE);
+            showEmptyView();
         } else {
-            vsNoCollection.setVisibility(View.GONE);
+            hideEmptyView();
         }
     }
 
@@ -146,6 +158,6 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         allCollections.removeAllViews();
         currentPage = 0;
         adapter = null;
-        vsNoCollection.setVisibility(View.VISIBLE);
+        showEmptyView();
     }
 }

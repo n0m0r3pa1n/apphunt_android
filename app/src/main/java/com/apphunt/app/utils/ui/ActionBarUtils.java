@@ -35,11 +35,11 @@ public class ActionBarUtils {
 
     public void init(ActionBarActivity activity) {
         this.activity = activity;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
-        } else {
-            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+//        } else {
+//            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+//        }
 
         configActionBar(activity);
     }
@@ -92,19 +92,19 @@ public class ActionBarUtils {
     }
 
     public void hideActionBarShadow() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
-        } else {
-            activity.findViewById(R.id.toolbar).setElevation(R.dimen.zero_elevation);
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            activity.findViewById(R.id.shadow).setVisibility(View.GONE);
+//        } else {
+//            activity.findViewById(R.id.toolbar).setElevation(R.dimen.zero_elevation);
+//        }
     }
 
     public void showActionBarShadow() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
-        } else {
-            activity.findViewById(R.id.toolbar).setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            activity.findViewById(R.id.shadow).setVisibility(View.VISIBLE);
+//        } else {
+//            activity.findViewById(R.id.toolbar).setElevation(activity.getResources().getDimension(R.dimen.one_elevation));
+//        }
     }
 
     public void invalidateOptionsMenu() {

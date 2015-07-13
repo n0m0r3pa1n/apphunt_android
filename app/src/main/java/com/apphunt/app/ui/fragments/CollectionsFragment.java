@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,9 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by nmp on 15-6-25.
- */
 public class CollectionsFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
     public static final String TAG = CollectionsFragment.class.getSimpleName();
 
@@ -34,7 +32,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     private TabLayout.Tab previousSelectedTab;
 
-    CollectionsPagerAdapter pagerAdapter;
+    private CollectionsPagerAdapter pagerAdapter;
 
     @Nullable
     @Override
@@ -44,7 +42,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
         pagerAdapter = new CollectionsPagerAdapter(getActivity().getSupportFragmentManager());
         initTabs();
 
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(1);
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         pager.setAdapter(pagerAdapter);
         pager.addOnPageChangeListener(this);
@@ -52,7 +50,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tag = (Integer)tab.getTag();
+                int tag = (Integer) tab.getTag();
                 setTabSelectedIcon(tab);
                 pager.setCurrentItem((Integer) tag);
                 resetTabIcon(previousSelectedTab);

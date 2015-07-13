@@ -108,7 +108,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
-        ActionBarUtils.getInstance().showActionBarShadow();
     }
 
     @Override
