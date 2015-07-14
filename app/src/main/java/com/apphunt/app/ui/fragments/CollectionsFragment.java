@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -7,15 +8,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.apphunt.app.R;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsPagerAdapter;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,10 +82,32 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
         return view;
     }
 
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        BusProvider.getInstance().register(this);
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
+        BusProvider.getInstance().unregister(this);
         ActionBarUtils.getInstance().showActionBarShadow();
+    }
+
+    @Subscribe
+    public void onUserLogin(LoginEvent event) {
+        pagerAdapter = null;
+        pager.setAdapter(null);
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pager.setAdapter(pagerAdapter);
+    }
+
+    @Subscribe
+    public void onUserLogout(LogoutEvent event) {
+        pagerAdapter = null;
+        pager.setAdapter(null);
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pager.setAdapter(pagerAdapter);
     }
 
     private void initTabs() {
