@@ -5,8 +5,8 @@
 
     <ImageButton
         android:id="@+id/more_apps"
-        android:layout_width="@dimen/list_more_apps_button_width"
-        android:layout_height="@dimen/list_more_apps_button_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/btn_more_apps"
         android:layout_centerInParent="true"/>
 </RelativeLayout>
