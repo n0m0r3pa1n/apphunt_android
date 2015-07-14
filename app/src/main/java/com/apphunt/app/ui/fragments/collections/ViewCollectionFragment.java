@@ -38,6 +38,7 @@ import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.squareup.otto.Subscribe;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -171,6 +172,8 @@ public class ViewCollectionFragment extends BaseFragment {
     @OnClick(R.id.edit_collection)
     public void editCollection() {
         if(isSave) {
+
+
             String desc = editDescription.getText().toString();
             if(TextUtils.isEmpty(collectionView.editName.getText().toString())) {
                 collectionView.editName.setError("Name can not be empty!");
@@ -200,11 +203,9 @@ public class ViewCollectionFragment extends BaseFragment {
             appsCollection.setName(collectionView.editName.getText().toString());
             appsCollection.setApps(collectionAppsAdapter.getItems());
 
-            ApiClient.getClient(activity).updateCollection(LoginProviderFactory.get(activity).getUser().getId(), appsCollection);
+            hideSoftKeyboard();
 
-            if (appsCollection.getApps().size() == 0) {
-                emptyView.setVisibility(View.VISIBLE);
-            }
+            ApiClient.getClient(activity).updateCollection(LoginProviderFactory.get(activity).getUser().getId(), appsCollection);
         } else {
             if (emptyView.getVisibility() == View.VISIBLE) {
                 emptyView.setVisibility(View.GONE);
@@ -223,15 +224,25 @@ public class ViewCollectionFragment extends BaseFragment {
         isSave = !isSave;
     }
 
+    @Subscribe
+    public void onUpdateCollection(UpdateCollectionEvent event) {
+        if (appsCollection.getApps().size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        BusProvider.getInstance().unregister(this);
+
         hideSoftKeyboard();
         if(isSave) {
             BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
