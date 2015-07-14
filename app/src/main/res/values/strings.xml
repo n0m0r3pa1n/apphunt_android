@@ -136,5 +136,16 @@
     <string name="action_add_to_collection">Add to collection</string>
     <string name="no_favourite_collections">Favourite a collection to appear here</string>
     <string name="title_select_collection">Select Collection</string>
+    <string name="sort_by">Sort by:</string>
+
+    <string-array name="order">
+        <item>Date Created</item>
+        <item>Votes Count</item>
+    </string-array>
+
+    <string-array name="order_values">
+        <item>all</item>
+        <item>vote</item>
+    </string-array>
 
 </resources>

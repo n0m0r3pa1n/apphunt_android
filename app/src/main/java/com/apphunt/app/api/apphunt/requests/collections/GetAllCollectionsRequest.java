@@ -10,12 +10,14 @@ import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
  * Created by nmp on 15-6-26.
  */
 public class GetAllCollectionsRequest extends BaseGetRequest<AppsCollections> {
-    public GetAllCollectionsRequest(int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&status=public", listener);
+    public GetAllCollectionsRequest(String sortBy, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize +
+                "&status=public&sortBy=" + sortBy, listener);
     }
 
-    public GetAllCollectionsRequest(String userId, int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&userId=" + userId + "&status=public", listener);
+    public GetAllCollectionsRequest(String userId, String sortBy, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/app-collections?page=" + page +"&pageSize=" + pageSize + "&userId=" +
+                userId + "&status=public&sortBy=" + sortBy, listener);
     }
 
     @Override
