@@ -138,6 +138,11 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
+        MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        if(sortItem != null) {
+            sortItem.setVisible(false);
+        }
+
         if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }

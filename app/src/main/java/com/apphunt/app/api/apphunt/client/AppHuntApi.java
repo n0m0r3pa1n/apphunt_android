@@ -46,7 +46,7 @@ public interface AppHuntApi {
 
     void getFavouriteCollections(String userId, int page, int pageSize);
 
-    void getAllCollections(String userId, int page, int pageSize);
+    void getAllCollections(String userId, String sortBy, int page, int pageSize);
 
     void voteCollection(String userId, String collectionId);
 

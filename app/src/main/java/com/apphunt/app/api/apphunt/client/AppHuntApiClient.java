@@ -3,6 +3,7 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -55,6 +56,8 @@ import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsReq
 
 
 public class AppHuntApiClient implements AppHuntApi {
+    public static final String TAG = AppHuntApiClient.class.getSimpleName();
+
     private Context context;
     public AppHuntApiClient(Context context) {
         this.context = context;
@@ -189,11 +192,11 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getAllCollections(String userId, int page, int pageSize) {
+    public void getAllCollections(String userId, String sortBy, int page, int pageSize) {
         if(TextUtils.isEmpty(userId)) {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(page, pageSize, listener));
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(sortBy, page, pageSize, listener));
         } else {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(userId, page, pageSize, listener));
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAllCollectionsRequest(userId, sortBy, page, pageSize, listener));
         }
     }
 
