@@ -35,12 +35,10 @@ import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
-import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.squareup.otto.Subscribe;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,11 +140,6 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
-        MenuItem sortItem = menu.findItem(R.id.menu_sort);
-        if(sortItem != null) {
-            sortItem.setVisible(false);
-        }
-
         if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }

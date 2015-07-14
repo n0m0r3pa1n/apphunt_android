@@ -9,9 +9,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -70,7 +67,6 @@ public class CreateCollectionFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         view = inflater.inflate(R.layout.fragment_create_collection, container, false);
 
         initUI();
@@ -148,20 +144,6 @@ public class CreateCollectionFragment extends BaseFragment {
         BusProvider.getInstance().register(this);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem sortItem = menu.findItem(R.id.menu_sort);
-        if(sortItem != null) {
-            sortItem.setVisible(false);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
 
     @Override
     public void onDetach() {
