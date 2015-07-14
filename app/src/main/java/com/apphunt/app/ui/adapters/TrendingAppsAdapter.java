@@ -21,6 +21,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
+import com.apphunt.app.auth.LoginProvider;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.listview_items.AppItem;
@@ -28,6 +30,7 @@ import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -222,7 +225,11 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                    } else {
+                        LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
+                    }
                 }
             });
 

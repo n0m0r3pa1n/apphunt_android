@@ -86,6 +86,7 @@
     <!-- Login -->
     <string name="login_canceled_text">Your email is required to continue</string>
     <string name="login_info_text">Let your friends see what you do</string>
+    <string name="login_info_add_to_collection">You need to be authorized in order to add this application to a collection</string>
     <string name="login_info_vote">You need to be authorized in order to vote for this application</string>
     <string name="login_info_save">You need to be authorized in order to save your favorite application in AppHunt</string>
     <string name="login_info_comment">You need to be authorized in order to post a comment for your favorite application</string>
