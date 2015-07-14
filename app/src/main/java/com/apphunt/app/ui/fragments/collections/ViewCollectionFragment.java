@@ -170,8 +170,6 @@ public class ViewCollectionFragment extends BaseFragment {
     @OnClick(R.id.edit_collection)
     public void editCollection() {
         if(isSave) {
-
-
             String desc = editDescription.getText().toString();
             if(TextUtils.isEmpty(collectionView.editName.getText().toString())) {
                 collectionView.editName.setError("Name can not be empty!");

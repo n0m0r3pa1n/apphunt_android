@@ -44,6 +44,7 @@ public class AllCollectionsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
+        loadMoreCollections(previousSelectedSortItem);
         allCollections.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {

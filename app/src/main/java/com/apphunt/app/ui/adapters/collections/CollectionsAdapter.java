@@ -85,7 +85,6 @@ public class CollectionsAdapter extends BaseAdapter {
             public void onClick(View v) {
                 NavUtils.getInstance((AppCompatActivity) parent.getContext())
                         .presentViewCollectionFragment(appsCollection);
-                ((Activity)parent.getContext()).invalidateOptionsMenu();
             }
         });
         viewHolder.name.setText(appsCollection.getName());
