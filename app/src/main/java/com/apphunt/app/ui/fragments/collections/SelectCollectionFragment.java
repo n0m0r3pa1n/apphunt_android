@@ -89,6 +89,13 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     private void getMyAvailableCollections() {
         currentPage++;
+        if(app == null || !LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            vsNoCollection.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            vsNoCollection.setVisibility(View.GONE);
+        }
+
         ApiClient.getClient(getActivity())
                 .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(), currentPage,
                         Constants.PAGE_SIZE);
