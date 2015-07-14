@@ -35,7 +35,7 @@
     <dimen name="list_item_add_to_collection_size">20dp</dimen>
     <dimen name="list_item_add_to_collection_margin_left">8dp</dimen>
 
-    <dimen name="list_more_apps_item_height">48dp</dimen>
+    <dimen name="list_more_apps_item_height">60dp</dimen>
     <dimen name="list_more_apps_button_width">60dp</dimen>
     <dimen name="list_more_apps_button_height">16dp</dimen>
 

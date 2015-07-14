@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_more_apps_item_height">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/more_apps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_more_apps"
+        android:layout_width="match_parent"
+        android:scaleType="centerInside"
+        android:layout_height="match_parent"
+        android:src="@drawable/btn_more_apps"
         android:layout_centerInParent="true"/>
 </RelativeLayout>
