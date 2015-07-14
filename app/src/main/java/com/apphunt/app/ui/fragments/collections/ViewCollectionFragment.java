@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,6 +172,20 @@ public class ViewCollectionFragment extends BaseFragment {
     public void editCollection() {
         if(isSave) {
             String desc = editDescription.getText().toString();
+            if(TextUtils.isEmpty(collectionView.editName.getText().toString())) {
+                collectionView.editName.setError("Name can not be empty!");
+                return;
+            } else {
+                collectionView.editName.setError(null);
+            }
+
+            if(TextUtils.isEmpty(desc)) {
+                editDescription.setError("Description can not be empty!");
+                return;
+            } else {
+                editDescription.setError(null);
+            }
+
             editDescription.setVisibility(View.GONE);
             editBanner.setVisibility(View.GONE);
             description.setVisibility(View.VISIBLE);

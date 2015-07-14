@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,20 @@ public class CreateCollectionFragment extends BaseFragment {
 
     @OnClick(R.id.collection_save)
     public void onSaveCollectionClick() {
+        if(TextUtils.isEmpty(collectionName.getText().toString())) {
+            collectionNameLayout.setError("Name can not be empty!");
+            return;
+        } else {
+            collectionNameLayout.setError(null);
+        }
+
+        if(TextUtils.isEmpty(collectionDesc.getText().toString())) {
+            collectionDescLayout.setError("Description can not be empty!");
+            return;
+        } else {
+            collectionDescLayout.setError(null);
+        }
+
         NewCollection collection = new NewCollection();
         collection.setName(collectionName.getText().toString());
         collection.setDescription(collectionDesc.getText().toString());

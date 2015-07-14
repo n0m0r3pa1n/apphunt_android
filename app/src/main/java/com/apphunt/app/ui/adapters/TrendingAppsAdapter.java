@@ -184,13 +184,13 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         RecyclerView.ViewHolder viewHolderItem = null;
-        if (getItemViewType(viewType) == Constants.ItemType.ITEM.getValue()) {
+        if (viewType == Constants.ItemType.ITEM.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_item, parent, false);
             viewHolderItem = new ViewHolderItem(view);
-        } else if (getItemViewType(viewType) == Constants.ItemType.SEPARATOR.getValue()) {
+        } else if (viewType == Constants.ItemType.SEPARATOR.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_list_header, parent, false);
             viewHolderItem = new ViewHolderSeparator(view);
-        } else if (getItemViewType(viewType) == Constants.ItemType.MORE_APPS.getValue()) {
+        } else if (viewType == Constants.ItemType.MORE_APPS.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_more_apps, parent, false);
             viewHolderItem = new ViewHolderMoreApps(view);
         }
