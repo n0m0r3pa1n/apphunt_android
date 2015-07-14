@@ -125,7 +125,7 @@ public class CreateCollectionFragment extends BaseFragment {
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionEvent event) {
         ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
-        NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, "You collection was successfully created!", false, false, false);
+        NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.notification_delete_confirmation), false, false);
     }
 
     @Subscribe

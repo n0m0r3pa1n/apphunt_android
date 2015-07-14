@@ -74,14 +74,14 @@ public class NavUtils {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, fragment, Constants.TAG_SELECT_COLLECTION_FRAGMENT)
                 .addToBackStack(Constants.TAG_SELECT_COLLECTION_FRAGMENT)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public void presentCreateCollectionFragment() {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new CreateCollectionFragment(), Constants.TAG_CREATE_COLLECTION_FRAGMENT)
                 .addToBackStack(Constants.TAG_CREATE_COLLECTION_FRAGMENT)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public void setOnBackBlocked(boolean isBlocked) {
