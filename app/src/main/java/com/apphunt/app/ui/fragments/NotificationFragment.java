@@ -21,26 +21,45 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 
-public class NotificationFragment extends BaseFragment implements OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+public class NotificationFragment extends BaseFragment {
 
     private static final String TAG = NotificationFragment.class.getName();
+
+    private View view;
+
+    @InjectView(R.id.notification)
+    RelativeLayout notificationLayout;
+
+    @InjectView(R.id.notification_text)
+    TextView notificationText;
+
+    @InjectView(R.id.dismiss)
+    Button dismissBtn;
+
+    @InjectView(R.id.open_settings)
+    Button settingsBtn;
+
+    @InjectView(R.id.show_continue)
+    Button continueBtn;
 
     private String notification;
     private boolean showSettingsBtn = false;
 
-    private View view;
-    private RelativeLayout notificationLayout;
-    private TextView notificationText;
-    private Button dismissBtn;
-    private Button settingsBtn;
-
     private ActionBarActivity activity;
     private boolean showRating;
     private boolean showShadow;
+    private boolean showContinue;
+
+    private OnActionNeeded actionListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +70,13 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         showSettingsBtn = getArguments().getBoolean(Constants.KEY_SHOW_SETTINGS);
         showRating = getArguments().getBoolean(Constants.KEY_SHOW_RATING);
         showShadow = getArguments().getBoolean(Constants.KEY_SHOW_SHADOW);
+        showContinue = getArguments().getBoolean(Constants.KEY_SHOW_CONTINUE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
+        ButterKnife.inject(this, view);
 
         initUI();
 
@@ -68,19 +89,19 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
     }
 
     private void initUI() {
-        notificationLayout = (RelativeLayout) view.findViewById(R.id.notification);
-
-        notificationText = (TextView) view.findViewById(R.id.notification_text);
         notificationText.setText(notification);
 
-        dismissBtn = (Button) view.findViewById(R.id.dismiss);
-        dismissBtn.setOnClickListener(this);
-
         if (showSettingsBtn) {
-            settingsBtn = (Button) view.findViewById(R.id.open_settings);
             settingsBtn.setVisibility(View.VISIBLE);
-            settingsBtn.setOnClickListener(this);
         }
+
+        if (showContinue) {
+            continueBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setActionListener(OnActionNeeded actionListener) {
+        this.actionListener = actionListener;
     }
 
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
@@ -117,23 +138,26 @@ public class NotificationFragment extends BaseFragment implements OnClickListene
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.dismiss:
-                if (showRating) {
-                    activity.getSupportFragmentManager().popBackStack();
-                    SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
-                }
-
-                activity.getSupportFragmentManager().popBackStack();
-                LoadersUtils.hideCenterLoader(activity);
-                break;
-
-            case R.id.open_settings:
-                startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), Constants.REQUEST_NETWORK_SETTINGS);
-                break;
+    @OnClick(R.id.dismiss)
+    public void onDismissClick() {
+        if (showRating) {
+            activity.getSupportFragmentManager().popBackStack();
+            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
         }
+
+        activity.getSupportFragmentManager().popBackStack();
+        LoadersUtils.hideCenterLoader(activity);
+    }
+
+    @OnClick(R.id.open_settings)
+    public void onSettingsClick() {
+        startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), Constants.REQUEST_NETWORK_SETTINGS);
+    }
+
+    @OnClick(R.id.show_continue)
+    public void onContinueClick() {
+        actionListener.onContinueAction();
+        activity.getSupportFragmentManager().popBackStack();
     }
 
     @Override

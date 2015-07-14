@@ -21,6 +21,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.NotificationFragment;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 
@@ -74,19 +75,26 @@ public class NotificationsUtils {
         SharedPreferencesHelper.setPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, false);
     }
 
-    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
-        showNotificationFragment(activity, message, showSettingsAction, showRating, true);
+    public static void showNotificationFragmentWithContinueAction(ActionBarActivity activity, String message, OnActionNeeded actionListener) {
+        showNotificationFragment(activity, message, false, true, false, true, actionListener);
     }
 
-    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating, boolean showShadow) {
+    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
+        showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, null);
+    }
+
+    private static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showContinueAction,
+                                                 boolean showRating, boolean showShadow, OnActionNeeded actionListener) {
         try {
             Bundle extras = new Bundle();
             extras.putString(Constants.KEY_NOTIFICATION, message);
             extras.putBoolean(Constants.KEY_SHOW_SETTINGS, showSettingsAction);
+            extras.putBoolean(Constants.KEY_SHOW_CONTINUE, showContinueAction);
             extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
             extras.putBoolean(Constants.KEY_SHOW_SHADOW, showShadow);
             NotificationFragment notificationFragment = new NotificationFragment();
             notificationFragment.setArguments(extras);
+            notificationFragment.setActionListener(actionListener);
 
             activity.getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.alpha_in, R.anim.slide_out_top)

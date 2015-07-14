@@ -58,6 +58,8 @@
     <string name="list_view_header_today">Today</string>
     <string name="dismiss">DISMISS</string>
     <string name="settings">SETTINGS</string>
+    <string name="show_continue">Continue</string>
+    <string name="notification_delete_confirmation">You collection was successfully created!</string>
 
     <!-- SmartRate -->
     <string name="smartrate_yes">YES</string>

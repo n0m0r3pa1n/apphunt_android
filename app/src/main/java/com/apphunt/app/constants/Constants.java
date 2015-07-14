@@ -35,7 +35,8 @@ public class Constants {
     public static final String KEY_SEARCH_QUERY = "search_query";
     public static final String KEY_TITLE = "fragment_title";
     public static final String KEY_COLLECTION = "collection";
-    public static final String KEY_SHOW_SHADOW = "show_shadow";;
+    public static final String KEY_SHOW_SHADOW = "show_shadow";
+    public static final String KEY_SHOW_CONTINUE = "show_continue";
 
     public static final String PLATFORM = "Android";
 

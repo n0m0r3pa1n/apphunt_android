@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +31,12 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -147,7 +150,12 @@ public class ViewCollectionFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
-                ApiClient.getClient(activity).deleteCollection(appsCollection.getId());
+                NotificationsUtils.showNotificationFragmentWithContinueAction((ActionBarActivity) activity, "Are you sure you want to delete this collection?", new OnActionNeeded() {
+                    @Override
+                    public void onContinueAction() {
+                        ApiClient.getClient(activity).deleteCollection(appsCollection.getId());
+                    }
+                });
                 return true;
 
         }
