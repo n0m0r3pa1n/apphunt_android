@@ -1,9 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/bg_primary</item>
         <item name="colorPrimaryDark">@color/bg_primary</item>
         <item name="elevation">@dimen/ab_elevation</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="">
+        <!--<item name="android:elevation">@dimen/toolbar_elevation</item>-->
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="HelpItem" >
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="HelpItemText">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="HelpItemSeparator">
+        <item name="android:background">@color/help_secondary_color</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="HelpText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+
+    <style name="HelpTopHuntersImage">
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+    <!--<style name="Widget.Button.Toggle" parent="android:Widget">-->
+        <!--<item name="android:textOn">Add</item>-->
+        <!--<item name="android:textOff">Del</item>-->
+        <!--<item name="android:disabledAlpha">?android:attr/disabledAlpha</item>-->
+    <!--</style>-->
+
+
+    <style name="FavouriteBtnStyle"  parent="ThemeOverlay.AppCompat.Dark">
+        <!--<item name="android:buttonStyleToggle">@style/Widget.Button.Toggle</item>-->
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
+        <item name="android:textColor">#FF00CC</item>
     </style>
 </resources>

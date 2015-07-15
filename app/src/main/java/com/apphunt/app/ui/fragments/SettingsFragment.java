@@ -15,10 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
 public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
@@ -35,9 +36,10 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setTitle(R.string.title_settings);
+        ActionBarUtils.getInstance().hideActionBarShadow();
         FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
+
+        setFragmentTag(Constants.TAG_SETTINGS_FRAGMENT);
     }
 
     @Override
@@ -56,11 +58,11 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
         notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
         notifications.setOnCheckedChangeListener(this);
-        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_DAILY_NOTIFICATION_ENABLED));
+        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED));
 
         sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
         sounds.setOnCheckedChangeListener(this);
-        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(activity, Constants.IS_SOUNDS_ENABLED));
+        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
 
         dismissBtn = (Button) view.findViewById(R.id.dismiss);
         dismissBtn.setOnClickListener(this);
@@ -113,7 +115,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                 if (!isChecked) {
                     FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
                 }
-                SharedPreferencesHelper.setPreference(activity, Constants.IS_SOUNDS_ENABLED, isChecked);
+                SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
                 break;
         }
     }
@@ -123,6 +125,17 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
         super.onAttach(activity);
 
         this.activity = (ActionBarActivity) activity;
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_settings;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 
     @Override

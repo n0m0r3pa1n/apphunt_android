@@ -1,79 +1,58 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/drawer"
+    android:layout_width="match_parent" android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:ctx=".MainActivity">
+    <LinearLayout
+        android:elevation="0dp"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <View
-        android:id="@+id/shadow"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ab_shadow_height"
-        android:background="@drawable/bottom_shadow" />
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/toolbar"
+            android:elevation="0dp"
+            style="@style/ToolBarStyle"
+            android:layout_width="match_parent"
+            app:layout_collapseMode="pin"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="@dimen/abc_action_bar_default_height_material" />
 
-    <com.quentindommerc.superlistview.SuperListview
-        android:id="@+id/trending_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_divider_height"
-        android:paddingTop="7dp"
-        android:layoutAnimation="@anim/list_view_entry"
-        android:elevation="@dimen/listview_elevation"
-        android:layout_above="@+id/more_loader_layout" />
+        <View
+            android:id="@+id/shadow"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ab_shadow_height"
+            android:background="@drawable/bottom_shadow" />
 
-    <com.shamanland.fab.FloatingActionButton
-        android:id="@+id/add_app"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/add_btn_margin_top"
-        android:layout_marginBottom="@dimen/add_btn_margin_bottom"
-        android:layout_marginRight="@dimen/add_btn_margin_right"
-        android:src="@drawable/ic_add_white"
-        app:floatingActionButtonColor="@color/bg_fab"
-        app:floatingActionButtonSize="normal"
-        android:elevation="@dimen/add_btn_elevation" />
+        <FrameLayout
+            android:id="@+id/container"
+            android:elevation="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
+    <com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout
+        android:id="@+id/scrimInsetsFrameLayout"
+        android:layout_width="@dimen/navigation_drawer_width" android:layout_height="wrap_content"
+        android:fitsSystemWindows="true" android:layout_gravity="start" app:insetForeground="#4000"
+        android:elevation="1dp">
+        <fragment android:id="@+id/fragment_drawer"
+            android:name="com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment"
+            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_height="match_parent" android:fitsSystemWindows="true"
+            app:layout="@layout/fragment_navigation_drawer" />
+    </com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout>
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/loader"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:background="@android:color/transparent" />
-
-    <RelativeLayout
-        android:id="@+id/more_loader_layout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bg_primary"
-        android:visibility="gone">
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/more_loader"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:background="@android:color/transparent" />
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/reload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/retry_text"
-        android:textSize="@dimen/click_to_reload_text"
-        android:textColor="@color/bg_primary"
         android:background="@android:color/transparent"
-        android:visibility="gone" />
-</RelativeLayout>
+        android:visibility="gone"/>
+</android.support.v4.widget.DrawerLayout>

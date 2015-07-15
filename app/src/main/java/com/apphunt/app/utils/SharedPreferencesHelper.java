@@ -4,80 +4,77 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.apphunt.app.constants.Constants;
+
 public class SharedPreferencesHelper {
 
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
 
+    public static void init(Context ctx) {
+        if(sharedPreferences == null) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        }
+    }
+
     /**
      * Saving a String value into the SharedPreferences Manager.
      *
-     * @param ctx   application's context.
      * @param key   preference's key.
      * @param value preference's value.
      */
-    public static void setPreference(Context ctx, String key, String value) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void setPreference(String key, String value) {
         editor = sharedPreferences.edit();
 
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
      * Saving an Int value into the SharedPreferences Manager.
      *
-     * @param ctx   application's context.
      * @param key   preference's key.
      * @param value preference's value.
      */
-    public static void setPreference(Context ctx, String key, int value) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void setPreference(String key, int value) {
         editor = sharedPreferences.edit();
 
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
      * Saving a Boolean value into the SharedPreferences Manager.
      *
-     * @param ctx   application's context.
      * @param key   preference's key.
      * @param value preference's value.
      */
-    public static void setPreference(Context ctx, String key, boolean value) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void setPreference(String key, boolean value) {
         editor = sharedPreferences.edit();
 
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
      * Saving a Long value into the SharedPreferences Manager.
      *
-     * @param ctx   application's context.
      * @param key   preference's key.
      * @param value preference's value.
      */
-    public static void setPreference(Context ctx, String key, long value) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void setPreference(String key, long value) {
         editor = sharedPreferences.edit();
 
         editor.putLong(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
      * Extracting a String value from the SharedPreferences Manager.
      *
-     * @param ctx application's context.
      * @param key preference's key.
      */
-    public static String getStringPreference(Context ctx, String key) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-
+    public static String getStringPreference(String key) {
         return sharedPreferences.getString(key, null);
     }
 
@@ -96,12 +93,10 @@ public class SharedPreferencesHelper {
     /**
      * Extracting an Int value from the SharedPreferences Manager.
      *
-     * @param ctx          application's context.
      * @param key          preference's key.
      * @param defaultValue default return value
      */
-    public static int getIntPreference(Context ctx, String key, int defaultValue) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static int getIntPreference(String key, int defaultValue) {
 
         return sharedPreferences.getInt(key, defaultValue);
     }
@@ -109,12 +104,10 @@ public class SharedPreferencesHelper {
     /**
      * Extracting a Boolean value from the SharedPreferences Manager.
      *
-     * @param ctx application's context.
      * @param key preference's key.
      */
-    public static Boolean getBooleanPreference(Context ctx, String key) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        if (key.equals(Constants.IS_DAILY_NOTIFICATION_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
+    public static Boolean getBooleanPreference(String key) {
+        if (key.equals(Constants.SETTING_NOTIFICATIONS_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
             return sharedPreferences.getBoolean(key, true);
         } else {
             return sharedPreferences.getBoolean(key, false);
@@ -124,11 +117,9 @@ public class SharedPreferencesHelper {
     /**
      * Extracting an Long value from the SharedPreferences Manager.
      *
-     * @param ctx application's context.
      * @param key preference's key.
      */
-    public static long getLongPreference(Context ctx, String key) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static long getLongPreference(String key) {
 
         return sharedPreferences.getLong(key, -1);
     }
@@ -136,14 +127,12 @@ public class SharedPreferencesHelper {
     /**
      * Removing a value from the SharedPreferences Manager.
      *
-     * @param ctx application's context.
      * @param key preference's key.
      */
-    public static void removePreference(Context ctx, String key) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static void removePreference(String key) {
         editor = sharedPreferences.edit();
 
         editor.remove(key);
-        editor.commit();
+        editor.apply();
     }
 }

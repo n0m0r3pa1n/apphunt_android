@@ -9,7 +9,7 @@
     android:paddingBottom="5dp"
     android:elevation="0dp">
 
-    <com.apphunt.app.ui.widgets.AvatarImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -60,16 +60,12 @@
         android:focusable="false"
         android:clickable="true">
 
-        <Button
-            android:id="@+id/vote"
+        <com.apphunt.app.ui.views.vote.CommentVoteButton
+            android:id="@+id/vote_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/list_item_vote_margin"
-            android:gravity="center"
-            android:textSize="@dimen/list_item_vote_text"
-            android:textColor="@android:color/white"
-            android:background="@drawable/btn_vote"
-            android:focusable="false"/>
+            android:focusable="false"
+            android:layout_marginLeft="@dimen/list_item_vote_margin" />
     </RelativeLayout>
 </RelativeLayout>

@@ -15,6 +15,9 @@ import com.apphunt.app.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class UserAppsAdapter extends BaseAdapter {
     private static final String TAG = UserAppsAdapter.class.getName();
@@ -40,11 +43,7 @@ public class UserAppsAdapter extends BaseAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) ctx
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.layout_user_app_item, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.icon = (ImageView) view.findViewById(R.id.app_icon);
-            viewHolder.name = (TextView) view.findViewById(R.id.app_name);
-
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -71,8 +70,15 @@ public class UserAppsAdapter extends BaseAdapter {
         return position;
     }
 
-    private class ViewHolder {
+    static class ViewHolder {
+        @InjectView(R.id.app_icon)
         ImageView icon;
+
+        @InjectView(R.id.app_name)
         TextView name;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }

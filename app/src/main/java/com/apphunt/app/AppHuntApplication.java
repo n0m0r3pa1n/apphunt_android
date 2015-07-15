@@ -2,9 +2,10 @@ package com.apphunt.app;
 
 import android.app.Application;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -23,20 +24,31 @@ public class AppHuntApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
+        SharedPreferencesHelper.init(this);
+        initNetworking();
+        initAnalytics();
+    }
+
+    private void initAnalytics() {
+        String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             FlurryAgent.setUserId(userId);
         }
 
-        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
-        if(!BuildConfig.DEBUG) {
-            FlurryAgent.setLogEvents(false);
-
-        }
-
         TwitterAuthConfig authConfig =
-                new TwitterAuthConfig("XCYebUTguuAJdTrF56zksVtmZ",
-                        "EmN3llE9vdhD3wRX1Z7E15rYVVqYbUYwx0uSDAd2yNPShLuM7x");
-        Fabric.with(this, new Crashlytics(), new Twitter(authConfig));
+                new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
+                        Constants.TWITTER_CONSUMER_SECRET);
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+
+        if (BuildConfig.DEBUG) {
+            FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
+        } else {
+            FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+        }
+    }
+
+    private void initNetworking() {
+        VolleyInstance.getInstance(this);
+        GsonInstance.init();
     }
 }

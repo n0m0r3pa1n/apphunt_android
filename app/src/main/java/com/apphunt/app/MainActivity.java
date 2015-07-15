@@ -4,93 +4,205 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.text.Html;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.HapticFeedbackConstants;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.Button;
 
-import com.apphunt.app.api.apphunt.AppHuntApiClient;
-import com.apphunt.app.api.apphunt.Callback;
-import com.apphunt.app.api.apphunt.models.AppsList;
-import com.apphunt.app.api.apphunt.models.User;
-import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
+import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
+import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
+import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
+import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.ui.fragments.SaveAppFragment;
-import com.apphunt.app.ui.fragments.SelectAppFragment;
+import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.SettingsFragment;
 import com.apphunt.app.ui.fragments.SuggestFragment;
-import com.apphunt.app.ui.interfaces.OnAppSelectedListener;
-import com.apphunt.app.ui.interfaces.OnAppVoteListener;
-import com.apphunt.app.ui.interfaces.OnNetworkStateChange;
-import com.apphunt.app.ui.interfaces.OnUserAuthListener;
-import com.apphunt.app.utils.ActionBarUtils;
+import com.apphunt.app.ui.fragments.TopAppsFragment;
+import com.apphunt.app.ui.fragments.TopHuntersFragment;
+import com.apphunt.app.ui.fragments.TrendingAppsFragment;
+import com.apphunt.app.ui.fragments.help.AddAppFragment;
+import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
-import com.apphunt.app.utils.LoadersUtils;
-import com.apphunt.app.utils.NotificationsUtils;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
-import com.facebook.widget.FacebookDialog;
+import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
-import com.quentindommerc.superlistview.SuperListview;
-import com.shamanland.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
-import kr.nectarine.android.fruitygcm.FruityGcmClient;
-import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
-import retrofit.client.Response;
 
-public class MainActivity extends ActionBarActivity implements AbsListView.OnScrollListener, OnClickListener,
-        OnAppSelectedListener, OnUserAuthListener, OnNetworkStateChange, OnAppVoteListener {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
 
-    private SuperListview trendingAppsList;
-    private FloatingActionButton addAppButton;
-    private Button reloadButton;
-    private TrendingAppsAdapter trendingAppsAdapter;
-    private boolean endOfList = false;
-    private boolean isBlocked = false;
+    public static final String TAG = MainActivity.class.getSimpleName();
+    private NavigationDrawerFragment navigationDrawerFragment;
+    private Toolbar toolbar;
+    private boolean consumedBack;
+    private Boolean hasInternet = null;
+    boolean isNetworkChanged = false;
+    private int previousPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
-
-        boolean isStartedFromNotification = getIntent().getBooleanExtra(Constants.KEY_DAILY_REMINDER_NOTIFICATION, false);
-        if (isStartedFromNotification) {
-            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromDailyTrendingAppsNotification);
-        }
-
-        updateNotificationIdIfNeeded();
-
         initUI();
+        initDeepLinking();
+        initNotifications();
 
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+    }
+
+    private void initUI() {
+        initToolbarAndNavigationDrawer();
+
+        ActionBarUtils.getInstance().init(this);
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
+                    getSupportActionBar().collapseActionView();
+                    BusProvider.getInstance().post(new DrawerStatusEvent(true));
+                } else if (fragmentManager.getBackStackEntryCount() == 0) {
+                    NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
+                    BusProvider.getInstance().post(new DrawerStatusEvent(false));
+                }
+
+                BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
+                if(fragment.getTitle() == 0) {
+                    getSupportActionBar().setTitle(fragment.getStringTitle());
+                } else {
+                    getSupportActionBar().setTitle(fragment.getTitle());
+                }
+
+                supportInvalidateOptionsMenu();
+            }
+        });
+
         showStartFragments(getIntent());
+    }
+
+    private void initToolbarAndNavigationDrawer() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        navigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    if (!navigationDrawerFragment.isDrawerOpen()) {
+                        navigationDrawerFragment.openDrawer();
+                    } else {
+                        navigationDrawerFragment.closeDrawer();
+                    }
+
+                    return;
+                }
+
+                onBackPressed();
+            }
+        });
+        navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
+        onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
+    }
+
+    private void initNotifications() {
+        String notificationType = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_TYPE);
+        if (!TextUtils.isEmpty(notificationType)) {
+            Map<String, String> params = new HashMap<>();
+            params.put("type", notificationType);
+            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
+        }
+
+        NotificationsUtils.updateNotificationIdIfNeeded(this);
+    }
+
+    private void initDeepLinking() {
+        if (isStartedFromDeepLink()) {
+            String action = getIntent().getAction();
+            Uri data = getIntent().getData();
+
+            Log.d("DeepLink Action", action);
+            Log.d("DeepLink Data", data.toString());
+        }
+    }
+
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
+            if (ConnectivityUtils.isNetworkAvailable(context)) {
+                setHasInternet(true);
+
+                if (fragment != null) {
+                    getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
+                if (isNetworkChanged) {
+                    BusProvider.getInstance().post(new NetworkStatusChangeEvent(true));
+                }
+            } else {
+                setHasInternet(false);
+                if (fragment == null) {
+                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
+                }
+            }
+        }
+    };
+
+    private void setHasInternet(boolean hasInternet) {
+        if (this.hasInternet == null || this.hasInternet == hasInternet) {
+            isNetworkChanged = false;
+        } else if (this.hasInternet != hasInternet) {
+            isNetworkChanged = true;
+        }
+        this.hasInternet = hasInternet;
+    }
+
+    private boolean isStartedFromDeepLink() {
+        Intent intent = getIntent();
+        return intent != null && Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null;
     }
 
     @Override
@@ -103,121 +215,35 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
         return Intent.ACTION_SEND.equals(intent.getAction());
     }
 
-    private void initUI() {
-        ActionBarUtils.getInstance().init(this);
-
-        addAppButton = (FloatingActionButton) findViewById(R.id.add_app);
-        addAppButton.setOnClickListener(this);
-
-        trendingAppsList = (SuperListview) findViewById(R.id.trending_list);
-
-        trendingAppsAdapter = new TrendingAppsAdapter(this, trendingAppsList);
-        trendingAppsList.setAdapter(trendingAppsAdapter);
-        trendingAppsList.setOnScrollListener(this);
-        trendingAppsList.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getSupportActionBar().collapseActionView();
-                trendingAppsAdapter.resetAdapter();
-            }
-        });
-
-        reloadButton = (Button) findViewById(R.id.reload);
-        reloadButton.setOnClickListener(this);
-
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                ActionBarUtils.getInstance().configActionBar(MainActivity.this);
-            }
-        });
-    }
-
-    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_NOTIFICATION_FRAGMENT);
-
-            if (!ConnectivityUtils.isNetworkAvailable(context)) {
-                if (fragment == null) {
-                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
-                }
-
-                addAppButton.setVisibility(View.INVISIBLE);
-                trendingAppsList.setVisibility(View.GONE);
-                trendingAppsAdapter.clearAdapter();
-                LoadersUtils.showCenterLoader(MainActivity.this);
-            } else {
-                if (fragment != null) {
-                    getSupportFragmentManager().popBackStack(Constants.TAG_NOTIFICATION_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
-                onNetworkAvailable();
-            }
-        }
-    };
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.add_app:
-                startSelectAppFragment();
-
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                break;
-
-            case R.id.reload:
-                v.setVisibility(View.GONE);
-                trendingAppsAdapter.resetAdapter();
-                addAppButton.setVisibility(View.VISIBLE);
-                trendingAppsList.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    private void startSelectAppFragment() {
-        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                    .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                    .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                    .commit();
-
-            getSupportFragmentManager().executePendingTransactions();
-        } else {
-            FacebookUtils.showLoginFragment(this);
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (LoginProviderFactory.get(this).isUserLoggedIn()) {
-            menu.findItem(R.id.action_login).setVisible(false);
-            menu.findItem(R.id.action_logout).setVisible(true);
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
+            menu.findItem(R.id.action_search).setVisible(true);
         } else {
-            menu.findItem(R.id.action_login).setVisible(true);
-            menu.findItem(R.id.action_logout).setVisible(false);
+            menu.findItem(R.id.action_search).setVisible(false);
         }
 
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            menu.findItem(R.id.action_search).setVisible(false);
+        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
+            menu.findItem(R.id.action_share).setVisible(true);
+            menu.findItem(R.id.action_add_to_collection).setVisible(true);
         } else {
-            menu.findItem(R.id.action_search).setVisible(true);
+            menu.findItem(R.id.action_share).setVisible(false);
+            menu.findItem(R.id.action_add_to_collection).setVisible(false);
         }
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                AppHuntApiClient.getClient().searchApps(s, SharedPreferencesHelper.getStringPreference(MainActivity.this, Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
-                        Constants.PLATFORM, new Callback<AppsList>() {
-                            @Override
-                            public void success(AppsList appsList, Response response) {
-                                trendingAppsAdapter.showSearchResult(appsList.getApps());
-                            }
-                        });
+                Map<String, String> params = new HashMap<>();
+                params.put("query", s);
+                FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
+                BusProvider.getInstance().post(new SearchStatusEvent(true));
+                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
+                        Constants.PLATFORM);
 
                 searchView.clearFocus();
                 return true;
@@ -225,6 +251,9 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (TextUtils.isEmpty(s)) {
+                    BusProvider.getInstance().post(new SearchStatusEvent(false));
+                }
                 return false;
             }
         });
@@ -238,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if (item.getItemId() == R.id.action_search) {
-                    trendingAppsAdapter.clearSearch();
+                    BusProvider.getInstance().post(new ClearSearchEvent());
                 }
                 return true;
             }
@@ -251,62 +280,7 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-            case R.id.action_login:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_LOGIN_FRAGMENT))
-                    break;
-
-                FacebookUtils.showLoginFragment(this);
-                break;
-
-            case R.id.action_logout:
-                LoginProviderFactory.get(this).logout();
-                FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
-                supportInvalidateOptionsMenu();
-                break;
-
-            case R.id.action_settings:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SETTINGS_FRAGMENT))
-                    break;
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, new SettingsFragment(), Constants.TAG_SETTINGS_FRAGMENT)
-                        .addToBackStack(Constants.TAG_SETTINGS_FRAGMENT)
-                        .commit();
-                break;
-
-            case R.id.action_share:
-                if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
-                        FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                    FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-                            .setName("AppHunt")
-                            .setPicture("https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4")
-                            .setLink(Constants.GOOGLE_PLAY_APP_URL).build();
-                    shareDialog.present();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithFacebook);
-                } else {
-                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                    sharingIntent.setType("text/html");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(getString(R.string.share_text)));
-                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
-                }
-                break;
-
-            case R.id.action_suggest:
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
-                        getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equals(Constants.TAG_SUGGEST_FRAGMENT))
-                    break;
-                getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
-                        .add(R.id.container, new SuggestFragment(), Constants.TAG_SUGGEST_FRAGMENT)
-                        .addToBackStack(Constants.TAG_SUGGEST_FRAGMENT)
-                        .commit();
-                break;
-
             case android.R.id.home:
                 AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
                 if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
@@ -316,8 +290,80 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
                 }
                 break;
         }
+        return false;
+    }
 
-        return true;
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        if(previousPosition == position) {
+            return;
+        }
+
+        BaseFragment fragment = null;
+        boolean addToBackStack = false;
+        switch (position) {
+            case Constants.TRENDING_APPS:
+                fragment = new TrendingAppsFragment();
+                break;
+            case Constants.TOP_APPS:
+                fragment = new TopAppsFragment();
+                break;
+            case Constants.TOP_HUNTERS:
+                fragment = new TopHuntersFragment();
+                break;
+            case Constants.COLLECTIONS:
+                fragment = new CollectionsFragment();
+                break;
+            case Constants.SUGGESTIONS:
+                fragment = new SuggestFragment();
+                fragment.setPreviousTitle(toolbar.getTitle().toString());
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
+                addToBackStack = true;
+                break;
+            case Constants.SETTINGS:
+                fragment = new SettingsFragment();
+                fragment.setPreviousTitle(toolbar.getTitle().toString());
+                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
+                addToBackStack = true;
+                break;
+            case Constants.HELP_ADD_APP:
+                fragment = new AddAppFragment();
+                break;
+            case Constants.HELP_TOP_HUNTERS_POINTS:
+                fragment = new com.apphunt.app.ui.fragments.help.TopHuntersFragment();
+                break;
+            case Constants.HELP_APPS_REQUIREMENTS:
+                fragment = new AppsRequirementsFragment();
+                break;
+        }
+
+        if (position != Constants.TRENDING_APPS) {
+            consumedBack = false;
+        } else {
+            consumedBack = true;
+        }
+        previousPosition = position;
+
+
+        try {
+            if (!addToBackStack) {
+                getSupportActionBar().setTitle(fragment.getTitle());
+                navigationDrawerFragment.markSelectedPosition(position);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
+            } else {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
+                        !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1)
+                                .getName().equals(fragment.getFragmentTag())) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.abc_fade_in, R.anim.alpha_out)
+                            .add(R.id.container, fragment, fragment.getFragmentTag())
+                            .addToBackStack(fragment.getFragmentTag())
+                            .commit();
+                }
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     @Override
@@ -332,127 +378,51 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     }
 
     @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        endOfList = (firstVisibleItem + visibleItemCount) == totalItemCount;
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (ConnectivityUtils.isNetworkAvailable(this)) {
-            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                Animation slideInBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
-
-                addAppButton.startAnimation(slideInBottom);
-                addAppButton.setVisibility(View.VISIBLE);
-
-                if (endOfList && trendingAppsAdapter.couldLoadMoreApps()) {
-                    FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
-                    trendingAppsAdapter.getAppsForNextDate();
-                }
-            } else {
-                Animation slideOutBottom = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
-                addAppButton.startAnimation(slideOutBottom);
-                addAppButton.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    @Override
-    public void onAppSelected(ApplicationInfo data) {
-        String curFragmentTag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
-
-        if (!curFragmentTag.equals(Constants.TAG_SAVE_APP_FRAGMENT)) {
-            Bundle extras = new Bundle();
-            extras.putParcelable(Constants.KEY_DATA, data);
-
-            SaveAppFragment saveAppFragment = new SaveAppFragment();
-            saveAppFragment.setArguments(extras);
-
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
-                    .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
-                    .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
-                    .commit();
-        }
-    }
-
-    public void setOnBackBlocked(boolean isBlocked) {
-        if (isBlocked) {
-            ActionBarUtils.getInstance().hideActionBar(this);
-        } else {
-            ActionBarUtils.getInstance().showActionBar(this);
-        }
-        this.isBlocked = isBlocked;
-    }
-
-    @Override
-    public void onUserLogin() {
-        setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(this);
-        trendingAppsAdapter.resetAdapter();
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
-    }
-
-    @Override
-    public void onUserLogout() {
-        setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(this);
-        trendingAppsAdapter.resetAdapter();
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
-    }
-
-    @Override
-    public void onNetworkAvailable() {
-        if (trendingAppsAdapter.getCount() == 0) {
-            LoadersUtils.hideCenterLoader(this);
-            reloadButton.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onAppVote(int position) {
-        trendingAppsAdapter.resetAdapter(position);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        AppSpice.onResume(this);
-
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        BusProvider.getInstance().register(this);
+        AppSpice.onResume(this);
     }
 
     private void showStartFragments(Intent intent) {
         if (isStartedFromShareIntent(intent)) {
-            startSelectAppFragment();
+            NavUtils.getInstance(this).startSelectAppFragment();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
-        unregisterReceiver(networkChangeReceiver);
+
     }
 
     @Override
     public void onBackPressed() {
-        if (!isBlocked) {
-            AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-            if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-                fragment.showDetails();
-            } else {
-                super.onBackPressed();
-            }
+        if (navigationDrawerFragment.isDrawerOpen()) {
+            navigationDrawerFragment.closeDrawer();
+            return;
         }
+
+        if (NavUtils.getInstance(this).isOnBackBlocked()) {
+            return;
+        }
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
+            fragment.showDetails();
+            return;
+        }
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && !consumedBack) {
+            onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
+            consumedBack = true;
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -464,35 +434,15 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(networkChangeReceiver);
         AppSpice.onStop(this);
     }
 
-    public void updateNotificationIdIfNeeded() {
-        final String userId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_USER_ID);
-        String notificationId = SharedPreferencesHelper.getStringPreference(this, Constants.KEY_NOTIFICATION_ID);
-        if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
-            FruityGcmClient.start(this, Constants.GCM_SENDER_ID, new FruityGcmListener() {
-
-                @Override
-                public void onPlayServiceNotAvailable(boolean b) {
-                }
-
-                @Override
-                public void onDeliverRegistrationId(final String regId, boolean b) {
-                    User user = new User();
-                    user.setNotificationId(regId);
-                    AppHuntApiClient.getClient().updateUser(userId, user, new Callback<User>() {
-                        @Override
-                        public void success(User user, Response response) {
-                            SharedPreferencesHelper.setPreference(MainActivity.this, Constants.KEY_NOTIFICATION_ID, regId);
-                        }
-                    });
-                }
-
-                @Override
-                public void onRegisterFailed() {
-                }
-            });
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void userVotedForAppEvent(AppVoteEvent event) {
+        if (event.isVote()) {
+            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
         }
     }
 
@@ -506,5 +456,32 @@ public class MainActivity extends ActionBarActivity implements AbsListView.OnScr
     @SuppressWarnings("unused")
     public void onAppSpiceError(AppSpiceError error) {
         SmartRate.onError();
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void onUserLogin(LoginEvent event) {
+        supportInvalidateOptionsMenu();
+        NotificationsUtils.updateNotificationIdIfNeeded(this);
+
+        NavUtils.getInstance(this).setOnBackBlocked(false);
+        LoadersUtils.hideBottomLoader(this);
+
+        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
+        if (fragment != null && fragment.isVisible()) {
+            fragment.loadData();
+        }
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void onHideFragmentEvent(HideFragmentEvent event) {
+        getSupportFragmentManager().popBackStack(event.getTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Subscribe
+    @SuppressWarnings("unused")
+    public void showNotificationFragment(ShowNotificationEvent event) {
+        NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
     }
 }

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import com.apphunt.app.constants.Constants;
+
 public class SoundsUtils {
     private static final String TAG = SoundsUtils.class.getName();
 
     public static void playSound(Context ctx, int resSound) {
-        if (SharedPreferencesHelper.getBooleanPreference(ctx, Constants.IS_SOUNDS_ENABLED)) {
+        if (SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED)) {
             try {
                 MediaPlayer mediaPlayer = MediaPlayer.create(ctx, resSound);
                 mediaPlayer.start();

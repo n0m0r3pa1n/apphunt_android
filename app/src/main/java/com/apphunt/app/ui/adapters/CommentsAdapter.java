@@ -2,42 +2,36 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.AppHuntApiClient;
-import com.apphunt.app.api.apphunt.Callback;
-import com.apphunt.app.api.apphunt.models.Comment;
-import com.apphunt.app.api.apphunt.models.CommentVote;
-import com.apphunt.app.api.apphunt.models.Comments;
+import com.apphunt.app.api.apphunt.client.ApiService;
+import com.apphunt.app.api.apphunt.models.comments.Comment;
+import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
-import com.apphunt.app.ui.widgets.AvatarImageView;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
+import com.apphunt.app.ui.views.vote.CommentVoteButton;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
-import retrofit.client.Response;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentsAdapter extends BaseAdapter {
+    public static final String TAG = CommentsAdapter.class.getSimpleName();
 
-    private static final String TAG = CommentsAdapter.class.getName();
     private ListView listView;
     private String userId;
 
@@ -56,7 +50,7 @@ public class CommentsAdapter extends BaseAdapter {
         addItems(comments);
         totalPages = comments.getTotalPages();
         page = comments.getPage();
-        userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
+        userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -67,26 +61,12 @@ public class CommentsAdapter extends BaseAdapter {
 
         if (view == null) {
             if (getItemViewType(position) == 0) {
-                commentViewHolder = new CommentViewHolder();
                 view = inflater.inflate(R.layout.layout_comment, parent, false);
-
-                commentViewHolder.layout = (RelativeLayout) view.findViewById(R.id.layout);
-                commentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
-                commentViewHolder.name = (TextView) view.findViewById(R.id.name);
-                commentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                commentViewHolder.vote = (Button) view.findViewById(R.id.vote);
-
+                commentViewHolder = new CommentViewHolder(view);
                 view.setTag(commentViewHolder);
             } else if (getItemViewType(position) == 1) {
                 view = inflater.inflate(R.layout.layout_subcomment, parent, false);
-                subCommentViewHolder = new SubCommentViewHolder();
-
-                subCommentViewHolder.layout = (RelativeLayout) view.findViewById(R.id.layout);
-                subCommentViewHolder.avatar = (AvatarImageView) view.findViewById(R.id.avatar);
-                subCommentViewHolder.name = (TextView) view.findViewById(R.id.name);
-                subCommentViewHolder.comment = (TextView) view.findViewById(R.id.text);
-                subCommentViewHolder.vote = (Button) view.findViewById(R.id.vote);
-
+                subCommentViewHolder = new SubCommentViewHolder(view);
                 view.setTag(subCommentViewHolder);
             }
         } else {
@@ -102,6 +82,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             Picasso.with(ctx)
                     .load(comment.getUser().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(commentViewHolder.avatar);
 
             commentViewHolder.name.setText(comment.getUser().getUsername());
@@ -113,61 +94,18 @@ public class CommentsAdapter extends BaseAdapter {
                 commentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
             }
 
-            commentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
-
-            commentViewHolder.vote.setOnClickListener(null);
-            commentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (userHasPermissions()) {
-                        if (comment.isHasVoted()) {
-                            FlurryAgent.logEvent(TrackingEvents.UserDownVotedComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(false);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            FlurryAgent.logEvent(TrackingEvents.UserVotedComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(true);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                }
-                            });
-                        }
-                    } else {
-                        FacebookUtils.showLoginFragment(ctx);
-                    }
-                }
-            });
-
-            if (comment.isHasVoted()) {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
-            } else {
-                commentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                commentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
-            }
+            commentViewHolder.vote.setComment(comment);
         } else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
             final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
             Picasso.with(ctx)
                     .load(comment.getUser().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
                     .into(subCommentViewHolder.avatar);
 
             subCommentViewHolder.name.setText(comment.getUser().getUsername());
             subCommentViewHolder.comment.setText(comment.getText());
-            subCommentViewHolder.vote.setText(String.valueOf(comment.getVotesCount()));
+
 
             if (comment.getUser().getId().equals(userId)) {
                 subCommentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
@@ -175,50 +113,7 @@ public class CommentsAdapter extends BaseAdapter {
                 subCommentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
             }
 
-            if (comment.isHasVoted()) {
-                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_voted);
-            } else {
-                subCommentViewHolder.vote.setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                subCommentViewHolder.vote.setBackgroundResource(R.drawable.btn_vote);
-            }
-
-            subCommentViewHolder.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (userHasPermissions()) {
-                        if (comment.isHasVoted()) {
-                            FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
-                            AppHuntApiClient.getClient().downVoteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(false);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_primary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
-                            AppHuntApiClient.getClient().voteComment(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), comment.getId(), new Callback<CommentVote>() {
-                                @Override
-                                public void success(CommentVote vote, Response response) {
-                                    comment.setHasVoted(true);
-                                    comment.setVotesCount(vote.getVotesCount());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.bg_secondary));
-                                    ((Button) v).setText(String.valueOf(vote.getVotesCount()));
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                }
-                            });
-                        }
-                    } else {
-                        FacebookUtils.showLoginFragment(ctx);
-                    }
-
-                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                }
-            });
+            subCommentViewHolder.vote.setComment(comment);
         }
 
         return view;
@@ -267,20 +162,14 @@ public class CommentsAdapter extends BaseAdapter {
 
         page = comments.getPage();
         notifyDataSetChanged();
+
+        listView.smoothScrollToPosition(items.size() - 2);
+        totalPages = comments.getTotalPages();
     }
 
-    public void loadMore(String appId, String userId, final TextView header) {
+    public void loadMore(String appId, String userId) {
         if (page < totalPages) {
-            AppHuntApiClient.getClient().getAppComments(appId, userId, page + 1, 3, new Callback<Comments>() {
-                @Override
-                public void success(Comments comments, Response response) {
-                    addItems(comments);
-                    listView.smoothScrollToPosition(items.size() - 3);
-                    page = comments.getPage();
-                    totalPages = comments.getTotalPages();
-                    header.setText(ctx.getResources().getQuantityString(R.plurals.header_comments, getCount(), getCount()));
-                }
-            });
+            ApiService.getInstance(ctx).loadAppComments(appId, userId, page + 1, 3);
         }
     }
 
@@ -294,18 +183,29 @@ public class CommentsAdapter extends BaseAdapter {
     }
 
     static class CommentViewHolder {
+        @InjectView(R.id.layout)
         RelativeLayout layout;
-        Target avatar;
+
+        @InjectView(R.id.avatar)
+        CircleImageView avatar;
+
+        @InjectView(R.id.name)
         TextView name;
+
+        @InjectView(R.id.text)
         TextView comment;
-        Button vote;
+
+        @InjectView(R.id.vote_btn)
+        CommentVoteButton vote;
+
+        public CommentViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
-    static class SubCommentViewHolder {
-        RelativeLayout layout;
-        Target avatar;
-        TextView name;
-        TextView comment;
-        Button vote;
+    static class SubCommentViewHolder extends CommentViewHolder {
+        public SubCommentViewHolder(View view) {
+            super(view);
+        }
     }
 }

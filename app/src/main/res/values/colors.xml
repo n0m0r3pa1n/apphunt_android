@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+ <resources>
     <color name="bg_primary">#23a2eb</color>
     <color name="bg_secondary">#eeeeee</color>
 
@@ -24,11 +24,25 @@
     <color name="bg_semi_fragment">#B4000000</color>
 
     <color name="bg_divider">#c7c7c7</color>
-    
+
+    <color name="list_item_divider">#1e1e92d4</color>
+
+    <color name="help_secondary_color">#9a9a9a</color>
+
+    <color name="divider_color">#1f000000</color>
+
+    <color name="alert_color">#fff59d</color>
+
+   <color name="save_collection_color">#43A047</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#C8FFFFFF</color>
     <color name="divider">#cdcdcd</color>
     <color name="comment_entry_hint">#69000000</color>
     <color name="bg_own_comment">#69fcfeda</color>
+    <color name="collection_transparent_background">#CC818181</color>
+
+    <drawable name="pressed_gray">#0c000000</drawable>
+    <drawable name="selected_gray">#2c000000</drawable>
 </resources>

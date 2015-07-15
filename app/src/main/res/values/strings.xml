@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
 
     <string name="app_name">App Hunt</string>
     <string name="title_select_app">Select App</string>
@@ -9,7 +11,26 @@
     <string name="title_settings">Settings</string>
     <string name="title_notification">Notification</string>
     <string name="title_app_details">Details</string>
+    <string name="title_top_apps">Top Apps</string>
     <string name="title_close">Close</string>
+    <string name="title_all_collection">All Collections</string>
+    <string name="title_favourite_collection">Favourite Collections</string>
+    <string name="title_my_collection">My Collections</string>
+    <string name="title_my_collections">My Collections</string>
+    <string name="title_create_collection">Create Collection</string>
+
+    <string-array name="drawer_menu">
+        <item>Trending Apps</item>
+        <item>Top Hunters</item>
+        <item>Top Apps</item>
+        <item>Collections</item>
+        <item>Suggestions</item>
+        <item>Settings</item>
+        <item>Help</item>
+        <item>Add new app</item>
+        <item>Apps Requirements</item>
+        <item>Top Hunters Points</item>
+    </string-array>
 
     <!-- Actions -->
     <string name="action_enable_notifications">com.apphunt.app.action.ENABLE_NOTIFICATIONS</string>
@@ -29,12 +50,16 @@
     <!-- Notifications -->
     <string name="notification_no_internet">Enable your Internet connection to continue</string>
     <string name="not_available_in_the_store">App is unavailable on Google Play</string>
+    <string name="server_error">Oops, something went wrong. Please, try again later :)</string>
     <string name="notification_cannot_login">Unsuccessful login attempt! Please try again…</string>
-    <string name="saved_successfully">App added successfully</string>
+    <string name="saved_successfully">Your app is waiting for review. You will be notified when status is changed :)</string>
+    <string name="app_already_exist">The app you are trying to add is already on AppHunt. Add another of your favourite apps :)</string>
     <string name="list_view_header_yesterday">Yesterday</string>
     <string name="list_view_header_today">Today</string>
     <string name="dismiss">DISMISS</string>
     <string name="settings">SETTINGS</string>
+    <string name="show_continue">Continue</string>
+    <string name="notification_delete_confirmation">You collection was successfully created!</string>
 
     <!-- SmartRate -->
     <string name="smartrate_yes">YES</string>
@@ -60,6 +85,14 @@
 
     <!-- Login -->
     <string name="login_canceled_text">Your email is required to continue</string>
+    <string name="login_info_text">Let your friends see what you do</string>
+    <string name="login_info_add_to_collection">You need to be authorized in order to add this application to a collection</string>
+    <string name="login_info_vote">You need to be authorized in order to vote for this application</string>
+    <string name="login_info_save">You need to be authorized in order to save your favorite application in AppHunt</string>
+    <string name="login_info_comment">You need to be authorized in order to post a comment for your favorite application</string>
+    <string name="login_info_fav_collection">You need to be authorized in order to favorite this collection</string>
+    <string name="login_info_create_collection">You need to be authorized in order to create a new collection</string>
+    <string name="login_not_now">Not now</string>
     <string name="suggest_title">Suggest</string>
     <string name="suggestion_input_hint">How AppHunt can be improved?</string>
     <string name="suggestion_send">Improve</string>
@@ -88,4 +121,32 @@
     <string name="action_search">Search</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">No apps found! Try again :)</string>
+    <string name="details">Details</string>
+    <string name="title_home">Home</string>
+    <string name="title_top_hunters">Top Hunters</string>
+    <string name="title_help">Help</string>
+    <string name="feedback">Feedback</string>
+    <string name="help">Help</string>
+    <string name="how_to_add_new_app">How to add new app</string>
+    <string name="apps_requirements">Apps Requirements</string>
+    <string name="top_hunters_points">Top Hunters Points</string>
+    <string name="title_choose_collection_banner">Choose a banner</string>
+    <string name="no_collection_text">Create your own collection</string>
+    <string name="delete_collection_menu_title">Delete</string>
+    <string name="no_apps_in_collection">Go to Trending apps list and choose your apps</string>
+    <string name="action_add_to_collection">Add to collection</string>
+    <string name="no_favourite_collections">Favourite a collection to appear here</string>
+    <string name="title_select_collection">Select Collection</string>
+    <string name="sort_by">Sort by:</string>
+
+    <string-array name="order">
+        <item>Date Created</item>
+        <item>Votes Count</item>
+    </string-array>
+
+    <string-array name="order_values">
+        <item>all</item>
+        <item>vote</item>
+    </string-array>
+
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ListView
+        android:id="@+id/listview"
+        android:padding="5dp"
+        android:dividerHeight="0dp"
+        android:divider="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <RelativeLayout
+        android:id="@+id/more_loader_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_primary"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/more_loader"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+</RelativeLayout>

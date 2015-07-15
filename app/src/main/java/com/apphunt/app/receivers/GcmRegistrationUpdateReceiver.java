@@ -2,10 +2,9 @@ package com.apphunt.app.receivers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
 import kr.nectarine.android.fruitygcm.receiver.FruityRegistrationIdUpdateReceiver;

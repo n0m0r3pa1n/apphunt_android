@@ -1,111 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:elevation="0dp"
+    android:padding="5dp">
 
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="@dimen/list_item_icon_size"
-        android:layout_height="@dimen/list_item_icon_size"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/list_item_icon_margin_left"
-        android:layout_marginRight="@dimen/list_item_icon_margin_right"/>
-
-    <LinearLayout
-        android:id="@+id/info"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/app_icon"
-        android:layout_toRightOf="@+id/app_icon"
-        android:layout_toStartOf="@+id/vote"
-        android:layout_toLeftOf="@+id/vote">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        cardview:cardCornerRadius="2dp"
+        cardview:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/app_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_name"
-            android:textStyle="bold"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/list_item_desc"
-            android:maxLines="3"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
-
-            <com.apphunt.app.ui.widgets.AvatarImageView
-                android:id="@+id/creator_avatar"
-                android:layout_width="@dimen/dimen_app_list_avatar_creator"
-                android:layout_height="@dimen/dimen_app_list_avatar_creator"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:id="@+id/creator_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/dimen_app_list_creator_name"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@drawable/ic_comment"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="15dp"/>
+                android:id="@+id/app_icon"
+                android:layout_width="@dimen/list_item_icon_size"
+                android:layout_height="@dimen/list_item_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/list_item_icon_margin_right" />
 
             <TextView
-                android:id="@+id/comments_count"
+                android:id="@+id/app_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/app_icon"
+                android:layout_toRightOf="@+id/app_icon"
+                android:layout_toStartOf="@+id/btn_vote"
+                android:layout_toLeftOf="@+id/btn_vote"
+                android:paddingRight="5dp"
+                android:textSize="@dimen/list_item_name" />
+
+            <com.apphunt.app.ui.views.vote.AppVoteButton
+                android:id="@+id/btn_vote"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:layout_alignParentRight="true"
+                android:gravity="right" />
+
+            <Button
+                android:id="@+id/add_to_collection"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:layout_alignParentRight="true"
+                android:drawableBottom="@drawable/ic_add_to_collection"
+                android:drawablePadding="5dp"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/btn_vote"/>
+
+            <TextView
+                android:id="@+id/category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:padding="0dp"
-                android:elevation="0dp"
-                android:textSize="@dimen/list_item_name"
-                android:textStyle="bold"
-                android:layout_marginRight="20dp"/>
+                android:layout_below="@+id/app_name"
+                android:layout_toRightOf="@+id/app_icon"
+                android:layout_marginTop="3dp"
+                android:textSize="@dimen/list_item_category" />
 
-        </LinearLayout>
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/creator_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/app_icon"
+                android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/vote"
-        android:layout_width="@dimen/list_item_vote_size"
-        android:layout_height="@dimen/list_item_vote_size"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/list_item_vote_margin"
-        android:layout_marginLeft="@dimen/list_item_vote_margin"
-        android:gravity="center"
-        android:textSize="@dimen/list_item_vote_text"
-        android:textColor="@android:color/white"
-        android:background="@drawable/btn_vote"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/creator_avatar"
+                    android:layout_width="@dimen/dimen_app_list_avatar_creator"
+                    android:layout_height="@dimen/dimen_app_list_avatar_creator"
+                    android:layout_centerVertical="true" />
 
+                <TextView
+                    android:id="@+id/creator_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/dimen_app_list_creator_name" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_view_divider_height"
-        android:background="@color/bg_divider"
-        android:layout_toRightOf="@+id/app_icon"
-        android:layout_toEndOf="@+id/app_icon"
-        android:layout_alignParentBottom="true"
-        android:elevation="@dimen/list_view_elevation" />
-</RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

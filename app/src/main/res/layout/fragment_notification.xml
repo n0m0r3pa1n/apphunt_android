@@ -37,6 +37,19 @@
             android:visibility="gone"/>
 
         <Button
+            android:id="@+id/show_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/dismiss"
+            android:padding="@dimen/notification_button_padding"
+            android:text="@string/show_continue"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/notification_button_text"
+            android:background="@android:color/transparent"
+            android:visibility="gone"/>
+
+        <Button
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

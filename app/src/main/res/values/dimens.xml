@@ -9,8 +9,11 @@
 
     <dimen name="add_btn_margin_top">16dp</dimen>
     <dimen name="add_btn_margin_bottom">16dp</dimen>
-    <dimen name="add_btn_margin_right">70dp</dimen>
+    <dimen name="add_btn_margin_right">16dp</dimen>
     <dimen name="add_btn_elevation">5dp</dimen>
+
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 
     <dimen name="list_divider_height">0dp</dimen>
 
@@ -18,18 +21,21 @@
     <dimen name="list_header_height">48dp</dimen>
     <dimen name="list_header_text">18sp</dimen>
 
-    <dimen name="list_item_height">100dp</dimen>
-    <dimen name="list_item_icon_margin_left">16dp</dimen>
-    <dimen name="list_item_icon_margin_right">16dp</dimen>
-    <dimen name="list_item_icon_size">50dp</dimen>
-    <dimen name="list_item_name">14sp</dimen>
-    <dimen name="list_item_desc">13sp</dimen>
-    <dimen name="list_item_vote_size">50dp</dimen>
-    <dimen name="list_item_vote_margin">16dp</dimen>
+    <dimen name="list_item_height">130dp</dimen>
+    <dimen name="list_item_icon_margin_left">7dp</dimen>
+    <dimen name="list_item_icon_margin_right">15dp</dimen>
+    <dimen name="list_item_icon_size">75dp</dimen>
+    <dimen name="list_item_name">17sp</dimen>
+    <dimen name="list_item_category">14sp</dimen>
+    <dimen name="list_item_desc">14sp</dimen>
+    <dimen name="list_item_vote_size">40dp</dimen>
+    <dimen name="list_item_vote_margin">7dp</dimen>
     <dimen name="list_item_vote_padding">5dp</dimen>
     <dimen name="list_item_vote_text">15sp</dimen>
+    <dimen name="list_item_add_to_collection_size">20dp</dimen>
+    <dimen name="list_item_add_to_collection_margin_left">8dp</dimen>
 
-    <dimen name="list_more_apps_item_height">48dp</dimen>
+    <dimen name="list_more_apps_item_height">60dp</dimen>
     <dimen name="list_more_apps_button_width">60dp</dimen>
     <dimen name="list_more_apps_button_height">16dp</dimen>
 
@@ -56,7 +62,7 @@
     <dimen name="settings_notification_label_height">30dp</dimen>
     <dimen name="settings_notifications_toggle_width">90dp</dimen>
     <dimen name="settings_notifications_toggle_height">30dp</dimen>
-    <dimen name="listview_elevation">0dp</dimen>
+    <dimen name="listview_elevation">2dp</dimen>
     <dimen name="notification_text">17sp</dimen>
     <dimen name="notification_button_text">17sp</dimen>
     <dimen name="notification_text_margin">10dp</dimen>
@@ -131,5 +137,12 @@
     <dimen name="send_comment_height">45dp</dimen>
     <dimen name="dimen_app_list_avatar_creator">20dp</dimen>
     <dimen name="dimen_app_list_creator_name">12sp</dimen>
+    <dimen name="collection_app_margin">10dp</dimen>
+    <dimen name="collection_app_width">150dp</dimen>
+    <dimen name="collection_app_icon_padding">2dp</dimen>
+
+    <dimen name="zero_elevation">-10dp</dimen>
+    <dimen name="one_elevation">12dp</dimen>
+    <dimen name="login_message_padding">40dp</dimen>
 
 </resources>

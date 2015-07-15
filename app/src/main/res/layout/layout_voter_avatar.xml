@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <com.apphunt.app.ui.widgets.AvatarImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="@dimen/details_voters_avatar_size"
         android:layout_height="@dimen/details_voters_avatar_size"

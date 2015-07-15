@@ -2,261 +2,86 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.AppHuntApiClient;
-import com.apphunt.app.api.apphunt.Callback;
-import com.apphunt.app.api.apphunt.models.App;
-import com.apphunt.app.api.apphunt.models.AppsList;
-import com.apphunt.app.api.apphunt.models.Vote;
+import com.apphunt.app.api.apphunt.client.ApiService;
+import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.smart_rate.SmartRate;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
-import com.apphunt.app.ui.widgets.AvatarImageView;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.FacebookUtils;
-import com.apphunt.app.utils.LoadersUtils;
+import com.apphunt.app.ui.views.vote.AppVoteButton;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.utils.StringUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
-import com.quentindommerc.superlistview.SuperListview;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
-import retrofit.client.Response;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TrendingAppsAdapter extends BaseAdapter {
+public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = TrendingAppsAdapter.class.getName();
 
     private Context ctx;
-    private SuperListview listView;
+    private MoreAppsItem moreAppsItem;
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Item> backup = new ArrayList<>();
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
-    private Calendar calendar = Calendar.getInstance();
     private Calendar today = Calendar.getInstance();
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d", Locale.ENGLISH);
 
-    private boolean success = false;
-    private int noAppsDays = 0;
+    private boolean isMoreItemsPressed = false;
 
-    private ViewHolderItem viewHolderItem = null;
-    private ViewHolderSeparator viewHolderSeparator = null;
-    private ViewHolderMoreApps viewHolderMoreApps = null;
+    private int allAppsSize = 0;
+    private int previousAppsSize = 0;
+    private int moreAppsItemPosition = 0;
     private int selectedAppPosition = -1;
 
-    public TrendingAppsAdapter(Context ctx, SuperListview listView) {
+    private RecyclerView recyclerView;
+
+    public TrendingAppsAdapter(Context ctx, RecyclerView recyclerView) {
         this.ctx = ctx;
-        this.listView = listView;
-
-        LoadersUtils.showCenterLoader((Activity) ctx);
-
-        getApps();
+        this.recyclerView = recyclerView;
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-                viewHolderItem = new ViewHolderItem();
-
-                view = inflater.inflate(R.layout.layout_app_item, parent, false);
-                viewHolderItem.layout = (RelativeLayout) view.findViewById(R.id.item);
-                viewHolderItem.icon = (ImageView) view.findViewById(R.id.app_icon);
-                viewHolderItem.title = (TextView) view.findViewById(R.id.app_name);
-                viewHolderItem.description = (TextView) view.findViewById(R.id.description);
-                viewHolderItem.commentsCount = (TextView) view.findViewById(R.id.comments_count);
-                viewHolderItem.creatorImageView = (AvatarImageView) view.findViewById(R.id.creator_avatar);
-                viewHolderItem.creatorUsername = (TextView) view.findViewById(R.id.creator_name);
-                viewHolderItem.vote = (Button) view.findViewById(R.id.vote);
-
-                view.setTag(viewHolderItem);
-            } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
-                viewHolderSeparator = new ViewHolderSeparator();
-
-                view = inflater.inflate(R.layout.layout_app_list_header, parent, false);
-                viewHolderSeparator.header = (TextView) view.findViewById(R.id.header);
-
-                view.setTag(viewHolderSeparator);
-            } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue()) {
-                viewHolderMoreApps = new ViewHolderMoreApps();
-
-                view = inflater.inflate(R.layout.layout_more_apps, parent, false);
-                viewHolderMoreApps.moreApps = (ImageButton) view.findViewById(R.id.more_apps);
-
-                view.setTag(viewHolderMoreApps);
-            }
-        } else {
-            if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-                viewHolderItem = (ViewHolderItem) view.getTag();
-            } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
-                viewHolderSeparator = (ViewHolderSeparator) view.getTag();
-            } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue()) {
-                viewHolderMoreApps = (ViewHolderMoreApps) view.getTag();
-            }
+    public void notifyAdapter(AppsList appsList) {
+        if(isMoreItemsPressed) {
+            displayMoreApps(appsList);
+            return;
         }
 
-        if (getItemViewType(position) == Constants.ItemType.ITEM.getValue() && viewHolderItem != null) {
-            final App app = ((AppItem) getItem(position)).getData();
-
-            int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
-            Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
-
-            viewHolderItem.title.setText(app.getName());
-            viewHolderItem.description.setText(app.getDescription());
-            viewHolderItem.commentsCount.setText(String.valueOf(app.getCommentsCount()));
-            Picasso.with(ctx)
-                    .load(app.getCreatedBy().getProfilePicture())
-                    .into(viewHolderItem.creatorImageView);
-            viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-
-            viewHolderItem.vote.setText(app.getVotesCount());
-
-            viewHolderItem.vote.setOnClickListener(null);
-            viewHolderItem.vote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        if (app.isHasVoted()) {
-                            AppHuntApiClient.getClient().downVote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
-                                @Override
-                                public void success(Vote vote, Response response) {
-                                    Map<String, String> params = new HashMap<>();
-                                    params.put("appId", app.getId());
-                                    FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp, params);
-                                    app.setVotesCount(vote.getVotes());
-                                    app.setHasVoted(false);
-                                    ((Button) v).setText(vote.getVotes());
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_text));
-                                    v.setBackgroundResource(R.drawable.btn_vote);
-                                }
-                            });
-                        } else {
-                            AppHuntApiClient.getClient().vote(app.getId(), SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID), new Callback<Vote>() {
-                                @Override
-                                public void success(Vote vote, Response response) {
-                                    Map<String, String> params = new HashMap<>();
-                                    params.put("appId", app.getId());
-                                    FlurryAgent.logEvent(TrackingEvents.UserVotedApp, params);
-                                    app.setVotesCount(vote.getVotes());
-                                    app.setHasVoted(true);
-                                    ((Button) v).setText(vote.getVotes());
-                                    v.setBackgroundResource(R.drawable.btn_voted);
-                                    ((Button) v).setTextColor(ctx.getResources().getColor(R.color.vote_btn_voted_text));
-                                    SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
-                                }
-                            });
-                        }
-
-                    } else {
-                        FacebookUtils.showLoginFragment(ctx);
-                    }
-
-                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                }
-            });
-            if (app.isHasVoted()) {
-                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_voted);
-                viewHolderItem.vote.setTextColor(Color.parseColor("#FFFFFF"));
-            } else {
-                viewHolderItem.vote.setBackgroundResource(R.drawable.btn_vote);
-                viewHolderItem.vote.setTextColor(Color.parseColor("#2f90de"));
-            }
-
-            viewHolderItem.layout.setOnClickListener(null);
-            viewHolderItem.layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        App app = ((AppItem) getItem(position)).getData();
-
-                        AppDetailsFragment detailsFragment = new AppDetailsFragment();
-
-                        Bundle extras = new Bundle();
-                        extras.putString(Constants.KEY_APP_ID, app.getId());
-                        extras.putString(Constants.KEY_APP_NAME, app.getName());
-                        extras.putInt(Constants.KEY_ITEM_POSITION, position);
-                        detailsFragment.setArguments(extras);
-
-                        ((FragmentActivity) ctx).getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                                .commit();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Couldn't get the shortUrl");
-                    }
-
-                }
-            });
-        } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue() && viewHolderSeparator != null) {
-            viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
-        } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue() && viewHolderMoreApps != null) {
-            viewHolderMoreApps.moreApps.setOnClickListener(null);
-            viewHolderMoreApps.moreApps.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserRequestedMoreApps);
-                    loadMoreApps(position);
-                }
-            });
-        }
-
-        return view;
+        displayAppsForPreviousDay(appsList);
     }
 
-    private void getApps() {
-        String userId = SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID);
-        AppHuntApiClient.getClient().getApps(userId, dateFormat.format(calendar.getTime()), 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-            @Override
-            public void success(AppsList appsList, Response response) {
-                if (appsList.getTotalCount() > 0) {
-                    notifyAdapter(appsList);
-                    if (!success) {
-                        calendar.add(Calendar.DATE, -1);
-                        getApps();
-                        success = true;
-                    }
-                } else {
-                    calendar.add(Calendar.DATE, -1);
-                    getApps();
-                }
-            }
-        });
-    }
-
-    private void notifyAdapter(AppsList appsList) {
+    private void displayAppsForPreviousDay(AppsList appsList) {
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);
@@ -280,77 +105,46 @@ public class TrendingAppsAdapter extends BaseAdapter {
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
 
         if (selectedAppPosition > -1) {
-            listView.getList().smoothScrollToPosition(selectedAppPosition);
+            recyclerView.smoothScrollToPosition(selectedAppPosition);
+        } else {
+            scrollToFirstAppForNextDay();
         }
     }
 
-    public void getAppsForNextDate() {
-        LoadersUtils.showBottomLoader((Activity) ctx, true);
-
-        calendar.add(Calendar.DATE, -1);
-
-        String date = dateFormat.format(calendar.getTime());
-
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
-                date, 1, 5, Constants.PLATFORM, new Callback<AppsList>() {
-                    @Override
-                    public void success(AppsList appsList, Response response) {
-                        ArrayList<Item> items = new ArrayList<>();
-
-                        if (appsList.getTotalCount() > 0) {
-                            items.add(new SeparatorItem(appsList.getDate()));
-
-                            for (App app : appsList.getApps()) {
-                                items.add(new AppItem(app));
-                            }
-
-                            if (appsList.haveMoreApps())
-                                items.add(new MoreAppsItem(1, 5, appsList.getDate()));
-
-                            addItems(items);
-                        } else if (noAppsDays < 5) {
-                            getAppsForNextDate();
-                            ++noAppsDays;
-                        } else {
-                            LoadersUtils.hideBottomLoader((Activity) ctx);
-                            noAppsDays = 0;
-                        }
-                    }
-                });
+    private void scrollToFirstAppForNextDay() {
+        if(allAppsSize != 0) {
+            previousAppsSize = allAppsSize + 1;
+        }
+        allAppsSize = items.size();
+        recyclerView.smoothScrollToPosition(previousAppsSize);
     }
 
-    public void addItems(ArrayList<Item> items) {
-        this.items.addAll(items);
+    private void displayMoreApps(AppsList appsList) {
+        if (!appsList.haveMoreApps()) {
+            items.remove(moreAppsItem);
+        } else {
+            moreAppsItem.setPage(moreAppsItem.getNextPage());
+        }
+
+        ArrayList<AppItem> newItems = new ArrayList<>();
+
+        for (App app : appsList.getApps()) {
+            newItems.add(new AppItem(app));
+        }
+
+        items.addAll(moreAppsItemPosition, newItems);
+
         notifyDataSetChanged();
-
-        LoadersUtils.hideBottomLoader((Activity) ctx);
-        listView.getList().smoothScrollToPosition(this.items.size() - items.size() + 1);
+        recyclerView.smoothScrollToPosition(moreAppsItemPosition + newItems.size());
+        isMoreItemsPressed = false;
     }
 
-    private void loadMoreApps(final int position) {
-        final MoreAppsItem item = (MoreAppsItem) getItem(position);
-        AppHuntApiClient.getClient().getApps(SharedPreferencesHelper.getStringPreference(ctx, Constants.KEY_USER_ID),
-                item.getDate(), item.getNextPage(), item.getItems(), Constants.PLATFORM, new Callback<AppsList>() {
-                    @Override
-                    public void success(AppsList appsList, Response response) {
-                        if (!appsList.haveMoreApps()) {
-                            items.remove(position);
-                        } else {
-                            item.setPage(item.getNextPage());
-                        }
-
-                        ArrayList<AppItem> newItems = new ArrayList<>();
-
-                        for (App app : appsList.getApps()) {
-                            newItems.add(new AppItem(app));
-                        }
-
-                        items.addAll(position, newItems);
-
-                        notifyDataSetChanged();
-                        listView.getList().smoothScrollToPosition(position + newItems.size());
-                    }
-                });
+    private void loadMoreApps(int position) {
+        moreAppsItem = (MoreAppsItem) getItem(position);
+        moreAppsItemPosition = position;
+        isMoreItemsPressed = true;
+        ApiService.getInstance(ctx).loadMoreApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
+                moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
     public void showSearchResult(ArrayList<App> apps) {
@@ -362,7 +156,7 @@ public class TrendingAppsAdapter extends BaseAdapter {
         }
 
         notifyDataSetChanged();
-        listView.getList().smoothScrollToPosition(0);
+        recyclerView.smoothScrollToPosition(0);
         if (apps.isEmpty()) {
             FlurryAgent.logEvent(TrackingEvents.UserFoundNoResults);
             Toast.makeText(ctx, R.string.no_results_found, Toast.LENGTH_LONG).show();
@@ -380,53 +174,102 @@ public class TrendingAppsAdapter extends BaseAdapter {
     }
 
     public void resetAdapter() {
-        success = false;
+        allAppsSize = 0;
+        previousAppsSize = 0;
         items.clear();
         notifyDataSetChanged();
 
-        calendar = Calendar.getInstance();
         today = Calendar.getInstance();
-
-        getApps();
-    }
-
-    public void resetAdapter(int position) {
-        this.selectedAppPosition = position;
-
-        resetAdapter();
-    }
-
-    public void clearAdapter() {
-        success = false;
-        items.clear();
-        notifyDataSetChanged();
-
-        calendar = Calendar.getInstance();
-        today = Calendar.getInstance();
-    }
-
-    public boolean couldLoadMoreApps() {
-        return (backup.size() == 0);
     }
 
     @Override
-    public int getViewTypeCount() {
-        return 3;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        RecyclerView.ViewHolder viewHolderItem = null;
+        if (viewType == Constants.ItemType.ITEM.getValue()) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_item, parent, false);
+            viewHolderItem = new ViewHolderItem(view);
+        } else if (viewType == Constants.ItemType.SEPARATOR.getValue()) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_list_header, parent, false);
+            viewHolderItem = new ViewHolderSeparator(view);
+        } else if (viewType == Constants.ItemType.MORE_APPS.getValue()) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_more_apps, parent, false);
+            viewHolderItem = new ViewHolderMoreApps(view);
+        }
+
+        return viewHolderItem;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
+            ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
+            final App app = ((AppItem) getItem(position)).getData();
+
+            int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
+
+            Picasso.with(ctx).load(app.getIcon()).resize(size, size).into(viewHolderItem.icon);
+
+            viewHolderItem.title.setText(StringUtils.htmlDecodeString(app.getName()));
+            if(!app.getCategories().isEmpty()) {
+                viewHolderItem.category.setText(app.getCategories().get(0));
+            }
+            Picasso.with(ctx)
+                    .load(app.getCreatedBy().getProfilePicture())
+                    .placeholder(R.drawable.placeholder_avatar)
+                    .into(viewHolderItem.creatorImageView);
+            viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
+            viewHolderItem.vote.setBaseApp(app);
+
+            viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                    } else {
+                        LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
+                    }
+                }
+            });
+
+            View.OnClickListener detailsClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        App app = ((AppItem) getItem(position)).getData();
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Couldn't get the shortUrl");
+                    }
+                }
+            };
+
+            viewHolderItem.layout.setOnClickListener(null);
+            viewHolderItem.layout.setOnClickListener(detailsClickListener);
+
+        } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
+            ViewHolderSeparator viewHolderSeparator = (ViewHolderSeparator) holder;
+            viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
+        } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue()) {
+            ViewHolderMoreApps viewHolderMoreApps = (ViewHolderMoreApps) holder;
+            viewHolderMoreApps.moreApps.setOnClickListener(null);
+            viewHolderMoreApps.moreApps.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FlurryAgent.logEvent(TrackingEvents.UserRequestedMoreApps);
+                    loadMoreApps(position);
+                }
+            });
+        }
+    }
+
+    public Object getItem(int position) {
+        return items.get(position);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getType().getValue();
-    }
-
-    @Override
-    public int getCount() {
-        return items.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return items.get(position);
+        return items.get(position).getType().ordinal();
     }
 
     @Override
@@ -434,22 +277,61 @@ public class TrendingAppsAdapter extends BaseAdapter {
         return position;
     }
 
-    private static class ViewHolderItem {
-        RelativeLayout layout;
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    //region ViewHolders
+    static class ViewHolderItem extends RecyclerView.ViewHolder{
+        @InjectView(R.id.item)
+        LinearLayout layout;
+
+        @InjectView(R.id.app_icon)
         ImageView icon;
+
+        @InjectView(R.id.app_name)
         TextView title;
-        TextView description;
-        TextView commentsCount;
-        Target creatorImageView;
+
+        @InjectView(R.id.category)
+        TextView category;
+
+        @InjectView(R.id.creator_avatar)
+        CircleImageView creatorImageView;
+
+        @InjectView(R.id.creator_name)
         TextView creatorUsername;
-        Button vote;
+
+        @InjectView(R.id.btn_vote)
+        AppVoteButton vote;
+
+        @InjectView(R.id.add_to_collection)
+        Button addToCollection;
+
+        public ViewHolderItem(View view) {
+            super(view);
+            ButterKnife.inject(this, view);
+        }
     }
 
-    private static class ViewHolderSeparator {
+    static class ViewHolderSeparator extends RecyclerView.ViewHolder {
+        @InjectView(R.id.header)
         TextView header;
+
+        public ViewHolderSeparator(View view) {
+            super(view);
+            ButterKnife.inject(this, view);
+        }
     }
 
-    private static class ViewHolderMoreApps {
-        ImageButton moreApps;
+    static class ViewHolderMoreApps extends RecyclerView.ViewHolder{
+        @InjectView(R.id.more_apps)
+        ImageView moreApps;
+
+        public ViewHolderMoreApps(View view) {
+            super(view);
+            ButterKnife.inject(this, view);
+        }
     }
+    //endregion
 }

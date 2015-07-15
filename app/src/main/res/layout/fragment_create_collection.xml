@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
+    android:padding="15dp"
+    android:background="@color/bg_secondary"
+    android:clickable="true">
+
+    <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
+        android:id="@+id/collection_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/collection_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="15sp"
+            android:hint="New collection name"/>
+    </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_set_banner"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/collection_name_layout"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        cardview:cardCornerRadius="2dp"
+        cardview:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:id="@+id/label_set_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Click to choose a banners"
+                android:gravity="center"
+                android:textSize="15sp"/>
+
+            <ImageButton
+                android:id="@+id/choose_banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/label_set_banner"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/collection_placeholder"
+                android:scaleType="centerCrop" />
+        </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
+        android:id="@+id/collection_desc_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/card_view_set_banner"
+        android:layout_marginTop="15dp">
+
+        <EditText
+            android:id="@+id/collection_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="15sp"
+            android:maxLength="100"
+            android:hint="Write a description"/>
+    </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
+
+    <me.gujun.android.taggroup.TagGroup
+        app:atg_isAppendMode="true"
+        android:id="@+id/tag_group"
+        android:layout_below="@+id/collection_desc_layout"
+        android:layout_marginTop="15dp"
+        style="@style/TagGroup" />
+
+    <Button
+        android:id="@+id/collection_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="Save"
+        android:textAllCaps="true"
+        android:background="@drawable/shape_btn_save"
+        android:elevation="5dp"/>
+</RelativeLayout>

@@ -1,7 +1,7 @@
 package com.apphunt.app.ui.listview_items;
 
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 
 public class MoreAppsItem implements Item {
 

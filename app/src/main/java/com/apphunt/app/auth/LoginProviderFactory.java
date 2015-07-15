@@ -3,7 +3,7 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.content.Context;
 
-import com.apphunt.app.utils.Constants;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
 /**
@@ -23,7 +23,7 @@ public class LoginProviderFactory {
 
     public static void setLoginProvider(Context context, LoginProvider loginProvider) {
         LoginProviderFactory.loginProvider = loginProvider;
-        SharedPreferencesHelper.setPreference(context, Constants.KEY_LOGIN_PROVIDER, loginProvider.getName());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, loginProvider.getName());
     }
 
 

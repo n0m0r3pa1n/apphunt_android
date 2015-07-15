@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.apphunt.app.constants.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 

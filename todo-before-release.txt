@@ -1,0 +1,8 @@
+Remove
+  @Override
+    public boolean isUserLoggedIn() {
+        //TODO: Remove
+        SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, "553554860b9ce203003112a9");
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, "twitter");
+
+in the BaseLoginProvider

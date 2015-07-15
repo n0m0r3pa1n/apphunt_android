@@ -11,20 +11,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.User;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.LoadersUtils;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
+import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
+import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apphunt.app.utils.ui.LoadersUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
+import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -36,39 +45,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class LoginFragment extends BaseFragment {
 
     private static final String TAG = LoginFragment.class.getName();
 
     private ActionBarActivity activity;
-
     private User user;
-    private TwitterLoginButton loginButton;
+
+    @InjectView(R.id.login_message)
+    TextView loginMessage;
+
+    @InjectView(R.id.login_button)
+    TwitterLoginButton loginButton;
+
+    private boolean canBeSkipped = false;
+    private String message;
+
+    public void setCanBeSkipped(boolean canBeSkipped) {
+        this.canBeSkipped = canBeSkipped;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_login);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ActionBarUtils.getInstance().hideActionBarShadow();
 
-        loginButton = (TwitterLoginButton) view.findViewById(R.id.login_button);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ButterKnife.inject(this, view);
+
+        loginMessage.setText(message);
+
+        Button notNowButton = (Button) view.findViewById(R.id.not_now);
+        notNowButton.setVisibility(View.GONE);
+        if(canBeSkipped) {
+            notNowButton.setVisibility(View.VISIBLE);
+            notNowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BusProvider.getInstance().post(new LoginSkippedEvent());
+                    BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_LOGIN_FRAGMENT));
+                }
+            });
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
                     LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                    ((MainActivity) activity).setOnBackBlocked(true);
+                    NavUtils.getInstance(activity).setOnBackBlocked(true);
                 }
             }
         });
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
-            public void success(Result<TwitterSession> twitterSessionResult) {
+            public void success(final Result<TwitterSession> twitterSessionResult) {
                 final AppHuntTwitterApiClient appHuntTwitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
                 boolean doNotIncludeEntities = false;
                 boolean skipStatus = true;
@@ -76,14 +115,17 @@ public class LoginFragment extends BaseFragment {
 
                     @Override
                     public void success(Result<com.twitter.sdk.android.core.models.User> userResult) {
-                        com.twitter.sdk.android.core.models.User twitterUser = userResult.data;
+                        final com.twitter.sdk.android.core.models.User twitterUser = userResult.data;
                         user = new User();
                         user.setUsername(twitterUser.screenName);
                         user.setName(twitterUser.name);
-                        user.setProfilePicture(twitterUser.profileImageUrl);
+
+                        String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
+                        user.setProfilePicture(profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
                         Locale locale = getResources().getConfiguration().locale;
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+                        user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
                         appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
                             @Override
@@ -135,12 +177,19 @@ public class LoginFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_login;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        ((MainActivity) activity).setOnBackBlocked(false);
+        NavUtils.getInstance(activity).setOnBackBlocked(false);
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -156,11 +205,18 @@ public class LoginFragment extends BaseFragment {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
-                LoginProviderFactory.get(activity).login(user);
+                ApiClient.getClient(getActivity()).createUser(user);
+                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
             } else {
                 onLoginFailed();
             }
         }
+    }
+
+    @Subscribe
+    public void onUserCreated(UserCreatedApiEvent event) {
+        LoadersUtils.hideBottomLoader(activity);
+        LoginProviderFactory.get(activity).login(event.getUser());
     }
 
     private void onLoginFailed() {
@@ -168,8 +224,16 @@ public class LoginFragment extends BaseFragment {
             return;
         }
         Toast.makeText(activity, R.string.login_canceled_text, Toast.LENGTH_LONG).show();
-        ((MainActivity) activity).setOnBackBlocked(false);
+        NavUtils.getInstance(activity).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(activity);
     }
 
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMessage(int messageRes) {
+        setMessage(getString(messageRes));
+    }
 }

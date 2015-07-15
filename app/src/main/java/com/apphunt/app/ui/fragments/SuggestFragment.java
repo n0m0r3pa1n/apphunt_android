@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -18,8 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.apphunt.app.R;
-import com.apphunt.app.utils.Constants;
-import com.apphunt.app.utils.TrackingEvents;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
@@ -37,8 +39,10 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.suggest_title);
         FlurryAgent.logEvent(TrackingEvents.UserViewedSuggestion);
+        ActionBarUtils.getInstance().hideActionBarShadow();
+
+        setFragmentTag(Constants.TAG_SUGGEST_FRAGMENT);
     }
 
     @Override
@@ -102,6 +106,7 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
                     params.put("suggestion", messageText.toString());
                     FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
                     Toast.makeText(getActivity(), R.string.feedback_send, Toast.LENGTH_LONG).show();
+                    getSupportFragmentManager().popBackStack();
                 }
                 break;
 
@@ -113,5 +118,16 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
 
     private FragmentManager getSupportFragmentManager() {
         return getActivity().getSupportFragmentManager();
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.suggest_title;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showActionBarShadow();
     }
 }
