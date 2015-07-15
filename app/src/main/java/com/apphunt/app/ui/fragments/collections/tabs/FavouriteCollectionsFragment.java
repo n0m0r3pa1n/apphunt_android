@@ -13,6 +13,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
@@ -23,8 +24,8 @@ import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
-import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -58,7 +59,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        FlurryAgent.logEvent(TrackingEvents.UserViewedFavouriteCollections);
         view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 

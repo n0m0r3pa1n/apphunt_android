@@ -21,12 +21,14 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -107,11 +109,14 @@ public class CreateCollectionFragment extends BaseFragment {
         }
 
         if(TextUtils.isEmpty(collectionDesc.getText().toString())) {
+            FlurryAgent.logEvent(TrackingEvents.UserTriedToCreateCollectionWithEmptyDesc);
             collectionDescLayout.setError("Description can not be empty!");
             return;
         } else {
             collectionDescLayout.setError(null);
         }
+
+        FlurryAgent.logEvent(TrackingEvents.UserCreatedCollection);
 
         NewCollection collection = new NewCollection();
         collection.setName(collectionName.getText().toString());

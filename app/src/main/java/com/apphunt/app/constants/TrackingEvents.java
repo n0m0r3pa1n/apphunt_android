@@ -50,4 +50,19 @@ public interface TrackingEvents {
     String UserDownVotedCollection = "user.down.voted.collection";
     String UserFavouritedCollection = "user.favourited.collection";
     String UserUnfavouritedCollection = "user.unfavourited.collection";
+    String UserViewedMyCollections = "user.viewed.my.collections";
+    String UserViewedFavouriteCollections="user.viewed.favourite.collections";
+    String UserViewedAllCollections = "user.viewed.all.collections";
+    String UserViewedChooseCollectionsBannerFragment="user.viewed.choose.collections.banner";
+    String UserSelectedCollectionBanner = "user.selected.collection.banner";
+    String UserTriedToCreateCollectionWithEmptyDesc = "user.tried.to.create.collection.with.empty.desc";
+    String UserCreatedCollection = "user.created.collection";
+    String UserViewedSelectCollection = "user.viewed.select.collection";
+    String UserAddedAppToCollection = "user.add.app.to.collection";
+    String UserCreatedCollectionFromSelectCollection = "user.created.collection.from.select.collection";
+    String UserViewedCollection = "user.viewed.collection.details";
+    String UserViewedCollectionApp = "user.viewed.collection.app";
+    String UserDeleteCollection = "user.delete.collection";
+    String UserDidntSaveCollection = "user.didnt.save.collection.after.edit";
+    String UserEditDescription = "user.edit.description";
 }

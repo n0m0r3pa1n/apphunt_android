@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.ListView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -19,11 +16,10 @@ import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.constants.StatusCode;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -31,6 +27,7 @@ import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -72,6 +69,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FlurryAgent.logEvent(TrackingEvents.UserViewedSelectCollection);
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
         ButterKnife.inject(this, view);
 
@@ -142,6 +140,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Override
     public void onClick(View view, int position) {
         if(app != null) {
+            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
             AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
             appsCollection.getApps().add(app);
             ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(),
@@ -158,6 +157,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Subscribe
     public void onCollectionCreated(CreateCollectionEvent event) {
+        FlurryAgent.logEvent(TrackingEvents.UserCreatedCollectionFromSelectCollection);
         currentPage = 0;
         selectCollectionAdapter = null;
         myCollections.resetAdapter();

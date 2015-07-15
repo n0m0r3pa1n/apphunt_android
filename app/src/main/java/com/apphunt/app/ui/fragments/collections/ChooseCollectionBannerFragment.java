@@ -9,18 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBannersList;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetBannersEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -52,6 +53,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FlurryAgent.logEvent(TrackingEvents.UserViewedChooseCollectionsBannerFragment);
         view = inflater.inflate(R.layout.fragment_choose_collection_banner, container, false);
         initUI();
         ApiClient.getClient(getActivity()).getBanners();
@@ -80,6 +82,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
 
     @OnItemClick(R.id.banners_list)
     public void onBannersListItemSelected(int position) {
+        FlurryAgent.logEvent(TrackingEvents.UserSelectedCollectionBanner);
         BusProvider.getInstance().post(new CollectionBannerSelectedEvent(list.getBanners().get(position)));
         activity.getSupportFragmentManager().popBackStack();
     }

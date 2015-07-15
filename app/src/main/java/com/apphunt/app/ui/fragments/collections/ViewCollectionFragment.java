@@ -27,6 +27,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
@@ -37,6 +38,7 @@ import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -93,6 +95,7 @@ public class ViewCollectionFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FlurryAgent.logEvent(TrackingEvents.UserViewedCollection);
         View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
 
@@ -116,6 +119,7 @@ public class ViewCollectionFragment extends BaseFragment {
         collectionAppsAdapter.setListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
+                FlurryAgent.logEvent(TrackingEvents.UserViewedCollectionApp);
                 NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position));
             }
         });
@@ -150,6 +154,7 @@ public class ViewCollectionFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
+                FlurryAgent.logEvent(TrackingEvents.UserDeleteCollection);
                 NotificationsUtils.showNotificationFragmentWithContinueAction((ActionBarActivity) activity, "Are you sure you want to delete this collection?", new OnActionNeeded() {
                     @Override
                     public void onContinueAction() {
@@ -180,11 +185,13 @@ public class ViewCollectionFragment extends BaseFragment {
 
             if(TextUtils.isEmpty(desc)) {
                 editDescription.setError("Description can not be empty!");
+                FlurryAgent.logEvent(TrackingEvents.UserTriedToCreateCollectionWithEmptyDesc);
                 return;
             } else {
                 editDescription.setError(null);
             }
 
+            FlurryAgent.logEvent(TrackingEvents.UserEditDescription);
             editDescription.setVisibility(View.GONE);
             editBanner.setVisibility(View.GONE);
             description.setVisibility(View.VISIBLE);
@@ -241,6 +248,7 @@ public class ViewCollectionFragment extends BaseFragment {
 
         hideSoftKeyboard();
         if(isSave) {
+            FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
             BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
         }
     }
