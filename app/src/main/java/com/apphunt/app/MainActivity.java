@@ -217,16 +217,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int backstackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
+        if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
         } else {
             menu.findItem(R.id.action_search).setVisible(false);
         }
 
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+        if (backstackEntryCount > 0 &&
                 getSupportFragmentManager().findFragmentByTag(CollectionsFragment.TAG) != null) {
             menu.findItem(R.id.action_sort).setVisible(false);
         }
