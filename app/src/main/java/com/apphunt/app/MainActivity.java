@@ -226,6 +226,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             menu.findItem(R.id.action_search).setVisible(false);
         }
 
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0 &&
+                getSupportFragmentManager().findFragmentByTag(CollectionsFragment.TAG) != null) {
+            menu.findItem(R.id.action_sort).setVisible(false);
+        }
+
         if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
             menu.findItem(R.id.action_share).setVisible(true);
             menu.findItem(R.id.action_add_to_collection).setVisible(true);
