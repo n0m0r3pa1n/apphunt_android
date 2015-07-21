@@ -65,4 +65,6 @@ public interface TrackingEvents {
     String UserDeleteCollection = "user.delete.collection";
     String UserDidntSaveCollection = "user.didnt.save.collection.after.edit";
     String UserEditDescription = "user.edit.description";
+
+    String UserOpenedInstalledApp = "user.opened.installed.app";
 }

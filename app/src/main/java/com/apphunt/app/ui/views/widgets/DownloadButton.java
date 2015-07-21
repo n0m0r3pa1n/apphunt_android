@@ -19,11 +19,13 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.InstalledPackagesUtils;
+import com.flurry.android.FlurryAgent;
 
-/**
- * Created by nmp on 15-7-21.
- */
+import java.util.HashMap;
+import java.util.Map;
+
 public class DownloadButton extends LinearLayout {
     private TextView textView;
 
@@ -76,10 +78,15 @@ public class DownloadButton extends LinearLayout {
                     return;
                 }
 
+                Map<String, String> params = new HashMap<>();
+                params.put("appPackage", appPackage);
+
                 if (InstalledPackagesUtils.isPackageInstalled(appPackage, getContext())) {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
                     Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackage);
                     getContext().startActivity(intent);
                 } else {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                     Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appPackage));
                     marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     try {
