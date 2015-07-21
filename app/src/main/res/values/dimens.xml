@@ -105,6 +105,7 @@
     <dimen name="details_avatar_creator">40dp</dimen>
     <dimen name="details_box_name_creator_name_text">14sp</dimen>
     <dimen name="details_box_name_creator_name_margin">15dp</dimen>
+    <dimen name="details_download_text_size">8sp</dimen>
     <dimen name="details_box_vote_size">40dp</dimen>
     <dimen name="details_box_vote_text">15sp</dimen>
     <dimen name="details_box_desc_height">90dp</dimen>
@@ -114,7 +115,7 @@
     <dimen name="details_box_desc_icon_margin">15dp</dimen>
     <dimen name="details_box_desc_app_name_text">14sp</dimen>
     <dimen name="details_box_desc_text">12sp</dimen>
-    <dimen name="details_box_desc_ic_download_size">20dp</dimen>
+    <dimen name="details_box_desc_ic_download_size">30dp</dimen>
     <dimen name="details_box_voters_padding_top">10dp</dimen>
     <dimen name="details_box_voters_padding_sides">15dp</dimen>
     <dimen name="details_box_voters_padding_bottom">5dp</dimen>

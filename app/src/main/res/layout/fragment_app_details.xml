@@ -79,12 +79,13 @@
                 android:textStyle="bold"
                 />
             
-            <Button
+            <com.apphunt.app.ui.views.widgets.DownloadButton
                 android:id="@+id/download"
-                android:layout_width="@dimen/details_box_desc_ic_download_size"
+                android:gravity="center"
+                android:layout_width="130dp"
                 android:layout_height="@dimen/details_box_desc_ic_download_size"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/ic_action_download"/>
+                />
 
             <TextView
                 android:id="@+id/desc"

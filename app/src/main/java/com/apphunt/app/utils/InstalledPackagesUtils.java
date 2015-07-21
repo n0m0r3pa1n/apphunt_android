@@ -1,5 +1,6 @@
 package com.apphunt.app.utils;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -36,4 +37,13 @@ public class InstalledPackagesUtils {
         return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 
+    public static boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
 }

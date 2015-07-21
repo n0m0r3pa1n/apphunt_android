@@ -33,6 +33,7 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
+import com.apphunt.app.ui.views.widgets.DownloadButton;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -100,6 +101,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
     @InjectView(R.id.comments_box)
     CommentsBox commentsBox;
+
+    @InjectView(R.id.download)
+    DownloadButton downloadBtn;
 
     //endregion
 
@@ -215,6 +219,7 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             votersAvatars.setAdapter(votersAdapter);
 
             commentsBox.checkIfUserCanComment();
+            downloadBtn.setAppPackage(baseApp.getPackageName());
 
             userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         }
@@ -232,15 +237,15 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
-            case R.id.box_desc:
-                if (baseApp == null) {
-                    return;
-                }
-                Map<String, String> params = new HashMap<>();
-                params.put("appId", appId);
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
-                openAppOnGooglePlay();
-                break;
+//            case R.id.box_desc:
+//                if (baseApp == null) {
+//                    return;
+//                }
+//                Map<String, String> params = new HashMap<>();
+//                params.put("appId", appId);
+//                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
+//                openAppOnGooglePlay();
+//                break;
         }
     }
 

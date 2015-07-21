@@ -8,6 +8,8 @@ import java.util.HashMap;
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
+    public static final String BASE_URL = "http://apphunt.herokuapp.com";
+
     // User's Keys
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_USER_NAME = "user_name";
