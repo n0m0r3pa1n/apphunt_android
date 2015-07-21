@@ -71,6 +71,10 @@ public class Constants {
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
 
+    //Extras
+    public static final String EXTRA_IMAGES = "extra_images";
+    public static final String EXTRA_SELECTED_IMAGE = "selected_image";
+
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
 

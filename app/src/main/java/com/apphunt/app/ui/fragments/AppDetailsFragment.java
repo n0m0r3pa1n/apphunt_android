@@ -32,6 +32,7 @@ import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.views.CommentsBox;
+import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
 import com.apphunt.app.utils.ImageUtils;
@@ -50,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AppDetailsFragment extends BaseFragment implements OnClickListener, CommentsBox.OnDisplayCommentBox {
+public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDisplayCommentBox {
 
     private static final String TAG = AppDetailsFragment.class.getName();
 
@@ -105,6 +106,9 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
     @InjectView(R.id.download)
     DownloadButton downloadBtn;
 
+    @InjectView(R.id.gallery)
+    GalleryView gallery;
+
     //endregion
 
     @Override
@@ -135,7 +139,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
         ActionBarUtils.getInstance().hideActionBarShadow();
         commentsBox.setBelowId(boxDetails.getId());
         commentsBox.setAppId(appId);
-        boxDesc.setOnClickListener(this);
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -220,6 +223,12 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
 
             commentsBox.checkIfUserCanComment();
             downloadBtn.setAppPackage(baseApp.getPackageName());
+            if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
+                gallery.setVisibility(View.GONE);
+            } else {
+                gallery.setImages(baseApp.getScreenshots());
+            }
+
 
             userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         }
@@ -231,21 +240,6 @@ public class AppDetailsFragment extends BaseFragment implements OnClickListener,
             commentsBox.resetComments(event.getComments());
         } else {
             commentsBox.setComments(event.getComments());
-        }
-    }
-
-    @Override
-    public void onClick(final View v) {
-        switch (v.getId()) {
-//            case R.id.box_desc:
-//                if (baseApp == null) {
-//                    return;
-//                }
-//                Map<String, String> params = new HashMap<>();
-//                params.put("appId", appId);
-//                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
-//                openAppOnGooglePlay();
-//                break;
         }
     }
 

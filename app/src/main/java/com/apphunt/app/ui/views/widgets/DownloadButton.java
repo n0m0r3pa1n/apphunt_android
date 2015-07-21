@@ -107,7 +107,7 @@ public class DownloadButton extends LinearLayout {
         if(InstalledPackagesUtils.isPackageInstalled(appPackage, getContext())) {
             textView.setText(R.string.open);
         } else {
-            textView.setText(R.string.download);
+            textView.setText(R.string.install);
         }
 
     }

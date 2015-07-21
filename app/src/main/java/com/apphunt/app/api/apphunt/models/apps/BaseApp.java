@@ -28,6 +28,8 @@ public class BaseApp implements Serializable {
     private User createdBy;
     private int commentsCount;
     private ArrayList<String> categories = new ArrayList<>();
+    private ArrayList<String> screenshots = new ArrayList<>();
+
 
     public int getPosition() {
         return position;
@@ -135,6 +137,14 @@ public class BaseApp implements Serializable {
 
     public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
+    }
+
+    public ArrayList<String> getScreenshots() {
+        return screenshots;
+    }
+
+    public void setScreenshots(ArrayList<String> screenshots) {
+        this.screenshots = screenshots;
     }
 
     @Override

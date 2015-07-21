@@ -440,7 +440,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(networkChangeReceiver);
+        try {
+            unregisterReceiver(networkChangeReceiver);
+        } catch (IllegalArgumentException e) {
+            Crashlytics.logException(e);
+        }
         AppSpice.onStop(this);
     }
 
