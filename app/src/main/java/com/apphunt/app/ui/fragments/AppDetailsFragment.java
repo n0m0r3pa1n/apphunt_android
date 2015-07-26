@@ -2,8 +2,11 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
@@ -14,8 +17,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +40,7 @@ import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
+import com.apphunt.app.ui.views.widgets.JHexedPhotoView;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -44,7 +50,10 @@ import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -109,6 +118,10 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.gallery)
     GalleryView gallery;
 
+    @InjectView(R.id.hexedView)
+    FrameLayout hexedPhotoView;
+
+    private Handler handler = new Handler();
     //endregion
 
     @Override
@@ -231,6 +244,32 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
 
 
             userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    final List<Bitmap> icons = new ArrayList<Bitmap>();
+                    for (int i = 0; i < baseApp.getVotes().size(); i++) {
+                        try {
+                            icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture()).get());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
+                            hexedView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                            hexedPhotoView.addView(hexedView);
+                        }
+                    });
+
+
+                    return null;
+                }
+            }.execute();
         }
     }
 

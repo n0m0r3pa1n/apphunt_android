@@ -36,8 +36,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.facebook.android:facebook-android-sdk:3.22.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.6'
     compile 'com.squareup.picasso:picasso:2.4.0'
@@ -57,4 +57,5 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile 'me.gujun.android.taggroup:library:1.4'
     compile 'de.hdodenhof:circleimageview:1.3.0'
+    compile project(':jhexed')
 }

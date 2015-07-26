@@ -10,4 +10,13 @@
     <declare-styleable name="CollectionView">
         <attr name="buttonsEnabled" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="JHexedPhotoView">
+        <attr name="cellWidth" format="integer"/>
+        <attr name="cellHeight" format="integer"/>
+        <attr name="fieldWidth" format="integer"/>
+        <attr name="fieldHeight" format="integer"/>
+        <attr name="hexBorder" format="color"/>
+        <attr name="hexSelectedBorder" format="color"/>
+        <attr name="hexLineWidth" format="float"/>
+    </declare-styleable>
 </resources>
