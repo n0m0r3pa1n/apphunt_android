@@ -62,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDisplayCommentBox {
 
     private static final String TAG = AppDetailsFragment.class.getName();
+    private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
 
     private String appId;
     private String userId;
@@ -96,6 +97,9 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.creator_name)
     TextView creatorName;
 
+    @InjectView(R.id.rating)
+    TextView rating;
+
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
 
@@ -116,6 +120,7 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
 
     private Handler handler = new Handler();
     public static final int MIN_HEX_IMAGES_SIZE = 15;
+    private boolean shouldStopLoading = false;
     //endregion
 
     @Override
@@ -196,76 +201,87 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @Subscribe
     public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
         baseApp = event.getBaseApp();
-        if (!isAdded()) {
+        if (!isAdded() || baseApp == null) {
             return;
         }
-        if (baseApp != null) {
-            baseApp.setPosition(itemPosition);
-            voteBtn.setBaseApp(baseApp);
 
-            Picasso.with(activity)
-                    .load(baseApp.getCreatedBy().getProfilePicture())
-                    .into(creator);
-            creatorName.setText(String.format(getString(R.string.posted_by),
-                    baseApp.getCreatedBy().getUsername()));
+        baseApp.setPosition(itemPosition);
+        voteBtn.setBaseApp(baseApp);
 
-            Picasso.with(activity)
-                    .load(baseApp.getIcon())
-                    .into(icon);
-            appName.setText(baseApp.getName());
-            appDescription.setText(baseApp.getDescription());
+        Picasso.with(activity)
+                .load(baseApp.getCreatedBy().getProfilePicture())
+                .into(creator);
+        creatorName.setText(String.format(getString(R.string.posted_by),
+                baseApp.getCreatedBy().getUsername()));
 
-            commentsBox.checkIfUserCanComment();
-            downloadBtn.setAppPackage(baseApp.getPackageName());
-            if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
-                gallery.setVisibility(View.GONE);
-            } else {
-                gallery.setImages(baseApp.getScreenshots());
-            }
+        Picasso.with(activity)
+                .load(baseApp.getIcon())
+                .into(icon);
+        appName.setText(baseApp.getName());
+        appDescription.setText(baseApp.getDescription());
+        rating.setText(String.format("%.1f", baseApp.getRating()));
+
+        commentsBox.checkIfUserCanComment();
+        downloadBtn.setAppPackage(baseApp.getPackageName());
+        if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
+            gallery.setVisibility(View.GONE);
+        } else {
+            gallery.setImages(baseApp.getScreenshots());
+        }
 
 
-            userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
-            new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, Void>() {
 
-                @Override
-                protected Void doInBackground(Void... params) {
-                    final List<Bitmap> icons = new ArrayList<Bitmap>();
-                    Random random = new Random();
-                    int size = 0;
-                    if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
-                        size = MIN_HEX_IMAGES_SIZE;
-                    } else {
-                        size = baseApp.getVotes().size();
-                    }
+            @Override
+            protected Void doInBackground(Void... params) {
+                final List<Bitmap> icons = new ArrayList<Bitmap>();
+                Random random = new Random();
+                int size = 0;
+                if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
+                    size = MIN_HEX_IMAGES_SIZE;
+                } else {
+                    size = baseApp.getVotes().size();
+                }
 
-                    for (int i = 0; i < size; i++) {
-                        try {
-                            icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture()).get());
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                for (int i = 0; i < size; i++) {
+                    try {
+                        if(shouldStopLoading) {
+                            break;
                         }
+                        icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture())
+                                .tag(TAG_LOAD_VOTERS_REQ).get());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                }
+                if(isAdded()) {
                     icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(isAdded()) {
-                                hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
-                                JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
-                                hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
-                                hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                        getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
-                                hexedPhotoView.addView(hexedView);
-                            }
+
+                            hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
+                            JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
+                            hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
+                            hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
+                            hexedPhotoView.addView(hexedView);
                         }
                     });
-
-
-                    return null;
                 }
-            }.execute();
-        }
+
+                return null;
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shouldStopLoading = true;
+        Picasso.with(getActivity()).cancelTag(TAG_LOAD_VOTERS_REQ);
     }
 
     @Subscribe

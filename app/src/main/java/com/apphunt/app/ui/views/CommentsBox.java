@@ -362,5 +362,4 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
     public interface OnDisplayCommentBox {
         void onCommentsBoxDisplayed(boolean isBoxFullscreen);
     }
-
 }
