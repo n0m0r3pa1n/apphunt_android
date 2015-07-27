@@ -163,7 +163,9 @@ public class CommentsAdapter extends BaseAdapter {
         page = comments.getPage();
         notifyDataSetChanged();
 
-        listView.smoothScrollToPosition(items.size() - 2);
+        if(listView != null) {
+            listView.smoothScrollToPosition(items.size() - 2);
+        }
         totalPages = comments.getTotalPages();
     }
 

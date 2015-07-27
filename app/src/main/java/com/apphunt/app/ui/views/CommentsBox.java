@@ -14,7 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,14 +25,14 @@ import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.utils.ConnectivityUtils;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -50,7 +50,6 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
     private String appId;
 
     private RelativeLayout.LayoutParams params;
-    private LayoutInflater inflater;
 
     private CommentsAdapter commentsAdapter;
     private Comment replyToComment;
@@ -69,7 +68,7 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
     TextView hideAllComments;
 
     @InjectView(R.id.comments_count)
-    ListView commentsList;
+    LinearLayout commentsList;
 
     @InjectView(R.id.label_comment)
     TextView labelComment;
@@ -217,15 +216,9 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
     }
 
     protected void init(Context context) {
-        if(inflater == null) {
-            inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        View view = inflater.inflate(R.layout.view_comment_box, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_comment_box, this, true);
         ButterKnife.inject(this, view);
 
-        commentsList.setOnItemClickListener(this);
-        commentsList.setOnScrollListener(this);
         commentBox.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -258,8 +251,10 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
             labelNoComment.setVisibility(View.VISIBLE);
         }
         if(commentsAdapter == null) {
-            commentsAdapter = new CommentsAdapter(getContext(), comments, commentsList);
-            commentsList.setAdapter(commentsAdapter);
+            commentsAdapter = new CommentsAdapter(getContext(), comments, null);
+            for (int i = 0; i < 3; i++) {
+                commentsList.addView(commentsAdapter.getView(i, null, this));
+            }
         } else {
             commentsAdapter.addItems(comments);
         }
@@ -267,34 +262,8 @@ public class CommentsBox extends RelativeLayout implements  AbsListView.OnScroll
         headerComments.setText(getResources().getQuantityString(R.plurals.header_comments, comments.getTotalCount(), comments.getTotalCount()));
     }
 
-    public void invalidateViews() {
-        commentsList.invalidateViews();
-    }
-
-    public void checkIfUserCanComment() {
-        if (userHasPermissions()) {
-            labelComment.setVisibility(View.GONE);
-            commentBox.setVisibility(View.VISIBLE);
-        } else {
-            labelComment.setVisibility(View.VISIBLE);
-            commentBox.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    public void setBelowId(int id) {
-        belowId = id;
-    }
-
     public void setAppId(String id) {
         appId = id;
-    }
-
-    public void addOnDisplayCommentsBoxListener(OnDisplayCommentBox listener) {
-        callback = listener;
-    }
-
-    public void removeOnDisplayCommentsBoxListener(OnDisplayCommentBox listener) {
-        callback = null;
     }
 
     public void hideBox() {

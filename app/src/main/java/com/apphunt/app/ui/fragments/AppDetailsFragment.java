@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -32,8 +33,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
-import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
@@ -58,8 +59,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDisplayCommentBox {
+public class AppDetailsFragment extends BaseFragment {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
@@ -100,14 +102,11 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.rating)
     TextView rating;
 
+    @InjectView(R.id.comments_action)
+    TextView commentsAction;
+
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
-
-    @InjectView(R.id.box_desc)
-    RelativeLayout boxDesc;
-
-    @InjectView(R.id.comments_box)
-    CommentsBox commentsBox;
 
     @InjectView(R.id.download)
     DownloadButton downloadBtn;
@@ -117,6 +116,12 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
 
     @InjectView(R.id.hexedView)
     LinearLayout hexedPhotoView;
+
+    @InjectView(R.id.comments)
+    LinearLayout commentsList;
+
+    @InjectView(R.id.loading_comments)
+    CircularProgressBar loadingComments;
 
     private Handler handler = new Handler();
     public static final int MIN_HEX_IMAGES_SIZE = 15;
@@ -149,8 +154,8 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
 
     private void initUI() {
         ActionBarUtils.getInstance().hideActionBarShadow();
-        commentsBox.setBelowId(boxDetails.getId());
-        commentsBox.setAppId(appId);
+//        commentsBox.setBelowId(boxDetails.getId());
+//        commentsBox.setAppId(appId);
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -179,14 +184,12 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        commentsBox.addOnDisplayCommentsBoxListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-        commentsBox.removeOnDisplayCommentsBoxListener(this);
     }
 
     @Subscribe
@@ -195,7 +198,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        commentsBox.invalidateViews();
     }
 
     @Subscribe
@@ -221,7 +223,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
         appDescription.setText(baseApp.getDescription());
         rating.setText(String.format("%.1f", baseApp.getRating()));
 
-        commentsBox.checkIfUserCanComment();
         downloadBtn.setAppPackage(baseApp.getPackageName());
         if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
             gallery.setVisibility(View.GONE);
@@ -287,9 +288,24 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         if (event.shouldReload()) {
-            commentsBox.resetComments(event.getComments());
+            //commentsBox.resetComments(event.getComments());
+            return;
+        }
+
+        Comments comments = event.getComments();
+        if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
+            loadingComments.setVisibility(View.GONE);
+            commentsAction.setText("WRITE A COMMENT :)");
+            return;
         } else {
-            commentsBox.setComments(event.getComments());
+            loadingComments.setVisibility(View.GONE);
+            commentsList.setVisibility(View.VISIBLE);
+        }
+
+        CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), null);
+        int size = comments.getComments().size() > 3 ? 3 : comments.getComments().size();
+        for (int i = 0; i < size; i++) {
+            commentsList.addView(commentsAdapter.getView(i, null, commentsList));
         }
     }
 
@@ -318,23 +334,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-    }
-
-    @Override
-    public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
-        if (isBoxFullscreen) {
-            boxDetails.setVisibility(View.GONE);
-        } else {
-            boxDetails.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void showDetails() {
-        commentsBox.hideBox();
-    }
-
-    public boolean isCommentsBoxOpened() {
-        return commentsBox.isCommentsBoxOpened();
     }
 
     @OnClick(R.id.share)

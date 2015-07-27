@@ -280,12 +280,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-                if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-                    fragment.showDetails();
-                } else {
-                    getSupportFragmentManager().popBackStack();
-                }
+                getSupportFragmentManager().popBackStack();
                 break;
         }
         return false;
@@ -405,12 +400,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
         if (NavUtils.getInstance(this).isOnBackBlocked()) {
-            return;
-        }
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-            fragment.showDetails();
             return;
         }
 

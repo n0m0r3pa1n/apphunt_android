@@ -200,9 +200,8 @@
             android:layout_below="@id/box_desc"
             android:id="@+id/gallery"
             android:layout_marginTop="10dp"
-            android:minHeight="200dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp">
 
         </com.apphunt.app.ui.views.gallery.GalleryView>
 
@@ -217,14 +216,41 @@
             android:layout_height="1dp"
             android:background="@color/text_secondary" />
 
-
-
-
-        <com.apphunt.app.ui.views.CommentsBox
-            android:id="@+id/comments_box"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_below="@+id/divider2"/>
+            android:layout_height="wrap_content">
 
+            <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                android:id="@+id/loading_comments"
+                app:cpb_colors="@array/colors"
+                style="@style/CircularThemeProgressBar"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:indeterminate="true"
+                />
+
+            <LinearLayout
+                android:id="@+id/comments"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/comments_action"
+                android:text="ALL COMMENTS"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/bg_primary"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>
