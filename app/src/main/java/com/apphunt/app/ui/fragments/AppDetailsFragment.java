@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
 import com.apphunt.app.ui.views.widgets.JHexedPhotoView;
 import com.apphunt.app.utils.ImageUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -55,9 +57,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDisplayCommentBox {
@@ -97,12 +101,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.creator_name)
     TextView creatorName;
 
-    @InjectView(R.id.header_voters)
-    TextView headerVoters;
-
-    @InjectView(R.id.voters)
-    GridView votersAvatars;
-
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
 
@@ -119,9 +117,10 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     GalleryView gallery;
 
     @InjectView(R.id.hexedView)
-    FrameLayout hexedPhotoView;
+    LinearLayout hexedPhotoView;
 
     private Handler handler = new Handler();
+    public static final int MIN_HEX_IMAGES_SIZE = 15;
     //endregion
 
     @Override
@@ -195,16 +194,8 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
         user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
-
-        if (event.isVote()) {
-            votersAdapter.addCreatorIfNotVoter(user);
-
-        } else {
-            votersAdapter.removeCreator(user);
-        }
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         commentsBox.invalidateViews();
-        headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, votersAdapter.getTotalVoters(), votersAdapter.getTotalVoters()));
     }
 
     @Subscribe
@@ -229,11 +220,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
             appName.setText(baseApp.getName());
             appDescription.setText(baseApp.getDescription());
 
-            headerVoters.setText(activity.getResources().getQuantityString(R.plurals.header_voters, Integer.valueOf(baseApp.getVotesCount()),
-                    Integer.valueOf(baseApp.getVotesCount())));
-            votersAdapter = new VotersAdapter(activity, baseApp.getVotes());
-            votersAvatars.setAdapter(votersAdapter);
-
             commentsBox.checkIfUserCanComment();
             downloadBtn.setAppPackage(baseApp.getPackageName());
             if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
@@ -250,19 +236,32 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
                 @Override
                 protected Void doInBackground(Void... params) {
                     final List<Bitmap> icons = new ArrayList<Bitmap>();
-                    for (int i = 0; i < baseApp.getVotes().size(); i++) {
+                    Random random = new Random();
+                    int size = 0;
+                    if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
+                        size = MIN_HEX_IMAGES_SIZE;
+                    } else {
+                        size = baseApp.getVotes().size();
+                    }
+
+                    for (int i = 0; i < size; i++) {
                         try {
                             icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture()).get());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
+                    icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
-                            hexedView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-                            hexedPhotoView.addView(hexedView);
+                            if(isAdded()) {
+                                JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
+                                hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
+                                hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                        getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
+                                hexedPhotoView.addView(hexedView);
+                            }
                         }
                     });
 
@@ -307,32 +306,7 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-        ActionBarUtils.getInstance().invalidateOptionsMenu();
-
     }
-
-    private void openAppOnGooglePlay() {
-        if (baseApp == null) {
-            Crashlytics.log("App is null!");
-            return;
-        }
-
-        String appPackageName = baseApp.getPackageName();
-        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baseApp.getPackageName()));
-        marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        try {
-            marketIntent.setData(Uri.parse("market://details?id=" + appPackageName));
-            startActivity(marketIntent);
-        } catch (android.content.ActivityNotFoundException anfe) {
-            marketIntent.setData(Uri.parse(baseApp.getUrl()));
-            startActivity(marketIntent);
-        }
-    }
-
-    private boolean userHasPermissions() {
-        return LoginProviderFactory.get(activity).isUserLoggedIn();
-    }
-
 
     @Override
     public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
@@ -351,22 +325,28 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
         return commentsBox.isCommentsBoxOpened();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                if(baseApp != null) {
-                    shareWithLocalApps();
-                    FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
-                }
-                return true;
+    @OnClick(R.id.share)
+    void share() {
+        if(baseApp != null) {
+            shareWithLocalApps();
+            FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
+        }
+    }
 
-            case R.id.action_add_to_collection:
-                NavUtils.getInstance((AppCompatActivity) activity).presentSelectCollectionFragment(baseApp);
-                return true;
+    @OnClick(R.id.add_to_collection)
+    void addToCollection() {
+        if(!isAdded()) {
+            return;
+        }
 
-            default:
-                return false;
+        if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_add_to_collection);
+            return;
+        }
+
+        if(baseApp != null) {
+            NavUtils.getInstance((AppCompatActivity) activity).presentSelectCollectionFragment(baseApp);
+            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
         }
     }
 

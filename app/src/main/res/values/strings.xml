@@ -151,6 +151,6 @@
         <item>all</item>
         <item>vote</item>
     </string-array>
-    <string name="title_activity_gallery">GalleryActivity</string>
+    <string name="title_activity_gallery">Screenshots</string>
 
 </resources>

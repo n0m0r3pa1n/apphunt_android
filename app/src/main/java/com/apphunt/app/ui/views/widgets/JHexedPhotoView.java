@@ -225,7 +225,7 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
         for (final String s : assetImageNames) {
             //final InputStream in = assetManager.open(s);
             try {
-                final Bitmap loaded = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_launcher);
+                final Bitmap loaded = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_logo_a);
                 result[index++] = loaded;
             } finally {
                 //in.close();
@@ -309,42 +309,42 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
 
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                this.lastPointerX = event.getX();
-                this.lastPointerY = event.getY();
-                this.dragModeActive = true;
-
-                // find selected
-                final float absPointX = this.lastPointerX + this.screenOffsetX;
-                final float absPointY = this.lastPointerY + this.screenOffsetY;
-
-                final HexPosition pressedHex = this.engine.pointToHex(absPointX, absPointY);
-
-                this.selectedHexPosition = pressedHex.isAtModel(this.hexModel) ? pressedHex : null;
-
-                this.invalidate();
-            }
-            break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_MOVE: {
-                if (this.dragModeActive) {
-                    final float dx = lastPointerX - event.getX();
-                    final float dy = lastPointerY - event.getY();
-
-                    this.screenOffsetX = this.screenOffsetX + Math.round(dx);
-                    this.screenOffsetY = this.screenOffsetY + Math.round(dy);
-                    this.lastPointerX = event.getX();
-                    this.lastPointerY = event.getY();
-
-                    this.invalidate();
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dragModeActive = false;
-                }
-            }
-            break;
-        }
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN: {
+//                this.lastPointerX = event.getX();
+//                this.lastPointerY = event.getY();
+//                this.dragModeActive = true;
+//
+//                // find selected
+//                final float absPointX = this.lastPointerX + this.screenOffsetX;
+//                final float absPointY = this.lastPointerY + this.screenOffsetY;
+//
+//                final HexPosition pressedHex = this.engine.pointToHex(absPointX, absPointY);
+//
+//                this.selectedHexPosition = pressedHex.isAtModel(this.hexModel) ? pressedHex : null;
+//
+//                this.invalidate();
+//            }
+//            break;
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_MOVE: {
+//                if (this.dragModeActive) {
+//                    final float dx = lastPointerX - event.getX();
+//                    final float dy = lastPointerY - event.getY();
+//
+//                    this.screenOffsetX = this.screenOffsetX + Math.round(dx);
+//                    this.screenOffsetY = this.screenOffsetY + Math.round(dy);
+//                    this.lastPointerX = event.getX();
+//                    this.lastPointerY = event.getY();
+//
+//                    this.invalidate();
+//                }
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    dragModeActive = false;
+//                }
+//            }
+//            break;
+//        }
 
         return true;
     }

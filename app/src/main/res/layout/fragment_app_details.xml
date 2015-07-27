@@ -1,158 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:background="@color/bg_primary">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/hexedView"
-        android:orientation="vertical"
-        android:gravity="fill_vertical"/>
-
-    <com.apphunt.app.ui.views.gallery.GalleryView
-        android:layout_below="@id/hexedView"
-        android:id="@+id/gallery"
-        android:layout_width="match_parent"
-        android:layout_height="250dp">
-
-    </com.apphunt.app.ui.views.gallery.GalleryView>
-
+    android:background="@color/bg_secondary"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
-        android:id="@+id/box_details"
-        android:layout_below="@id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:background="@color/bg_secondary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/hexedView"
+            android:orientation="vertical" />
 
         <RelativeLayout
-            android:id="@+id/box_name"
+            android:id="@+id/box_details"
+            android:layout_marginTop="@dimen/details_box_name_margin_bottom"
+            android:layout_below="@id/hexedView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/details_box_name_height"
-            android:layout_marginBottom="@dimen/details_box_name_margin_bottom"
-            android:paddingRight="@dimen/details_box_name_padding"
-            android:paddingLeft="@dimen/details_box_name_padding"
-            android:elevation="0dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/creator_avatar"
-                android:layout_width="@dimen/details_avatar_creator"
-                android:layout_height="@dimen/details_avatar_creator"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:id="@+id/creator_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/details_box_name_creator_name_text"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
-                android:layout_toLeftOf="@+id/vote"
-                android:layout_toRightOf="@+id/creator_avatar"/>
-
-            <com.apphunt.app.ui.views.vote.AppVoteButton
-                android:id="@+id/vote_btn"
-                android:layout_width="@dimen/details_box_vote_size"
-                android:layout_height="@dimen/details_box_vote_size"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                />
-
-
-            </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/box_desc"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/details_box_desc_height"
-            android:layout_below="@+id/box_name"
-            android:paddingLeft="@dimen/details_box_desc_padding_left"
-            android:paddingRight="@dimen/details_box_desc_padding_left"
-            android:paddingBottom="@dimen/details_box_desc_padding_top"
-            android:paddingTop="@dimen/details_box_desc_padding_top"
-            android:elevation="0dp"
-            android:background="@color/bg_box_desc">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/icon"
                 android:layout_width="@dimen/details_box_desc_icon_size"
                 android:layout_height="@dimen/details_box_desc_icon_size"
+                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/details_box_desc_icon_margin"
+                android:layout_marginLeft="@dimen/details_box_name_margin_bottom"
                 />
 
             <TextView
                 android:id="@+id/app_name"
+                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/details_box_name_padding"
                 android:layout_toRightOf="@+id/icon"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/details_box_desc_app_name_text"
-                android:textStyle="bold"
                 />
 
-            <com.apphunt.app.ui.views.widgets.DownloadButton
-                android:id="@+id/download"
-                android:gravity="center"
-                android:layout_width="130dp"
-                android:layout_height="@dimen/details_box_desc_ic_download_size"
-                android:layout_alignParentRight="true"
+
+            <RelativeLayout
+                android:id="@+id/box_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/details_box_name_height"
+                android:layout_below="@id/app_name"
+                android:layout_toRightOf="@id/icon"
+                android:layout_marginTop="10dp"
+                android:paddingRight="@dimen/details_box_name_padding"
+                android:paddingLeft="@dimen/details_box_name_padding"
+                android:elevation="0dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/creator_avatar"
+                    android:layout_width="@dimen/details_avatar_creator"
+                    android:layout_height="@dimen/details_avatar_creator"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/creator_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/details_box_name_creator_name_text"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
+                    android:layout_toLeftOf="@+id/vote"
+                    android:layout_toRightOf="@+id/creator_avatar"/>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <com.apphunt.app.ui.views.widgets.DownloadButton
+            android:id="@+id/download"
+            android:layout_marginRight="@dimen/details_box_name_creator_name_margin"
+            android:gravity="center"
+            android:layout_below="@id/box_details"
+            android:layout_width="120dp"
+            android:layout_height="@dimen/details_box_desc_ic_download_size"
+            android:layout_alignParentRight="true"
+            />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:elevation="0dp"
+            android:layout_below="@id/download"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_secondary" />
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_below="@id/divider"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <RelativeLayout
+                android:background="@drawable/btn_circle_background"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size">
+
+                <TextView
+                    android:id="@+id/rating"
+                    android:text="4.6"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="22sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textIsSelectable="true" />
+
+                <TextView
+                    android:text="Rating"
+                    android:textSize="11sp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true" />
+
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_marginLeft="@dimen/details_buttons_margin"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:background="@drawable/selector_details_btn"
+                android:src="@drawable/ic_detail_share"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size" />
+
+            <ImageView
+                android:id="@+id/add_to_collection"
+                android:layout_marginLeft="@dimen/details_buttons_margin"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:background="@drawable/selector_details_btn"
+                android:src="@drawable/ic_add_to_collection"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size" />
+
+            <com.apphunt.app.ui.views.vote.AppVoteButton
+                android:layout_marginLeft="@dimen/details_buttons_margin"
+                android:id="@+id/vote_btn"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size"
                 />
 
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/box_desc"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/details_box_desc_height"
+            android:layout_below="@id/buttons_container"
+            android:paddingLeft="@dimen/details_box_desc_padding_left"
+            android:paddingRight="@dimen/details_box_desc_padding_left"
+            android:paddingBottom="@dimen/details_box_desc_padding_top"
+            android:paddingTop="@dimen/details_box_desc_padding_top"
+            android:elevation="0dp">
+
+            <!--android:layout_toRightOf="@+id/icon"-->
+            <!--android:layout_below="@+id/app_name"-->
             <TextView
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/icon"
-                android:layout_below="@+id/app_name"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/details_box_desc_text"
                 />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/box_voters"
+        <com.apphunt.app.ui.views.gallery.GalleryView
+            android:layout_below="@id/box_desc"
+            android:id="@+id/gallery"
+            android:layout_marginTop="10dp"
+            android:minHeight="200dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/details_box_voters_padding_top"
-            android:paddingLeft="@dimen/details_box_voters_padding_sides"
-            android:paddingRight="@dimen/details_box_voters_padding_sides"
-            android:paddingBottom="@dimen/details_box_voters_padding_bottom"
-            android:layout_below="@+id/box_desc">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/header_voters"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginBottom="@dimen/details_box_voters_header_margin"
-                android:text="0 voters"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@color/text_headers"/>
+        </com.apphunt.app.ui.views.gallery.GalleryView>
 
-            <GridView
-                android:id="@+id/voters"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnWidth="@dimen/voters_gridview_column_width"
-                android:numColumns="auto_fit"
-                android:layout_below="@id/header_voters"
-                android:verticalSpacing="@dimen/voters_gridview_vertical_spacing"
-                />
+        <View
+            android:id="@+id/divider2"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:elevation="0dp"
+            android:layout_below="@id/gallery"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_secondary" />
 
-            </RelativeLayout>
 
-        </RelativeLayout>
+
 
         <com.apphunt.app.ui.views.CommentsBox
             android:id="@+id/comments_box"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/box_details"/>
+            android:layout_height="350dp"
+            android:layout_below="@+id/divider2"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

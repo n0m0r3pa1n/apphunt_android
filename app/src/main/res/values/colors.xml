@@ -37,7 +37,8 @@
 
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
-    <color name="text_headers">#C8FFFFFF</color>
+    <color name="text_headers">#36000000</color>
+    <color name="text_secondary">#46000000</color>
     <color name="divider">#cdcdcd</color>
     <color name="comment_entry_hint">#69000000</color>
     <color name="bg_own_comment">#69fcfeda</color>

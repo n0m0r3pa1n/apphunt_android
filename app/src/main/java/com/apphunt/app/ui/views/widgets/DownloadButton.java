@@ -10,7 +10,9 @@ import android.os.Build;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,16 +62,8 @@ public class DownloadButton extends LinearLayout {
     }
 
     private void init(Context context) {
-        textView = new TextView(context);
-        textView.setBackgroundColor(Color.parseColor("#4CAF50"));
-        final int padding = 4;
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setGravity(Gravity.CENTER);
-        textView.setPadding(padding, padding, padding, padding);
-        textView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-        textView.setTextColor(getResources().getColor(android.R.color.white));
-        textView.setTextSize(getResources().getDimension(R.dimen.details_download_text_size));
+        View view = LayoutInflater.from(context).inflate(R.layout.view_download, this, true);
+        textView = (TextView) view.findViewById(R.id.tv_download);
 
         textView.setOnClickListener(new OnClickListener() {
             @Override
@@ -99,7 +93,6 @@ public class DownloadButton extends LinearLayout {
                 }
             }
         });
-        this.addView(textView);
     }
 
     public void setAppPackage(String appPackage) {

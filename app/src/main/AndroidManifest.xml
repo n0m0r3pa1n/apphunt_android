@@ -95,6 +95,8 @@
             android:value="cc2ee6dbf972b1c1f0b6f70e17ac06b19636cbc0" />
 
         <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait"
             android:name=".ui.views.gallery.GalleryActivity"
             android:label="@string/title_activity_gallery" >
         </activity>
