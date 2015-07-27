@@ -12,14 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,7 +43,6 @@ import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -256,6 +251,7 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
                         @Override
                         public void run() {
                             if(isAdded()) {
+                                hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
                                 JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
                                 hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
                                 hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
