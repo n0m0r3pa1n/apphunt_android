@@ -146,6 +146,7 @@ public class AppDetailsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_app_details, container, false);
         ButterKnife.inject(this, view);
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         initUI();
 
