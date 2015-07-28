@@ -22,6 +22,8 @@ public class BaseApp implements Serializable {
     @SerializedName("package")
     private String packageName;
     private int votesCount;
+    @SerializedName("averageScore")
+    private double rating;
     private String shortUrl;
     private String url;
     private boolean hasVoted;
@@ -129,6 +131,14 @@ public class BaseApp implements Serializable {
 
     public void setVotesCount(int votesCount) {
         this.votesCount = votesCount;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public ArrayList<String> getCategories() {

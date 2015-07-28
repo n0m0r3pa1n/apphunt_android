@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +81,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void displayAppsForPreviousDay(AppsList appsList) {
+        if(appsList == null) {
+            return;
+        }
+
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);

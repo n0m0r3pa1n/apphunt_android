@@ -12,14 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,6 +24,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -36,8 +33,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
-import com.apphunt.app.ui.views.CommentsBox;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
@@ -47,7 +44,6 @@ import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -63,10 +59,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDisplayCommentBox {
+public class AppDetailsFragment extends BaseFragment {
 
     private static final String TAG = AppDetailsFragment.class.getName();
+    private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
 
     private String appId;
     private String userId;
@@ -101,14 +99,14 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.creator_name)
     TextView creatorName;
 
+    @InjectView(R.id.rating)
+    TextView rating;
+
+    @InjectView(R.id.comments_action)
+    TextView commentsAction;
+
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
-
-    @InjectView(R.id.box_desc)
-    RelativeLayout boxDesc;
-
-    @InjectView(R.id.comments_box)
-    CommentsBox commentsBox;
 
     @InjectView(R.id.download)
     DownloadButton downloadBtn;
@@ -119,8 +117,15 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     @InjectView(R.id.hexedView)
     LinearLayout hexedPhotoView;
 
+    @InjectView(R.id.comments)
+    LinearLayout commentsList;
+
+    @InjectView(R.id.loading_comments)
+    CircularProgressBar loadingComments;
+
     private Handler handler = new Handler();
     public static final int MIN_HEX_IMAGES_SIZE = 15;
+    private boolean shouldStopLoading = false;
     //endregion
 
     @Override
@@ -141,6 +146,7 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_app_details, container, false);
         ButterKnife.inject(this, view);
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         initUI();
 
@@ -149,8 +155,8 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
 
     private void initUI() {
         ActionBarUtils.getInstance().hideActionBarShadow();
-        commentsBox.setBelowId(boxDetails.getId());
-        commentsBox.setAppId(appId);
+//        commentsBox.setBelowId(boxDetails.getId());
+//        commentsBox.setAppId(appId);
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -179,14 +185,12 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
-        commentsBox.addOnDisplayCommentsBoxListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-        commentsBox.removeOnDisplayCommentsBoxListener(this);
     }
 
     @Subscribe
@@ -195,89 +199,114 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        commentsBox.invalidateViews();
     }
 
     @Subscribe
     public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
         baseApp = event.getBaseApp();
-        if (!isAdded()) {
+        if (!isAdded() || baseApp == null) {
             return;
         }
-        if (baseApp != null) {
-            baseApp.setPosition(itemPosition);
-            voteBtn.setBaseApp(baseApp);
 
-            Picasso.with(activity)
-                    .load(baseApp.getCreatedBy().getProfilePicture())
-                    .into(creator);
-            creatorName.setText(String.format(getString(R.string.posted_by),
-                    baseApp.getCreatedBy().getUsername()));
+        baseApp.setPosition(itemPosition);
+        voteBtn.setBaseApp(baseApp);
 
-            Picasso.with(activity)
-                    .load(baseApp.getIcon())
-                    .into(icon);
-            appName.setText(baseApp.getName());
-            appDescription.setText(baseApp.getDescription());
+        Picasso.with(activity)
+                .load(baseApp.getCreatedBy().getProfilePicture())
+                .into(creator);
+        creatorName.setText(String.format(getString(R.string.posted_by),
+                baseApp.getCreatedBy().getUsername()));
 
-            commentsBox.checkIfUserCanComment();
-            downloadBtn.setAppPackage(baseApp.getPackageName());
-            if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
-                gallery.setVisibility(View.GONE);
-            } else {
-                gallery.setImages(baseApp.getScreenshots());
-            }
+        Picasso.with(activity)
+                .load(baseApp.getIcon())
+                .into(icon);
+        appName.setText(baseApp.getName());
+        appDescription.setText(baseApp.getDescription());
+        rating.setText(String.format("%.1f", baseApp.getRating()));
+
+        downloadBtn.setAppPackage(baseApp.getPackageName());
+        if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
+            gallery.setVisibility(View.GONE);
+        } else {
+            gallery.setImages(baseApp.getScreenshots());
+        }
 
 
-            userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
+        userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
-            new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, Void>() {
 
-                @Override
-                protected Void doInBackground(Void... params) {
-                    final List<Bitmap> icons = new ArrayList<Bitmap>();
-                    Random random = new Random();
-                    int size = 0;
-                    if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
-                        size = MIN_HEX_IMAGES_SIZE;
-                    } else {
-                        size = baseApp.getVotes().size();
-                    }
+            @Override
+            protected Void doInBackground(Void... params) {
+                final List<Bitmap> icons = new ArrayList<Bitmap>();
+                Random random = new Random();
+                int size = 0;
+                if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
+                    size = MIN_HEX_IMAGES_SIZE;
+                } else {
+                    size = baseApp.getVotes().size();
+                }
 
-                    for (int i = 0; i < size; i++) {
-                        try {
-                            icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture()).get());
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                for (int i = 0; i < size; i++) {
+                    try {
+                        if(shouldStopLoading) {
+                            break;
                         }
+                        icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture())
+                                .tag(TAG_LOAD_VOTERS_REQ).get());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                }
+                if(isAdded()) {
                     icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if(isAdded()) {
-                                JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
-                                hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
-                                hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                        getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
-                                hexedPhotoView.addView(hexedView);
-                            }
+
+                            hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
+                            JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
+                            hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
+                            hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
+                            hexedPhotoView.addView(hexedView);
                         }
                     });
-
-
-                    return null;
                 }
-            }.execute();
-        }
+
+                return null;
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shouldStopLoading = true;
+        Picasso.with(getActivity()).cancelTag(TAG_LOAD_VOTERS_REQ);
     }
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         if (event.shouldReload()) {
-            commentsBox.resetComments(event.getComments());
+            //commentsBox.resetComments(event.getComments());
+            return;
+        }
+
+        Comments comments = event.getComments();
+        if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
+            loadingComments.setVisibility(View.GONE);
+            commentsAction.setText("WRITE A COMMENT :)");
+            return;
         } else {
-            commentsBox.setComments(event.getComments());
+            loadingComments.setVisibility(View.GONE);
+            commentsList.setVisibility(View.VISIBLE);
+        }
+
+        CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), null);
+        int size = comments.getComments().size() > 3 ? 3 : comments.getComments().size();
+        for (int i = 0; i < size; i++) {
+            commentsList.addView(commentsAdapter.getView(i, null, commentsList));
         }
     }
 
@@ -306,23 +335,6 @@ public class AppDetailsFragment extends BaseFragment implements CommentsBox.OnDi
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-    }
-
-    @Override
-    public void onCommentsBoxDisplayed(boolean isBoxFullscreen) {
-        if (isBoxFullscreen) {
-            boxDetails.setVisibility(View.GONE);
-        } else {
-            boxDetails.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void showDetails() {
-        commentsBox.hideBox();
-    }
-
-    public boolean isCommentsBoxOpened() {
-        return commentsBox.isCommentsBoxOpened();
     }
 
     @OnClick(R.id.share)
