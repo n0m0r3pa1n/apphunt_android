@@ -115,33 +115,20 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
      */
     private HexPosition selectedHexPosition;
 
-    public JHexedPhotoView(final Context ctx, List<Bitmap> icons, final AttributeSet attrs) {
-        super(ctx, attrs);
+    public JHexedPhotoView(final Context ctx, List<Bitmap> icons) {
+        super(ctx);
         context = ctx;
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         this.icons = icons.toArray(new Bitmap[icons.size()]);
 
         // Read properties of the View
-        final TypedArray typedArray = ctx.getTheme().obtainStyledAttributes(attrs, R.styleable.JHexedPhotoView, 0, 0);
-        try {
-            this.cellWidth = typedArray.getInt(R.styleable.JHexedPhotoView_cellWidth, 94);
-            this.cellHeight = typedArray.getInt(R.styleable.JHexedPhotoView_cellHeight, 84);
-            this.fieldWidth = typedArray.getInt(R.styleable.JHexedPhotoView_fieldWidth, 82);
-            this.fieldHeight = typedArray.getInt(R.styleable.JHexedPhotoView_fieldHeight, 82);
-            this.hexEdgeColor = typedArray.getColor(R.styleable.JHexedPhotoView_hexBorder, Color.WHITE);
-            this.hexSelectedEdgeColor = typedArray.getColor(R.styleable.JHexedPhotoView_hexSelectedBorder, Color.BLUE);
-            this.hexLineWidth = typedArray.getFloat(R.styleable.JHexedPhotoView_hexLineWidth, 4.0f);
-        } finally {
-            typedArray.recycle();
-        }
-
-        try {
-            //icons = this.isInEditMode() ? new Bitmap[0] : loadIconsFromAsset(ctx, new String[]{"astra1.jpg"});
-            //System.out.println("Loaded " + icons.length + " icon(s)");
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-
+        this.cellWidth = 94;
+        this.cellHeight = 84;
+        this.fieldWidth = 82;
+        this.fieldHeight = 82;
+        this.hexEdgeColor = Color.WHITE;
+        this.hexSelectedEdgeColor = Color.BLUE;
+        this.hexLineWidth = 4.0f;
 
         // Create and fill the model by random values for loaded icon number
         this.hexModel = new DefaultIntegerHexModel(this.fieldWidth, this.fieldHeight, -1);
@@ -259,10 +246,13 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
 
     @Override
     protected void onDraw(final Canvas canvas) {
-        final Rect visibleRect = new Rect();
+        Rect visibleRect = new Rect();
         if (this.getGlobalVisibleRect(visibleRect)) {
             this.engine.drawArea(canvas, new HexRect2D(visibleRect.left - 60, visibleRect.top - 60, visibleRect.width(), visibleRect.height()), true);
             //drawSelection(canvas);
+        } else {
+            canvas.getClipBounds(visibleRect);
+            this.engine.drawArea(canvas, new HexRect2D(visibleRect.left - 60, visibleRect.top - 60, visibleRect.width(), visibleRect.height()), true);
         }
     }
 

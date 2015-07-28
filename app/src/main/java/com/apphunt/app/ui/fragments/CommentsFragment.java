@@ -238,7 +238,12 @@ public class CommentsFragment extends BaseFragment implements AdapterView.OnItem
         }
 
         Comments comments = event.getComments();
-        if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
+        if(comments == null || comments.getComments() == null) {
+            return;
+        }
+
+        if(comments.getComments().size() == 0) {
+            loading.setVisibility(View.GONE);
             return;
         }
 

@@ -17,6 +17,7 @@
             android:id="@+id/hexedView"
             android:gravity="center"
             android:orientation="vertical">
+
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
                 android:id="@+id/loading"
                 app:cpb_colors="@array/colors"

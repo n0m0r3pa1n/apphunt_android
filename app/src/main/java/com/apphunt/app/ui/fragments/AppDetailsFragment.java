@@ -11,8 +11,11 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.util.Xml;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -20,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -36,6 +40,7 @@ import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
+import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
@@ -49,7 +54,12 @@ import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +86,7 @@ public class AppDetailsFragment extends BaseFragment {
     private View view;
     private Activity activity;
     private VotersAdapter votersAdapter;
+    private JHexedPhotoView hexedView;
 
     private RelativeLayout.LayoutParams params;
 
@@ -269,10 +280,9 @@ public class AppDetailsFragment extends BaseFragment {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
         new AsyncTask<Void, Void, Void>() {
-
+            final List<Bitmap> icons = new ArrayList<Bitmap>();
             @Override
             protected Void doInBackground(Void... params) {
-                final List<Bitmap> icons = new ArrayList<Bitmap>();
                 Random random = new Random();
                 int size = 0;
                 if(baseApp.getVotes().size() > MIN_HEX_IMAGES_SIZE) {
@@ -298,23 +308,21 @@ public class AppDetailsFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
-                if(isAdded()) {
-                    icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
-                            JHexedPhotoView hexedView = new JHexedPhotoView(getActivity(), icons, null);
-                            hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
-                            hexedView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                    getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
-                            hexedPhotoView.addView(hexedView);
-                        }
-                    });
-                }
 
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if(isAdded()) {
+                    icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
+                    hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
+                    hexedView = new JHexedPhotoView(getActivity(), icons);
+                    hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
+                    hexedPhotoView.addView(hexedView,
+                            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    getResources().getDimensionPixelSize(R.dimen.app_details_hexagon)));
+                }
             }
         }.execute();
     }
