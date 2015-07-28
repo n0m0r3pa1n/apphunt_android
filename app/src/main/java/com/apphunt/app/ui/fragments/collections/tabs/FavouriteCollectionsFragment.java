@@ -133,7 +133,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         allCollections.hideBottomLoader();
 
         if (adapter == null) {
-            adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
+            adapter = new CollectionsAdapter(getActivity(), event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();

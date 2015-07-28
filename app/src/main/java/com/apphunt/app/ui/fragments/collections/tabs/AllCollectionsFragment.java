@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -39,6 +44,12 @@ public class AllCollectionsFragment extends BaseFragment {
 
     public static AllCollectionsFragment newInstance() {
         return new AllCollectionsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -84,11 +95,44 @@ public class AllCollectionsFragment extends BaseFragment {
         BusProvider.getInstance().unregister(this);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            MenuItem sortMenu = menu.findItem(R.id.action_sort).setVisible(true);
+            Spinner spinner = (Spinner) sortMenu.getActionView().findViewById(R.id.sort_by);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String[] items = getResources().getStringArray(R.array.order_values);
+                    String selectedItem = items[position];
+                    if (previousSelectedSortItem.equals(selectedItem)) {
+                        return;
+                    }
+
+                    currentPage = 0;
+                    adapter = null;
+                    allCollections.resetListView();
+
+                    previousSelectedSortItem = selectedItem;
+                    loadMoreCollections(selectedItem);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
     @Subscribe
     public void onCollectionsReceived(GetAllCollectionsEvent event) {
         allCollections.hideBottomLoader();
         if(adapter == null) {
-            adapter = new CollectionsAdapter(event.getAppsCollection().getCollections());
+            adapter = new CollectionsAdapter(getActivity() ,event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();

@@ -22,12 +22,16 @@ public class BaseApp implements Serializable {
     @SerializedName("package")
     private String packageName;
     private int votesCount;
+    @SerializedName("averageScore")
+    private double rating;
     private String shortUrl;
     private String url;
     private boolean hasVoted;
     private User createdBy;
     private int commentsCount;
     private ArrayList<String> categories = new ArrayList<>();
+    private ArrayList<String> screenshots = new ArrayList<>();
+
 
     public int getPosition() {
         return position;
@@ -129,12 +133,28 @@ public class BaseApp implements Serializable {
         this.votesCount = votesCount;
     }
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     public ArrayList<String> getCategories() {
         return categories;
     }
 
     public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
+    }
+
+    public ArrayList<String> getScreenshots() {
+        return screenshots;
+    }
+
+    public void setScreenshots(ArrayList<String> screenshots) {
+        this.screenshots = screenshots;
     }
 
     @Override

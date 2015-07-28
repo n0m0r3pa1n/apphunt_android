@@ -37,7 +37,8 @@
 
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
-    <color name="text_headers">#C8FFFFFF</color>
+    <color name="text_headers">#36000000</color>
+    <color name="text_secondary">#46000000</color>
     <color name="divider">#cdcdcd</color>
     <color name="comment_entry_hint">#69000000</color>
     <color name="bg_own_comment">#69fcfeda</color>
@@ -45,4 +46,20 @@
 
     <drawable name="pressed_gray">#0c000000</drawable>
     <drawable name="selected_gray">#2c000000</drawable>
+
+    <!-- Progress Bar colors -->
+    <integer-array name="colors">
+        <item>@color/holo_blue_dark</item>
+        <item>@color/holo_yellow_dark</item>
+        <item>@color/holo_green_dark</item>
+        <item>@color/holo_purple_dark</item>
+        <item>@color/holo_red_dark</item>
+    </integer-array>
+
+    <color name="holo_blue_dark">#0099cc</color>
+    <color name="holo_yellow_dark">#ff8800</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_purple_dark">#9933cc</color>
+    <color name="holo_red_dark">#cc0000</color>
+
 </resources>

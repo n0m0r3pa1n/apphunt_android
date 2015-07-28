@@ -138,6 +138,9 @@
     <string name="no_favourite_collections">Favourite a collection to appear here</string>
     <string name="title_select_collection">Select Collection</string>
     <string name="sort_by">Sort by:</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="open">OPEN</string>
+    <string name="install">INSTALL</string>
 
     <string-array name="order">
         <item>Date Created</item>
@@ -148,5 +151,7 @@
         <item>all</item>
         <item>vote</item>
     </string-array>
+    <string name="title_activity_gallery">Screenshots</string>
+    <string name="title_comments">Comments</string>
 
 </resources>

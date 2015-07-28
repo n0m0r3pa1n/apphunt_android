@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +81,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void displayAppsForPreviousDay(AppsList appsList) {
+        if(appsList == null) {
+            return;
+        }
+
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);
@@ -203,7 +206,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-            ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
+            final ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
             final App app = ((AppItem) getItem(position)).getData();
 
             int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
@@ -236,10 +239,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     try {
-                        App app = ((AppItem) getItem(position)).getData();
                         NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
+                        e.printStackTrace();
                     }
                 }
             };

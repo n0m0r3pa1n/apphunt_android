@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -217,21 +218,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int backstackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
+        if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
         } else {
             menu.findItem(R.id.action_search).setVisible(false);
         }
 
-        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
-            menu.findItem(R.id.action_share).setVisible(true);
-            menu.findItem(R.id.action_add_to_collection).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_share).setVisible(false);
-            menu.findItem(R.id.action_add_to_collection).setVisible(false);
+        if (backstackEntryCount > 0 &&
+                getSupportFragmentManager().findFragmentByTag(CollectionsFragment.TAG) != null) {
+            menu.findItem(R.id.action_sort).setVisible(false);
         }
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
@@ -251,9 +250,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (TextUtils.isEmpty(s)) {
-                    BusProvider.getInstance().post(new SearchStatusEvent(false));
-                }
                 return false;
             }
         });
@@ -282,12 +278,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-                if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-                    fragment.showDetails();
-                } else {
-                    getSupportFragmentManager().popBackStack();
-                }
+                getSupportFragmentManager().popBackStack();
                 break;
         }
         return false;
@@ -298,6 +289,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if(previousPosition == position) {
             return;
         }
+        ApiClient.getClient(this).cancelAllRequests();
 
         BaseFragment fragment = null;
         boolean addToBackStack = false;
@@ -410,12 +402,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             return;
         }
 
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-            fragment.showDetails();
-            return;
-        }
-
         if (getSupportFragmentManager().getBackStackEntryCount() == 0 && !consumedBack) {
             onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
             consumedBack = true;
@@ -434,7 +420,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(networkChangeReceiver);
+        try {
+            unregisterReceiver(networkChangeReceiver);
+        } catch (IllegalArgumentException e) {
+            Crashlytics.logException(e);
+        }
         AppSpice.onStop(this);
     }
 
@@ -466,11 +456,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
     }
 
     @Subscribe

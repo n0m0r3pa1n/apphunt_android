@@ -92,14 +92,18 @@ public class ViewCollectionFragment extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlurryAgent.logEvent(TrackingEvents.UserViewedCollection);
         View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
-
-        setHasOptionsMenu(true);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
@@ -147,7 +151,6 @@ public class ViewCollectionFragment extends BaseFragment {
         if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }
-
     }
 
     @Override

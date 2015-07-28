@@ -214,6 +214,7 @@ public class TrendingAppsFragment extends BaseFragment {
     @Subscribe
     public void onClearSearch(ClearSearchEvent event) {
         trendingAppsAdapter.clearSearch();
+        rvTrendingApps.addOnScrollListener(onScrollListener);
     }
 
     @Subscribe

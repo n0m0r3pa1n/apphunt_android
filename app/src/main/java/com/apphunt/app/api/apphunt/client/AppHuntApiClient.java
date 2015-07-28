@@ -255,5 +255,8 @@ public class AppHuntApiClient implements AppHuntApi {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionBannersRequest(listener));
     }
 
-
+    @Override
+    public void cancelAllRequests() {
+        VolleyInstance.getInstance(context).cancelAllRequests();
+    }
 }

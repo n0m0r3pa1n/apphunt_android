@@ -54,7 +54,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/created_by_image"
                     android:src="@drawable/ic_add"
-                    android:layout_width="30dp"
+                    android:layout_width="@dimen/collection_creator_image_size"
                     android:layout_height="30dp"
                     />
 

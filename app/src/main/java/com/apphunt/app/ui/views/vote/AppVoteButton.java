@@ -6,7 +6,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -31,7 +33,7 @@ public class AppVoteButton extends LinearLayout {
     private LayoutInflater inflater;
 
     @InjectView(R.id.vote)
-    Button voteButton;
+    TextView voteButton;
 
     public AppVoteButton(Context context) {
         super(context);

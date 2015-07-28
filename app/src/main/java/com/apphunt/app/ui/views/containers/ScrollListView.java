@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -74,7 +76,7 @@ public class ScrollListView extends LinearLayout {
         listView.setOnScrollListener(new EndlessScrollListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
-                if(adapter.getCount() >= totalItemsCount) {
+                if (adapter.getCount() >= totalItemsCount) {
                     return;
                 }
 
@@ -88,6 +90,14 @@ public class ScrollListView extends LinearLayout {
         this.adapter = adapter;
         listView.setAdapter(adapter);
         this.totalItemsCount = totalItemsCount;
+    }
+
+    public ListView getListView() {
+        return  listView;
+    }
+
+    public void setOnItemClickListener(AbsListView.OnItemClickListener onItemClickListener) {
+        listView.setOnItemClickListener(onItemClickListener);
     }
 
     public void resetListView() {

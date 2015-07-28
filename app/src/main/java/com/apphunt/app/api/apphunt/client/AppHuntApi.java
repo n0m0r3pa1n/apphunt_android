@@ -65,4 +65,6 @@ public interface AppHuntApi {
     void deleteCollection(String collectionId);
 
     void getBanners();
+
+    void cancelAllRequests();
 }
