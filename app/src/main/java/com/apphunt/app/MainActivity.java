@@ -459,11 +459,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
     }
 
     @Subscribe

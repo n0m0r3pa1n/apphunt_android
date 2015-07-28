@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -236,6 +237,7 @@ public class AppDetailsFragment extends BaseFragment {
     @Subscribe
     public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
         baseApp = event.getBaseApp();
+
         if (!isAdded() || baseApp == null) {
             return;
         }
@@ -319,7 +321,8 @@ public class AppDetailsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        if (event.shouldReload()) {
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
+        if (event.shouldReload()  || fragment != null) {
             return;
         }
 
@@ -336,7 +339,14 @@ public class AppDetailsFragment extends BaseFragment {
         CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), null);
         int size = comments.getComments().size() < MAX_DISPLAYED_COMMENTS ? comments.getComments().size() : MAX_DISPLAYED_COMMENTS;
         for (int i = 0; i < size; i++) {
-            commentsList.addView(commentsAdapter.getView(i, null, commentsList));
+            View view = commentsAdapter.getView(i, null, commentsList);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openComments();
+                }
+            });
+            commentsList.addView(view);
         }
     }
 
@@ -369,8 +379,12 @@ public class AppDetailsFragment extends BaseFragment {
 
     @OnClick(R.id.comments_action)
     void openComments() {
+        if(baseApp == null) {
+            return;
+        }
+
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, CommentsFragment.newInstance(), Constants.TAG_COMMENTS)
+                .add(R.id.container, CommentsFragment.newInstance(baseApp.getId()), Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
                 .commit();
     }

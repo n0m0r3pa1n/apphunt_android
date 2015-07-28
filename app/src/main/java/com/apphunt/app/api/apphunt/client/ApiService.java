@@ -51,6 +51,8 @@ public class ApiService {
     }
 
     public void reloadAppComments(String applicationId) {
-        ApiClient.getClient(context).getAppComments(applicationId, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, 3, true);
+        ApiClient.getClient(context).getAppComments(applicationId,
+                SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1,
+                Constants.COMMENTS_PAGE_SIZE, true);
     }
 }

@@ -217,6 +217,7 @@
             android:background="@color/text_secondary" />
 
         <LinearLayout
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:layout_marginBottom="10dp"
             android:layout_below="@id/divider2"
@@ -225,7 +226,6 @@
 
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
                 android:id="@+id/loading_comments"
-                android:layout_marginTop="10dp"
                 style="@style/CircularThemeProgressBar"
                 android:layout_gravity="center"
                 android:layout_width="50dp"
