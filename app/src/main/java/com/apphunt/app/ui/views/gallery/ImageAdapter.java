@@ -19,6 +19,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 /**
  * Created by nmp on 15-7-21.

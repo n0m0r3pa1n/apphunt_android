@@ -57,6 +57,10 @@ public class VolleyInstance {
         getRequestQueue().add(req);
     }
 
+    public void cancelAllRequests() {
+        getRequestQueue().cancelAll(mCtx.getApplicationContext());
+    }
+
     public ImageLoader getImageLoader() {
         return mImageLoader;
     }

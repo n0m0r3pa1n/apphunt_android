@@ -65,6 +65,7 @@ public class AppDetailsFragment extends BaseFragment {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
+    public static final int MAX_DISPLAYED_COMMENTS = 3;
 
     private String appId;
     private String userId;
@@ -146,7 +147,6 @@ public class AppDetailsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_app_details, container, false);
         ButterKnife.inject(this, view);
-        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         initUI();
 
@@ -155,8 +155,6 @@ public class AppDetailsFragment extends BaseFragment {
 
     private void initUI() {
         ActionBarUtils.getInstance().hideActionBarShadow();
-//        commentsBox.setBelowId(boxDetails.getId());
-//        commentsBox.setAppId(appId);
         enterAnimation = AnimationUtils.loadAnimation(activity, R.anim.slide_in_left);
         enterAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -177,7 +175,7 @@ public class AppDetailsFragment extends BaseFragment {
     public void loadData() {
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         ApiService.getInstance(activity).loadAppDetails(userId, appId);
-        ApiService.getInstance(activity).loadAppComments(appId, userId, 1, 3);
+        ApiService.getInstance(activity).loadAppComments(appId, userId, 1, MAX_DISPLAYED_COMMENTS);
     }
 
 
@@ -252,7 +250,13 @@ public class AppDetailsFragment extends BaseFragment {
                         if(shouldStopLoading) {
                             break;
                         }
-                        icons.add(Picasso.with(getActivity()).load(baseApp.getVotes().get(i).getUser().getProfilePicture())
+
+                        User user = baseApp.getVotes().get(i).getUser();
+                        if(user == null) {
+                            continue;
+                        }
+
+                        icons.add(Picasso.with(getActivity()).load(user.getProfilePicture())
                                 .tag(TAG_LOAD_VOTERS_REQ).get());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -289,7 +293,6 @@ public class AppDetailsFragment extends BaseFragment {
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         if (event.shouldReload()) {
-            //commentsBox.resetComments(event.getComments());
             return;
         }
 
@@ -304,7 +307,7 @@ public class AppDetailsFragment extends BaseFragment {
         }
 
         CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), null);
-        int size = comments.getComments().size() > 3 ? 3 : comments.getComments().size();
+        int size = comments.getComments().size() < MAX_DISPLAYED_COMMENTS ? comments.getComments().size() : MAX_DISPLAYED_COMMENTS;
         for (int i = 0; i < size; i++) {
             commentsList.addView(commentsAdapter.getView(i, null, commentsList));
         }

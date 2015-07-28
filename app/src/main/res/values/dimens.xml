@@ -150,4 +150,5 @@
     <dimen name="details_buttons_margin">10dp</dimen>
     <dimen name="collection_creator_image_size">30dp</dimen>
     <dimen name="collection_banner_height">140dp</dimen>
+    <dimen name="view_collection_height">150dp</dimen>
 </resources>

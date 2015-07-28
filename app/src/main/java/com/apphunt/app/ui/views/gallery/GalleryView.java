@@ -14,10 +14,14 @@ import com.apphunt.app.R;
 
 import java.util.ArrayList;
 
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+
 /**
  * Created by nmp on 15-7-21.
  */
 public class GalleryView extends LinearLayout {
+    CircularProgressBar loading;
+    View view;
     RecyclerView recyclerView;
     ImageAdapter adapter;
     public GalleryView(Context context) {
@@ -50,18 +54,21 @@ public class GalleryView extends LinearLayout {
     }
 
     private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_gallery, this, false);
+        view = LayoutInflater.from(context).inflate(R.layout.view_gallery, this, false);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        loading = (CircularProgressBar) view.findViewById(R.id.loading);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+        addView(view);
     }
 
     public void setImages(ArrayList<String> images) {
+        loading.setVisibility(GONE);
+        recyclerView.setVisibility(VISIBLE);
         adapter = new ImageAdapter(getContext(), images);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        addView(recyclerView);
     }
 }

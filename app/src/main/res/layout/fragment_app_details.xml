@@ -225,7 +225,7 @@
 
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
                 android:id="@+id/loading_comments"
-                app:cpb_colors="@array/colors"
+                android:layout_marginTop="10dp"
                 style="@style/CircularThemeProgressBar"
                 android:layout_gravity="center"
                 android:layout_width="50dp"

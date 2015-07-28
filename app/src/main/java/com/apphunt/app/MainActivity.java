@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -291,6 +292,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if(previousPosition == position) {
             return;
         }
+        ApiClient.getClient(this).cancelAllRequests();
 
         BaseFragment fragment = null;
         boolean addToBackStack = false;

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -105,7 +106,9 @@ public class CollectionView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        BusProvider.getInstance().register(this);
+        try {
+            BusProvider.getInstance().register(this);
+        } catch(Exception e) {}
     }
 
     @Override
@@ -192,7 +195,23 @@ public class CollectionView extends RelativeLayout {
         name.setText(collection.getName());
         createdBy.setText(collection.getCreatedBy().getUsername());
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
-        Picasso.with(getContext()).load(collection.getPicture()).into(banner);
+
+        final ViewTreeObserver viewTree = banner.getViewTreeObserver();
+        viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = banner.getViewTreeObserver();
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeGlobalOnLayoutListener(this);
+                } else {
+                    obs.removeOnGlobalLayoutListener(this);
+                }
+                Picasso.with(getContext()).load(appsCollection.getPicture()).resize(
+                        banner.getWidth(),
+                        getResources().getDimensionPixelSize(R.dimen.view_collection_height)
+                ).into(banner);
+            }
+        });
     }
 
     public AppsCollection getCollection() {

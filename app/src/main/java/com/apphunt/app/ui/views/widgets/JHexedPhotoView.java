@@ -15,7 +15,9 @@ import com.igormaznitsa.jhexed.engine.misc.HexPoint2D;
 import com.igormaznitsa.jhexed.engine.misc.HexPosition;
 import com.igormaznitsa.jhexed.engine.misc.HexRect2D;
 import com.igormaznitsa.jhexed.engine.renders.HexEngineRender;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -83,6 +85,7 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
      * Array contains prepared and optimized icons to be drawn in hexagons
      */
     private final Bitmap[] iconsOptimizedForHexagons;
+    private final Context context;
     /**
      * The Hexagonal Path.
      */
@@ -114,6 +117,7 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
 
     public JHexedPhotoView(final Context ctx, List<Bitmap> icons, final AttributeSet attrs) {
         super(ctx, attrs);
+        context = ctx;
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         this.icons = icons.toArray(new Bitmap[icons.size()]);
 
@@ -174,7 +178,7 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
      * @param hexPath a Path describes a hexagon, must not be null
      * @return an array contains resized and masked icons to be drawn in hexagons
      */
-    private static Bitmap[] makeHexagonalIcons(final Bitmap[] icons, final Path hexPath) {
+    private Bitmap[] makeHexagonalIcons(final Bitmap[] icons, final Path hexPath) {
         final Bitmap[] result = new Bitmap[icons.length];
 
         final int maskColor = 0xff424242;

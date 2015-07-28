@@ -3,13 +3,16 @@ package com.apphunt.app.ui.adapters.collections;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,12 +36,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CollectionsAdapter extends BaseAdapter {
     public static final String TAG = CollectionsAdapter.class.getSimpleName();
+    public static final int COMPAT_PADDING = 5;
     private List<AppsCollection> appsCollections;
     private Context context;
+    int width;
 
     public CollectionsAdapter(Context context,  List<AppsCollection> appsCollections) {
         this.appsCollections = appsCollections;
         this.context = context;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
     }
 
     public void updateData(List<AppsCollection> appsCollections) {
@@ -107,23 +118,10 @@ public class CollectionsAdapter extends BaseAdapter {
                         resources.getDimensionPixelSize(R.dimen.collection_creator_image_size))
                 .into(viewHolder.createdByImage);
 
-        final ViewTreeObserver viewTree = viewHolder.banner.getViewTreeObserver();
-        viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    viewTree.removeGlobalOnLayoutListener(this);
-                } else {
-                    viewTree.removeOnGlobalLayoutListener(this);
-                }
-
-                Picasso.with(context)
-                        .load(appsCollection.getPicture())
-                        .resize(viewHolder.banner.getWidth(), resources.getDimensionPixelSize(R.dimen.collection_banner_height))
-                        .into(viewHolder.banner);
-            }
-        });
+        Picasso.with(context)
+                .load(appsCollection.getPicture())
+                .resize(width - COMPAT_PADDING, resources.getDimensionPixelSize(R.dimen.collection_banner_height))
+                .into(viewHolder.banner);
 
         return convertView;
     }
