@@ -152,5 +152,6 @@
         <item>vote</item>
     </string-array>
     <string name="title_activity_gallery">Screenshots</string>
+    <string name="title_comments">Comments</string>
 
 </resources>

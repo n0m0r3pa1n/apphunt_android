@@ -191,6 +191,40 @@ public class AppDetailsFragment extends BaseFragment {
         BusProvider.getInstance().unregister(this);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shouldStopLoading = true;
+        Picasso.with(getActivity()).cancelTag(TAG_LOAD_VOTERS_REQ);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            return enterAnimation;
+        } else {
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_out_right);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.title_app_details;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ActionBarUtils.getInstance().showActionBarShadow();
+    }
+
     @Subscribe
     public void onVotersReceived(AppVoteEvent event) {
         user = new User();
@@ -283,13 +317,6 @@ public class AppDetailsFragment extends BaseFragment {
         }.execute();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        shouldStopLoading = true;
-        Picasso.with(getActivity()).cancelTag(TAG_LOAD_VOTERS_REQ);
-    }
-
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         if (event.shouldReload()) {
@@ -313,32 +340,7 @@ public class AppDetailsFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        if (enter) {
-            return enterAnimation;
-        } else {
-            return AnimationUtils.loadAnimation(activity, R.anim.slide_out_right);
-        }
-    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.title_app_details;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        ActionBarUtils.getInstance().showActionBarShadow();
-    }
 
     @OnClick(R.id.share)
     void share() {
@@ -363,6 +365,14 @@ public class AppDetailsFragment extends BaseFragment {
             NavUtils.getInstance((AppCompatActivity) activity).presentSelectCollectionFragment(baseApp);
             FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
         }
+    }
+
+    @OnClick(R.id.comments_action)
+    void openComments() {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, CommentsFragment.newInstance(), Constants.TAG_COMMENTS)
+                .addToBackStack(Constants.TAG_COMMENTS)
+                .commit();
     }
 
     private void shareWithLocalApps() {
