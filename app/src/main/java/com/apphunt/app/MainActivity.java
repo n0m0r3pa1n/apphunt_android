@@ -250,9 +250,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (TextUtils.isEmpty(s)) {
-                    BusProvider.getInstance().post(new SearchStatusEvent(false));
-                }
                 return false;
             }
         });
