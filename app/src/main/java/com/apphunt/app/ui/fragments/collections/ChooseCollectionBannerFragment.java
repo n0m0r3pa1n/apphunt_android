@@ -16,7 +16,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBannersList;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetBannersEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetBannersApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -88,7 +88,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onBannersReceived(GetBannersEvent event) {
+    public void onBannersReceived(GetBannersApiEvent event) {
         list = event.getBannersList();
         bannersList.setAdapter(new CollectionBannersAdapter(activity, list));
     }

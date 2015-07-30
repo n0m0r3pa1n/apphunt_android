@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.collections.hunters.HuntersCollections;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionApiEvent;
 
 public class GetTopHuntersRequest extends BaseGetRequest<HuntersCollections> {
     public GetTopHuntersRequest(String criteria, Response.ErrorListener listener) {
@@ -18,6 +18,6 @@ public class GetTopHuntersRequest extends BaseGetRequest<HuntersCollections> {
 
     @Override
     public void deliverResponse(HuntersCollections response) {
-        BusProvider.getInstance().post(new GetTopHuntersCollectionEvent(response));
+        BusProvider.getInstance().post(new GetTopHuntersCollectionApiEvent(response));
     }
 }

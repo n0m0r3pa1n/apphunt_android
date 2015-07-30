@@ -3,16 +3,12 @@ package com.apphunt.app.event_bus.events.api.collections;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 
 /**
- * * Created by Seishin <atanas@naughtyspirit.co>
- * * on 5/26/15.
- * *
- * * NaughtySpirit 2015
+ * Created by nmp on 15-6-29.
  */
-public class GetTopAppsCollectionEvent {
-
+public class GetFavouriteCollectionsApiEvent {
     private AppsCollections appsCollection;
 
-    public GetTopAppsCollectionEvent(AppsCollections appsCollection) {
+    public GetFavouriteCollectionsApiEvent(AppsCollections appsCollection) {
         this.appsCollection = appsCollection;
     }
 

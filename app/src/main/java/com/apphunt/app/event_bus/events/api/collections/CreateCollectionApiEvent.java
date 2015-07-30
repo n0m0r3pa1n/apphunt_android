@@ -5,10 +5,10 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 /**
  * Created by nmp on 15-6-30.
  */
-public class CreateCollectionEvent {
+public class CreateCollectionApiEvent {
     private AppsCollection appsCollection;
 
-    public CreateCollectionEvent(AppsCollection appsCollection) {
+    public CreateCollectionApiEvent(AppsCollection appsCollection) {
         this.appsCollection = appsCollection;
     }
 

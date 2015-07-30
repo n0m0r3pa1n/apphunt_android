@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,10 +21,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.client.AppHuntApiClient;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
@@ -34,11 +36,10 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.SettingsFragment;
-import com.apphunt.app.ui.fragments.SuggestFragment;
+import com.apphunt.app.ui.fragments.notification.SettingsFragment;
+import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -46,6 +47,7 @@ import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -73,11 +75,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private Boolean hasInternet = null;
     boolean isNetworkChanged = false;
     private int previousPosition = 0;
+    private int versionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            versionCode = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionCode;
+            ApiClient.getClient(this).getLatestAppVersionCode();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
         initUI();
         initDeepLinking();
         initNotifications();
@@ -468,5 +481,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @SuppressWarnings("unused")
     public void showNotificationFragment(ShowNotificationEvent event) {
         NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
+    }
+
+    @Subscribe
+    public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
+        if(versionCode != event.getVersion().getVersionCode()) {
+            Toast.makeText(this, "You need update", Toast.LENGTH_SHORT).show();
+        }
+        UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), "UpdateRquired");
+
     }
 }

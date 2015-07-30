@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;

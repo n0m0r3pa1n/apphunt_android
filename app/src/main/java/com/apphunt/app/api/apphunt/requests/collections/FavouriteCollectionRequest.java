@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.requests.base.BasePutRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionApiEvent;
 
 import org.json.JSONObject;
 
@@ -28,6 +28,6 @@ public class FavouriteCollectionRequest extends BasePutRequest<JSONObject> {
     @Override
     public void deliverResponse(JSONObject response) {
         collection.setIsFavourite(true);
-        BusProvider.getInstance().post(new FavouriteCollectionEvent(collection, getRawResponse().statusCode));
+        BusProvider.getInstance().post(new FavouriteCollectionApiEvent(collection, getRawResponse().statusCode));
     }
 }

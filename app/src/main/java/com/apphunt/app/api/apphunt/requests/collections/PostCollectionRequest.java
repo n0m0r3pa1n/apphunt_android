@@ -5,7 +5,7 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
 
 public class PostCollectionRequest extends BasePostRequest<AppsCollection> {
     public PostCollectionRequest(NewCollection collection, Response.ErrorListener listener) {
@@ -19,6 +19,6 @@ public class PostCollectionRequest extends BasePostRequest<AppsCollection> {
 
     @Override
     public void deliverResponse(AppsCollection response) {
-        BusProvider.getInstance().post(new CreateCollectionEvent(response));
+        BusProvider.getInstance().post(new CreateCollectionApiEvent(response));
     }
 }

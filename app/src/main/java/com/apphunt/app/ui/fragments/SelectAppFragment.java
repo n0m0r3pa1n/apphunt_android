@@ -21,7 +21,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.UserAppsAdapter;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.InstalledPackagesUtils;
+import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -143,7 +143,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         @Override
         protected Packages doInBackground(Void... params) {
             Packages packages = new Packages();
-            data = InstalledPackagesUtils.installedPackages(activity.getPackageManager());
+            data = PackagesUtils.installedPackages(activity.getPackageManager());
             for (ApplicationInfo info : data) {
                 packages.getPackages().add(info.packageName);
             }

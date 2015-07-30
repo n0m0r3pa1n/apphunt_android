@@ -26,7 +26,7 @@ public class AppHuntApplication extends Application {
 
         SharedPreferencesHelper.init(this);
         initNetworking();
-        initAnalytics();
+        //initAnalytics();
     }
 
     private void initAnalytics() {

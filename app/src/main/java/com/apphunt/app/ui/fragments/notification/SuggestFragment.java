@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 

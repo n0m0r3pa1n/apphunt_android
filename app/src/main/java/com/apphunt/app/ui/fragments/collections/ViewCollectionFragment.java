@@ -29,7 +29,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -231,7 +231,7 @@ public class ViewCollectionFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if (appsCollection.getApps().size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -252,7 +252,7 @@ public class ViewCollectionFragment extends BaseFragment {
         hideSoftKeyboard();
         if(isSave) {
             FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
-            BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
+            BusProvider.getInstance().post(new UpdateCollectionApiEvent(appsCollection, false));
         }
     }
 }

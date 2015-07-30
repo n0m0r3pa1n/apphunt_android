@@ -5,10 +5,10 @@ import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBannersList
 /**
  * Created by nmp on 15-7-9.
  */
-public class GetBannersEvent {
+public class GetBannersApiEvent {
     private CollectionBannersList bannersList;
 
-    public GetBannersEvent(CollectionBannersList bannersList) {
+    public GetBannersApiEvent(CollectionBannersList bannersList) {
         this.bannersList = bannersList;
     }
 

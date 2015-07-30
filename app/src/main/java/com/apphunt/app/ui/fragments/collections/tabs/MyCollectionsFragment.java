@@ -16,10 +16,10 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
@@ -125,7 +125,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     }
 
     @Subscribe
-    public void onMyCollectionsReceive(GetMyCollectionsEvent event) {
+    public void onMyCollectionsReceive(GetMyCollectionsApiEvent event) {
         collectionsList.hideBottomLoader();
         collections = event.getAppsCollection().getCollections();
 
@@ -145,7 +145,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     }
 
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if (event.getAppsCollection() != null && event.isSuccess()) {
             selectCollectionAdapter = null;
             currentPage = 0;
@@ -154,7 +154,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     }
 
     @Subscribe
-    public void onCollectionCreateSuccess(CreateCollectionEvent event) {
+    public void onCollectionCreateSuccess(CreateCollectionApiEvent event) {
         selectCollectionAdapter.addCollection(event.getAppsCollection());
         if(collectionsList.getAdapter() == null) {
             collectionsList.setAdapter(selectCollectionAdapter, selectCollectionAdapter.getItemCount());
@@ -164,7 +164,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     }
 
     @Subscribe
-    public void onCollectionDeleted(DeleteCollectionEvent event) {
+    public void onCollectionDeleted(DeleteCollectionApiEvent event) {
         String collectionId = event.getCollectionId();
         selectCollectionAdapter.removeCollection(collectionId);
         activity.getSupportFragmentManager().popBackStack();

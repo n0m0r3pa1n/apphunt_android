@@ -37,6 +37,7 @@ import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
+import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
@@ -253,6 +254,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getBanners() {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionBannersRequest(listener));
+    }
+
+    @Override
+    public void getLatestAppVersionCode() {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetLatestAppVersionRequest(listener));
     }
 
     @Override

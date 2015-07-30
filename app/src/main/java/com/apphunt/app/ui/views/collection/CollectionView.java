@@ -19,7 +19,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
@@ -141,7 +141,7 @@ public class CollectionView extends RelativeLayout {
     }
 
     @Subscribe
-    public void onCollectionUpdate(UpdateCollectionEvent event) {
+    public void onCollectionUpdate(UpdateCollectionApiEvent event) {
         AppsCollection newCollection = event.getAppsCollection();
         if (!newCollection.getId().equals(appsCollection.getId())) {
             return;

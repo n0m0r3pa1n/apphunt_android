@@ -5,11 +5,11 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 /**
  * Created by nmp on 15-6-29.
  */
-public class FavouriteCollectionEvent {
+public class FavouriteCollectionApiEvent {
     private int statusCode;
     private AppsCollection collection;
 
-    public FavouriteCollectionEvent(AppsCollection collection, int statusCode) {
+    public FavouriteCollectionApiEvent(AppsCollection collection, int statusCode) {
         this.statusCode = statusCode;
         this.collection = collection;
     }

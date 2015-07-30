@@ -1,8 +1,10 @@
 package com.apphunt.app.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 
 import com.apphunt.app.constants.Constants;
@@ -11,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InstalledPackagesUtils {
-    private static final String TAG = InstalledPackagesUtils.class.getName();
+public class PackagesUtils {
+    private static final String TAG = PackagesUtils.class.getName();
 
     public static List<ApplicationInfo> installedPackages(PackageManager packageManager) {
         List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();
@@ -44,6 +46,18 @@ public class InstalledPackagesUtils {
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
+        }
+    }
+
+    public static void openInMarket(Context context, String appPackage) {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appPackage));
+        marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            marketIntent.setData(Uri.parse("market://details?id=" + appPackage));
+            context.startActivity(marketIntent);
+        } catch (android.content.ActivityNotFoundException anfe) {
+            marketIntent.setData(Uri.parse(appPackage));
+            context.startActivity(marketIntent);
         }
     }
 }

@@ -18,9 +18,9 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -100,7 +100,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     }
 
     @Subscribe
-    public void onMyCollectionsReceive(GetMyAvailableCollectionsEvent event) {
+    public void onMyCollectionsReceive(GetMyAvailableCollectionsApiEvent event) {
         myCollections.hideBottomLoader();
 
         if(selectCollectionAdapter == null) {
@@ -149,14 +149,14 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     }
 
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if(event.getAppsCollection() != null) {
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }
 
     @Subscribe
-    public void onCollectionCreated(CreateCollectionEvent event) {
+    public void onCollectionCreated(CreateCollectionApiEvent event) {
         FlurryAgent.logEvent(TrackingEvents.UserCreatedCollectionFromSelectCollection);
         currentPage = 0;
         selectCollectionAdapter = null;

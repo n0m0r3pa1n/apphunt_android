@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;

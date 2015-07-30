@@ -23,7 +23,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -128,7 +128,7 @@ public class CreateCollectionFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionCreateSuccess(CreateCollectionEvent event) {
+    public void onCollectionCreateSuccess(CreateCollectionApiEvent event) {
         ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
         NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.notification_delete_confirmation), false, false);
     }

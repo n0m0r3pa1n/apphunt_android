@@ -18,9 +18,9 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -129,7 +129,7 @@ public class AllCollectionsFragment extends BaseFragment {
 
 
     @Subscribe
-    public void onCollectionsReceived(GetAllCollectionsEvent event) {
+    public void onCollectionsReceived(GetAllCollectionsApiEvent event) {
         allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(getActivity() ,event.getAppsCollection().getCollections());
@@ -142,13 +142,13 @@ public class AllCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionDeleted(DeleteCollectionEvent event) {
+    public void onCollectionDeleted(DeleteCollectionApiEvent event) {
         String collectionId = event.getCollectionId();
         adapter.removeCollection(collectionId);
     }
 
     @Subscribe
-    public void onCollectionEdit(UpdateCollectionEvent event) {
+    public void onCollectionEdit(UpdateCollectionApiEvent event) {
         if(!event.isSuccess()) {
             return;
         }

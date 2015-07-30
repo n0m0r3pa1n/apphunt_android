@@ -66,5 +66,7 @@ public interface AppHuntApi {
 
     void getBanners();
 
+    void getLatestAppVersionCode();
+
     void cancelAllRequests();
 }
