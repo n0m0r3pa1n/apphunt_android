@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.services.InstallService;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
@@ -31,6 +32,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     private RelativeLayout settingsLayout;
     private ToggleButton notifications;
     private ToggleButton sounds;
+    private ToggleButton installNotification;
     private ActionBarActivity activity;
     private Button dismissBtn;
 
@@ -59,11 +61,16 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
         notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
         notifications.setOnCheckedChangeListener(this);
-        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED));
+        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true));
 
         sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
         sounds.setOnCheckedChangeListener(this);
-        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
+        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED, true));
+
+        installNotification = (ToggleButton) view.findViewById(R.id.installed_apps_toggle);
+        installNotification.setOnCheckedChangeListener(this);
+        installNotification.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED,
+                true));
 
         dismissBtn = (Button) view.findViewById(R.id.dismiss);
         dismissBtn.setOnClickListener(this);
@@ -116,7 +123,15 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                 if (!isChecked) {
                     FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
                 }
+
                 SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
+                break;
+            case R.id.installed_apps_toggle:
+                if (!isChecked) {
+                    FlurryAgent.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
+                }
+                SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
+                InstallService.setupService(getActivity(), true);
                 break;
         }
     }

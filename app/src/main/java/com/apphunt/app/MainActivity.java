@@ -6,13 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -26,10 +25,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
@@ -45,7 +42,6 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
@@ -103,7 +99,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initUI();
         initDeepLinking();
         initNotifications();
-        setupInstallService();
+        InstallService.setupService(this, true);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -509,26 +505,5 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRquired");
         }
-    }
-
-    private  void setupInstallService() {
-
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(this, InstallService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, PendingIntent.FLAG_NO_CREATE);
-        if(alarmMgr == null || alarmIntent == null) {
-            Log.d(TAG, "AlarmMgr or intent are null");
-            return;
-        }
-        boolean alarmUp = (PendingIntent.getService(getBaseContext(), 123, intent, PendingIntent.FLAG_NO_CREATE) != null);
-        if(alarmUp) {
-            return;
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1*60*1000, alarmIntent);
     }
 }

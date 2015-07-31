@@ -154,5 +154,6 @@
     <string name="title_activity_gallery">Screenshots</string>
     <string name="title_comments">Comments</string>
     <string name="title_update_required">Update Required</string>
+    <string name="enable_install_notification">Enable install notification</string>
 
 </resources>

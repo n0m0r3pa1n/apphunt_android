@@ -58,6 +58,29 @@
                 android:background="@drawable/selector_toggle_button"
                 android:textOn=""
                 android:textOff="" />
+
+            <TextView
+                android:id="@+id/installed_apps_label"
+                android:layout_width="match_parent"
+                android:layout_toLeftOf="@+id/installed_apps_toggle"
+                android:layout_below="@+id/sounds_toggle"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/settings_notification_label_text"
+                android:text="@string/enable_install_notification"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/settings_notification_label_height"
+                android:layout_marginTop="@dimen/settings_item_margin"/>
+
+            <ToggleButton
+                android:id="@+id/installed_apps_toggle"
+                android:layout_width="@dimen/settings_notifications_toggle_width"
+                android:layout_height="@dimen/settings_notifications_toggle_height"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/sounds_toggle"
+                android:layout_marginTop="@dimen/settings_item_margin"
+                android:background="@drawable/selector_toggle_button"
+                android:textOn=""
+                android:textOff="" />
         </RelativeLayout>
 
         <Button

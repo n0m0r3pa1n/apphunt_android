@@ -49,6 +49,7 @@ public class Constants {
     // Settings
     public static final String SETTING_NOTIFICATIONS_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
+    public static final String IS_INSTALL_NOTIFICATION_ENABLED = "isInstallNotificationEnabled";
     public static final String WAS_SPLASH_SHOWN = "wasSplashShown";
 
     // Fragment TAGs
@@ -133,6 +134,7 @@ public class Constants {
     public static final int PAGE_SIZE = 5;
     public static final int COMMENTS_PAGE_SIZE = 10;
     public static final int MIN_COLLECTION_APPS_SIZE = 4;
+    public static final int THIRTY_MINS = 30 * 60 * 1000;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),

@@ -67,4 +67,5 @@ public interface TrackingEvents {
     String UserEditDescription = "user.edit.description";
 
     String UserOpenedInstalledApp = "user.opened.installed.app";
+    String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
 }
