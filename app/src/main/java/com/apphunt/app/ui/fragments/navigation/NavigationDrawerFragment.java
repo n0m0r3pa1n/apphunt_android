@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
@@ -26,7 +27,6 @@ import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
-import com.apphunt.app.constants.Constants;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ import static com.apphunt.app.constants.Constants.HELP_ADD_APP;
 import static com.apphunt.app.constants.Constants.HELP_APPS_REQUIREMENTS;
 import static com.apphunt.app.constants.Constants.HELP_TOP_HUNTERS_POINTS;
 import static com.apphunt.app.constants.Constants.SETTINGS;
+import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 import static com.apphunt.app.constants.Constants.TOP_APPS;
 import static com.apphunt.app.constants.Constants.TOP_HUNTERS;
 import static com.apphunt.app.constants.Constants.TRENDING_APPS;
-import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

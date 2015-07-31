@@ -3,9 +3,11 @@ package com.apphunt.app.ui.fragments.notification;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,27 +22,37 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
+import com.apphunt.app.auth.GooglePlusLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.views.CustomTwitterLoginButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,31 +60,44 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-public class LoginFragment extends BaseFragment {
+public class LoginFragment extends BaseFragment implements OnConnectionFailedListener, ConnectionCallbacks {
 
     private static final String TAG = LoginFragment.class.getName();
-
-    private ActionBarActivity activity;
-    private User user;
 
     @InjectView(R.id.login_message)
     TextView loginMessage;
 
     @InjectView(R.id.login_button)
-    TwitterLoginButton loginButton;
+    CustomTwitterLoginButton twitterLoginBtn;
+
+    @InjectView(R.id.gplus_login_button)
+    SignInButton gplusSignInBtn;
+
+    private ActionBarActivity activity;
+    private User user;
 
     private boolean canBeSkipped = false;
+    private boolean isTwitterLogin = false;
     private String message;
 
-    public void setCanBeSkipped(boolean canBeSkipped) {
-        this.canBeSkipped = canBeSkipped;
-    }
+    private GoogleApiClient googleApiClient;
+    private Locale locale;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FlurryAgent.logEvent(TrackingEvents.UserViewedLogin);
+
+        googleApiClient = new GoogleApiClient.Builder(activity)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(new Scope(Scopes.PROFILE))
+                .build();
+
+        locale = getResources().getConfiguration().locale;
     }
 
     @Override
@@ -97,16 +122,7 @@ public class LoginFragment extends BaseFragment {
             });
         }
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
-                    LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                    NavUtils.getInstance(activity).setOnBackBlocked(true);
-                }
-            }
-        });
-        loginButton.setCallback(new Callback<TwitterSession>() {
+        twitterLoginBtn.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(final Result<TwitterSession> twitterSessionResult) {
                 final AppHuntTwitterApiClient appHuntTwitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
@@ -124,7 +140,6 @@ public class LoginFragment extends BaseFragment {
                         String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
                         user.setProfilePicture(profileImageUrl);
                         user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
-                        Locale locale = getResources().getConfiguration().locale;
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
@@ -165,6 +180,20 @@ public class LoginFragment extends BaseFragment {
         return view;
     }
 
+    @OnClick(R.id.login_button)
+    public void onTwitterLoginBtnClick() {
+        if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            isTwitterLogin = true;
+            LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+            NavUtils.getInstance(activity).setOnBackBlocked(true);
+        }
+    }
+
+    @OnClick(R.id.gplus_login_button)
+    public void onGooglePlusLoginBtnClick() {
+        googleApiClient.connect();
+    }
+
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (!enter) {
@@ -182,8 +211,26 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public void setCanBeSkipped(boolean canBeSkipped) {
+        this.canBeSkipped = canBeSkipped;
+    }
+
+    @Override
     public int getTitle() {
         return R.string.title_login;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -195,11 +242,12 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
 
-        loginButton.onActivityResult(requestCode, resultCode,
-                data);
+        if (isTwitterLogin) {
+            twitterLoginBtn.onActivityResult(requestCode, resultCode,
+                    data);
+        }
 
         if (requestCode == Constants.REQUEST_ACCOUNT_EMAIL) {
             if (resultCode == Activity.RESULT_OK) {
@@ -211,7 +259,11 @@ public class LoginFragment extends BaseFragment {
             } else {
                 onLoginFailed();
             }
+        } else if (requestCode == Constants.GPLUS_SIGN_IN) {
+            googleApiClient.connect();
         }
+
+        isTwitterLogin = false;
     }
 
     @Subscribe
@@ -236,5 +288,42 @@ public class LoginFragment extends BaseFragment {
 
     public void setMessage(int messageRes) {
         setMessage(getString(messageRes));
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+            Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+
+            User user = new User();
+            user.setEmail(Plus.AccountApi.getAccountName(googleApiClient));
+            user.setProfilePicture(currentPerson.getImage().getUrl());
+            user.setCoverPicture(currentPerson.hasCover() ? currentPerson.getCover().getCoverPhoto().getUrl() : null);
+            user.setName(currentPerson.getName().getGivenName() + " " + currentPerson.getName().getFamilyName());
+            user.setUsername(currentPerson.hasNickname() ? currentPerson.getNickname() : currentPerson.getDisplayName());
+            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+            user.setLoginType(GooglePlusLoginProvider.PROVIDER_NAME);
+
+            LoginProviderFactory.setLoginProvider(activity, new GooglePlusLoginProvider(activity));
+            ApiClient.getClient(getActivity()).createUser(user);
+            LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(activity, "User is connected!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed: " + connectionResult.toString());
+
+        try {
+            connectionResult.startResolutionForResult(activity, Constants.GPLUS_SIGN_IN);
+        } catch (IntentSender.SendIntentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

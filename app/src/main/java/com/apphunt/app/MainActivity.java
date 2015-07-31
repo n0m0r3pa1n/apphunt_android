@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -27,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
@@ -42,8 +43,6 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.notification.SettingsFragment;
-import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -51,12 +50,12 @@ import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.apphunt.app.ui.fragments.notification.SettingsFragment;
+import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -99,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initUI();
         initDeepLinking();
         initNotifications();
-        InstallService.setupService(this, true);
+        InstallService.setupService(this);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -503,7 +502,28 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if(versionCode != event.getVersion().getVersionCode()) {
             UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
             dialog.setCancelable(false);
-            dialog.show(getSupportFragmentManager(), "UpdateRquired");
+            dialog.show(getSupportFragmentManager(), "UpdateRequired");
         }
+    }
+
+    private  void setupInstallService() {
+
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, InstallService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, PendingIntent.FLAG_NO_CREATE);
+        if(alarmMgr == null || alarmIntent == null) {
+            Log.d(TAG, "AlarmMgr or intent are null");
+            return;
+        }
+        boolean alarmUp = (PendingIntent.getService(getBaseContext(), 123, intent, PendingIntent.FLAG_NO_CREATE) != null);
+        if(alarmUp) {
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1*60*1000, alarmIntent);
     }
 }

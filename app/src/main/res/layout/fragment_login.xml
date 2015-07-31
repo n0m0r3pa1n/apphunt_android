@@ -23,11 +23,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal"
-        />
+        android:layout_gravity="center_horizontal" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/gplus_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_button"
+        android:layout_alignStart="@+id/login_button"
+        android:layout_alignEnd="@+id/login_button"
+        android:layout_marginTop="20dp" />
 
     <Button
-        android:layout_below="@id/login_button"
         android:id="@+id/not_now"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

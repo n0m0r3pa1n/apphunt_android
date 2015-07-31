@@ -93,6 +93,7 @@ public class Constants {
 
     // Invites
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
+    public static int GPLUS_SIGN_IN = 0;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
