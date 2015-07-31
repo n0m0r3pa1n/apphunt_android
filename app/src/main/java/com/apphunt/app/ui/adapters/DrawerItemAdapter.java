@@ -131,6 +131,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
                             LoginProviderFactory.get((Activity) ctx).logout();
                             FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
                         }
@@ -209,7 +210,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @InjectView(R.id.profile_image)
         CircleImageView profileImage;
 
-        @InjectView(R.id.twitter_login_button)
+        @InjectView(R.id.login_button)
         Button loginButton;
 
         public HeaderLoggedOutViewHolder(View rootView) {

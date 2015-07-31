@@ -7,7 +7,6 @@ import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -26,7 +25,7 @@ public class AppHuntApplication extends Application {
 
         SharedPreferencesHelper.init(this);
         initNetworking();
-        //initAnalytics();
+        initAnalytics();
     }
 
     private void initAnalytics() {
@@ -38,7 +37,8 @@ public class AppHuntApplication extends Application {
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
                         Constants.TWITTER_CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
+        // TODO: Add before deployment: new Crashlytics()
+        Fabric.with(this, new Twitter(authConfig));
 
         if (BuildConfig.DEBUG) {
             FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);

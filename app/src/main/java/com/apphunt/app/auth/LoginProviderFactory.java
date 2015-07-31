@@ -25,6 +25,4 @@ public class LoginProviderFactory {
         LoginProviderFactory.loginProvider = loginProvider;
         SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, loginProvider.getName());
     }
-
-
 }

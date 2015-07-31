@@ -74,6 +74,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
         SharedPreferencesHelper.setPreference(Constants.KEY_USERNAME, user.getUsername());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_PROFILE_PICTURE, user.getProfilePicture());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_COVER_PICTURE, user.getCoverPicture());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, user.getLoginType());
     }
 
     protected void removeSharedPreferences() {

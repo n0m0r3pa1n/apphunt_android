@@ -25,25 +25,25 @@ import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.GooglePlusLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.views.CustomTwitterLoginButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -53,7 +53,6 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +69,8 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @InjectView(R.id.login_message)
     TextView loginMessage;
 
-    @InjectView(R.id.twitter_login_button)
-    TwitterLoginButton twitterLoginBtn;
+    @InjectView(R.id.login_button)
+    CustomTwitterLoginButton twitterLoginBtn;
 
     @InjectView(R.id.gplus_login_button)
     SignInButton gplusSignInBtn;
@@ -123,19 +122,9 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
             });
         }
 
-        twitterLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
-                    LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-                    NavUtils.getInstance(activity).setOnBackBlocked(true);
-                }
-            }
-        });
         twitterLoginBtn.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(final Result<TwitterSession> twitterSessionResult) {
-                isTwitterLogin = true;
                 final AppHuntTwitterApiClient appHuntTwitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
                 boolean doNotIncludeEntities = false;
                 boolean skipStatus = true;
@@ -191,8 +180,17 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         return view;
     }
 
+    @OnClick(R.id.login_button)
+    public void onTwitterLoginBtnClick() {
+        if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            isTwitterLogin = true;
+            LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+            NavUtils.getInstance(activity).setOnBackBlocked(true);
+        }
+    }
+
     @OnClick(R.id.gplus_login_button)
-    public void onGPlusLoginBtnClick() {
+    public void onGooglePlusLoginBtnClick() {
         googleApiClient.connect();
     }
 
@@ -215,7 +213,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @Override
     public void onStart() {
         super.onStart();
-//        googleApiClient.connect();
     }
 
     public void setCanBeSkipped(boolean canBeSkipped) {
@@ -271,7 +268,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
 
     @Subscribe
     public void onUserCreated(UserCreatedApiEvent event) {
-        Log.e(TAG, event.getUser().toString());
         LoadersUtils.hideBottomLoader(activity);
         LoginProviderFactory.get(activity).login(event.getUser());
     }
