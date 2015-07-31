@@ -3,7 +3,6 @@ package com.apphunt.app.ui.views.widgets;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -14,11 +13,15 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.db.models.ClickedApp;
 import com.apphunt.app.utils.PackagesUtils;
 import com.flurry.android.FlurryAgent;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.realm.Realm;
 
 public class DownloadButton extends LinearLayout {
     private TextView textView;
@@ -53,7 +56,7 @@ public class DownloadButton extends LinearLayout {
         }
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_download, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
 
@@ -74,8 +77,13 @@ public class DownloadButton extends LinearLayout {
                 } else {
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                     PackagesUtils.openInMarket(getContext(), appPackage);
-                    //TODO save to the db
-
+                    
+                    Realm realm = Realm.getInstance(context);
+                    realm.beginTransaction();
+                    ClickedApp clickedApp = realm.createObject(ClickedApp.class);
+                    clickedApp.setPackageName(appPackage);
+                    clickedApp.setDateClicked(new Date());
+                    realm.commitTransaction();
                 }
             }
         });
