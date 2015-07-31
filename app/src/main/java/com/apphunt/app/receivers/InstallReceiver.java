@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.apphunt.app.db.models.InstalledApp;
 
@@ -22,10 +23,17 @@ public class InstallReceiver extends BroadcastReceiver {
         String packageInstalled = str[str.length-1];
 
         Realm realm = Realm.getInstance(context);
+        InstalledApp installedApp = realm.where(InstalledApp.class).equalTo("packageName", packageInstalled).findFirst();
         realm.beginTransaction();
-        InstalledApp installedApp = realm.createObject(InstalledApp.class);
-        installedApp.setPackageName(packageInstalled);
-        installedApp.setDateInstalled(new Date());
+
+        if (installedApp != null) {
+            installedApp.setDateInstalled(new Date());
+        } else {
+            installedApp = realm.createObject(InstalledApp.class);
+            installedApp.setPackageName(packageInstalled);
+            installedApp.setDateInstalled(new Date());
+        }
+
         realm.commitTransaction();
     }
 }
