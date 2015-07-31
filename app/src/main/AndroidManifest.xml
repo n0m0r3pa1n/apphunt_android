@@ -98,7 +98,6 @@
 
         <service
             android:name=".services.InstallService"
-            android:process=":appHuntInstall"
             android:exported="false" />
 
         <meta-data
@@ -117,7 +116,5 @@
             android:name="applicationId"
             android:value="@string/facebook_app_id" />
 
-
     </application>
-
 </manifest>

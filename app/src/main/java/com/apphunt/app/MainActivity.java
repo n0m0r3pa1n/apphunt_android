@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
@@ -43,6 +45,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
+import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
@@ -55,6 +58,7 @@ import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -95,7 +99,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
 
         initUI();
         initDeepLinking();
@@ -394,6 +397,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
+
+        displaySaveAppFragment();
+    }
+
+    private void displaySaveAppFragment() {
+        String appPackage = getIntent().getStringExtra(Constants.EXTRA_APP_PACKAGE);
+        if(!TextUtils.isEmpty(appPackage)) {
+            ApplicationInfo data = PackagesUtils.getApplicationInfo(getPackageManager(), appPackage);
+            NavUtils.getInstance(this).presentSaveAppFragment(this, data);
+        }
     }
 
     private void showStartFragments(Intent intent) {
@@ -499,17 +512,23 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private  void setupInstallService() {
-        Intent intent = new Intent(this, InstallService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, 0);
+
         AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, InstallService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, PendingIntent.FLAG_NO_CREATE);
         if(alarmMgr == null || alarmIntent == null) {
             Log.d(TAG, "AlarmMgr or intent are null");
+            return;
+        }
+        boolean alarmUp = (PendingIntent.getService(getBaseContext(), 123, intent, PendingIntent.FLAG_NO_CREATE) != null);
+        if(alarmUp) {
             return;
         }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
+                1*60*1000, alarmIntent);
     }
 }

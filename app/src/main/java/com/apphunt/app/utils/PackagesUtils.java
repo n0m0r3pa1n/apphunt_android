@@ -60,4 +60,13 @@ public class PackagesUtils {
             context.startActivity(marketIntent);
         }
     }
+
+    public static ApplicationInfo getApplicationInfo(PackageManager pm, String appPackage) {
+        try {
+            return pm.getApplicationInfo(appPackage, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

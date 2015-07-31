@@ -68,6 +68,20 @@ public class NavUtils {
         }
     }
 
+    public void presentSaveAppFragment(AppCompatActivity act, ApplicationInfo data) {
+        Bundle extras = new Bundle();
+        extras.putParcelable(Constants.KEY_DATA, data);
+
+        SaveAppFragment saveAppFragment = new SaveAppFragment();
+        saveAppFragment.setArguments(extras);
+
+        act.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
+                .commitAllowingStateLoss();
+    }
+
     public void presentSelectCollectionFragment(App app) {
         SelectCollectionFragment fragment = SelectCollectionFragment.newInstance(app);
 
