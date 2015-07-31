@@ -1,13 +1,17 @@
 package com.apphunt.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -34,6 +38,7 @@ import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.services.InstallService;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -60,6 +65,7 @@ import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,7 +100,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initUI();
         initDeepLinking();
         initNotifications();
-
+        setupInstallService();
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -486,11 +492,24 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Subscribe
     public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
         if(versionCode != event.getVersion().getVersionCode()) {
-            Toast.makeText(this, "You need update", Toast.LENGTH_SHORT).show();
+            UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
+            dialog.setCancelable(false);
+            dialog.show(getSupportFragmentManager(), "UpdateRquired");
         }
-        UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
-        dialog.setCancelable(false);
-        dialog.show(getSupportFragmentManager(), "UpdateRquired");
+    }
 
+    private  void setupInstallService() {
+        Intent intent = new Intent(this, InstallService.class);
+        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, 0);
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if(alarmMgr == null || alarmIntent == null) {
+            Log.d(TAG, "AlarmMgr or intent are null");
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
     }
 }

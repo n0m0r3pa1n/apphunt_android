@@ -74,6 +74,8 @@ public class DownloadButton extends LinearLayout {
                 } else {
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                     PackagesUtils.openInMarket(getContext(), appPackage);
+                    //TODO save to the db
+
                 }
             }
         });
