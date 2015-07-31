@@ -209,7 +209,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @InjectView(R.id.profile_image)
         CircleImageView profileImage;
 
-        @InjectView(R.id.login_button)
+        @InjectView(R.id.twitter_login_button)
         Button loginButton;
 
         public HeaderLoggedOutViewHolder(View rootView) {
