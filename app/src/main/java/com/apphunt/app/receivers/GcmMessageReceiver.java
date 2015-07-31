@@ -48,7 +48,7 @@ public class GcmMessageReceiver extends BroadcastReceiver {
                     } catch (IOException ex) {
                         Crashlytics.logException(ex);
                     }
-                    NotificationsUtils.displayNotification(context, MainActivity.class, notification, largeIcon);
+                    NotificationsUtils.displayNotification(context, MainActivity.class, null, notification, largeIcon);
                     Map<String, String> params = new HashMap<>();
                     params.put("type", notification.getType());
                     FlurryAgent.logEvent(TrackingEvents.AppShowedNotification, params);
