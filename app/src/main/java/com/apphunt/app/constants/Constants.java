@@ -72,6 +72,8 @@ public class Constants {
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
+    public static final int RC_INSTALL_SERVICE = 123;
+    public static final int RC_DAILY_SERVICE = 124;
 
     //Extras
     public static final String EXTRA_IMAGES = "extra_images";
@@ -90,7 +92,6 @@ public class Constants {
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
     public static final String BIT_LY_GOOGLE_PLAY_URL = "http://bit.ly/1umy2AV";
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
-
     // Invites
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
     public static int GPLUS_SIGN_IN = 0;

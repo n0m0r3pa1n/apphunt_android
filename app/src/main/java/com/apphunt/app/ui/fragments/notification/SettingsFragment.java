@@ -131,7 +131,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                     FlurryAgent.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
                 }
                 SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
-                InstallService.setupService(getActivity(), true);
+                InstallService.setupService(getActivity());
                 break;
         }
     }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.ClickedApp;
+import com.apphunt.app.db.models.InstalledApp;
 import com.apphunt.app.utils.PackagesUtils;
 import com.flurry.android.FlurryAgent;
 
@@ -77,16 +78,27 @@ public class DownloadButton extends LinearLayout {
                 } else {
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                     PackagesUtils.openInMarket(getContext(), appPackage);
-                    
-                    Realm realm = Realm.getInstance(context);
-                    realm.beginTransaction();
-                    ClickedApp clickedApp = realm.createObject(ClickedApp.class);
-                    clickedApp.setPackageName(appPackage);
-                    clickedApp.setDateClicked(new Date());
-                    realm.commitTransaction();
+
+                    updateOrCreateClickedAppObject();
                 }
             }
         });
+    }
+
+    private void updateOrCreateClickedAppObject() {
+        Realm realm = Realm.getInstance(getContext());
+        ClickedApp clickedApp = realm.where(ClickedApp.class).equalTo("packageName", appPackage).findFirst();
+        realm.beginTransaction();
+
+        if (clickedApp != null) {
+            clickedApp.setDateClicked(new Date());
+        } else {
+            clickedApp = realm.createObject(ClickedApp.class);
+            clickedApp.setPackageName(appPackage);
+            clickedApp.setDateClicked(new Date());
+        }
+
+        realm.commitTransaction();
     }
 
     public void setAppPackage(String appPackage) {

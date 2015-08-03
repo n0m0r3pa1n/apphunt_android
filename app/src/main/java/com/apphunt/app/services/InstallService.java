@@ -1,22 +1,25 @@
 package com.apphunt.app.services;
 
-import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.android.volley.Response;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.db.models.ClickedApp;
 import com.apphunt.app.db.models.InstalledApp;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -26,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -34,107 +36,162 @@ import io.realm.RealmResults;
 /**
  * Created by nmp on 15-7-30.
  */
-public class InstallService extends IntentService {
+public class InstallService extends Service {
     public static final String TAG = InstallService.class.getSimpleName();
 
-
     private Realm realm;
-    private RealmResults<ClickedApp> clickedApps;
 
-    public InstallService() {
-        super("InstallService");
+    private List<ApplicationInfo> data;
+    private RealmResults<InstalledApp> dailyInstalledApps;
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         SharedPreferencesHelper.init(this);
-
-        if(!SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED)) {
-            return;
-        }
-
         realm = Realm.getInstance(this);
-        long fromDate = System.currentTimeMillis() - Constants.THIRTY_MINS;
+        if (!SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, true)) {
+            return START_FLAG_RETRY;
+        }
 
-        RealmResults<InstalledApp> installedApps = realm.where(InstalledApp.class)
-                .between("dateInstalled", new Date(fromDate), new Date())
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        Date today = new Date(calendar.getTimeInMillis());
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+
+        Date tomorrow = new Date(calendar.getTimeInMillis());
+
+        dailyInstalledApps = realm.where(InstalledApp.class)
+                .between("dateInstalled", today, tomorrow)
+                .equalTo("hasNotificationShowed", false)
                 .findAll();
 
-        clickedApps = realm.where(ClickedApp.class)
-                .between("dateClicked", new Date(fromDate), new Date())
-                .findAll();
-
-        List<InstalledApp> recentlyInstalledApps = new ArrayList<>();
-        for (int i = 0; i < installedApps.size(); i++) {
-            InstalledApp app = installedApps.get(i);
-            //if(wasOpenedFromAppHunt(app)) {
-                recentlyInstalledApps.add(app);
-            //}
+        if (dailyInstalledApps.size() == 0) {
+            return START_FLAG_RETRY;
         }
 
-        if(recentlyInstalledApps.size() == 0) {
-            return;
-        }
-
-        InstalledApp app = recentlyInstalledApps.get(
-                getRandomAppPosition(recentlyInstalledApps.size())
-        );
-        ApplicationInfo applicationInfo = PackagesUtils.getApplicationInfo(getPackageManager(), app.getPackageName());
-        String appName = applicationInfo == null ? "" : applicationInfo.loadLabel(getPackageManager()).toString();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.EXTRA_APP_PACKAGE, app.getPackageName());
-        NotificationsUtils.displayNotification(this, MainActivity.class,
-                bundle,
-                new Notification("Pssst",
-                        "Did you like " + appName + "? Share your opinion with others!", "", ""),
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_small_notification));
-    }
-
-    private int getRandomAppPosition(int recentlyInstalledAppsSize) {
-        if(recentlyInstalledAppsSize <= 0)
-            return 0;
-
-        Random random = new Random();
-        return random.nextInt(recentlyInstalledAppsSize);
-    }
-
-    private boolean wasOpenedFromAppHunt(InstalledApp app) {
-        if (clickedApps == null || clickedApps.size() == 0) {
-            return false;
-        }
-
-        for (int i = 0; i < clickedApps.size(); i++) {
-            if(clickedApps.get(i).getPackageName().equals(app.getPackageName())) {
-                return true;
+        data = PackagesUtils.getInstalledPackages(getPackageManager());
+        ApiClient.getClient(this).filterApps(getInstalledPackageNames(), new Response.Listener<Packages>() {
+            @Override
+            public void onResponse(Packages response) {
+                displayNotificationForInstalledApp(response);
             }
-        }
+        });
 
-        return false;
+        return START_FLAG_RETRY;
     }
+
+
 
     public static void setupService(Context context) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, InstallService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(context, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent = PendingIntent.getService(context, Constants.RC_INSTALL_SERVICE, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(alarmMgr == null) {
+        if (alarmMgr == null) {
             Log.d(TAG, "AlarmMgr is null");
             return;
         }
 
-        if(isInstallNotificationDisabled()) {
+        if (isInstallNotificationDisabled()) {
             alarmMgr.cancel(alarmIntent);
             return;
         }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 30*1000
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 10 * 1000, 30 * 1000
                 , alarmIntent);
     }
 
     @NonNull
     private static Boolean isInstallNotificationDisabled() {
         return !SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, true);
+    }
+
+
+    public void displayNotificationForInstalledApp(Packages event) {
+        if (event.getAvailablePackages() != null &&
+                event.getAvailablePackages().size() > 0) {
+
+            InstalledApp app = findDailyInstalledAppInAvailableApps(event);
+
+            if (app == null) {
+                return;
+            }
+
+            updateNotificationDisplayed(app);
+
+            ApplicationInfo applicationInfo = PackagesUtils.getApplicationInfo(getPackageManager(), app.getPackageName());
+            String appName = applicationInfo == null ? "" : applicationInfo.loadLabel(getPackageManager()).toString();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.EXTRA_APP_PACKAGE, app.getPackageName());
+            NotificationsUtils.displayNotification(this, MainActivity.class,
+                    bundle,
+                    new Notification("Pssst",
+                            "Did you like " + appName + "? Share your opinion with others!", "", ""),
+                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_small_notification));
+        }
+    }
+
+    @Nullable
+    private InstalledApp findDailyInstalledAppInAvailableApps(Packages event) {
+        InstalledApp app = null;
+        List<ApplicationInfo> availablePackages = getAvailablePackages(event);
+        for (ApplicationInfo availableAppInfo : availablePackages) {
+            for (InstalledApp dailyApp : dailyInstalledApps) {
+                if (dailyApp.getPackageName().equals(availableAppInfo.packageName)) {
+                    app = dailyApp;
+                    break;
+                }
+            }
+            if (app != null) {
+                break;
+            }
+        }
+        return app;
+    }
+
+    private List<ApplicationInfo> getAvailablePackages(Packages packages) {
+        List<ApplicationInfo> tempData = new ArrayList<>();
+
+        for (ApplicationInfo info : data) {
+            for (String packageName : packages.getAvailablePackages()) {
+                if (info.packageName.equals(packageName)) {
+                    tempData.add(info);
+                }
+            }
+        }
+
+        return tempData;
+    }
+
+    private void updateNotificationDisplayed(InstalledApp app) {
+        realm.beginTransaction();
+        InstalledApp installedApp = realm.where(InstalledApp.class)
+                .equalTo("packageName", app.getPackageName())
+                .findFirst();
+        installedApp.setHasNotificationShowed(true);
+        realm.commitTransaction();
+    }
+
+
+
+    private Packages getInstalledPackageNames() {
+        Packages packages = new Packages();
+        for (ApplicationInfo info : data) {
+            packages.getPackages().add(info.packageName);
+        }
+
+        return packages;
     }
 }

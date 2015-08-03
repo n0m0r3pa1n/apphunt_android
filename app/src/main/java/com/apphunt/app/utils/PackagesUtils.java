@@ -16,7 +16,7 @@ import java.util.List;
 public class PackagesUtils {
     private static final String TAG = PackagesUtils.class.getName();
 
-    public static List<ApplicationInfo> installedPackages(PackageManager packageManager) {
+    public static List<ApplicationInfo> getInstalledPackages(PackageManager packageManager) {
         List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();
 
         try {

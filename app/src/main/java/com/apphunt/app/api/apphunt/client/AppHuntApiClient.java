@@ -109,6 +109,11 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
+    public void filterApps(Packages packages, Response.Listener<Packages> successListener) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilteredAppPackages(packages, successListener, listener));
+    }
+
+    @Override
     public void vote(String appId, String userId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new PostAppVoteRequest(appId, userId, null, listener));
     }

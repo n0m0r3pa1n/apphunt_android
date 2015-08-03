@@ -13,6 +13,7 @@ public class InstalledApp extends RealmObject {
     @PrimaryKey
     private String packageName;
     private Date dateInstalled;
+    private boolean hasNotificationShowed;
 
     public String getPackageName() {
         return packageName;
@@ -28,5 +29,13 @@ public class InstalledApp extends RealmObject {
 
     public void setDateInstalled(Date age) {
         this.dateInstalled = age;
+    }
+
+    public boolean isHasNotificationShowed() {
+        return hasNotificationShowed;
+    }
+
+    public void setHasNotificationShowed(boolean hasNotificationShowed) {
+        this.hasNotificationShowed = hasNotificationShowed;
     }
 }

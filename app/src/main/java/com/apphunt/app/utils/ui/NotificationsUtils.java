@@ -39,7 +39,8 @@ public class NotificationsUtils {
     public static void setupDailyNotificationService(Context ctx) {
 
         Intent intent = new Intent(ctx, DailyNotificationService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(ctx, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent = PendingIntent.getService(ctx, Constants.RC_DAILY_SERVICE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 

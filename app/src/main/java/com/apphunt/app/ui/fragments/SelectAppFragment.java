@@ -143,7 +143,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         @Override
         protected Packages doInBackground(Void... params) {
             Packages packages = new Packages();
-            data = PackagesUtils.installedPackages(activity.getPackageManager());
+            data = PackagesUtils.getInstalledPackages(activity.getPackageManager());
             for (ApplicationInfo info : data) {
                 packages.getPackages().add(info.packageName);
             }
