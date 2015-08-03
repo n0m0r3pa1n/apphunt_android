@@ -68,4 +68,7 @@ public interface TrackingEvents {
 
     String UserOpenedInstalledApp = "user.opened.installed.app";
     String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
+    String UserViewedAddAppToAppHuntNotification = "user.viewed.add.app.to.apphunt.notification";
+    String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
+    String UserViewedUpdateAppDialog = "user.viewed.update.app.dialog";
 }

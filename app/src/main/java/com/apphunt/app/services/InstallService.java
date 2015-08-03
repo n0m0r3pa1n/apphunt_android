@@ -20,10 +20,12 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.InstalledApp;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -107,10 +109,20 @@ public class InstallService extends Service {
             return;
         }
 
+        Calendar today = Calendar.getInstance();
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 10 * 1000, 30 * 1000
-                , alarmIntent);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (today.after(calendar)) {
+            calendar.add(Calendar.DATE, +1);
+        }
+
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
     @NonNull
@@ -129,6 +141,7 @@ public class InstallService extends Service {
                 return;
             }
 
+            FlurryAgent.logEvent(TrackingEvents.UserViewedAddAppToAppHuntNotification);
             updateNotificationDisplayed(app);
 
             ApplicationInfo applicationInfo = PackagesUtils.getApplicationInfo(getPackageManager(), app.getPackageName());
@@ -137,8 +150,8 @@ public class InstallService extends Service {
             bundle.putString(Constants.EXTRA_APP_PACKAGE, app.getPackageName());
             NotificationsUtils.displayNotification(this, MainActivity.class,
                     bundle,
-                    new Notification("Pssst",
-                            "Did you like " + appName + "? Share your opinion with others!", "", ""),
+                    new Notification("Did you like " + appName + "?",
+                            "Share your opinion with the AppHunt community!", "", ""),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_small_notification));
         }
     }

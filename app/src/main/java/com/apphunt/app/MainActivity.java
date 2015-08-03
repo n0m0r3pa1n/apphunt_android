@@ -399,6 +399,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private void displaySaveAppFragment() {
         String appPackage = getIntent().getStringExtra(Constants.EXTRA_APP_PACKAGE);
         if(!TextUtils.isEmpty(appPackage)) {
+            FlurryAgent.logEvent(TrackingEvents.UserViewedSaveAppFragmentFromNotification);
             ApplicationInfo data = PackagesUtils.getApplicationInfo(getPackageManager(), appPackage);
             NavUtils.getInstance(this).presentSaveAppFragment(this, data);
         }
@@ -500,6 +501,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Subscribe
     public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
         if(versionCode != event.getVersion().getVersionCode()) {
+            FlurryAgent.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
             UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
