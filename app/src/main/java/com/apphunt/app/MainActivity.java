@@ -500,32 +500,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Subscribe
     public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
-        if(versionCode != event.getVersion().getVersionCode()) {
+        if(versionCode < event.getVersion().getVersionCode()) {
             FlurryAgent.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
             UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
         }
-    }
-
-    private  void setupInstallService() {
-
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(this, InstallService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(this, 123, intent, PendingIntent.FLAG_NO_CREATE);
-        if(alarmMgr == null || alarmIntent == null) {
-            Log.d(TAG, "AlarmMgr or intent are null");
-            return;
-        }
-        boolean alarmUp = (PendingIntent.getService(getBaseContext(), 123, intent, PendingIntent.FLAG_NO_CREATE) != null);
-        if(alarmUp) {
-            return;
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1*60*1000, alarmIntent);
     }
 }
