@@ -29,6 +29,8 @@ public interface TrackingEvents {
     String UserMadeSuggestion = "user.made.suggestion";
     String UserViewedAppDetails = "user.viewed.app.details";
     String UserViewedLogin = "user.viewed.login";
+    String UserTwitterLogin = "user.login.twitter";
+    String UserGooglePlusLogin = "user.login.googleplus";
     String UserViewedSettings = "user.viewed.settings";
     String UserViewedAddApp = "user.viewed.add.app";
     String UserViewedSelectApp = "user.viewed.select.app";

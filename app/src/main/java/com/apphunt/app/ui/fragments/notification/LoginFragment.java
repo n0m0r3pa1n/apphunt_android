@@ -256,6 +256,8 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                 ApiClient.getClient(getActivity()).createUser(user);
                 LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+
+                FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
             } else {
                 onLoginFailed();
             }
@@ -307,6 +309,8 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
             LoginProviderFactory.setLoginProvider(activity, new GooglePlusLoginProvider(activity));
             ApiClient.getClient(getActivity()).createUser(user);
             LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+
+            FlurryAgent.logEvent(TrackingEvents.UserGooglePlusLogin);
         }
     }
 
