@@ -72,4 +72,6 @@ public interface AppHuntApi {
     void getLatestAppVersionCode();
 
     void cancelAllRequests();
+
+    void getTagsSuggestion(String str);
 }

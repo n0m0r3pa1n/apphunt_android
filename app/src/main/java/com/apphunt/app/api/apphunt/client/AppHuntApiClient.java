@@ -35,6 +35,7 @@ import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -269,5 +270,10 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void cancelAllRequests() {
         VolleyInstance.getInstance(context).cancelAllRequests();
+    }
+
+    @Override
+    public void getTagsSuggestion(String str) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetTagsSuggestionRequest(str, listener));
     }
 }

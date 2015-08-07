@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_primary"
     android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/save_box_margin"
         android:background="@color/bg_secondary"
@@ -30,14 +31,23 @@
             android:layout_height="@dimen/save_box_icon_size"
             android:layout_below="@+id/title"
             android:layout_marginBottom="@dimen/save_box_icon_margin_bottom"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
+
+        <View
+            android:id="@+id/top_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/desc_shadow_height"
+            android:background="@drawable/shadow"
+            android:layout_below="@+id/app_icon"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/save_box_desc_height"
-            android:layout_below="@+id/app_icon"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_line"
+            android:layout_above="@id/tag_group"
             android:gravity="top|start"
             android:background="@color/desc_bg"
             android:singleLine="false"
@@ -50,19 +60,23 @@
             android:textColorHint="@color/desc_hint"
             android:inputType="textMultiLine"/>
         
-        <View
+        <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/tag_group"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/desc_shadow_height"
-            android:background="@drawable/shadow"
-            android:layout_alignTop="@+id/description"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_line"
+            android:padding="10dp"
+            android:background="@color/desc_bg"
+            android:elevation="-1dp"
+            app:atg_isAppendMode="true"
+            style="@style/TagGroup" />
 
         <View
+            android:id="@+id/bottom_line"
             android:layout_width="match_parent"
             android:layout_height="@dimen/desc_shadow_height"
             android:background="@drawable/shadow_bottom"
-            android:layout_alignBottom="@+id/description"
+            android:layout_above="@+id/save"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -72,7 +86,7 @@
             android:layout_height="@dimen/save_btn_height"
             android:background="@android:color/transparent"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/description"
+            android:layout_alignParentBottom="true"
             android:textColor="@color/save_app_text"
             android:textSize="@dimen/save_btn_text"
             android:text="@string/save"

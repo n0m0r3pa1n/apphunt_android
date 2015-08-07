@@ -1,4 +1,5 @@
-include ':app', ':volley', ':jhexed'
+include ':app', ':volley', ':jhexed', ':tag_group_library'
 
 project(':volley').projectDir = new File('libs/volley')
 project(':jhexed').projectDir = new File('libs/jhexed')
+project(':tag_group_library').projectDir = new File('libs/TagGroup/library')

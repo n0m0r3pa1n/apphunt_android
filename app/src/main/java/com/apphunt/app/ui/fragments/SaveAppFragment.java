@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +15,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,17 +29,18 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.StatusCode;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppSavedApiEvent;
+import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.StatusCode;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
@@ -49,6 +54,7 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import me.gujun.android.taggroup.TagGroup;
 
 public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
@@ -58,12 +64,16 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private ApplicationInfo data;
     private ActionBarActivity activity;
+    private AutoCompleteTextView tagView;
 
     @InjectView(R.id.save)
     Button saveButton;
 
     @InjectView(R.id.description)
     EditText desc;
+
+    @InjectView(R.id.tag_group)
+    TagGroup tagGroup;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +116,14 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
         ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
         icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
+
+        tagGroup.setOnTagTextEntryListener(new TagGroup.OnTagTextEntryListener() {
+            @Override
+            public void onTextEntry(AutoCompleteTextView view, String text) {
+                tagView = view;
+                if (!TextUtils.isEmpty(text)) ApiClient.getClient(activity).getTagsSuggestion(text);
+            }
+        });
     }
 
     @Override
@@ -175,6 +193,10 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         app.setPackageName(data.packageName);
         app.setPlatform(Constants.PLATFORM);
         app.setUserId(userId);
+
+        if (tagGroup.getTags().length > 0) {
+            app.setTags(tagGroup.getTags());
+        }
 
         ApiClient.getClient(getActivity()).saveApp(app);
     }
@@ -247,4 +269,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         }
     }
 
+    @Subscribe
+    public void onTagsSuggestionReceive(TagsSuggestionApiEvent event) {
+        tagView.setAdapter(new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, event.getTags().getTags()));
+    }
 }
