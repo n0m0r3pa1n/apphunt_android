@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.SearchItems;
@@ -60,6 +62,15 @@ public class SearchFragment extends BaseFragment {
 
         resultsListAdapter = new SearchResultsAdapter(activity, resultsList, data);
         resultsList.setAdapter(resultsListAdapter);
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter) {
+            return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_top_notification);
+        } else {
+            return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_top);
+        }
     }
 
     @Override
