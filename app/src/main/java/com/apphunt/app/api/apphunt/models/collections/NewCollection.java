@@ -1,5 +1,7 @@
 package com.apphunt.app.api.apphunt.models.collections;
 
+import java.util.Arrays;
+
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
  * * on 6/30/15.
@@ -11,6 +13,7 @@ public class NewCollection {
     private String name;
     private String description;
     private String picture;
+    private String[] tags = {};
 
     public NewCollection() {}
 
@@ -51,5 +54,24 @@ public class NewCollection {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return "NewCollection{" +
+                "userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", picture='" + picture + '\'' +
+                ", tags=" + Arrays.toString(tags) +
+                '}';
     }
 }

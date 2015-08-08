@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/tools"
     android:padding="15dp"
     android:background="@color/bg_secondary"
-    android:clickable="true">
+    android:clickable="true"
+    android:elevation="10dp">
 
     <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
         android:id="@+id/collection_name_layout"
@@ -60,7 +61,7 @@
                 android:scaleType="centerCrop" />
         </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 
     <com.apphunt.app.ui.views.widgets.CustomTextInputLayout
         android:id="@+id/collection_desc_layout"
@@ -80,12 +81,19 @@
             android:hint="Write a description"/>
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
-    <me.gujun.android.taggroup.TagGroup
-        app:atg_isAppendMode="true"
-        android:id="@+id/tag_group"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/collection_desc_layout"
-        android:layout_marginTop="15dp"
-        style="@style/TagGroup" />
+        android:layout_above="@+id/collection_save">
+
+        <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:atg_isAppendMode="true"
+            style="@style/TagGroup" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/collection_save"
@@ -97,6 +105,5 @@
         android:paddingRight="50dp"
         android:text="Save"
         android:textAllCaps="true"
-        android:background="@drawable/shape_btn_save"
-        android:elevation="5dp"/>
+        android:background="@drawable/shape_btn_save"/>
 </RelativeLayout>

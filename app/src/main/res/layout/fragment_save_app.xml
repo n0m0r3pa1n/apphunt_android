@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/top_line"
-            android:layout_above="@id/tag_group"
+            android:layout_above="@+id/tag_group"
             android:gravity="top|start"
             android:background="@color/desc_bg"
             android:singleLine="false"
