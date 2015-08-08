@@ -20,6 +20,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -207,7 +208,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
             final ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
-            final App app = ((AppItem) getItem(position)).getData();
+            final BaseApp app = ((AppItem) getItem(position)).getData();
 
             int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
 
@@ -222,13 +223,13 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-            viewHolderItem.vote.setBaseApp(app);
+            viewHolderItem.vote.setBaseApp((App) app);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
                     } else {
                         LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
                     }

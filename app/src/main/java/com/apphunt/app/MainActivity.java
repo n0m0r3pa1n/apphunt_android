@@ -1,7 +1,5 @@
 package com.apphunt.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,15 +24,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.SearchResultsApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
-import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
@@ -43,6 +42,7 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
+import com.apphunt.app.ui.fragments.SearchFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -55,7 +55,6 @@ import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.PackagesUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -64,7 +63,6 @@ import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -257,9 +255,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-                BusProvider.getInstance().post(new SearchStatusEvent(true));
-                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
-                        Constants.PLATFORM);
+//                BusProvider.getInstance().post(new SearchStatusEvent(true));
+//                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
+//                        Constants.PLATFORM);
+
+                String[] tags = s.split(" ");
+                String url = "?";
+
+                for (String tag : tags) {
+                    url += "names[]=" + tag + "&";
+                }
+
+                ApiClient.getClient(MainActivity.this).getItemsByTags(url, LoginProviderFactory.get(MainActivity.this).getUser().getId());
 
                 searchView.clearFocus();
                 return true;
@@ -506,5 +513,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
         }
+    }
+
+    @Subscribe
+    public void onSearchResultsObtainEvent(SearchResultsApiEvent event) {
+        SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setData(event.getSearchItems());
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, searchFragment, "Search Fragment")
+                .addToBackStack("Search Fragment")
+                .commit();
     }
 }

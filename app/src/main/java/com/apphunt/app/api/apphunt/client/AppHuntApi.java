@@ -74,4 +74,6 @@ public interface AppHuntApi {
     void cancelAllRequests();
 
     void getTagsSuggestion(String str);
+
+    void getItemsByTags(String tags, String userId);
 }

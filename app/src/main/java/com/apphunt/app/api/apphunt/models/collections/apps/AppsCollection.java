@@ -1,7 +1,6 @@
 package com.apphunt.app.api.apphunt.models.collections.apps;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.users.User;
@@ -10,7 +9,6 @@ import com.apphunt.app.constants.Constants;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
