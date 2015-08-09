@@ -66,6 +66,9 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     private ActionBarActivity activity;
     private AutoCompleteTextView tagView;
 
+    @InjectView(R.id.container)
+    RelativeLayout container;
+
     @InjectView(R.id.save)
     Button saveButton;
 
@@ -109,8 +112,9 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     private void initUI() {
-        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.container);
+        container.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.vertical_flip));
         container.setOnClickListener(this);
+
         TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(data.loadLabel(activity.getPackageManager()));
 
