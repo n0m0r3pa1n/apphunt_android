@@ -148,24 +148,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void saveApp() {
         if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
             showLoginFragment();
-            return;
-        }
-
-        if (desc.getText() != null && desc.getText().length() >= 50) {
-            if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-                saveApp(saveButton, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-            } else {
-                showLoginFragment();
-            }
-        } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
-            desc.setHint(R.string.hint_short_description);
-            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-            desc.setError("Min 50 chars");
-            vibrate();
-        } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
-            desc.setHint(R.string.hint_please_enter_description);
-            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-            vibrate();
+        } else {
+            saveApp(saveButton, LoginProviderFactory.get(activity).getUser().getId());
         }
     }
 
@@ -187,18 +171,29 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     private void saveApp(final View v, String userId) {
-        v.setEnabled(false);
-        SaveApp app = new SaveApp();
-        app.setDescription(desc.getText().toString());
-        app.setPackageName(data.packageName);
-        app.setPlatform(Constants.PLATFORM);
-        app.setUserId(userId);
+        if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
+            desc.setHint(R.string.hint_short_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            desc.setError("Min 50 chars");
+            vibrate();
+        } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
+            desc.setHint(R.string.hint_please_enter_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            vibrate();
+        } else {
+            v.setEnabled(false);
+            SaveApp app = new SaveApp();
+            app.setDescription(desc.getText().toString());
+            app.setPackageName(data.packageName);
+            app.setPlatform(Constants.PLATFORM);
+            app.setUserId(userId);
 
-        if (tagGroup.getTags().length > 0) {
-            app.setTags(tagGroup.getTags());
+            if (tagGroup.getTags().length > 0) {
+                app.setTags(tagGroup.getTags());
+            }
+
+            ApiClient.getClient(getActivity()).saveApp(app);
         }
-
-        ApiClient.getClient(getActivity()).saveApp(app);
     }
 
     private void closeKeyboard(View v) {
