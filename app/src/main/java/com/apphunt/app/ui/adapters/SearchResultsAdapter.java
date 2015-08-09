@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -179,15 +180,15 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderCollection.favouriteButton.setVisibility(View.GONE);
             }
 
-            String tags = null;
+            String tags = "";
             for (int i = 0; i < appsCollection.getTags().size(); i++) {
-                tags += appsCollection.getTags().get(i);
-
-                if (i < appsCollection.getTags().size()) {
+                if (i > 0 && i < appsCollection.getTags().size()) {
                     tags += ", ";
                 }
+
+                tags += appsCollection.getTags().get(i);
             }
-            viewHolderCollection.tags.setText(String.format(ctx.getString(R.string.tags), tags));
+            viewHolderCollection.tags.setText(String.format(ctx.getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
 
             final Resources resources = ctx.getResources();
             Picasso.with(ctx)

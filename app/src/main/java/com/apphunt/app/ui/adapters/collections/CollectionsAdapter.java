@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,15 +109,15 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder.favouriteButton.setVisibility(View.GONE);
         }
 
-        String tags = null;
+        String tags = "";
         for (int i = 0; i < appsCollection.getTags().size(); i++) {
-            tags += appsCollection.getTags().get(i);
-
-            if (i < appsCollection.getTags().size()) {
-               tags += ", ";
+            if (i > 0 && i < appsCollection.getTags().size()) {
+                tags += ", ";
             }
+
+            tags += appsCollection.getTags().get(i);
         }
-        viewHolder.tags.setText(String.format(context.getString(R.string.tags), tags));
+        viewHolder.tags.setText(String.format(context.getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
 
         final Resources resources = context.getResources();
         Picasso.with(context)

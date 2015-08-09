@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -199,15 +200,15 @@ public class CollectionView extends RelativeLayout {
         createdBy.setText(collection.getCreatedBy().getUsername());
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
 
-        String tags = null;
+        String tags = "";
         for (int i = 0; i < collection.getTags().size(); i++) {
-            tags += collection.getTags().get(i);
-
-            if (i < collection.getTags().size()) {
+            if (i > 0 && i < collection.getTags().size()) {
                 tags += ", ";
             }
+
+            tags += collection.getTags().get(i);
         }
-        this.tags.setText(String.format(getContext().getString(R.string.tags), tags));
+        this.tags.setText(String.format(getContext().getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
 
         final ViewTreeObserver viewTree = banner.getViewTreeObserver();
         viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
