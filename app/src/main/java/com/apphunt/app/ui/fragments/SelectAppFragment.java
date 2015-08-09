@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -129,7 +130,15 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
            LoadersUtils.hideCenterLoader(activity);
            userAppsAdapter = new UserAppsAdapter(activity, tempData);
-           gridView.setAdapter(userAppsAdapter);
+
+
+           Handler delayHandler = new Handler();
+           delayHandler.postDelayed(new Runnable() {
+               @Override
+               public void run() {
+                   gridView.setAdapter(userAppsAdapter);
+               }
+           }, 250);
        }
     }
 
