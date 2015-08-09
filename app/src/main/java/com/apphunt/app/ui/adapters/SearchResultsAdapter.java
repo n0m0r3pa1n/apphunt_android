@@ -179,6 +179,16 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 viewHolderCollection.favouriteButton.setVisibility(View.GONE);
             }
 
+            String tags = null;
+            for (int i = 0; i < appsCollection.getTags().size(); i++) {
+                tags += appsCollection.getTags().get(i);
+
+                if (i < appsCollection.getTags().size()) {
+                    tags += ", ";
+                }
+            }
+            viewHolderCollection.tags.setText(String.format(ctx.getString(R.string.tags), tags));
+
             final Resources resources = ctx.getResources();
             Picasso.with(ctx)
                     .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -257,6 +267,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.tags)
+        TextView tags;
 
         @InjectView(R.id.vote_btn)
         CollectionVoteButton voteButton;

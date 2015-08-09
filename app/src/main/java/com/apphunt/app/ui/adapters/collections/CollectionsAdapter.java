@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
