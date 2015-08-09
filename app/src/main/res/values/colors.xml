@@ -56,6 +56,10 @@
         <item>@color/holo_red_dark</item>
     </integer-array>
 
+    <integer-array name="colors_sec">
+        <item>@android:color/white</item>
+    </integer-array>
+
     <color name="holo_blue_dark">#0099cc</color>
     <color name="holo_yellow_dark">#ff8800</color>
     <color name="holo_green_dark">#669900</color>
