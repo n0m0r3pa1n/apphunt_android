@@ -59,6 +59,9 @@ public class CollectionView extends RelativeLayout {
     @InjectView(R.id.created_by)
     TextView createdBy;
 
+    @InjectView(R.id.tags)
+    TextView tags;
+
     @InjectView(R.id.collection_status)
     ImageView status;
 
@@ -195,6 +198,16 @@ public class CollectionView extends RelativeLayout {
         name.setText(collection.getName());
         createdBy.setText(collection.getCreatedBy().getUsername());
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
+
+        String tags = null;
+        for (int i = 0; i < collection.getTags().size(); i++) {
+            tags += collection.getTags().get(i);
+
+            if (i < collection.getTags().size()) {
+                tags += ", ";
+            }
+        }
+        this.tags.setText(String.format(getContext().getString(R.string.tags), tags));
 
         final ViewTreeObserver viewTree = banner.getViewTreeObserver();
         viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

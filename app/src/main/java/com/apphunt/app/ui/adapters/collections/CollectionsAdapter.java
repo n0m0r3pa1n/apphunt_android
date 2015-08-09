@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +109,16 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder.favouriteButton.setVisibility(View.GONE);
         }
 
+        String tags = null;
+        for (int i = 0; i < appsCollection.getTags().size(); i++) {
+            tags += appsCollection.getTags().get(i);
+
+            if (i < appsCollection.getTags().size()) {
+               tags += ", ";
+            }
+        }
+        viewHolder.tags.setText(String.format(context.getString(R.string.tags), tags));
+
         final Resources resources = context.getResources();
         Picasso.with(context)
                 .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -154,6 +165,9 @@ public class CollectionsAdapter extends BaseAdapter {
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.tags)
+        TextView tags;
 
         @InjectView(R.id.vote_btn)
         CollectionVoteButton voteButton;

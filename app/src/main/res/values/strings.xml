@@ -156,5 +156,6 @@
     <string name="title_update_required">Update Required</string>
     <string name="enable_install_notification">Enable install notification</string>
     <string name="title_search">Search Results</string>
+    <string name="tags">Tags: %s</string>
 
 </resources>
