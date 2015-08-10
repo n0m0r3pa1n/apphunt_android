@@ -2,8 +2,6 @@ package com.apphunt.app.utils.ui;
 
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,6 +12,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
+import com.apphunt.app.ui.fragments.SearchFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
@@ -128,9 +127,19 @@ public class NavUtils {
         extras.putString(Constants.KEY_APP_NAME, app.getName());
         detailsFragment.setArguments(extras);
 
-        ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                .commit();
+    }
+
+    public void presentSearchResultsFragment(String query) {
+        SearchFragment searchFragment = new SearchFragment();
+        searchFragment.setQuery(query);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, searchFragment, "Search Fragment")
+                .addToBackStack("Search Fragment")
                 .commit();
     }
 

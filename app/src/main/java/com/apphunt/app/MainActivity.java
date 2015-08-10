@@ -122,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
 
                 BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if(fragment.getTitle() == 0) {
+                if (fragment.getTitle() == 0) {
                     getSupportActionBar().setTitle(fragment.getStringTitle());
                 } else {
                     getSupportActionBar().setTitle(fragment.getTitle());
@@ -255,18 +255,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-//                BusProvider.getInstance().post(new SearchStatusEvent(true));
-//                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
-//                        Constants.PLATFORM);
 
-                String[] tags = s.split(" ");
-                String url = "?";
-
-                for (String tag : tags) {
-                    url += "names[]=" + tag + "&";
-                }
-
-                ApiClient.getClient(MainActivity.this).getItemsByTags(url, LoginProviderFactory.get(MainActivity.this).getUser().getId());
+                NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
 
                 searchView.clearFocus();
                 return true;
@@ -513,16 +503,5 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
         }
-    }
-
-    @Subscribe
-    public void onSearchResultsObtainEvent(SearchResultsApiEvent event) {
-        SearchFragment searchFragment = new SearchFragment();
-        searchFragment.setData(event.getSearchItems());
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, searchFragment, "Search Fragment")
-                .addToBackStack("Search Fragment")
-                .commit();
     }
 }

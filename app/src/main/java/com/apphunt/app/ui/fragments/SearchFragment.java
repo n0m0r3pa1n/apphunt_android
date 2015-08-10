@@ -13,12 +13,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.SearchItems;
+import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.SearchResultsApiEvent;
 import com.apphunt.app.ui.adapters.SearchResultsAdapter;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -31,12 +35,15 @@ public class SearchFragment extends BaseFragment {
 
     private Activity activity;
     private View view;
-    private SearchItems data;
+    private String query;
     private LinearLayoutManager layoutManager;
     private SearchResultsAdapter resultsListAdapter;
 
     @InjectView(R.id.results_list)
     RecyclerView resultsList;
+
+    @InjectView(R.id.loading)
+    CircularProgressBar loader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,13 +67,13 @@ public class SearchFragment extends BaseFragment {
         resultsList.setLayoutManager(layoutManager);
         resultsList.setHasFixedSize(true);
 
-        resultsListAdapter = new SearchResultsAdapter(activity, resultsList, data);
-        resultsList.setAdapter(resultsListAdapter);
+        ApiClient.getClient(activity).getItemsByTags(query, LoginProviderFactory.get(activity).getUser().getId());
     }
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
+            loader.setVisibility(View.VISIBLE);
             return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_top_notification);
         } else {
             return AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_top);
@@ -78,8 +85,23 @@ public class SearchFragment extends BaseFragment {
         return R.string.title_search;
     }
 
-    public void setData(SearchItems data) {
-        this.data = data;
+    public void setQuery(String q) {
+        String[] tags = q.split(" ");
+        String query = "?";
+
+        for (String tag : tags) {
+            query += "names[]=" + tag + "&";
+        }
+
+        this.query = query;
+    }
+
+    @Subscribe
+    public void onSearchResultsObtainEvent(SearchResultsApiEvent event) {
+        loader.progressiveStop();
+
+        resultsListAdapter = new SearchResultsAdapter(activity, resultsList, event.getSearchItems());
+        resultsList.setAdapter(resultsListAdapter);
     }
 
     @Override
