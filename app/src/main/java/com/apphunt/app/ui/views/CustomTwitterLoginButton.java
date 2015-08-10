@@ -1,8 +1,15 @@
 package com.apphunt.app.ui.views;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.StyleRes;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
 
+import com.apphunt.app.R;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 /**
@@ -32,6 +39,15 @@ public class CustomTwitterLoginButton extends TwitterLoginButton {
         if (isInEditMode()) {
             return;
         }
-        setBackgroundResource(NULL_RESOURCE);
+
+        Resources res = this.getResources();
+
+        setBackgroundResource(R.drawable.shape_provider_background);
+        setCompoundDrawablesWithIntrinsicBounds(null, null, res.getDrawable(R.drawable.ic_twitter), null);
+        setPadding(60, 2, 8, 2);
+        setText("Twitter");
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        setTypeface(Typeface.DEFAULT);
+        setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
     }
 }
