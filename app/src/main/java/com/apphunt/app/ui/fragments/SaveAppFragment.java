@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -41,7 +40,6 @@ import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
@@ -68,6 +66,12 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     @InjectView(R.id.container)
     RelativeLayout container;
+
+    @InjectView(R.id.title)
+    TextView title;
+
+    @InjectView(R.id.app_icon)
+    ImageView icon;
 
     @InjectView(R.id.save)
     Button saveButton;
@@ -115,10 +119,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         container.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.vertical_flip));
         container.setOnClickListener(this);
 
-        TextView title = (TextView) view.findViewById(R.id.title);
         title.setText(data.loadLabel(activity.getPackageManager()));
-
-        ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
         icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
 
         tagGroup.setOnTagTextEntryListener(new TagGroup.OnTagTextEntryListener() {
