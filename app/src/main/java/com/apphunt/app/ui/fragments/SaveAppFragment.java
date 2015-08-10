@@ -271,6 +271,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     @Subscribe
     public void onTagsSuggestionReceive(TagsSuggestionApiEvent event) {
-        tagView.setAdapter(new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, event.getTags().getTags()));
+        tagView.setAdapter(new ArrayAdapter<>(activity, R.layout.layout_tags_suggestion, event.getTags().getTags()));
     }
 }
