@@ -33,6 +33,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.views.CustomTwitterLoginButton;
+import com.apphunt.app.ui.views.widgets.CustomGooglePlusButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -40,7 +41,6 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -73,7 +73,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     CustomTwitterLoginButton twitterLoginBtn;
 
     @InjectView(R.id.gplus_login_button)
-    SignInButton gplusSignInBtn;
+    CustomGooglePlusButton gplusSignInBtn;
 
     private ActionBarActivity activity;
     private User user;
