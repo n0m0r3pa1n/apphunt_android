@@ -51,6 +51,10 @@ public class NavUtils {
     }
 
     public void startSaveAppFragment(ApplicationInfo data) {
+        if (activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            return;
+        }
+
         String curFragmentTag = activity.getSupportFragmentManager().getBackStackEntryAt(activity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
 
         if (!curFragmentTag.equals(Constants.TAG_SAVE_APP_FRAGMENT)) {
