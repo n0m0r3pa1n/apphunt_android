@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent
 import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
@@ -39,7 +39,6 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import me.gujun.android.taggroup.TagGroup;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>

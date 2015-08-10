@@ -60,7 +60,7 @@
             android:textColorHint="@color/desc_hint"
             android:inputType="textMultiLine"/>
         
-        <me.gujun.android.taggroup.TagGroup
+        <com.apphunt.app.ui.views.widgets.TagGroup
             android:id="@+id/tag_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

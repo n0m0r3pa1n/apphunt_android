@@ -378,7 +378,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
             }
         } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
+            Crashlytics.logException(e);
         }
     }
 

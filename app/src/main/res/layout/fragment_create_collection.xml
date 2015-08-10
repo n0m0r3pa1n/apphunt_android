@@ -81,7 +81,7 @@
             android:hint="Write a description"/>
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
-    <me.gujun.android.taggroup.TagGroup
+    <com.apphunt.app.ui.views.widgets.TagGroup
         android:id="@+id/tags"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

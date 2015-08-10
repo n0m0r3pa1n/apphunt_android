@@ -67,5 +67,4 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:7.5.+'
     compile 'com.google.android.gms:play-services-gcm:7.5.+'
     compile project(':jhexed')
-    compile project(':tag_group_library')
 }

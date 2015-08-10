@@ -39,6 +39,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -54,7 +55,6 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import me.gujun.android.taggroup.TagGroup;
 
 public class SaveAppFragment extends BaseFragment implements OnClickListener {
 

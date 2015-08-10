@@ -157,5 +157,5 @@
     <string name="enable_install_notification">Enable install notification</string>
     <string name="title_search">Search Results</string>
     <string name="tags">Tags: %s</string>
-
+    <string name="add_tag">Add Tag</string>
 </resources>
