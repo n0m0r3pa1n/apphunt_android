@@ -41,7 +41,7 @@ public class AppHuntApplication extends Application {
                         Constants.TWITTER_CONSUMER_SECRET);
         // TODO: Add before deployment: new Crashlytics()
         Fabric.with(this, new Twitter(authConfig));
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext(), Constants.FACEBOOK_SIGN_IN);
 
         if (BuildConfig.DEBUG) {
             FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);

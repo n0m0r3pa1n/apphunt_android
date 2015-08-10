@@ -31,8 +31,24 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_button"
         android:layout_alignStart="@+id/login_button"
+        android:layout_alignLeft="@+id/login_button"
         android:layout_alignEnd="@+id/login_button"
+        android:layout_alignRight="@+id/login_button"
         android:layout_marginTop="20dp" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/fb_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/gplus_login_button"
+        android:layout_alignStart="@+id/login_button"
+        android:layout_alignLeft="@+id/login_button"
+        android:layout_alignEnd="@+id/login_button"
+        android:layout_alignRight="@+id/login_button"
+        android:layout_marginTop="20dp"
+        android:elevation="1dp"
+         />
 
     <Button
         android:id="@+id/not_now"

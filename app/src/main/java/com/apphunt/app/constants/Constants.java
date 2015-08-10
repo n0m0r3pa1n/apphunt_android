@@ -8,8 +8,8 @@ import java.util.HashMap;
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
-//    public static final String BASE_URL = "http://apphunt.herokuapp.com";
-    public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
+    public static final String BASE_URL = "http://apphunt.herokuapp.com";
+//    public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
     // User's Keys
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_USER_NAME = "user_name";
@@ -95,6 +95,7 @@ public class Constants {
     // Invites
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
     public static int GPLUS_SIGN_IN = 0;
+    public static int FACEBOOK_SIGN_IN = 12;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";

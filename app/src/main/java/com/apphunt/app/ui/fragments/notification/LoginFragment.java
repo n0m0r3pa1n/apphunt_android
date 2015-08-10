@@ -7,6 +7,7 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
+import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.GooglePlusLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
@@ -36,6 +38,15 @@ import com.apphunt.app.ui.views.CustomTwitterLoginButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,7 +65,11 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,6 +87,9 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @InjectView(R.id.login_button)
     CustomTwitterLoginButton twitterLoginBtn;
 
+    @InjectView(R.id.fb_login_button)
+    LoginButton fbLoginBtn;
+
     @InjectView(R.id.gplus_login_button)
     SignInButton gplusSignInBtn;
 
@@ -80,10 +98,13 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
 
     private boolean canBeSkipped = false;
     private boolean isTwitterLogin = false;
-    private String message;
+    private boolean isFacebookLogin = false;
 
+    private String message;
     private GoogleApiClient googleApiClient;
+
     private Locale locale;
+    private CallbackManager callbackManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +118,8 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
 
+        callbackManager = CallbackManager.Factory.create();
+
         locale = getResources().getConfiguration().locale;
     }
 
@@ -108,6 +131,50 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         ButterKnife.inject(this, view);
 
         loginMessage.setText(message);
+        fbLoginBtn.setFragment(this);
+        fbLoginBtn.setReadPermissions(Arrays.asList("email"));
+        fbLoginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+
+                                JSONObject json = response.getJSONObject();
+                                final User user = new User();
+                                String id = "";
+                                try {
+                                    id = json.getString("id");
+                                    user.setEmail(json.getString("email"));
+                                    String name = json.getString("name");
+                                    user.setName(name);
+                                    user.setUsername(name);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if(TextUtils.isEmpty(id)) {
+                                    return;
+                                }
+                                setUserFbProfilePictureAndLogin(user, id);
+                            }
+                        }).executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                onLoginFailed();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                onLoginFailed();
+            }
+        });
 
         Button notNowButton = (Button) view.findViewById(R.id.not_now);
         notNowButton.setVisibility(View.GONE);
@@ -180,6 +247,37 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         return view;
     }
 
+    private void setUserFbProfilePictureAndLogin(final User user, String id) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("redirect", false);
+        bundle.putString("type", "large");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/"+id+"/picture",
+                bundle,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+
+                        JSONObject json = response.getJSONObject();
+                        String pictureUrl = null;
+                        try {
+                            pictureUrl = json.getJSONObject("data").getString("url");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(!TextUtils.isEmpty(pictureUrl)) {
+                            user.setProfilePicture(pictureUrl);
+                            user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
+                            LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
+                            ApiClient.getClient(getActivity()).createUser(user);
+                            FlurryAgent.logEvent(TrackingEvents.UserFacebookLogin);
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
     @OnClick(R.id.login_button)
     public void onTwitterLoginBtnClick() {
         if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
@@ -192,6 +290,13 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @OnClick(R.id.gplus_login_button)
     public void onGooglePlusLoginBtnClick() {
         googleApiClient.connect();
+    }
+
+    @OnClick(R.id.fb_login_button)
+    public void onFacebookLoginBtnClick() {
+        LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+        NavUtils.getInstance(activity).setOnBackBlocked(true);
+        isFacebookLogin = true;
     }
 
     @Override
@@ -263,6 +368,9 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
             }
         } else if (requestCode == Constants.GPLUS_SIGN_IN) {
             googleApiClient.connect();
+        } else if (requestCode == Constants.FACEBOOK_SIGN_IN) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            isFacebookLogin = false;
         }
 
         isTwitterLogin = false;
