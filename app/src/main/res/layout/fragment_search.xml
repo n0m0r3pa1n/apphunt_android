@@ -15,6 +15,32 @@
         app:cpb_colors="@array/colors"
         style="@style/CircularThemeProgressBar" />
 
+    <RelativeLayout
+        android:id="@+id/no_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_results_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_search_not_found"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_results_icon"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_results_found"
+            android:textSize="22sp"
+            android:textColor="#32000000"
+            android:gravity="center"/>
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/results_list"
         android:layout_width="match_parent"

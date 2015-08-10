@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -44,6 +45,9 @@ public class SearchFragment extends BaseFragment {
 
     @InjectView(R.id.loading)
     CircularProgressBar loader;
+
+    @InjectView(R.id.no_results)
+    RelativeLayout noResultsLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,8 +104,12 @@ public class SearchFragment extends BaseFragment {
     public void onSearchResultsObtainEvent(SearchResultsApiEvent event) {
         loader.progressiveStop();
 
-        resultsListAdapter = new SearchResultsAdapter(activity, resultsList, event.getSearchItems());
-        resultsList.setAdapter(resultsListAdapter);
+        if (event.getSearchItems().getApps().size() == 0 || event.getSearchItems().getCollections().size() == 0) {
+            noResultsLayout.setVisibility(View.VISIBLE);
+        } else {
+            resultsListAdapter = new SearchResultsAdapter(activity, resultsList, event.getSearchItems());
+            resultsList.setAdapter(resultsListAdapter);
+        }
     }
 
     @Override
