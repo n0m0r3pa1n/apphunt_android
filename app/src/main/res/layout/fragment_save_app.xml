@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_primary"
-    android:elevation="1dp"
     android:clickable="true">
 
     <RelativeLayout
@@ -34,50 +33,44 @@
             android:layout_marginBottom="@dimen/save_box_icon_margin_bottom"
             android:layout_centerHorizontal="true" />
 
-        <View
-            android:id="@+id/top_line"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/desc_shadow_height"
-            android:background="@drawable/shadow"
-            android:layout_below="@+id/app_icon"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <EditText
-            android:id="@+id/description"
+        <RelativeLayout
+            android:id="@+id/container_desc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/top_line"
-            android:layout_above="@+id/tag_group"
-            android:gravity="top|start"
-            android:background="@color/desc_bg"
-            android:singleLine="false"
-            android:maxLength="100"
-            android:padding="@dimen/save_box_desc_padding"
-            android:hint="@string/hint_description"
-            android:textSize="@dimen/save_box_desc_text"
-            android:textColor="@color/desc_text"
-            android:textColorHint="@color/desc_hint"
-            android:inputType="textMultiLine"/>
-        
-        <com.apphunt.app.ui.views.widgets.TagGroup
-            android:id="@+id/tag_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/bottom_line"
-            android:padding="10dp"
-            android:background="@color/desc_bg"
-            app:atg_isAppendMode="true"
-            style="@style/TagGroup" />
-
-        <View
-            android:id="@+id/bottom_line"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/desc_shadow_height"
-            android:background="@drawable/shadow_bottom"
+            android:layout_below="@+id/app_icon"
             android:layout_above="@+id/save"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:background="#32000000"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:elevation="0dp">
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tag_group"
+                android:gravity="top|start"
+                android:background="@color/desc_bg"
+                android:singleLine="false"
+                android:maxLength="100"
+                android:padding="@dimen/save_box_desc_padding"
+                android:hint="@string/hint_description"
+                android:textSize="@dimen/save_box_desc_text"
+                android:textColor="@color/desc_text"
+                android:textColorHint="@color/desc_hint"
+                android:inputType="textMultiLine"/>
+
+            <com.apphunt.app.ui.views.widgets.TagGroup
+                android:id="@+id/tag_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:background="@color/desc_bg"
+                app:atg_isAppendMode="true"
+                style="@style/TagGroup" />
+
+        </RelativeLayout>
 
         <Button
             android:id="@+id/save"
