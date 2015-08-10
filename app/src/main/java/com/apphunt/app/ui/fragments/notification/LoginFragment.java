@@ -35,6 +35,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.views.CustomTwitterLoginButton;
+import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
 import com.apphunt.app.ui.views.widgets.CustomGooglePlusButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -87,11 +88,11 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @InjectView(R.id.login_button)
     CustomTwitterLoginButton twitterLoginBtn;
 
-    @InjectView(R.id.fb_login_button)
-    LoginButton fbLoginBtn;
-
     @InjectView(R.id.gplus_login_button)
     CustomGooglePlusButton gplusSignInBtn;
+
+    @InjectView(R.id.fb_login_button)
+    CustomFacebookButton fbLoginBtn;
 
     private ActionBarActivity activity;
     private User user;
