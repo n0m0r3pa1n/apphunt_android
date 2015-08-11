@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -133,10 +134,13 @@ public class SearchResultsFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.findItem(R.id.action_search).setVisible(true);
-        menu.findItem(R.id.action_search).setVisible(true);
-        menu.findItem(R.id.action_search).expandActionView();
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        if(isSearchShowing()) {
+            return;
+        }
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        searchMenuItem.setVisible(true);
+        searchMenuItem.expandActionView();
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setQuery(searchTerm, false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -163,32 +167,16 @@ public class SearchResultsFragment extends BaseFragment {
                 return false;
             }
         });
+    }
 
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (item.getItemId() == R.id.action_search) {
-                    ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
-                }
-                return true;
-            }
-        });
+    private boolean isSearchShowing() {
+        return getActivity().getSupportFragmentManager().getBackStackEntryCount() > 1;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @OnClick(R.id.more_apps)
@@ -209,7 +197,7 @@ public class SearchResultsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
-        if(activity.getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        if(isSearchShowing()) {
             return;
         }
 
@@ -229,7 +217,7 @@ public class SearchResultsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
-        if(activity.getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        if(isSearchShowing()) {
             return;
         }
         loader.progressiveStop();
