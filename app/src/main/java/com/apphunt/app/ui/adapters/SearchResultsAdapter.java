@@ -227,6 +227,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    public void resetAdapter() {
+        items.clear();
+    }
+
     static class ViewHolderApp extends RecyclerView.ViewHolder {
         @InjectView(R.id.item)
         LinearLayout layout;

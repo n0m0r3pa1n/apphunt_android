@@ -79,6 +79,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     boolean isNetworkChanged = false;
     private int previousPosition = 0;
     private int versionCode;
+    private String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +257,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
 
+                String[] tags = s.split(" ");
+                String query = "?";
+
+                for (String tag : tags) {
+                    query += "names[]=" + tag + "&";
+                }
+
+                ApiClient.getClient(MainActivity.this).getAppsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
+                ApiClient.getClient(MainActivity.this).getCollectionsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
+
                 NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
 
                 searchView.clearFocus();
@@ -267,6 +278,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 return false;
             }
         });
+
+//        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_SEARCH_RESULTS_FRAGMENT) != null) {
+//            menu.findItem(R.id.action_search).setVisible(true);
+//            menu.findItem(R.id.action_search).expandActionView();
+//            searchView.setQuery(query, false);
+//        }
 
         MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
             @Override

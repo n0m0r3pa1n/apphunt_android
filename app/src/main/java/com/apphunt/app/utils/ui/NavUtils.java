@@ -6,9 +6,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
@@ -135,10 +137,13 @@ public class NavUtils {
 
     public void presentSearchResultsFragment(String query) {
         SearchFragment searchFragment = new SearchFragment();
+        Bundle args = new Bundle();
+        args.putString("q", query);
+        searchFragment.setArguments(args);
         searchFragment.setQuery(query);
 
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
+                .add(R.id.container, new SearchFragment(), Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .commit();
     }

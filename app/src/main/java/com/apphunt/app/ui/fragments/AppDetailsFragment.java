@@ -305,7 +305,7 @@ public class AppDetailsFragment extends BaseFragment {
             @Override
             protected void onPostExecute(Void aVoid) {
                 if(isAdded()) {
-                    icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_a, null));
+                    icons.add(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo, null));
                     hexedPhotoView.findViewById(R.id.loading).setVisibility(View.GONE);
                     hexedView = new JHexedPhotoView(getActivity(), icons);
                     hexedView.setBackgroundColor(getResources().getColor(R.color.bg_primary));
