@@ -150,6 +150,11 @@ public class CollectionsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void resetAdapter() {
+        appsCollections.clear();
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder {
         @InjectView(R.id.card_view)
         CardView cardView;

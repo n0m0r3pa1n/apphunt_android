@@ -28,7 +28,6 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.SearchResultsApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -42,7 +41,6 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.SearchFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -278,12 +276,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 return false;
             }
         });
-
-//        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_SEARCH_RESULTS_FRAGMENT) != null) {
-//            menu.findItem(R.id.action_search).setVisible(true);
-//            menu.findItem(R.id.action_search).expandActionView();
-//            searchView.setQuery(query, false);
-//        }
 
         MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
             @Override
