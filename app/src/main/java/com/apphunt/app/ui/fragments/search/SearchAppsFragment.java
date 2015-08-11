@@ -15,7 +15,6 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SearchAppsAdapter;
-import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
@@ -55,6 +54,7 @@ public class SearchAppsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
+
         query = getArguments().getString(QUERY);
         getApps();
         items.setOnEndReachedListener(new OnEndReachedListener() {
@@ -91,8 +91,9 @@ public class SearchAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
-        loader.progressiveStop();
+        loader.setVisibility(View.GONE);
         items.hideBottomLoader();
+
         if(adapter == null) {
             adapter = new SearchAppsAdapter(getActivity(), event.getApps().getApps());
             items.setAdapter(adapter, event.getApps().getTotalCount());

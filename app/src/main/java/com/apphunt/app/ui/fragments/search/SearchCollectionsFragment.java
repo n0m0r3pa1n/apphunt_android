@@ -15,7 +15,6 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
-import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
@@ -98,7 +97,7 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
 
     @Subscribe
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
-        loader.progressiveStop();
+        loader.setVisibility(View.GONE);
         items.hideBottomLoader();
         if(adapter == null) {
             adapter = new SelectCollectionAdapter(getActivity(), event.getCollections().getCollections());
