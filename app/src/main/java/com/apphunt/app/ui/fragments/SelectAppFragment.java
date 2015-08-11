@@ -22,7 +22,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
-import com.apphunt.app.ui.adapters.UserAppsAdapter;
+import com.apphunt.app.ui.adapters.InstalledAppsAdapter;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -48,7 +48,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     GridView gridView;
 
     private View view;
-    private UserAppsAdapter userAppsAdapter;
+    private InstalledAppsAdapter userAppsAdapter;
     private List<ApplicationInfo> data;
     private ActionBarActivity activity;
 
@@ -136,7 +136,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
            }
 
            LoadersUtils.hideCenterLoader(activity);
-           userAppsAdapter = new UserAppsAdapter(activity, tempData);
+           userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
 
            Handler delayHandler = new Handler();
            delayHandler.postDelayed(new Runnable() {

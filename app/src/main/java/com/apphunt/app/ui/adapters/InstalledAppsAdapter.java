@@ -19,14 +19,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
-public class UserAppsAdapter extends BaseAdapter {
-    private static final String TAG = UserAppsAdapter.class.getName();
+public class InstalledAppsAdapter extends BaseAdapter {
+    private static final String TAG = InstalledAppsAdapter.class.getName();
 
     private List<ApplicationInfo> appsList = new ArrayList<>();
     private Context ctx;
     private PackageManager packageManager;
 
-    public UserAppsAdapter(Context ctx, List<ApplicationInfo> appsList) {
+    public InstalledAppsAdapter(Context ctx, List<ApplicationInfo> appsList) {
         this.ctx = ctx;
         this.appsList = appsList;
         this.packageManager = ctx.getPackageManager();

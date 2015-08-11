@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.api.collections;
 
-import com.apphunt.app.api.apphunt.models.tags.CollectionsSearchResult;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -10,17 +10,17 @@ import com.apphunt.app.api.apphunt.models.tags.CollectionsSearchResult;
  */
 public class CollectionsSearchResultEvent {
 
-    private CollectionsSearchResult result;
+    private AppsCollections collections;
 
-    public CollectionsSearchResultEvent(CollectionsSearchResult result) {
-        this.result = result;
+    public CollectionsSearchResultEvent(AppsCollections collections) {
+        this.collections = collections;
     }
 
-    public CollectionsSearchResult getResult() {
-        return result;
+    public AppsCollections getCollections() {
+        return collections;
     }
 
-    public void setResult(CollectionsSearchResult result) {
-        this.result = result;
+    public void setCollections(AppsCollections collections) {
+        this.collections = collections;
     }
 }

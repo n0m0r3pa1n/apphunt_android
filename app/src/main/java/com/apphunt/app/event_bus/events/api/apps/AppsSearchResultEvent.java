@@ -1,6 +1,6 @@
 package com.apphunt.app.event_bus.events.api.apps;
 
-import com.apphunt.app.api.apphunt.models.tags.AppsSearchResult;
+import com.apphunt.app.api.apphunt.models.apps.AppsList;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -10,17 +10,17 @@ import com.apphunt.app.api.apphunt.models.tags.AppsSearchResult;
  */
 public class AppsSearchResultEvent {
 
-    private AppsSearchResult result;
+    private AppsList apps;
 
-    public AppsSearchResultEvent(AppsSearchResult result) {
-        this.result = result;
+    public AppsSearchResultEvent(AppsList apps) {
+        this.apps = apps;
     }
 
-    public AppsSearchResult getResult() {
-        return result;
+    public AppsList getApps() {
+        return apps;
     }
 
-    public void setResult(AppsSearchResult result) {
-        this.result = result;
+    public void setApps(AppsList apps) {
+        this.apps = apps;
     }
 }

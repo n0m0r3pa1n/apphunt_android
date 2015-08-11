@@ -27,7 +27,6 @@ import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.listview_items.AppItem;
@@ -40,7 +39,6 @@ import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -208,9 +206,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
-        if (event.getResult().getTotalCount() > 0) {
+        if (event.getApps().getTotalCount() > 0) {
             items.add(new SeparatorItem("Applications"));
-            for (BaseApp app : event.getResult().getResults()) {
+            for (BaseApp app : event.getApps().getApps()) {
                 items.add(new AppItem(app));
             }
 
@@ -219,9 +217,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
-        if (event.getResult().getTotalCount() > 0) {
+        if (event.getCollections().getTotalCount() > 0) {
             items.add(new SeparatorItem("Collections"));
-            for (AppsCollection collection : event.getResult().getResults()) {
+            for (AppsCollection collection : event.getCollections().getCollections()) {
                 items.add(new CollectionItem(collection));
             }
 
