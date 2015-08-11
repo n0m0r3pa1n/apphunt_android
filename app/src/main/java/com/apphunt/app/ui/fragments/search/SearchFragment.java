@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.search;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SearchResultsAdapter;
+import com.apphunt.app.ui.fragments.BaseFragment;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;

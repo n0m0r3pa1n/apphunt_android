@@ -42,7 +42,6 @@ import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.SearchFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;

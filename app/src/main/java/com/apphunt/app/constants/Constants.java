@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
-//    public static final String BASE_URL = "http://apphunt.herokuapp.com";
+    //public static final String BASE_URL = "http://apphunt.herokuapp.com";
     public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
 
     // User's Keys
@@ -70,6 +70,8 @@ public class Constants {
     public static final String TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT = "choose_collection_banner_fragment";
     public static final String TAG_COMMENTS = "comments_fragment";
     public static final String TAG_SEARCH_RESULTS_FRAGMENT = "search_results_fragment";
+    public static final String TAG_SEARCH_COLLECTIONS_FRAGMENT = "search_collections_fragment";
+    public static final String TAG_SEARCH_APPS_FRAGMENT = "search_apps_fragment";
 
 
     // RequestCodes

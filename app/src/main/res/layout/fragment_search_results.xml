@@ -75,13 +75,37 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="none"
             android:layoutAnimation="@anim/list_view_entry"
             android:id="@+id/apps"
             android:layout_below="@+id/more_apps" />
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/no_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
 
+        <ImageView
+            android:id="@+id/no_results_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_search_not_found"
+            android:layout_centerInParent="true"/>
 
+        <TextView
+            android:id="@+id/no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_results_icon"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_results_found"
+            android:textSize="22sp"
+            android:textColor="#32000000"
+            android:gravity="center"/>
+    </RelativeLayout>
 
 </RelativeLayout>

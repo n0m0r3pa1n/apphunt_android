@@ -18,6 +18,7 @@
     <string name="title_my_collection">My Collections</string>
     <string name="title_my_collections">My Collections</string>
     <string name="title_create_collection">Create Collection</string>
+    <string name="title_search_apps">Apps</string>
 
     <string-array name="drawer_menu">
         <item>Trending Apps</item>
@@ -158,4 +159,5 @@
     <string name="title_search">Search Results</string>
     <string name="tags">Tags: %s</string>
     <string name="add_tag">Add Tag</string>
+    <string name="title_search_collections">Collections</string>
 </resources>

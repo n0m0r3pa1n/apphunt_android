@@ -98,11 +98,14 @@ public class AllCollectionsFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            MenuItem sortMenu = menu.findItem(R.id.action_sort).setVisible(true);
-            Spinner spinner = (Spinner) sortMenu.getActionView().findViewById(R.id.sort_by);
+            MenuItem sortMenuItem = menu.findItem(R.id.action_sort).setVisible(true);
+            Spinner spinner = (Spinner) sortMenuItem.getActionView().findViewById(R.id.sort_by);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(!isAdded()) {
+                        return;
+                    }
                     String[] items = getResources().getStringArray(R.array.order_values);
                     String selectedItem = items[position];
                     if (previousSelectedSortItem.equals(selectedItem)) {
@@ -125,8 +128,6 @@ public class AllCollectionsFragment extends BaseFragment {
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-
 
     @Subscribe
     public void onCollectionsReceived(GetAllCollectionsApiEvent event) {
