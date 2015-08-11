@@ -43,7 +43,7 @@ public class SearchResultsFragments extends BaseFragment {
     private int appsCount = -1;
     private int collectionsCount = -1;
 
-    private Activity activity;
+    private AppCompatActivity activity;
     private String query;
 
     @InjectView(R.id.loading)
@@ -114,7 +114,7 @@ public class SearchResultsFragments extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @OnClick(R.id.more_apps)
@@ -135,6 +135,10 @@ public class SearchResultsFragments extends BaseFragment {
 
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
+        if(activity.getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            return;
+        }
+
         loader.progressiveStop();
         int totalCount = event.getApps().getTotalCount();
         if(totalCount <= 0) {
@@ -149,6 +153,9 @@ public class SearchResultsFragments extends BaseFragment {
 
     @Subscribe
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
+        if(activity.getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            return;
+        }
         loader.progressiveStop();
         int totalCount = event.getCollections().getTotalCount();
 
@@ -157,6 +164,7 @@ public class SearchResultsFragments extends BaseFragment {
             setSearchResults(appsCount, totalCount);
         } else {
             collectionsAdapter = new CollectionsAdapter(getActivity() ,event.getCollections().getCollections());
+            collectionsAdapter = new CollectionsAdapter(getActivity() ,event.getCollections().getCollections());
             collections.setAdapter(collectionsAdapter);
         }
     }
@@ -164,9 +172,13 @@ public class SearchResultsFragments extends BaseFragment {
     public void setSearchResults(int apps, int collections) {
         this.appsCount = apps;
         this.collectionsCount = collections;
-        if(appsCount != -1 && collectionsCount != -1 && appsCount == 0 && collectionsCount == 0) {
+        if(isResultFromQueriesEmpty()) {
             noResultsLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isResultFromQueriesEmpty() {
+        return appsCount != -1 && collectionsCount != -1 && appsCount == 0 && collectionsCount == 0;
     }
 
     private void updateQuery(String q) {
