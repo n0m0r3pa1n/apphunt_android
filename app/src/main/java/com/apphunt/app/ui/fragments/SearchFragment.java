@@ -17,7 +17,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.SearchResultsApiEvent;
+import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
+import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SearchResultsAdapter;
 import com.squareup.otto.Subscribe;
 
@@ -71,7 +72,11 @@ public class SearchFragment extends BaseFragment {
         resultsList.setLayoutManager(layoutManager);
         resultsList.setHasFixedSize(true);
 
-        ApiClient.getClient(activity).getItemsByTags(query, LoginProviderFactory.get(activity).getUser().getId());
+        resultsListAdapter = new SearchResultsAdapter(activity, resultsList, noResultsLayout);
+        resultsList.setAdapter(resultsListAdapter);
+
+        ApiClient.getClient(activity).getAppsByTags(query, 1, 10, LoginProviderFactory.get(activity).getUser().getId());
+        ApiClient.getClient(activity).getCollectionsByTags(query, 1, 10, LoginProviderFactory.get(activity).getUser().getId());
     }
 
     @Override
@@ -101,14 +106,24 @@ public class SearchFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onSearchResultsObtainEvent(SearchResultsApiEvent event) {
+    public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.progressiveStop();
 
-        if (event.getSearchItems().getApps().size() == 0 || event.getSearchItems().getCollections().size() == 0) {
-            noResultsLayout.setVisibility(View.VISIBLE);
+        if (event.getResult().getTotalCount() > 0) {
+            resultsListAdapter.notifyDataSetChanged();
         } else {
-            resultsListAdapter = new SearchResultsAdapter(activity, resultsList, event.getSearchItems());
-            resultsList.setAdapter(resultsListAdapter);
+            noResultsLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Subscribe
+    public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
+        loader.progressiveStop();
+
+        if (event.getResult().getTotalCount() > 0) {
+            resultsListAdapter.notifyDataSetChanged();
+        } else {
+            noResultsLayout.setVisibility(View.VISIBLE);
         }
     }
 

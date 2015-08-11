@@ -35,6 +35,8 @@ import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
@@ -284,6 +286,24 @@ public class AppHuntApiClient implements AppHuntApi {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, listener));
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, userId, listener));
+        }
+    }
+
+    @Override
+    public void getAppsByTags(String tags, int page, int pageSize, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, userId, listener));
+        }
+    }
+
+    @Override
+    public void getCollectionsByTags(String tags, int page, int pageSize, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, userId, listener));
         }
     }
 }

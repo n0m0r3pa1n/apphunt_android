@@ -76,4 +76,8 @@ public interface AppHuntApi {
     void getTagsSuggestion(String str);
 
     void getItemsByTags(String tags, String userId);
+
+    void getAppsByTags(String tags, int page, int pageSize, String userId);
+
+    void getCollectionsByTags(String tags, int page, int pageSize, String userId);
 }

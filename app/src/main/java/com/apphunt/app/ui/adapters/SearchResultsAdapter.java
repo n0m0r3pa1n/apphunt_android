@@ -18,15 +18,18 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.SearchItems;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
+import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.CollectionItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -37,6 +40,7 @@ import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -54,18 +58,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = SearchResultsAdapter.class.getSimpleName();
-
     private Context ctx;
+
     private RecyclerView recyclerView;
+    private final RelativeLayout noResultsLayout;
     private ArrayList<Item> items = new ArrayList<>();
 
     private int width;
     private static final int COMPAT_PADDING = 5;
 
-    public SearchResultsAdapter(Context ctx, RecyclerView recyclerView, SearchItems data) {
+    public SearchResultsAdapter(Context ctx, RecyclerView recyclerView, RelativeLayout noResultsLayout) {
         this.ctx = ctx;
         this.recyclerView = recyclerView;
-        this.items = getItemsFrom(data);
+        this.noResultsLayout = noResultsLayout;
 
         WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -73,26 +78,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         Point size = new Point();
         display.getSize(size);
         width = size.x;
-    }
 
-    private ArrayList<Item> getItemsFrom(SearchItems data) {
-        ArrayList<Item> items = new ArrayList<>();
-
-        if (data.getApps().size() > 0) {
-            items.add(new SeparatorItem("Applications"));
-            for (BaseApp app : data.getApps()) {
-                items.add(new AppItem(app));
-            }
-        }
-
-        if (data.getCollections().size() > 0) {
-            items.add(new SeparatorItem("Collections"));
-            for (AppsCollection collection : data.getCollections()) {
-                items.add(new CollectionItem(collection));
-            }
-        }
-
-        return items;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -220,6 +207,27 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public Object getItem(int position) {
         return items.get(position);
+    }
+
+    @Subscribe
+    public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
+        if (event.getResult().getTotalCount() > 0) {
+            items.add(new SeparatorItem("Applications"));
+            for (BaseApp app : event.getResult().getResults()) {
+                items.add(new AppItem(app));
+            }
+        }
+    }
+
+    @Subscribe
+    public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
+        if (event.getResult().getTotalCount() > 0) {
+            items.add(new SeparatorItem("Collections"));
+            for (AppsCollection collection : event.getResult().getResults()) {
+                items.add(new CollectionItem(collection));
+            }
+        }
+
     }
 
     static class ViewHolderApp extends RecyclerView.ViewHolder {
