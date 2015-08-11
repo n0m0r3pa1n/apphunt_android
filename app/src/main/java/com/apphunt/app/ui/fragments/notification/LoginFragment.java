@@ -48,7 +48,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -350,6 +349,8 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.e(TAG, requestCode + " " + resultCode);
+
         if (isTwitterLogin) {
             twitterLoginBtn.onActivityResult(requestCode, resultCode,
                     data);
@@ -367,7 +368,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
             } else {
                 onLoginFailed();
             }
-        } else if (requestCode == Constants.GPLUS_SIGN_IN) {
+        } else if (requestCode == Constants.GPLUS_SIGN_IN && resultCode == -1) {
             googleApiClient.connect();
         } else if (requestCode == Constants.FACEBOOK_SIGN_IN) {
             callbackManager.onActivityResult(requestCode, resultCode, data);

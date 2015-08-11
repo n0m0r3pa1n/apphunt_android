@@ -69,6 +69,8 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onPause() {
         super.onPause();
+        loader.progressiveStop();
+        loader.setVisibility(View.GONE);
         BusProvider.getInstance().unregister(this);
     }
 
