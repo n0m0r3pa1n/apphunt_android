@@ -58,14 +58,16 @@
 
         <TextView
             android:id="@+id/more_collections"
+            android:elevation="2dp"
+            android:textAllCaps="true"
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:text="More"
+            android:text="@string/more_button"
             android:layout_alignParentRight="true"
             android:background="@color/bg_primary"
-            android:textSize="@dimen/details_download_text_size"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:gravity="center"/>
 
@@ -98,10 +100,12 @@
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:text="More"
+            android:text="@string/more_button"
+            android:elevation="2dp"
+            android:textAllCaps="true"
             android:layout_alignParentRight="true"
             android:background="@color/bg_primary"
-            android:textSize="@dimen/details_download_text_size"
+            android:textSize="14sp"
             android:textColor="@android:color/white"
             android:gravity="center"/>
 
