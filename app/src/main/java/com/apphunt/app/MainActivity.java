@@ -251,20 +251,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Map<String, String> params = new HashMap<>();
-                params.put("query", s);
-                FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-
-                String[] tags = s.split(" ");
-                String query = "?";
-
-                for (String tag : tags) {
-                    query += "names[]=" + tag + "&";
-                }
-
-                ApiClient.getClient(MainActivity.this).getAppsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
-                ApiClient.getClient(MainActivity.this).getCollectionsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
-
                 NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
 
                 searchView.clearFocus();
