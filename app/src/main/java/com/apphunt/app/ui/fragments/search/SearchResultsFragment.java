@@ -111,7 +111,7 @@ public class SearchResultsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_results, container, false);
         ButterKnife.inject(this, view);
-        loader.setVisibility(View.VISIBLE);
+
         apps.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         apps.setLayoutManager(layoutManager);
@@ -199,8 +199,8 @@ public class SearchResultsFragment extends BaseFragment {
             return;
         }
 
-        loader.progressiveStop();
         loader.setVisibility(View.GONE);
+
         int totalCount = event.getApps().getTotalCount();
         if(totalCount <= 0) {
             appsContainer.setVisibility(View.GONE);
@@ -218,10 +218,10 @@ public class SearchResultsFragment extends BaseFragment {
         if(isSearchShowing()) {
             return;
         }
-        loader.progressiveStop();
-        loader.setVisibility(View.GONE);
-        int totalCount = event.getCollections().getTotalCount();
 
+        loader.setVisibility(View.GONE);
+        
+        int totalCount = event.getCollections().getTotalCount();
         if(totalCount <= 0) {
             collectionsContainer.setVisibility(View.GONE);
         } else {

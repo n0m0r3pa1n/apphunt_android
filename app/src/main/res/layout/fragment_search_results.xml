@@ -12,8 +12,7 @@
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        style="@style/CircularThemeProgressBar"
-        android:visibility="gone"/>
+        style="@style/CircularThemeProgressBar" />
 
     <RelativeLayout
         android:id="@+id/no_results"
@@ -45,7 +44,8 @@
         android:id="@+id/collections_container"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/collections_header"
@@ -84,7 +84,8 @@
         android:elevation="2dp"
         android:layout_below="@+id/collections_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/apps_header"
