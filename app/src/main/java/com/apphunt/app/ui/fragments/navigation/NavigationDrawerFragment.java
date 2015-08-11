@@ -2,11 +2,11 @@ package com.apphunt.app.ui.fragments.navigation;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -190,8 +190,7 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 if (!isAdded()) return;
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                getActivity().supportInvalidateOptionsMenu();
             }
 
             @Override
@@ -204,7 +203,8 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
+                getActivity().supportInvalidateOptionsMenu();
             }
         };
 

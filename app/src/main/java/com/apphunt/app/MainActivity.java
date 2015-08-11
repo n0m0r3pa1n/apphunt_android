@@ -139,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         setSupportActionBar(toolbar);
 
         navigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,7 +410,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onPause();
         BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
-
     }
 
     @Override

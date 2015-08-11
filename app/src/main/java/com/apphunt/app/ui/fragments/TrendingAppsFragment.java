@@ -195,6 +195,7 @@ public class TrendingAppsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     @Override

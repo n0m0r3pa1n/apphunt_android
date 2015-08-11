@@ -10,7 +10,7 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.search.SearchResultsFragments;
+import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
@@ -134,7 +134,7 @@ public class NavUtils {
     }
 
     public void presentSearchResultsFragment(String query) {
-        SearchResultsFragments searchFragment = SearchResultsFragments.newInstance(query);
+        SearchResultsFragment searchFragment = SearchResultsFragment.newInstance(query);
 
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
