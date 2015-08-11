@@ -106,14 +106,6 @@ public class SearchFragment extends BaseFragment {
         this.query = query;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(resultsListAdapter.getItemCount() > 0) {
-            loader.progressiveStop();
-        }
-    }
-
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.progressiveStop();
