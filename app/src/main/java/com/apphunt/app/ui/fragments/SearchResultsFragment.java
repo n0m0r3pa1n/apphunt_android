@@ -117,6 +117,12 @@ public class SearchResultsFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        loader.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.findItem(R.id.action_search).setVisible(true);
         menu.findItem(R.id.action_search).setVisible(true);

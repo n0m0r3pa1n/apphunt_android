@@ -139,7 +139,7 @@ public class NavUtils {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_RESULTS_FRAGMENT)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public boolean isOnBackBlocked() {

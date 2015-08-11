@@ -40,6 +40,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -151,7 +152,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
-    public void showSearchResult(ArrayList<App> apps) {
+    public void showSearchResult(List<App> apps) {
         backup.addAll(items);
         items.clear();
 

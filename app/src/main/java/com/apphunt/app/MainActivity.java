@@ -251,7 +251,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
+                if(!isFinishing()) {
+                    NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
+                }
 
                 searchView.clearFocus();
                 return true;
