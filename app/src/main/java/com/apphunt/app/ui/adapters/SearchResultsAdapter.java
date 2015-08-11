@@ -78,8 +78,6 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         Point size = new Point();
         display.getSize(size);
         width = size.x;
-
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -209,25 +207,26 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return items.get(position);
     }
 
-    @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         if (event.getResult().getTotalCount() > 0) {
             items.add(new SeparatorItem("Applications"));
             for (BaseApp app : event.getResult().getResults()) {
                 items.add(new AppItem(app));
             }
-        }
+
+            notifyDataSetChanged();
+       }
     }
 
-    @Subscribe
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
         if (event.getResult().getTotalCount() > 0) {
             items.add(new SeparatorItem("Collections"));
             for (AppsCollection collection : event.getResult().getResults()) {
                 items.add(new CollectionItem(collection));
             }
-        }
 
+            notifyDataSetChanged();
+        }
     }
 
     static class ViewHolderApp extends RecyclerView.ViewHolder {

@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
@@ -75,8 +76,8 @@ public class SearchFragment extends BaseFragment {
         resultsListAdapter = new SearchResultsAdapter(activity, resultsList, noResultsLayout);
         resultsList.setAdapter(resultsListAdapter);
 
-        ApiClient.getClient(activity).getAppsByTags(query, 1, 10, LoginProviderFactory.get(activity).getUser().getId());
-        ApiClient.getClient(activity).getCollectionsByTags(query, 1, 10, LoginProviderFactory.get(activity).getUser().getId());
+        ApiClient.getClient(activity).getAppsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(activity).getUser().getId());
+        ApiClient.getClient(activity).getCollectionsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(activity).getUser().getId());
     }
 
     @Override
@@ -105,12 +106,20 @@ public class SearchFragment extends BaseFragment {
         this.query = query;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(resultsListAdapter.getItemCount() > 0) {
+            loader.progressiveStop();
+        }
+    }
+
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.progressiveStop();
 
         if (event.getResult().getTotalCount() > 0) {
-            resultsListAdapter.notifyDataSetChanged();
+            resultsListAdapter.onAppsSearchResultsEvent(event);
         } else {
             noResultsLayout.setVisibility(View.VISIBLE);
         }
@@ -121,7 +130,7 @@ public class SearchFragment extends BaseFragment {
         loader.progressiveStop();
 
         if (event.getResult().getTotalCount() > 0) {
-            resultsListAdapter.notifyDataSetChanged();
+            resultsListAdapter.onCollectionsSearchResultsEvent(event);
         } else {
             noResultsLayout.setVisibility(View.VISIBLE);
         }
