@@ -110,7 +110,7 @@ public class SearchFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if(resultsListAdapter.getItemCount() > 0) {
-            loader.progressiveStop();
+            loader.setVisibility(View.GONE);
         }
     }
 
@@ -118,7 +118,7 @@ public class SearchFragment extends BaseFragment {
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.progressiveStop();
 
-        if (event.getResult().getTotalCount() > 0) {
+        if (event.getApps().getTotalCount() > 0) {
             resultsListAdapter.onAppsSearchResultsEvent(event);
         } else {
             noResultsLayout.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class SearchFragment extends BaseFragment {
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
         loader.progressiveStop();
 
-        if (event.getResult().getTotalCount() > 0) {
+        if (event.getCollections().getTotalCount() > 0) {
             resultsListAdapter.onCollectionsSearchResultsEvent(event);
         } else {
             noResultsLayout.setVisibility(View.VISIBLE);

@@ -138,8 +138,8 @@ public class NavUtils {
         searchFragment.setQuery(query);
 
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, searchFragment, "Search Fragment")
-                .addToBackStack("Search Fragment")
+                .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
+                .addToBackStack(Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .commit();
     }
 
