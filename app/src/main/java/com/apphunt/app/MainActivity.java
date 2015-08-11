@@ -28,7 +28,6 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.SearchResultsApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -78,6 +77,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     boolean isNetworkChanged = false;
     private int previousPosition = 0;
     private int versionCode;
+    private String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,6 +254,16 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
+
+                String[] tags = s.split(" ");
+                String query = "?";
+
+                for (String tag : tags) {
+                    query += "names[]=" + tag + "&";
+                }
+
+                ApiClient.getClient(MainActivity.this).getAppsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
+                ApiClient.getClient(MainActivity.this).getCollectionsByTags(query, 1, Constants.PAGE_SIZE, LoginProviderFactory.get(MainActivity.this).getUser().getId());
 
                 NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
 
