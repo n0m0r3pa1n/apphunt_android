@@ -24,6 +24,7 @@ public class FacebookLoginProvider extends BaseLoginProvider implements LoginPro
     @Override
     public void logout() {
         super.logout();
+        AccessToken.setCurrentAccessToken(null);
         LoginManager.getInstance().logOut();
     }
 
