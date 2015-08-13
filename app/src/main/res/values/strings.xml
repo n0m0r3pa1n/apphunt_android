@@ -66,6 +66,9 @@
     <string name="section_notifications">Notifications</string>
     <string name="section_sounds">Sounds</string>
 
+    <!-- Select App Fragment -->
+    <string name="info_select_app">This list is containing your installed applications that are available for sharing with the other users of AppHunt.</string>
+
     <!-- SmartRate -->
     <string name="smartrate_yes">YES</string>
     <string name="smartrate_no">NO</string>
