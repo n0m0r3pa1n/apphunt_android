@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments.collections;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     private SelectCollectionAdapter selectCollectionAdapter;
     private BaseApp app;
+    private AppCompatActivity activity;
 
     public static SelectCollectionFragment newInstance(App app) {
         SelectCollectionFragment fragment = new SelectCollectionFragment();
@@ -133,10 +135,16 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+    }
+
     @Subscribe
     public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if(event.getAppsCollection() != null) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            activity.getSupportFragmentManager().popBackStack();
         }
     }
 

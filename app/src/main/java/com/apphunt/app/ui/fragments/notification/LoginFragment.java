@@ -312,7 +312,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -342,7 +341,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onDetach() {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
-        BusProvider.getInstance().unregister(this);
     }
 
     @Override
