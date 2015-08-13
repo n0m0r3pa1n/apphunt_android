@@ -63,7 +63,7 @@
     <string name="notification_delete_confirmation">You collection was successfully created!</string>
 
     <!-- Settings Fragment -->
-    <string name="section_notifications">Notification</string>
+    <string name="section_notifications">Notifications</string>
     <string name="section_sounds">Sounds</string>
 
     <!-- SmartRate -->
