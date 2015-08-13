@@ -282,6 +282,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getItemsByTags(String tags, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, listener));
         } else {
@@ -291,6 +292,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getAppsByTags(String tags, int page, int pageSize, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, listener));
         } else {
@@ -300,10 +302,22 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getCollectionsByTags(String tags, int page, int pageSize, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, listener));
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, userId, listener));
         }
+    }
+
+    private String getFormattedQuery(String q) {
+        String[] tags = q.split(" ");
+        String query = "?";
+
+        for (String tag : tags) {
+            query += "names[]=" + tag + "&";
+        }
+
+        return query;
     }
 }

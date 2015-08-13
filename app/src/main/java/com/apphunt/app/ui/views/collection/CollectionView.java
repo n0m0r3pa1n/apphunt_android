@@ -60,7 +60,7 @@ public class CollectionView extends RelativeLayout {
     @InjectView(R.id.created_by)
     TextView createdBy;
 
-    @InjectView(R.id.tags)
+    @InjectView(R.id.tags_container)
     TextView tags;
 
     @InjectView(R.id.collection_status)

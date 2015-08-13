@@ -171,7 +171,7 @@ public class CollectionsAdapter extends BaseAdapter {
         @InjectView(R.id.created_by)
         TextView createdBy;
 
-        @InjectView(R.id.tags)
+        @InjectView(R.id.tags_container)
         TextView tags;
 
         @InjectView(R.id.vote_btn)

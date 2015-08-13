@@ -73,7 +73,7 @@ public class CreateCollectionFragment extends BaseFragment {
     @InjectView(R.id.choose_banner)
     ImageButton chooseBanner;
 
-    @InjectView(R.id.tags)
+    @InjectView(R.id.tags_container)
     TagGroup tagGroup;
 
     @Nullable

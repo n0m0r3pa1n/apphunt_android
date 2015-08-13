@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.ClickedApp;
-import com.apphunt.app.db.models.InstalledApp;
 import com.apphunt.app.utils.PackagesUtils;
 import com.flurry.android.FlurryAgent;
 
@@ -58,7 +57,7 @@ public class DownloadButton extends LinearLayout {
     }
 
     private void init(final Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_download, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
 
         textView.setOnClickListener(new OnClickListener() {

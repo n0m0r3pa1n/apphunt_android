@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.fragments.search;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
@@ -67,6 +69,7 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
         query = getArguments().getString(QUERY);
+        ActionBarUtils.getInstance().setTitle(query);
         getCollections();
         items.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
@@ -85,8 +88,8 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
     }
 
     @Override
-    public int getTitle() {
-        return R.string.title_search_collections;
+    public String getStringTitle() {
+        return query;
     }
 
     @Override

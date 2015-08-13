@@ -174,11 +174,18 @@
 
         </LinearLayout>
 
+        <com.wefika.flowlayout.FlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons_container"
+            android:id="@+id/tags_container"
+            android:gravity="left"/>
+
         <RelativeLayout
             android:id="@+id/box_desc"
             android:layout_width="match_parent"
             android:layout_height="@dimen/details_box_desc_height"
-            android:layout_below="@id/buttons_container"
+            android:layout_below="@id/tags_container"
             android:paddingLeft="@dimen/details_box_desc_padding_left"
             android:paddingRight="@dimen/details_box_desc_padding_left"
             android:paddingBottom="@dimen/details_box_desc_padding_top"

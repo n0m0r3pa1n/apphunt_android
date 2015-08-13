@@ -75,7 +75,6 @@ public class SearchResultsFragment extends BaseFragment {
 
     private CollectionsAdapter collectionsAdapter;
     private TrendingAppsAdapter trendingAppsAdapter;
-    private String searchTerm;
 
     public static SearchResultsFragment newInstance(String query) {
         SearchResultsFragment fragment = new SearchResultsFragment();
@@ -95,8 +94,7 @@ public class SearchResultsFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BusProvider.getInstance().register(this);
-        this.searchTerm = getArguments().getString(QUERY);
-        updateQuery(searchTerm);
+        query = getArguments().getString(QUERY);
         setHasOptionsMenu(true);
     }
 
@@ -139,7 +137,7 @@ public class SearchResultsFragment extends BaseFragment {
         searchMenuItem.setVisible(true);
         searchMenuItem.expandActionView();
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchView.setQuery(searchTerm, false);
+        searchView.setQuery(query, false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -147,8 +145,6 @@ public class SearchResultsFragment extends BaseFragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-
-                updateQuery(s);
 
                 if (trendingAppsAdapter != null) trendingAppsAdapter.resetAdapter();
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
@@ -244,16 +240,5 @@ public class SearchResultsFragment extends BaseFragment {
 
     private boolean isResultFromQueriesEmpty() {
         return appsCount != -1 && collectionsCount != -1 && appsCount == 0 && collectionsCount == 0;
-    }
-
-    private void updateQuery(String q) {
-        String[] tags = q.split(" ");
-        String query = "?";
-
-        for (String tag : tags) {
-            query += "names[]=" + tag + "&";
-        }
-
-        this.query = query;
     }
 }

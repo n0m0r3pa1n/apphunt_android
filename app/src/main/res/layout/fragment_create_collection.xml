@@ -82,7 +82,7 @@
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
     <com.apphunt.app.ui.views.widgets.TagGroup
-        android:id="@+id/tags"
+        android:id="@+id/tags_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/collection_desc_layout"
