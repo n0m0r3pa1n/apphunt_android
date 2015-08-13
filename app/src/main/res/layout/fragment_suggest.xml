@@ -25,7 +25,7 @@
             android:maxLength="100"
             android:padding="@dimen/save_box_desc_padding"
             android:singleLine="false"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textColorHint="@color/desc_hint"
             android:textSize="@dimen/save_box_desc_text" />
 

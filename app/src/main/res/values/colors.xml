@@ -11,9 +11,11 @@
     <color name="vote_btn_text">#2f90de</color>
     <color name="vote_btn_voted_text">#FFFFFF</color>
 
-    <color name="desc_bg">#e7e7e7</color>
+    <color name="desc_bg">#50FFFFFF</color>
     <color name="desc_text">#96000000</color>
     <color name="desc_hint">#69000000</color>
+
+    <color name="save_app_desc_bg">#e7e7e7</color>
 
     <color name="select_app_text">#96000000</color>
     
