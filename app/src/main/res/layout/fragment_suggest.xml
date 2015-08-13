@@ -40,7 +40,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/dismiss"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text" />
+            android:textSize="@dimen/settings_button_dismiss_text" />
 
         <Button
             android:id="@+id/suggestion_send"
@@ -53,7 +53,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/suggestion_send"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text" />
+            android:textSize="@dimen/settings_button_dismiss_text" />
 
     </RelativeLayout>
 

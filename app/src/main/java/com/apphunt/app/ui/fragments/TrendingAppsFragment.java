@@ -44,6 +44,7 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
@@ -167,7 +168,7 @@ public class TrendingAppsFragment extends BaseFragment {
     @OnClick(R.id.add_app)
     public void addApp() {
         startSelectAppFragment();
-        btnAddApp.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        SoundsUtils.performHapticFeedback(btnAddApp);
     }
 
     private void startSelectAppFragment() {

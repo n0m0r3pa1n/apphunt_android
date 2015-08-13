@@ -33,7 +33,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/smartrate_no"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"/>
 
         <Button
@@ -45,7 +45,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/smartrate_yes"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"/>
         </RelativeLayout>
 

@@ -48,6 +48,14 @@
         <item name="atg_checkedBackgroundColor">#FF3D7F</item>
     </style>
 
+    <style name="TagGroup.Beauty_Blue" parent="TagGroup">
+        <item name="atg_borderColor">#23a2eb</item>
+        <item name="atg_textColor">#23a2eb</item>
+        <item name="atg_checkedBorderColor">#23a2eb</item>
+        <item name="atg_checkedBackgroundColor">#23a2eb</item>
+        <item name="atg_checkedTextColor">#FFFFFF</item>
+    </style>
+
     <style name="TagGroup.Beauty_Red.Inverse" parent="TagGroup">
         <item name="atg_borderColor">#FF3D7F</item>
         <item name="atg_textColor">#FFFFFF</item>

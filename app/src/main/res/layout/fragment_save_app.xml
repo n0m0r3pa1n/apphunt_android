@@ -68,7 +68,7 @@
                 android:padding="10dp"
                 android:background="@color/save_app_desc_bg"
                 app:atg_isAppendMode="true"
-                style="@style/TagGroup" />
+                style="@style/TagGroup.Beauty_Blue" />
 
         </RelativeLayout>
 

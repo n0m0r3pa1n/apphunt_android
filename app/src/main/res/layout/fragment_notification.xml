@@ -32,7 +32,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/settings"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"
             android:visibility="gone"/>
 
@@ -45,7 +45,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/show_continue"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"
             android:visibility="gone"/>
 
@@ -58,7 +58,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/dismiss"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"/>
         </RelativeLayout>
 
