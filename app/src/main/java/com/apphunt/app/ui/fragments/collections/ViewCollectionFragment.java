@@ -36,6 +36,7 @@ import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
@@ -176,7 +177,7 @@ public class ViewCollectionFragment extends BaseFragment {
     }
 
     @OnClick(R.id.edit_collection)
-    public void editCollection() {
+    public void editCollection(View view) {
         if(isSave) {
             String desc = editDescription.getText().toString();
             if(TextUtils.isEmpty(collectionView.editName.getText().toString())) {
@@ -228,6 +229,7 @@ public class ViewCollectionFragment extends BaseFragment {
         }
 
         isSave = !isSave;
+        SoundsUtils.performHapticFeedback(view);
     }
 
     @Subscribe

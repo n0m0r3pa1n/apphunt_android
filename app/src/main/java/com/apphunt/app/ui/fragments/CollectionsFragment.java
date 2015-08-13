@@ -22,6 +22,7 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsPagerAdapter;
 import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
@@ -167,12 +168,14 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     }
 
     @OnClick(R.id.add_collection)
-    public void openCreateCollectionFragment() {
+    public void openCreateCollectionFragment(View view) {
         if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
             NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
         } else {
             LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_create_collection);
         }
+
+        SoundsUtils.performHapticFeedback(view);
     }
 
     private void updateActionBarTitle(int position) {

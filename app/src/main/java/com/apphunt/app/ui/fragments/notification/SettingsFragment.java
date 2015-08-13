@@ -109,17 +109,17 @@ public class SettingsFragment extends BaseFragment {
 
     @OnClick(R.id.toggle_daily_notification)
     public void onDailyNotifToggleClick() {
-        SoundsUtils.vibrate(activity);
+        SoundsUtils.performHapticFeedback(dailyNotifToggle);
     }
 
     @OnClick(R.id.toggle_install_notifications)
     public void onInstallNotifToggleClick() {
-        SoundsUtils.vibrate(activity);
+        SoundsUtils.performHapticFeedback(installNotifToggle);
     }
 
     @OnClick(R.id.toggle_sounds)
     public void onSoundsBtnClick() {
-        SoundsUtils.vibrate(activity);
+        SoundsUtils.performHapticFeedback(soundsAndVibrationToggle);
     }
 
     @Override
