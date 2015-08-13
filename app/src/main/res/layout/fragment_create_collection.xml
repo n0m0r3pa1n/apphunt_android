@@ -88,7 +88,7 @@
         android:layout_below="@+id/collection_desc_layout"
         android:layout_above="@+id/collection_save"
         app:atg_isAppendMode="true"
-        style="@style/TagGroup" />
+        style="@style/TagGroup.Beauty_Blue" />
 
     <Button
         android:id="@+id/collection_save"
