@@ -1,11 +1,14 @@
 package com.apphunt.app.api.apphunt.models.apps;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AppsList {
+    @SerializedName("apps")
     private ArrayList<App> apps = new ArrayList<>();
     private int totalCount;
     private int page;
@@ -74,5 +77,16 @@ public class AppsList {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "AppsList{" +
+                "apps=" + apps +
+                ", totalCount=" + totalCount +
+                ", page=" + page +
+                ", totalPages=" + totalPages +
+                ", date='" + date + '\'' +
+                '}';
     }
 }

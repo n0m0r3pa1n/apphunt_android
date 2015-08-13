@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,22 +24,23 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
-import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.services.InstallService;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
-import com.apphunt.app.ui.fragments.SettingsFragment;
-import com.apphunt.app.ui.fragments.SuggestFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -45,10 +48,11 @@ import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.apphunt.app.ui.fragments.notification.SettingsFragment;
+import com.apphunt.app.ui.fragments.notification.SuggestFragment;
+import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -72,15 +76,26 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private Boolean hasInternet = null;
     boolean isNetworkChanged = false;
     private int previousPosition = 0;
+    private int versionCode;
+    private String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        try {
+            versionCode = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionCode;
+            ApiClient.getClient(this).getLatestAppVersionCode();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         initUI();
         initDeepLinking();
         initNotifications();
-
+        InstallService.setupService(this);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
         SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
@@ -106,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
 
                 BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if(fragment.getTitle() == 0) {
+                if (fragment.getTitle() == 0) {
                     getSupportActionBar().setTitle(fragment.getStringTitle());
                 } else {
                     getSupportActionBar().setTitle(fragment.getTitle());
@@ -124,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         setSupportActionBar(toolbar);
 
         navigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.fragment_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,33 +232,28 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int backstackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
+        if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
         } else {
             menu.findItem(R.id.action_search).setVisible(false);
         }
 
-        if (getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT) != null) {
-            menu.findItem(R.id.action_share).setVisible(true);
-            menu.findItem(R.id.action_add_to_collection).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_share).setVisible(false);
-            menu.findItem(R.id.action_add_to_collection).setVisible(false);
+        if (backstackEntryCount > 0 &&
+                getSupportFragmentManager().findFragmentByTag(CollectionsFragment.TAG) != null) {
+            menu.findItem(R.id.action_sort).setVisible(false);
         }
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Map<String, String> params = new HashMap<>();
-                params.put("query", s);
-                FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
-                BusProvider.getInstance().post(new SearchStatusEvent(true));
-                ApiClient.getClient(getApplicationContext()).searchApps(s, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1, Constants.SEARCH_RESULT_COUNT,
-                        Constants.PLATFORM);
+                if(!isFinishing()) {
+                    NavUtils.getInstance(MainActivity.this).presentSearchResultsFragment(s);
+                }
 
                 searchView.clearFocus();
                 return true;
@@ -251,9 +261,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (TextUtils.isEmpty(s)) {
-                    BusProvider.getInstance().post(new SearchStatusEvent(false));
-                }
                 return false;
             }
         });
@@ -282,12 +289,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-                if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-                    fragment.showDetails();
-                } else {
-                    getSupportFragmentManager().popBackStack();
-                }
+                getSupportFragmentManager().popBackStack();
                 break;
         }
         return false;
@@ -298,6 +300,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if(previousPosition == position) {
             return;
         }
+        ApiClient.getClient(this).cancelAllRequests();
 
         BaseFragment fragment = null;
         boolean addToBackStack = false;
@@ -362,7 +365,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 }
             }
         } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
+            Crashlytics.logException(e);
         }
     }
 
@@ -383,6 +386,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
+
+        displaySaveAppFragment();
+    }
+
+    private void displaySaveAppFragment() {
+        String appPackage = getIntent().getStringExtra(Constants.EXTRA_APP_PACKAGE);
+        if(!TextUtils.isEmpty(appPackage)) {
+            FlurryAgent.logEvent(TrackingEvents.UserViewedSaveAppFragmentFromNotification);
+            ApplicationInfo data = PackagesUtils.getApplicationInfo(getPackageManager(), appPackage);
+            NavUtils.getInstance(this).presentSaveAppFragment(this, data);
+        }
     }
 
     private void showStartFragments(Intent intent) {
@@ -396,7 +410,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onPause();
         BusProvider.getInstance().unregister(this);
         AppSpice.onPause(this);
-
     }
 
     @Override
@@ -407,12 +420,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
         if (NavUtils.getInstance(this).isOnBackBlocked()) {
-            return;
-        }
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible() && fragment.isCommentsBoxOpened()) {
-            fragment.showDetails();
             return;
         }
 
@@ -434,7 +441,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(networkChangeReceiver);
+        try {
+            unregisterReceiver(networkChangeReceiver);
+        } catch (IllegalArgumentException e) {
+            Crashlytics.logException(e);
+        }
         AppSpice.onStop(this);
     }
 
@@ -466,11 +477,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
         LoadersUtils.hideBottomLoader(this);
-
-        AppDetailsFragment fragment = (AppDetailsFragment) getSupportFragmentManager().findFragmentByTag(Constants.TAG_APP_DETAILS_FRAGMENT);
-        if (fragment != null && fragment.isVisible()) {
-            fragment.loadData();
-        }
     }
 
     @Subscribe
@@ -483,5 +489,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @SuppressWarnings("unused")
     public void showNotificationFragment(ShowNotificationEvent event) {
         NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
+    }
+
+    @Subscribe
+    public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
+        if(versionCode < event.getVersion().getVersionCode()) {
+            FlurryAgent.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
+            UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
+            dialog.setCancelable(false);
+            dialog.show(getSupportFragmentManager(), "UpdateRequired");
+        }
     }
 }

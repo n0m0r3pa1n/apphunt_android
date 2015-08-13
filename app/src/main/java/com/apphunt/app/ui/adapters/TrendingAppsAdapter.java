@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -40,6 +40,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -82,6 +83,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void displayAppsForPreviousDay(AppsList appsList) {
+        if(appsList == null) {
+            return;
+        }
+
         Calendar yesterday = Calendar.getInstance();
         yesterday.setTime(today.getTime());
         yesterday.add(Calendar.DATE, -1);
@@ -147,7 +152,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
-    public void showSearchResult(ArrayList<App> apps) {
+    public void showSearchResult(List<App> apps) {
         backup.addAll(items);
         items.clear();
 
@@ -203,8 +208,8 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
-            ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
-            final App app = ((AppItem) getItem(position)).getData();
+            final ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
+            final BaseApp app = ((AppItem) getItem(position)).getData();
 
             int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
 
@@ -219,13 +224,13 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-            viewHolderItem.vote.setBaseApp(app);
+            viewHolderItem.vote.setBaseApp((App) app);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
                     } else {
                         LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
                     }
@@ -236,10 +241,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     try {
-                        App app = ((AppItem) getItem(position)).getData();
                         NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
+                        e.printStackTrace();
                     }
                 }
             };

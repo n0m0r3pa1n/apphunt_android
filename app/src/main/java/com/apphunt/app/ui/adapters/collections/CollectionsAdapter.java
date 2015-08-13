@@ -1,19 +1,23 @@
 package com.apphunt.app.ui.adapters.collections;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
 import com.apphunt.app.ui.views.collection.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -31,10 +35,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CollectionsAdapter extends BaseAdapter {
     public static final String TAG = CollectionsAdapter.class.getSimpleName();
+    public static final int COMPAT_PADDING = 5;
     private List<AppsCollection> appsCollections;
+    private Context context;
+    int width;
 
-    public CollectionsAdapter(List<AppsCollection> appsCollections) {
+    public CollectionsAdapter(Context context,  List<AppsCollection> appsCollections) {
         this.appsCollections = appsCollections;
+        this.context = context;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
     }
 
     public void updateData(List<AppsCollection> appsCollections) {
@@ -73,7 +87,7 @@ public class CollectionsAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         final AppsCollection appsCollection = appsCollections.get(position);
         if(convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_collection_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.layout_collection_item, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -95,14 +109,29 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder.favouriteButton.setVisibility(View.GONE);
         }
 
-        Picasso.with(parent.getContext())
+        String tags = "";
+        for (int i = 0; i < appsCollection.getTags().size(); i++) {
+            if (i > 0 && i < appsCollection.getTags().size()) {
+                tags += ", ";
+            }
+
+            tags += appsCollection.getTags().get(i);
+        }
+        viewHolder.tags.setText(String.format(context.getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
+
+        final Resources resources = context.getResources();
+        Picasso.with(context)
                 .load(appsCollection.getCreatedBy().getProfilePicture())
                 .placeholder(R.drawable.placeholder_avatar)
+                .resize(resources.getDimensionPixelSize(R.dimen.collection_creator_image_size),
+                        resources.getDimensionPixelSize(R.dimen.collection_creator_image_size))
                 .into(viewHolder.createdByImage);
 
-        Picasso.with(parent.getContext())
+        Picasso.with(context)
                 .load(appsCollection.getPicture())
+                .resize(width - COMPAT_PADDING, resources.getDimensionPixelSize(R.dimen.collection_banner_height))
                 .into(viewHolder.banner);
+
         return convertView;
     }
 
@@ -121,6 +150,11 @@ public class CollectionsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void resetAdapter() {
+        appsCollections.clear();
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder {
         @InjectView(R.id.card_view)
         CardView cardView;
@@ -136,6 +170,9 @@ public class CollectionsAdapter extends BaseAdapter {
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.tags)
+        TextView tags;
 
         @InjectView(R.id.vote_btn)
         CollectionVoteButton voteButton;

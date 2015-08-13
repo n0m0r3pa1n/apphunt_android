@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionApiEvent;
 import com.apphunt.app.ui.adapters.rankings.TopHuntersAdapter;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.StringUtils;
@@ -74,7 +74,7 @@ public class TopHuntersFragment extends BaseFragment {
 
     @Subscribe
     @SuppressWarnings("unused")
-    public void onCollectionReceived(GetTopHuntersCollectionEvent event) {
+    public void onCollectionReceived(GetTopHuntersCollectionApiEvent event) {
         collectionHuntersList.setItemAnimator(new DefaultItemAnimator());
         collectionHuntersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         collectionHuntersList.setHasFixedSize(true);

@@ -12,13 +12,15 @@ import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 
 public class GetFilteredAppPackages extends BasePostRequest<Packages> {
     public static final String TAG = GetFilteredAppPackages.class.getSimpleName();
+    private Response.Listener<Packages> listener;
+
     public GetFilteredAppPackages(Packages packages, Response.ErrorListener listener) {
-        super(BASE_URL + "/apps/actions/filter", packages, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse " + error);
-            }
-        });
+        super(BASE_URL + "/apps/actions/filter", packages, listener);
+    }
+
+    public GetFilteredAppPackages(Packages packages, Response.Listener<Packages> listener, Response.ErrorListener errorListener) {
+        super(BASE_URL + "/apps/actions/filter", packages, errorListener);
+        this.listener = listener;
     }
 
     @Override
@@ -28,6 +30,10 @@ public class GetFilteredAppPackages extends BasePostRequest<Packages> {
 
     @Override
     public void deliverResponse(Packages response) {
-        BusProvider.getInstance().post(new PackagesFilteredApiEvent(response));
+        if(listener != null) {
+            listener.onResponse(response);
+        } else {
+            BusProvider.getInstance().post(new PackagesFilteredApiEvent(response));
+        }
     }
 }

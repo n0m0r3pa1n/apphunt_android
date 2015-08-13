@@ -29,7 +29,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
 import com.apphunt.app.ui.fragments.BaseFragment;
@@ -92,14 +92,18 @@ public class ViewCollectionFragment extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlurryAgent.logEvent(TrackingEvents.UserViewedCollection);
         View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
-
-        setHasOptionsMenu(true);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
@@ -147,7 +151,6 @@ public class ViewCollectionFragment extends BaseFragment {
         if(appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }
-
     }
 
     @Override
@@ -228,7 +231,7 @@ public class ViewCollectionFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if (appsCollection.getApps().size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -249,7 +252,7 @@ public class ViewCollectionFragment extends BaseFragment {
         hideSoftKeyboard();
         if(isSave) {
             FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
-            BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
+            BusProvider.getInstance().post(new UpdateCollectionApiEvent(appsCollection, false));
         }
     }
 }

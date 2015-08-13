@@ -3,7 +3,7 @@ package com.apphunt.app.api.apphunt.requests.collections;
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionApiEvent;
 
 import org.json.JSONObject;
 
@@ -21,6 +21,6 @@ public class UnfavouriteCollectionRequest extends BaseGsonRequest<JSONObject> {
 
     @Override
     public void deliverResponse(JSONObject response) {
-        BusProvider.getInstance().post(new UnfavouriteCollectionEvent(collectionId, getRawResponse().statusCode));
+        BusProvider.getInstance().post(new UnfavouriteCollectionApiEvent(collectionId, getRawResponse().statusCode));
     }
 }

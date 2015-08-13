@@ -1,5 +1,6 @@
 package com.apphunt.app.api.apphunt.client;
 
+import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
@@ -18,6 +19,8 @@ public interface AppHuntApi {
     void getDetailedApp(String userId, String appId);
 
     void filterApps(Packages packages);
+
+    void filterApps(Packages packages, Response.Listener<Packages> listener);
 
     void vote(String appId, String userId);
 
@@ -65,4 +68,16 @@ public interface AppHuntApi {
     void deleteCollection(String collectionId);
 
     void getBanners();
+
+    void getLatestAppVersionCode();
+
+    void cancelAllRequests();
+
+    void getTagsSuggestion(String str);
+
+    void getItemsByTags(String tags, String userId);
+
+    void getAppsByTags(String tags, int page, int pageSize, String userId);
+
+    void getCollectionsByTags(String tags, int page, int pageSize, String userId);
 }

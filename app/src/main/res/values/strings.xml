@@ -18,6 +18,7 @@
     <string name="title_my_collection">My Collections</string>
     <string name="title_my_collections">My Collections</string>
     <string name="title_create_collection">Create Collection</string>
+    <string name="title_search_apps">Apps</string>
 
     <string-array name="drawer_menu">
         <item>Trending Apps</item>
@@ -120,7 +121,7 @@
     <string name="be_first">Be the first one to comment! :)</string>
     <string name="action_search">Search</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
-    <string name="no_results_found">No apps found! Try again :)</string>
+    <string name="no_results_found">Nothing was found...</string>
     <string name="details">Details</string>
     <string name="title_home">Home</string>
     <string name="title_top_hunters">Top Hunters</string>
@@ -138,6 +139,9 @@
     <string name="no_favourite_collections">Favourite a collection to appear here</string>
     <string name="title_select_collection">Select Collection</string>
     <string name="sort_by">Sort by:</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="open">OPEN</string>
+    <string name="install">INSTALL</string>
 
     <string-array name="order">
         <item>Date Created</item>
@@ -148,5 +152,13 @@
         <item>all</item>
         <item>vote</item>
     </string-array>
-
+    <string name="title_activity_gallery">Screenshots</string>
+    <string name="title_comments">Comments</string>
+    <string name="title_update_required">Update Required</string>
+    <string name="enable_install_notification">Enable install notification</string>
+    <string name="title_search">Search Results</string>
+    <string name="tags">Tags: %s</string>
+    <string name="add_tag">Add Tag</string>
+    <string name="title_search_collections">Collections</string>
+    <string name="more_button">More</string>
 </resources>

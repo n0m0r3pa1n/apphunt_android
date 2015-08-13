@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,7 +20,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
@@ -57,6 +59,9 @@ public class CollectionView extends RelativeLayout {
 
     @InjectView(R.id.created_by)
     TextView createdBy;
+
+    @InjectView(R.id.tags)
+    TextView tags;
 
     @InjectView(R.id.collection_status)
     ImageView status;
@@ -105,7 +110,9 @@ public class CollectionView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        BusProvider.getInstance().register(this);
+        try {
+            BusProvider.getInstance().register(this);
+        } catch(Exception e) {}
     }
 
     @Override
@@ -138,7 +145,7 @@ public class CollectionView extends RelativeLayout {
     }
 
     @Subscribe
-    public void onCollectionUpdate(UpdateCollectionEvent event) {
+    public void onCollectionUpdate(UpdateCollectionApiEvent event) {
         AppsCollection newCollection = event.getAppsCollection();
         if (!newCollection.getId().equals(appsCollection.getId())) {
             return;
@@ -192,7 +199,33 @@ public class CollectionView extends RelativeLayout {
         name.setText(collection.getName());
         createdBy.setText(collection.getCreatedBy().getUsername());
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
-        Picasso.with(getContext()).load(collection.getPicture()).into(banner);
+
+        String tags = "";
+        for (int i = 0; i < collection.getTags().size(); i++) {
+            if (i > 0 && i < collection.getTags().size()) {
+                tags += ", ";
+            }
+
+            tags += collection.getTags().get(i);
+        }
+        this.tags.setText(String.format(getContext().getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
+
+        final ViewTreeObserver viewTree = banner.getViewTreeObserver();
+        viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = banner.getViewTreeObserver();
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeGlobalOnLayoutListener(this);
+                } else {
+                    obs.removeOnGlobalLayoutListener(this);
+                }
+                Picasso.with(getContext()).load(appsCollection.getPicture()).resize(
+                        banner.getWidth(),
+                        getResources().getDimensionPixelSize(R.dimen.view_collection_height)
+                ).into(banner);
+            }
+        });
     }
 
     public AppsCollection getCollection() {

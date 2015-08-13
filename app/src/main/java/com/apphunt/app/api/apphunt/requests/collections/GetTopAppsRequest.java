@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionApiEvent;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -29,6 +29,6 @@ public class GetTopAppsRequest extends BaseGetRequest<AppsCollections> {
 
     @Override
     public void deliverResponse(AppsCollections response) {
-        BusProvider.getInstance().post(new GetTopAppsCollectionEvent(response));
+        BusProvider.getInstance().post(new GetTopAppsCollectionApiEvent(response));
     }
 }

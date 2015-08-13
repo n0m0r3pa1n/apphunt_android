@@ -5,39 +5,76 @@
     android:background="@color/bg_primary"
     android:clickable="true">
 
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/ic_logo"/>
+
     <TextView
         android:id="@+id/login_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/login_button"
-        android:padding="@dimen/login_message_padding"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon"
+        android:layout_above="@+id/connect_with"
+        android:layout_centerHorizontal="true"
         android:text="@string/login_info_text"
         android:textColor="@android:color/white"
         android:textSize="@dimen/notification_text"
         android:gravity="center"/>
 
+    <TextView
+        android:id="@+id/connect_with"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect with"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="15dp"/>
 
     <com.apphunt.app.ui.views.CustomTwitterLoginButton
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal"
-        />
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/connect_with"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
+
+    <com.apphunt.app.ui.views.widgets.CustomGooglePlusButton
+        android:id="@+id/gplus_login_button"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/login_button"
+        android:layout_alignLeft="@+id/login_button"
+        android:layout_alignEnd="@+id/login_button"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/login_button" />
+
+    <com.apphunt.app.ui.views.widgets.CustomFacebookButton
+        android:id="@+id/fb_login_button"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/gplus_login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
     <Button
-        android:layout_below="@id/login_button"
         android:id="@+id/not_now"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
         android:text="@string/login_not_now"
         android:textAllCaps="false"
-        android:layout_gravity="center_horizontal"
         android:textColor="@android:color/white"
         android:textSize="@dimen/notification_button_text"
         android:background="@android:color/transparent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>

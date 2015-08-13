@@ -6,11 +6,12 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 
 public abstract class BaseGsonRequest<T> extends Request<T> {
     public static final String TAG = BaseGsonRequest.class.getSimpleName();
-    public static String BASE_URL = "http://apphunt.herokuapp.com";
+    public static String BASE_URL = Constants.BASE_URL;
     private NetworkResponse networkResponse;
 
     public BaseGsonRequest(int method, String url, Response.ErrorListener listener) {

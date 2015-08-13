@@ -35,8 +35,13 @@ import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
+import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
+import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
@@ -105,6 +110,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void filterApps(Packages packages) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetFilteredAppPackages(packages, listener));
+    }
+
+    @Override
+    public void filterApps(Packages packages, Response.Listener<Packages> successListener) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilteredAppPackages(packages, successListener, listener));
     }
 
     @Override
@@ -255,5 +265,45 @@ public class AppHuntApiClient implements AppHuntApi {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionBannersRequest(listener));
     }
 
+    @Override
+    public void getLatestAppVersionCode() {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetLatestAppVersionRequest(listener));
+    }
 
+    @Override
+    public void cancelAllRequests() {
+        VolleyInstance.getInstance(context).cancelAllRequests();
+    }
+
+    @Override
+    public void getTagsSuggestion(String str) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetTagsSuggestionRequest(str, listener));
+    }
+
+    @Override
+    public void getItemsByTags(String tags, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, userId, listener));
+        }
+    }
+
+    @Override
+    public void getAppsByTags(String tags, int page, int pageSize, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, userId, listener));
+        }
+    }
+
+    @Override
+    public void getCollectionsByTags(String tags, int page, int pageSize, String userId) {
+        if (TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, userId, listener));
+        }
+    }
 }

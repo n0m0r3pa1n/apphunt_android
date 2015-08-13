@@ -131,6 +131,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
                             LoginProviderFactory.get((Activity) ctx).logout();
                             FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
                         }

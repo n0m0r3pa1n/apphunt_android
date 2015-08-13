@@ -29,6 +29,9 @@ public interface TrackingEvents {
     String UserMadeSuggestion = "user.made.suggestion";
     String UserViewedAppDetails = "user.viewed.app.details";
     String UserViewedLogin = "user.viewed.login";
+    String UserTwitterLogin = "user.login.twitter";
+    String UserGooglePlusLogin = "user.login.googleplus";
+    String UserFacebookLogin = "user.login.facebook";
     String UserViewedSettings = "user.viewed.settings";
     String UserViewedAddApp = "user.viewed.add.app";
     String UserViewedSelectApp = "user.viewed.select.app";
@@ -65,4 +68,10 @@ public interface TrackingEvents {
     String UserDeleteCollection = "user.delete.collection";
     String UserDidntSaveCollection = "user.didnt.save.collection.after.edit";
     String UserEditDescription = "user.edit.description";
+
+    String UserOpenedInstalledApp = "user.opened.installed.app";
+    String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
+    String UserViewedAddAppToAppHuntNotification = "user.viewed.add.app.to.apphunt.notification";
+    String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
+    String UserViewedUpdateAppDialog = "user.viewed.update.app.dialog";
 }

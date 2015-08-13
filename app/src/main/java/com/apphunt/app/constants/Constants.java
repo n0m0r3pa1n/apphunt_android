@@ -8,6 +8,9 @@ import java.util.HashMap;
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
+    //public static final String BASE_URL = "http://apphunt.herokuapp.com";
+    public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
+
     // User's Keys
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_USER_NAME = "user_name";
@@ -47,6 +50,7 @@ public class Constants {
     // Settings
     public static final String SETTING_NOTIFICATIONS_ENABLED = "isDisplayNotificationServiceEnabled";
     public static final String IS_SOUNDS_ENABLED = "isSoundsEnabled";
+    public static final String IS_INSTALL_NOTIFICATION_ENABLED = "isInstallNotificationEnabled";
     public static final String WAS_SPLASH_SHOWN = "wasSplashShown";
 
     // Fragment TAGs
@@ -64,10 +68,21 @@ public class Constants {
     public static final String TAG_CREATE_COLLECTION_FRAGMENT = "create_collection_fragment";
     public static final String TAG_COLLECTION_DETAILS_FRAGMENT = "collection_details_fragment";
     public static final String TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT = "choose_collection_banner_fragment";
+    public static final String TAG_COMMENTS = "comments_fragment";
+    public static final String TAG_SEARCH_RESULTS_FRAGMENT = "search_results_fragment";
+    public static final String TAG_SEARCH_COLLECTIONS_FRAGMENT = "search_collections_fragment";
+    public static final String TAG_SEARCH_APPS_FRAGMENT = "search_apps_fragment";
 
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
+    public static final int RC_INSTALL_SERVICE = 123;
+    public static final int RC_DAILY_SERVICE = 124;
+
+    //Extras
+    public static final String EXTRA_IMAGES = "extra_images";
+    public static final String EXTRA_SELECTED_IMAGE = "selected_image";
+    public static final String EXTRA_APP_PACKAGE = "app_package";
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
@@ -81,9 +96,10 @@ public class Constants {
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";
     public static final String BIT_LY_GOOGLE_PLAY_URL = "http://bit.ly/1umy2AV";
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
-
     // Invites
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
+    public static int GPLUS_SIGN_IN = 0;
+    public static int FACEBOOK_SIGN_IN = 12;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
@@ -123,11 +139,13 @@ public class Constants {
     public static final int HELP_TOP_HUNTERS_POINTS = 12;
 
     public static final int PAGE_SIZE = 5;
+    public static final int COMMENTS_PAGE_SIZE = 10;
     public static final int MIN_COLLECTION_APPS_SIZE = 4;
+    public static final int THIRTY_MINS = 30 * 60 * 1000;
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1), MORE_APPS(2),
-        COMMENT(3), SUBCOMMENT(4);
+        COMMENT(3), SUBCOMMENT(4), COLLECTION(5);
 
         private int value;
 
