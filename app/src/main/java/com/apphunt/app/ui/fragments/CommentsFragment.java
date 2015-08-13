@@ -136,14 +136,7 @@ public class CommentsFragment extends BaseFragment implements AdapterView.OnItem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
         hideSoftKeyboard();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.fragments.collections;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
@@ -117,19 +115,6 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
             vsNoCollection.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        BusProvider.getInstance().unregister(this);
-    }
-
 
 
     @OnClick(R.id.add_collection)

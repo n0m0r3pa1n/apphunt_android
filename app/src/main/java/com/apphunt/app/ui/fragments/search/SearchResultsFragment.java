@@ -23,7 +23,6 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
@@ -93,15 +92,8 @@ public class SearchResultsFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
         query = getArguments().getString(QUERY);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Nullable

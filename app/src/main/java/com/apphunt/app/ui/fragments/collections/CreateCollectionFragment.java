@@ -172,8 +172,6 @@ public class CreateCollectionFragment extends BaseFragment {
 
         this.activity = activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -181,7 +179,5 @@ public class CreateCollectionFragment extends BaseFragment {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ActionBarUtils.getInstance().hideActionBarShadow();
-
-        BusProvider.getInstance().unregister(this);
     }
 }

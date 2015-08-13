@@ -51,18 +51,6 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

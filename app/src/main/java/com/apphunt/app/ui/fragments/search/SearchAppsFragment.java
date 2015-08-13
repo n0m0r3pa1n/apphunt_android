@@ -77,18 +77,6 @@ public class SearchAppsFragment extends BaseFragment {
         this.activity = (AppCompatActivity) activity;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
-    }
-
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.setVisibility(View.GONE);

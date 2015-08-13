@@ -103,18 +103,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
-    }
-
     private void initUI() {
         container.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.vertical_flip));
         container.setOnClickListener(this);

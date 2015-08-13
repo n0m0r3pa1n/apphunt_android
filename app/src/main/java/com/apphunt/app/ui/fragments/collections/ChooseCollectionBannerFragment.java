@@ -96,17 +96,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = (AppCompatActivity) activity;
-        BusProvider.getInstance().register(this);
-
         hideSoftKeyboard();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        BusProvider.getInstance().unregister(this);
     }
 }

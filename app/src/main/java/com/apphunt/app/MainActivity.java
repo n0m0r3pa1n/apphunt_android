@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
@@ -111,7 +110,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+                BaseFragment currentFragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
                 if (fragmentManager.getBackStackEntryCount() > 0) {
+                    BaseFragment fragment = (BaseFragment) fragmentManager.getFragments().get(fragmentManager.getBackStackEntryCount() - 1);
+                    fragment.unregisterForEvents();
+                    currentFragment.registerForEvents();
+
                     NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
                     getSupportActionBar().collapseActionView();
                     BusProvider.getInstance().post(new DrawerStatusEvent(true));
@@ -120,11 +124,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     BusProvider.getInstance().post(new DrawerStatusEvent(false));
                 }
 
-                BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if (fragment.getTitle() == 0) {
-                    getSupportActionBar().setTitle(fragment.getStringTitle());
+                if (currentFragment.getTitle() == 0) {
+                    getSupportActionBar().setTitle(currentFragment.getStringTitle());
                 } else {
-                    getSupportActionBar().setTitle(fragment.getTitle());
+                    getSupportActionBar().setTitle(currentFragment.getTitle());
                 }
 
                 supportInvalidateOptionsMenu();

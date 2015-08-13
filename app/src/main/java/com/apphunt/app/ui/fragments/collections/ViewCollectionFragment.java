@@ -243,14 +243,11 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
-
         hideSoftKeyboard();
         if(isSave) {
             FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
