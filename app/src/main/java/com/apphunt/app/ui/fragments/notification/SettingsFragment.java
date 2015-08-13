@@ -9,32 +9,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
 
-public class SettingsFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
+public class SettingsFragment extends BaseFragment {
 
     private static final String TAG = SettingsFragment.class.getName();
 
     private View view;
-    private RelativeLayout settingsLayout;
-    private ToggleButton notifications;
-    private ToggleButton sounds;
-    private ToggleButton installNotification;
     private ActionBarActivity activity;
-    private Button dismissBtn;
+
+    @InjectView(R.id.settings)
+    RelativeLayout container;
+
+    @InjectView(R.id.toggle_daily_notification)
+    ToggleButton dailyNotifToggle;
+
+    @InjectView(R.id.toggle_install_notifications)
+    ToggleButton installNotifToggle;
+
+    @InjectView(R.id.toggle_sounds)
+    ToggleButton soundsAndVibrationToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +58,8 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_settings, container, false);
+        ButterKnife.inject(this, view);
 
         initUI();
 
@@ -57,23 +68,58 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     }
 
     private void initUI() {
-        settingsLayout = (RelativeLayout) view.findViewById(R.id.settings);
-
-        notifications = (ToggleButton) view.findViewById(R.id.notification_toggle);
-        notifications.setOnCheckedChangeListener(this);
-        notifications.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true));
-
-        sounds = (ToggleButton) view.findViewById(R.id.sounds_toggle);
-        sounds.setOnCheckedChangeListener(this);
-        sounds.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED, true));
-
-        installNotification = (ToggleButton) view.findViewById(R.id.installed_apps_toggle);
-        installNotification.setOnCheckedChangeListener(this);
-        installNotification.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED,
+        dailyNotifToggle.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true));
+        soundsAndVibrationToggle.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED, true));
+        installNotifToggle.setChecked(SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED,
                 true));
+    }
 
-        dismissBtn = (Button) view.findViewById(R.id.dismiss);
-        dismissBtn.setOnClickListener(this);
+    @OnClick(R.id.dismiss)
+    public void onDissmissClick() {
+        activity.getSupportFragmentManager().popBackStack();
+
+        // TODO: Select the previously selected item in the navigation drawer
+    }
+
+    @OnCheckedChanged(R.id.toggle_daily_notification)
+    public void onDailyNotifStateChange(boolean isChecked) {
+        if (isChecked) {
+            NotificationsUtils.setupDailyNotificationService(activity);
+        } else {
+            NotificationsUtils.disableDailyNotificationsService(activity);
+        }
+    }
+
+    @OnCheckedChanged(R.id.toggle_install_notifications)
+    public void onInstallNotifStateChange(boolean isChecked) {
+        if (!isChecked) {
+            FlurryAgent.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
+        }
+        SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
+        InstallService.setupService(activity);
+    }
+
+    @OnCheckedChanged(R.id.toggle_sounds)
+    public void onSoundsStateChange(boolean isChecked) {
+        if (!isChecked) {
+            FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
+        }
+        SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
+    }
+
+    @OnClick(R.id.toggle_daily_notification)
+    public void onDailyNotifToggleClick() {
+        SoundsUtils.vibrate(activity);
+    }
+
+    @OnClick(R.id.toggle_install_notifications)
+    public void onInstallNotifToggleClick() {
+        SoundsUtils.vibrate(activity);
+    }
+
+    @OnClick(R.id.toggle_sounds)
+    public void onSoundsBtnClick() {
+        SoundsUtils.vibrate(activity);
     }
 
     @Override
@@ -90,7 +136,7 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
                     Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
                             R.anim.slide_in_top_notification);
                     notificationEnterAnim.setFillAfter(true);
-                    settingsLayout.startAnimation(notificationEnterAnim);
+                    container.startAnimation(notificationEnterAnim);
                 }
 
                 @Override
@@ -101,38 +147,10 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
             return enterAnim;
         } else {
             Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
-            settingsLayout.startAnimation(AnimationUtils.loadAnimation(activity,
+            container.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));
 
             return outAnim;
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.notification_toggle:
-                if (isChecked) {
-                    NotificationsUtils.setupDailyNotificationService(activity);
-                } else {
-                    NotificationsUtils.disableDailyNotificationsService(activity);
-                }
-                break;
-
-            case R.id.sounds_toggle:
-                if (!isChecked) {
-                    FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
-                }
-
-                SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
-                break;
-            case R.id.installed_apps_toggle:
-                if (!isChecked) {
-                    FlurryAgent.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
-                }
-                SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
-                InstallService.setupService(activity);
-                break;
         }
     }
 
@@ -152,14 +170,5 @@ public class SettingsFragment extends BaseFragment implements CompoundButton.OnC
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.dismiss:
-                activity.getSupportFragmentManager().popBackStack();
-                break;
-        }
     }
 }

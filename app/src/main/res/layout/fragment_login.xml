@@ -73,7 +73,7 @@
         android:text="@string/login_not_now"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/notification_button_text"
+        android:textSize="@dimen/settings_button_dismiss_text"
         android:background="@android:color/transparent"
         android:visibility="gone" />
 

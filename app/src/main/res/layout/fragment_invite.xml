@@ -11,7 +11,7 @@
         android:layout_height="@dimen/settings_layout_height"
         android:background="@color/bg_primary"
         android:visibility="invisible"
-        android:padding="@dimen/settings_notification_padding">
+        android:padding="@dimen/settings_container_padding">
 
         <TextView
             android:id="@+id/invite_text"
@@ -32,7 +32,7 @@
             android:padding="@dimen/notification_button_padding"
             android:text="@string/action_share"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:background="@android:color/transparent"/>
 
     </RelativeLayout>

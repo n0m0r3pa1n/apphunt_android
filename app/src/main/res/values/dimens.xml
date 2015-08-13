@@ -55,16 +55,24 @@
     <dimen name="save_btn_margin_bottom">25dp</dimen>
     <dimen name="save_btn_text">23sp</dimen>
 
+    <!-- Settings fragment -->
+    <dimen name="settings_section_height">20dp</dimen>
+    <dimen name="settings_section_margin_left">20dp</dimen>
+    <dimen name="settings_section_margin_top">15dp</dimen>
+    <dimen name="settings_section_text">17sp</dimen>
+    <dimen name="settings_item_height">48dp</dimen>
+    <dimen name="settings_item_margin_top">10dp</dimen>
+    <dimen name="settings_label_padding_left">20dp</dimen>
+    <dimen name="settings_label_text">14sp</dimen>
+    <dimen name="settings_toggle_size">42dp</dimen>
+    <dimen name="settings_btn_dismiss_margin_top">10dp</dimen>
+    <dimen name="settings_button_dismiss_text">17sp</dimen>
+
     <dimen name="semi_fragment_layout_height">150dp</dimen>
     <dimen name="semi_fragment_layout_padding">15dp</dimen>
-    <dimen name="settings_notification_padding">20sp</dimen>
-    <dimen name="settings_notification_label_text">17sp</dimen>
-    <dimen name="settings_notification_label_height">30dp</dimen>
-    <dimen name="settings_notifications_toggle_width">90dp</dimen>
-    <dimen name="settings_notifications_toggle_height">30dp</dimen>
+    <dimen name="settings_container_padding">20sp</dimen>
     <dimen name="listview_elevation">2dp</dimen>
     <dimen name="notification_text">16sp</dimen>
-    <dimen name="notification_button_text">17sp</dimen>
     <dimen name="notification_text_margin">10dp</dimen>
     <dimen name="list_view_divider_height">1dp</dimen>
     <dimen name="list_view_elevation">0dp</dimen>
