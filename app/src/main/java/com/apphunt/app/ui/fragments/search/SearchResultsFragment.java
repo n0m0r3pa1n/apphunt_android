@@ -103,7 +103,7 @@ public class SearchResultsFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         apps.setItemAnimator(new DefaultItemAnimator());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         apps.setLayoutManager(layoutManager);
         apps.setHasFixedSize(true);
 
@@ -141,6 +141,7 @@ public class SearchResultsFragment extends BaseFragment {
                 if (trendingAppsAdapter != null) trendingAppsAdapter.resetAdapter();
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
 
+                query = s;
                 ApiClient.getClient(activity).getAppsByTags(query, 1, APPS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
                 ApiClient.getClient(activity).getCollectionsByTags(query, 1, COLLECTIONS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
 
@@ -156,7 +157,7 @@ public class SearchResultsFragment extends BaseFragment {
     }
 
     private boolean isSearchShowing() {
-        return getActivity().getSupportFragmentManager().getBackStackEntryCount() > 1;
+        return activity.getSupportFragmentManager().getBackStackEntryCount() > 1;
     }
 
     @Override
@@ -214,7 +215,7 @@ public class SearchResultsFragment extends BaseFragment {
             collectionsContainer.setVisibility(View.GONE);
         } else {
             collectionsContainer.setVisibility(View.VISIBLE);
-            collectionsAdapter = new CollectionsAdapter(getActivity() ,event.getCollections().getCollections());
+            collectionsAdapter = new CollectionsAdapter(activity ,event.getCollections().getCollections());
             collections.setAdapter(collectionsAdapter);
         }
         setSearchResults(appsCount, totalCount);
