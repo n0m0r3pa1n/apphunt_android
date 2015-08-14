@@ -10,17 +10,14 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
+import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 
-/**
- * Created by nmp on 15-5-9.
- */
 public class NavUtils {
 
     private static NavUtils instance;
@@ -32,10 +29,15 @@ public class NavUtils {
             instance = new NavUtils(activity);
         }
 
+        instance.setActivity(activity);
         return instance;
     }
 
     private NavUtils(AppCompatActivity activity) {
+        this.activity = activity;
+    }
+
+    private void setActivity(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -130,7 +132,7 @@ public class NavUtils {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public void presentSearchResultsFragment(String query) {
