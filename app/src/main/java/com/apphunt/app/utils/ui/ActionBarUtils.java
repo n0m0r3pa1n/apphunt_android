@@ -3,12 +3,9 @@ package com.apphunt.app.utils.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 
-import com.apphunt.app.R;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
