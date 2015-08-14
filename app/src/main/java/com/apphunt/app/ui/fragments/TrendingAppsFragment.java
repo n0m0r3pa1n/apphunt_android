@@ -142,6 +142,7 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @OnClick(R.id.reload)
     public void reloadApps() {
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
         btnReload.setVisibility(View.GONE);
         trendingAppsAdapter.resetAdapter();
         ApiService.getInstance(activity).loadAppsForToday();
@@ -233,6 +234,7 @@ public class TrendingAppsFragment extends BaseFragment {
         if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
             btnReload.setVisibility(View.VISIBLE);
             rvTrendingApps.setVisibility(View.GONE);
+            swipeRefreshLayout.setVisibility(View.GONE);
         } else {
             reloadApps();
         }
