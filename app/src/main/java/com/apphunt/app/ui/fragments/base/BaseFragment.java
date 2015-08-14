@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,6 @@ import com.apphunt.app.event_bus.BusProvider;
 public class BaseFragment extends Fragment {
 
     private int title;
-    private boolean isRegistered = false;
     private String previousTitle;
     private String fragmentTag;
     public String getStringTitle() {
@@ -38,20 +37,6 @@ public class BaseFragment extends Fragment {
 
     public void setFragmentTag(String fragmentTag) {
         this.fragmentTag = fragmentTag;
-    }
-
-    public void registerForEvents() {
-        if(!isRegistered) {
-            isRegistered = true;
-            BusProvider.getInstance().register(this);
-        }
-    }
-
-    public void unregisterForEvents() {
-        if(isRegistered) {
-            isRegistered = false;
-            BusProvider.getInstance().unregister(this);
-        }
     }
 
     protected void hideSoftKeyboard() {

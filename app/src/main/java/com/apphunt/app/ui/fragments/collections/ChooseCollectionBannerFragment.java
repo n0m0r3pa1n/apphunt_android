@@ -19,7 +19,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetBannersApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -34,7 +35,7 @@ import butterknife.OnItemClick;
  * *
  * * NaughtySpirit 2015
  */
-public class ChooseCollectionBannerFragment extends BaseFragment {
+public class ChooseCollectionBannerFragment extends BackStackFragment {
 
     private static final String TAG = ChooseCollectionBannerFragment.class.getSimpleName();
 

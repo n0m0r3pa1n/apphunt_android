@@ -1,22 +1,16 @@
 package com.apphunt.app.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,14 +23,14 @@ import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
-import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;
@@ -50,7 +44,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 /**
  * Created by nmp on 15-7-28.
  */
-public class CommentsFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class CommentsFragment extends BackStackFragment implements AdapterView.OnItemClickListener {
     private static final String KEY_APP_ID = "APP_ID";
 
     private String appId;

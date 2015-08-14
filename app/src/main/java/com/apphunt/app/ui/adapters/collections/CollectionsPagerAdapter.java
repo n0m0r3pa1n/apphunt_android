@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.AllCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;

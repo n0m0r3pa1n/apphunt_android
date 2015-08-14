@@ -27,7 +27,8 @@ import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -42,7 +43,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 /**
  * Created by nmp on 15-8-11.
  */
-public class SearchResultsFragment extends BaseFragment {
+public class SearchResultsFragment extends BackStackFragment {
     public static final String TAG = SearchResultsFragment.class.getSimpleName();
     public static final String QUERY = "QUERY";
     public static final int COLLECTIONS_COUNT = 1;
@@ -169,7 +170,7 @@ public class SearchResultsFragment extends BaseFragment {
     @OnClick(R.id.more_apps)
     public void moreApps() {
         ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, SearchAppsFragment.newInstance(query))
+                .add(R.id.container, SearchAppsFragment.newInstance(query), Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .commit();
     }
@@ -177,7 +178,7 @@ public class SearchResultsFragment extends BaseFragment {
     @OnClick(R.id.more_collections)
     public void moreCollections() {
         ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, SearchCollectionsFragment.newInstance(query))
+                .add(R.id.container, SearchCollectionsFragment.newInstance(query), Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .commit();
     }

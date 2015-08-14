@@ -38,6 +38,8 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -54,7 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SaveAppFragment extends BaseFragment implements OnClickListener {
+public class SaveAppFragment extends BackStackFragment implements OnClickListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
