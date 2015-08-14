@@ -169,7 +169,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+                if (backStackEntryCount == 0) {
                     if (!navigationDrawerFragment.isDrawerOpen()) {
                         navigationDrawerFragment.openDrawer();
                     } else {
@@ -179,7 +180,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     return;
                 }
 
-                onBackPressed();
+                for (int i = 0; i < backStackEntryCount; i++) {
+                    getSupportFragmentManager().popBackStack();
+                }
             }
         });
         navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
