@@ -25,17 +25,17 @@ public class AHEditText extends EditText {
     }
 
     public AHEditText(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
-//        init(context, attrs);
+        super(context, attrs, android.R.attr.editTextStyle);
+        init(context, attrs);
     }
 
     public AHEditText(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-//        init(context, attrs);
+        super(context, attrs, android.R.attr.editTextStyle);
+        init(context, attrs);
     }
 
     public AHEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr, android.R.attr.editTextStyle);
     }
 
     public void init(Context ctx, AttributeSet attrs) {
