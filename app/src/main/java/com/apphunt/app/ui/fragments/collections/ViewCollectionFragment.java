@@ -32,7 +32,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
 /**
  * Created by nmp on 15-7-3.
  */
-public class ViewCollectionFragment extends BaseFragment {
+public class ViewCollectionFragment extends BackStackFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
 
     private boolean isSave;
@@ -243,14 +244,11 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
-
         hideSoftKeyboard();
         if(isSave) {
             FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);

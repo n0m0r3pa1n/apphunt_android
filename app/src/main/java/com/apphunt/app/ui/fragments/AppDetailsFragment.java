@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
@@ -32,12 +33,13 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
@@ -66,7 +68,7 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BaseFragment {
+public class AppDetailsFragment extends BackStackFragment {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
@@ -192,13 +194,6 @@ public class AppDetailsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         shouldStopLoading = false;
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -293,6 +288,11 @@ public class AppDetailsFragment extends BaseFragment {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.container, SearchAppsFragment.newInstance(tag), Constants.TAG_SEARCH_APPS_FRAGMENT)
+                            .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
+                            .commit();
                 }
             });
 
@@ -361,7 +361,7 @@ public class AppDetailsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
+        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
         if (event.shouldReload()  || fragment != null) {
             return;
         }
@@ -380,7 +380,7 @@ public class AppDetailsFragment extends BaseFragment {
             commentsList.setVisibility(View.VISIBLE);
         }
 
-        CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), comments, null);
+        CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null);
         int size = comments.getComments().size() < MAX_DISPLAYED_COMMENTS ? comments.getComments().size() : MAX_DISPLAYED_COMMENTS;
         for (int i = 0; i < size; i++) {
             View view = commentsAdapter.getView(i, null, commentsList);
@@ -409,8 +409,8 @@ public class AppDetailsFragment extends BaseFragment {
             return;
         }
 
-        if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_add_to_collection);
+        if(!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(activity, false, R.string.login_info_add_to_collection);
             return;
         }
 
@@ -426,7 +426,7 @@ public class AppDetailsFragment extends BaseFragment {
             return;
         }
 
-        getActivity().getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, CommentsFragment.newInstance(baseApp.getId()), Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
                 .commit();

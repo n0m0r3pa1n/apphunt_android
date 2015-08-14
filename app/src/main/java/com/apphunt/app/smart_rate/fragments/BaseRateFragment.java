@@ -3,7 +3,7 @@ package com.apphunt.app.smart_rate.fragments;
 import com.apphunt.app.smart_rate.listeners.OnNoClickListener;
 import com.apphunt.app.smart_rate.listeners.OnSendClickListener;
 import com.apphunt.app.smart_rate.listeners.OnYesClickListener;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 
 public class BaseRateFragment extends BaseFragment {
 

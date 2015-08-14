@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.fragments.help;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;

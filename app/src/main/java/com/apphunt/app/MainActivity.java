@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
@@ -39,7 +38,8 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
@@ -102,8 +102,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void initUI() {
         initToolbarAndNavigationDrawer();
-
         ActionBarUtils.getInstance().init(this);
+        addBackStackChangeListener();
+        showStartFragments(getIntent());
+    }
+
+    private int backStackCount = 0;
+
+    private boolean isFragmentAdded(int currentBackStackCount) {
+        return backStackCount < currentBackStackCount && currentBackStackCount > 1;
+    }
+
+    private void addBackStackChangeListener() {
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -111,27 +121,42 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-                if (fragmentManager.getBackStackEntryCount() > 0) {
+                int currentBackStackCount = fragmentManager.getBackStackEntryCount();
+                if(isFragmentAdded(currentBackStackCount)) {
+                    FragmentManager.BackStackEntry previousEntry = fragmentManager.getBackStackEntryAt(currentBackStackCount - 2);
+                    Fragment previousFragment = fragmentManager.findFragmentByTag(previousEntry.getName());
+                    if(previousFragment instanceof BackStackFragment) {
+                        ((BackStackFragment) previousFragment).unregisterForEvents();
+                    }
+                }
+
+                if (currentBackStackCount > 0) {
+                    FragmentManager.BackStackEntry e = fragmentManager.getBackStackEntryAt(currentBackStackCount - 1);
+                    Fragment topFragment = fragmentManager.findFragmentByTag(e.getName());
+                    if(topFragment instanceof BackStackFragment) {
+                        ((BackStackFragment) topFragment).registerForEvents();
+                    }
+
                     NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
                     getSupportActionBar().collapseActionView();
                     BusProvider.getInstance().post(new DrawerStatusEvent(true));
-                } else if (fragmentManager.getBackStackEntryCount() == 0) {
+                } else if (currentBackStackCount == 0) {
                     NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
                     BusProvider.getInstance().post(new DrawerStatusEvent(false));
                 }
 
-                BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if (fragment.getTitle() == 0) {
-                    getSupportActionBar().setTitle(fragment.getStringTitle());
+                backStackCount = currentBackStackCount;
+
+                BaseFragment currentFragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
+                if (currentFragment.getTitle() == 0) {
+                    getSupportActionBar().setTitle(currentFragment.getStringTitle());
                 } else {
-                    getSupportActionBar().setTitle(fragment.getTitle());
+                    getSupportActionBar().setTitle(currentFragment.getTitle());
                 }
 
                 supportInvalidateOptionsMenu();
             }
         });
-
-        showStartFragments(getIntent());
     }
 
     private void initToolbarAndNavigationDrawer() {

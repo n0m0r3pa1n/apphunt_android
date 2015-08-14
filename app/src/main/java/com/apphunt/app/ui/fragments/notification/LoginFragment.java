@@ -33,7 +33,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.CustomTwitterLoginButton;
 import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
 import com.apphunt.app.ui.views.widgets.CustomGooglePlusButton;
@@ -77,7 +78,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LoginFragment extends BaseFragment implements OnConnectionFailedListener, ConnectionCallbacks {
+public class LoginFragment extends BackStackFragment implements OnConnectionFailedListener, ConnectionCallbacks {
 
     private static final String TAG = LoginFragment.class.getName();
 
@@ -342,7 +343,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -372,7 +372,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onDetach() {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
-        BusProvider.getInstance().unregister(this);
     }
 
     @Override
