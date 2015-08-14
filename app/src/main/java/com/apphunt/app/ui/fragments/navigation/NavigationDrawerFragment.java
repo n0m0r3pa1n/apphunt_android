@@ -236,7 +236,7 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
-        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
+//        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
         this.selectedPosition = position;
     }
 

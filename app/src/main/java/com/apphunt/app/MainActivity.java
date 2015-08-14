@@ -122,10 +122,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
 
                 int currentBackStackCount = fragmentManager.getBackStackEntryCount();
-                if(isFragmentAdded(currentBackStackCount)) {
+                if (isFragmentAdded(currentBackStackCount)) {
                     FragmentManager.BackStackEntry previousEntry = fragmentManager.getBackStackEntryAt(currentBackStackCount - 2);
                     Fragment previousFragment = fragmentManager.findFragmentByTag(previousEntry.getName());
-                    if(previousFragment instanceof BackStackFragment) {
+                    if (previousFragment instanceof BackStackFragment) {
                         ((BackStackFragment) previousFragment).unregisterForEvents();
                     }
                 }
@@ -133,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 if (currentBackStackCount > 0) {
                     FragmentManager.BackStackEntry e = fragmentManager.getBackStackEntryAt(currentBackStackCount - 1);
                     Fragment topFragment = fragmentManager.findFragmentByTag(e.getName());
-                    if(topFragment instanceof BackStackFragment) {
+                    if (topFragment instanceof BackStackFragment) {
                         ((BackStackFragment) topFragment).registerForEvents();
                     }
 
@@ -147,16 +147,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
                 backStackCount = currentBackStackCount;
 
-                BaseFragment currentFragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if (currentFragment.getTitle() == 0) {
-                    getSupportActionBar().setTitle(currentFragment.getStringTitle());
-                } else {
-                    getSupportActionBar().setTitle(currentFragment.getTitle());
-                }
-
+                setActionBarTitle();
                 supportInvalidateOptionsMenu();
             }
         });
+    }
+
+    private void setActionBarTitle() {
+        BaseFragment currentFragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
+        if (currentFragment.getTitle() == 0) {
+            getSupportActionBar().setTitle(currentFragment.getStringTitle());
+        } else {
+            getSupportActionBar().setTitle(currentFragment.getTitle());
+        }
     }
 
     private void initToolbarAndNavigationDrawer() {
@@ -348,13 +351,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
             case Constants.HELP_ADD_APP:
@@ -368,19 +369,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
         }
 
-        if (position != Constants.TRENDING_APPS) {
-            consumedBack = false;
-        } else {
-            consumedBack = true;
+        if(fragment == null) {
+            return;
         }
-        previousPosition = position;
 
+        consumedBack = position == Constants.TRENDING_APPS;
 
         try {
             if (!addToBackStack) {
                 getSupportActionBar().setTitle(fragment.getTitle());
-                navigationDrawerFragment.markSelectedPosition(position);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
+                navigationDrawerFragment.markSelectedPosition(position);
+                previousPosition = position;
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
                         !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1)
@@ -391,6 +391,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                             .addToBackStack(fragment.getFragmentTag())
                             .commit();
                 }
+                navigationDrawerFragment.markSelectedPosition(previousPosition);
             }
         } catch (Exception e) {
             Crashlytics.logException(e);
