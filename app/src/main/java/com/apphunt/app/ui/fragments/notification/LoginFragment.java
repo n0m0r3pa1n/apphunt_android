@@ -160,7 +160,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                                 if(TextUtils.isEmpty(id)) {
                                     return;
                                 }
-                                setUserFbProfilePictureAndLogin(user, id);
+                                setUserFbProfiledDataAndLogin(user, id);
                             }
                         }).executeAsync();
             }
@@ -247,7 +247,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         return view;
     }
 
-    private void setUserFbProfilePictureAndLogin(final User user, String id) {
+    private void setUserFbProfiledDataAndLogin(final User user, final String id) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("redirect", false);
         bundle.putString("type", "large");
@@ -266,8 +266,37 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         if(!TextUtils.isEmpty(pictureUrl)) {
                             user.setProfilePicture(pictureUrl);
+                            setUserCover(id, user);
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void setUserCover(String id, final User user) {
+        Bundle params = new Bundle();
+        params.putString("fields", "cover");
+        params.putString("type", "large");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/"+id,
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+
+                        JSONObject json = response.getJSONObject();
+                        String coverUrl = null;
+                        try {
+                            coverUrl = json.getJSONObject("cover").getString("source");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(!TextUtils.isEmpty(coverUrl)) {
+                            user.setCoverPicture(coverUrl);
                             user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                             LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
                             ApiClient.getClient(getActivity()).createUser(user);
@@ -348,8 +377,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.e(TAG, requestCode + " " + resultCode);
 
         if (isTwitterLogin) {
             twitterLoginBtn.onActivityResult(requestCode, resultCode,
