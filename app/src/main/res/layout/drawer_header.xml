@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_header_content"
     android:layout_width="wrap_content"
     android:layout_height="170dp">
@@ -27,7 +28,7 @@
         android:paddingLeft="10dp"
         android:background="@drawable/gradient_black_white">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,9 +37,10 @@
             android:paddingTop="2dp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +48,8 @@
             android:gravity="center_vertical"
             android:paddingTop="2dp"
             android:textColor="@android:color/white"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
         <ImageButton
             android:id="@+id/logout_button"

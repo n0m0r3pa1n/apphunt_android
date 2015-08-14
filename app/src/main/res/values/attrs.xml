@@ -20,6 +20,10 @@
         <attr name="hexLineWidth" format="float"/>
     </declare-styleable>
 
+    <declare-styleable name="AHTextView">
+        <attr name="typefacePath" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="TagGroup">
         <!-- Whether the tag group is in append mode. -->
         <attr name="atg_isAppendMode" format="boolean" />

@@ -72,7 +72,7 @@
     <dimen name="semi_fragment_layout_padding">15dp</dimen>
     <dimen name="settings_container_padding">20sp</dimen>
     <dimen name="listview_elevation">2dp</dimen>
-    <dimen name="notification_text">16sp</dimen>
+    <dimen name="notification_text">17sp</dimen>
     <dimen name="notification_text_margin">10dp</dimen>
     <dimen name="list_view_divider_height">1dp</dimen>
     <dimen name="list_view_elevation">0dp</dimen>

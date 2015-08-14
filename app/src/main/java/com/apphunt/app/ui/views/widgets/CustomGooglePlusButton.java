@@ -16,7 +16,7 @@ import com.apphunt.app.R;
  * *
  * * NaughtySpirit 2015
  */
-public class CustomGooglePlusButton extends Button {
+public class CustomGooglePlusButton extends AHButton {
     public CustomGooglePlusButton(Context context) {
         this(context, (AttributeSet) null);
     }
@@ -34,7 +34,7 @@ public class CustomGooglePlusButton extends Button {
         setPadding(60, 2, 8, 2);
         setText("Google+");
         setTextColor(Color.WHITE);
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
     }
 }
