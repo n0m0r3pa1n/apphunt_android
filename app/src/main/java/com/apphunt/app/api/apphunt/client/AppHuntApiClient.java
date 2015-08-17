@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
@@ -20,6 +21,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
@@ -34,11 +36,13 @@ import com.apphunt.app.api.apphunt.requests.collections.PostCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
+import com.apphunt.app.api.apphunt.requests.comments.GetUserCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -48,6 +52,7 @@ import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
@@ -308,6 +313,21 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, userId, listener));
         }
+    }
+
+    @Override
+    public void getUserProfile(String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, listener));
+    }
+
+    @Override
+    public void getUserComments(String userId, Pagination pagination) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserCommentsRequest(userId, pagination, listener));
+    }
+
+    @Override
+    public void getUserApps(String userId, Pagination pagination) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserAppsRequest(userId, pagination, listener));
     }
 
     private String getFormattedQuery(String q) {

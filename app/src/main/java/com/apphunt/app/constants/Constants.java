@@ -72,6 +72,7 @@ public class Constants {
     public static final String TAG_SEARCH_RESULTS_FRAGMENT = "search_results_fragment";
     public static final String TAG_SEARCH_COLLECTIONS_FRAGMENT = "search_collections_fragment";
     public static final String TAG_SEARCH_APPS_FRAGMENT = "search_apps_fragment";
+    public static final String TAG_USER_PROFILE_FRAGMENT = "user_profile_fragment";
 
 
     // RequestCodes
