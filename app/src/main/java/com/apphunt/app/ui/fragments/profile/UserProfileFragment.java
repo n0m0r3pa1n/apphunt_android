@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.profile;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,11 +13,7 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.Pagination;
-import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
-import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsApiEvent;
-import com.apphunt.app.event_bus.events.api.users.GetUserAppsApiEvent;
 import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
@@ -32,6 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileFragment extends BackStackFragment {
     public static final String TAG = UserProfileFragment.class.getSimpleName();
+    public static final String USER_ID = "USER_ID";
+    public static final String NAME = "NAME";
 
     private Activity activity;
     private ProfileTabsPagerAdapter pagerAdapter;
@@ -58,8 +56,13 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.profile_tabs)
     ViewPager profileTabsPager;
 
-    public static UserProfileFragment newInstance() {
-        return new UserProfileFragment();
+    public static UserProfileFragment newInstance(String userId, String name) {
+        Bundle bundle = new Bundle();
+        bundle.putString(USER_ID, userId);
+        bundle.putString(NAME, name);
+        UserProfileFragment userProfileFragment = new UserProfileFragment();
+        userProfileFragment.setArguments(bundle);
+        return userProfileFragment;
     }
 
     @Nullable
@@ -67,18 +70,15 @@ public class UserProfileFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         ButterKnife.inject(this, view);
-        pagerAdapter = new ProfileTabsPagerAdapter(getChildFragmentManager());
+        title = getArguments().getString(NAME);
+        String userId = getArguments().getString(USER_ID);
+
+        pagerAdapter = new ProfileTabsPagerAdapter(getChildFragmentManager(), userId);
         profileTabsPager.setOffscreenPageLimit(1);
         profileTabsPager.setAdapter(pagerAdapter);
 
-        User user = LoginProviderFactory.get(activity).getUser();
-        title = user.getName();
-        String userId = user.getId();
-
         ApiClient.getClient(activity).getUserProfile(userId);
-        ApiClient.getClient(activity).getUserComments(userId , new Pagination(1, 5));
-        ApiClient.getClient(activity).getUserApps(userId , new Pagination(1, 5));
-        ApiClient.getClient(activity).getMyCollections(userId, 1, 5);
+        ApiClient.getClient(activity).getUserComments(userId, new Pagination(1, 5));
 
         return view;
     }
@@ -114,16 +114,6 @@ public class UserProfileFragment extends BackStackFragment {
     public void onUserComments(GetUserCommentsApiEvent event) {
         Log.d(TAG, "onUserComments " + event.getComments().getComments().size());
         //ActionBarUtils.getInstance().setSubtitle("AAAAA");
-    }
-
-    @Subscribe
-    public void onUserApps(GetUserAppsApiEvent event) {
-        Log.d(TAG, "onUserApps " + event.getApps().getApps().size());
-    }
-
-    @Subscribe
-    public void onMyCollections(GetMyCollectionsApiEvent event) {
-        Log.d(TAG, "onUserCollections " + event.getAppsCollection().getCollections().size());
     }
 
     private void initTabs() {

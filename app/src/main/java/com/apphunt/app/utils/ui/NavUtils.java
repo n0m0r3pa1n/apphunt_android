@@ -9,12 +9,11 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
-import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.UserProfileFragment;
+import com.apphunt.app.ui.fragments.profile.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
@@ -98,8 +97,8 @@ public class NavUtils {
                 .commitAllowingStateLoss();
     }
 
-    public void presentUserProfileFragment() {
-        UserProfileFragment fragment = UserProfileFragment.newInstance();
+    public void presentUserProfileFragment(String userId, String name) {
+        UserProfileFragment fragment = UserProfileFragment.newInstance(userId, name);
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, fragment, Constants.TAG_USER_PROFILE_FRAGMENT)
                 .addToBackStack(Constants.TAG_USER_PROFILE_FRAGMENT)

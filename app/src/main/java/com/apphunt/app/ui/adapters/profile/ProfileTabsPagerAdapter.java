@@ -5,25 +5,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.apphunt.app.ui.fragments.base.BaseFragment;
-import com.apphunt.app.ui.fragments.collections.tabs.AllCollectionsFragment;
-import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
+import com.apphunt.app.ui.fragments.profile.tabs.AppsFragment;
+import com.apphunt.app.ui.fragments.profile.tabs.CommentsFragment;
 
 public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
-    public ProfileTabsPagerAdapter(FragmentManager fm) {
+    private String userId;
+    public ProfileTabsPagerAdapter(FragmentManager fm, String userId) {
         super(fm);
+        this.userId = userId;
     }
 
     @Override
     public Fragment getItem(int position) {
         BaseFragment fragment = null;
         switch (position) {
-            case 0: fragment = AllCollectionsFragment.newInstance();
+            case 0: fragment = AppsFragment.newInstance(userId);
                 break;
-            case 1: fragment = FavouriteCollectionsFragment.newInstance();
+            case 1: fragment = MyCollectionsFragment.newInstance(userId);
                 break;
             case 2:
-                fragment = MyCollectionsFragment.newInstance();
+                fragment = CommentsFragment.newInstance(userId);
                 break;
         }
 

@@ -118,7 +118,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (drawerItem.getType()) {
             case HEADER:
                 if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                    User user = LoginProviderFactory.get((Activity) ctx).getUser();
+                    final User user = LoginProviderFactory.get((Activity) ctx).getUser();
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     Picasso.with(ctx).load(user.getProfilePicture()).into(headerViewHolder.profileImage);
 
@@ -131,7 +131,9 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     headerViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment();
+                            NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment(
+                                    user.getId(), user.getName()
+                            );
                         }
                     });
                     headerViewHolder.username.setText(user.getUsername());
