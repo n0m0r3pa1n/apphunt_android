@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/box_name"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:elevation="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/creator_avatar"
+        android:layout_width="@dimen/details_avatar_creator"
+        android:layout_height="@dimen/details_avatar_creator"
+        />
+
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/creator_name"
+        app:typefacePath="fonts/OpenSans-SemiboldItalic.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
+        android:layout_marginStart="@dimen/details_box_name_creator_name_margin"
+        />
+
+</LinearLayout>

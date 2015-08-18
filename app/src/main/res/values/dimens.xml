@@ -115,7 +115,6 @@
     <dimen name="details_box_name_margin_bottom">10dp</dimen>
     <dimen name="details_box_name_padding">15dp</dimen>
     <dimen name="details_avatar_creator">35dp</dimen>
-    <dimen name="details_box_name_creator_name_text">14sp</dimen>
     <dimen name="details_box_name_creator_name_margin">10dp</dimen>
     <dimen name="details_download_text_size">16sp</dimen>
     <dimen name="details_box_vote_size">55dp</dimen>
@@ -149,7 +148,6 @@
     <dimen name="send_comment_width">65dp</dimen>
     <dimen name="send_comment_height">45dp</dimen>
     <dimen name="dimen_app_list_avatar_creator">20dp</dimen>
-    <dimen name="dimen_app_list_creator_name">12sp</dimen>
     <dimen name="collection_app_margin">10dp</dimen>
     <dimen name="collection_app_width">150dp</dimen>
     <dimen name="collection_app_icon_padding">2dp</dimen>

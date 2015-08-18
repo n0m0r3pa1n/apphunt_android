@@ -69,30 +69,16 @@
                 android:textSize="@dimen/list_item_category"
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-            <LinearLayout
+            <com.apphunt.app.ui.views.CreatorView
                 android:id="@+id/creator_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@id/app_icon"
-                android:orientation="horizontal">
+                app:pictureHeight="@dimen/dimen_app_list_avatar_creator"
+                app:pictureWidth="@dimen/dimen_app_list_avatar_creator"
+                app:textSize="@integer/dimen_app_list_creator_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/creator_avatar"
-                    android:layout_width="@dimen/dimen_app_list_avatar_creator"
-                    android:layout_height="@dimen/dimen_app_list_avatar_creator"
-                    android:layout_centerVertical="true" />
-
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/creator_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center_vertical"
-                    android:textSize="@dimen/dimen_app_list_creator_name"
-                    app:typefacePath="fonts/OpenSans-SemiboldItalic.ttf" />
-
-            </LinearLayout>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

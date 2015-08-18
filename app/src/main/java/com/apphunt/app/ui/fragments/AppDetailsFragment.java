@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
@@ -39,8 +38,8 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
+import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
@@ -65,7 +64,6 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class AppDetailsFragment extends BackStackFragment {
@@ -99,14 +97,11 @@ public class AppDetailsFragment extends BackStackFragment {
     @InjectView(R.id.desc)
     TextView appDescription;
 
-    @InjectView(R.id.creator_avatar)
-    CircleImageView creator;
-
     @InjectView(R.id.vote_btn)
     AppVoteButton voteBtn;
 
-    @InjectView(R.id.creator_name)
-    TextView creatorName;
+    @InjectView(R.id.box_name)
+    CreatorView creator;
 
     @InjectView(R.id.rating)
     TextView rating;
@@ -252,11 +247,8 @@ public class AppDetailsFragment extends BackStackFragment {
         baseApp.setPosition(itemPosition);
         voteBtn.setBaseApp(baseApp);
 
-        Picasso.with(activity)
-                .load(baseApp.getCreatedBy().getProfilePicture())
-                .into(creator);
-        creatorName.setText(String.format(getString(R.string.posted_by),
-                baseApp.getCreatedBy().getUsername()));
+        User createdBy = baseApp.getCreatedBy();
+        creator.setUser(createdBy.getId(), createdBy.getProfilePicture(), createdBy.getName());
 
         Picasso.with(activity)
                 .load(baseApp.getIcon())
