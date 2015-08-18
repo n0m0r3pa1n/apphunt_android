@@ -62,6 +62,10 @@ public class ActionBarUtils {
         ((ActionBarActivity) activity).getSupportActionBar().setTitle(title);
     }
 
+    public void setSubtitle(String title) {
+        ((ActionBarActivity) activity).getSupportActionBar().setSubtitle(title);
+    }
+
     public void setTitle(int titleRes) {
         try {
             setTitle(activity.getResources().getString(titleRes));

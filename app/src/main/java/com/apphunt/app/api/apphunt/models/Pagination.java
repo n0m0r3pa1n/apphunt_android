@@ -1,8 +1,5 @@
 package com.apphunt.app.api.apphunt.models;
 
-/**
- * Created by nmp on 15-8-17.
- */
 public class Pagination {
     private int page;
     private int pageSize;
