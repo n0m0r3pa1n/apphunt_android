@@ -40,13 +40,16 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     private CollectionsPagerAdapter pagerAdapter;
     private int title;
+    private  String creatorId;
+    private Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.inject(this, view);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        creatorId = LoginProviderFactory.get(activity).isUserLoggedIn() ? LoginProviderFactory.get(activity).getUser().getId() : null;
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         initTabs();
 
         pager.setOffscreenPageLimit(1);
@@ -81,6 +84,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.activity = activity;
         BusProvider.getInstance().register(this);
     }
 
@@ -95,7 +99,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public void onUserLogin(LoginEvent event) {
         pagerAdapter = null;
         pager.setAdapter(null);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         pager.setAdapter(pagerAdapter);
     }
 
@@ -103,7 +107,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public void onUserLogout(LogoutEvent event) {
         pagerAdapter = null;
         pager.setAdapter(null);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         pager.setAdapter(pagerAdapter);
     }
 
@@ -165,10 +169,10 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     @OnClick(R.id.add_collection)
     public void openCreateCollectionFragment(View view) {
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            NavUtils.getInstance((AppCompatActivity) activity).presentCreateCollectionFragment();
         } else {
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_create_collection);
+            LoginUtils.showLoginFragment(activity, false, R.string.login_info_create_collection);
         }
 
         SoundsUtils.performHapticFeedback(view);

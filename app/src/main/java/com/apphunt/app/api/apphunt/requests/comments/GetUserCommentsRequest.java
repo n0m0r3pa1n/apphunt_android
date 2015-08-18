@@ -9,8 +9,12 @@ import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
 
 public class GetUserCommentsRequest extends BaseGetRequest<Comments> {
 
-    public GetUserCommentsRequest(String userId, Pagination pagination, Response.ErrorListener listener) {
-        super(BASE_URL + "/comments/mine?userId=" + userId + "&" + pagination.getPaginationString(), listener);
+    public GetUserCommentsRequest(String creatorId, String userId, Pagination pagination, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/comments?userId=" + userId + "&" + pagination.getPaginationString(), listener);
+    }
+
+    public GetUserCommentsRequest(String creatorId, Pagination pagination, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/comments?" + pagination.getPaginationString(), listener);
     }
 
     @Override

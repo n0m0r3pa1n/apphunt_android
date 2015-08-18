@@ -12,6 +12,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
@@ -27,10 +28,11 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class CommentsFragment extends BaseFragment {
 
-    public static final String USER_ID = "USER_ID";
+    public static final String CREATOR_ID = "CREATOR_ID";
     private AppCompatActivity activity;
     private CommentsAdapter adapter;
 
+    private String creatorId;
     private String userId;
     private int currentPage = 0;
 
@@ -40,10 +42,10 @@ public class CommentsFragment extends BaseFragment {
     @InjectView(R.id.loading)
     CircularProgressBar loader;
 
-    public static CommentsFragment newInstance(String userId) {
+    public static CommentsFragment newInstance(String creatorId) {
 
         Bundle args = new Bundle();
-        args.putString(USER_ID, userId);
+        args.putString(CREATOR_ID, creatorId);
         CommentsFragment fragment = new CommentsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -54,7 +56,10 @@ public class CommentsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_comments, container, false);
         ButterKnife.inject(this, view);
-        userId = getArguments().getString(USER_ID);
+        creatorId = getArguments().getString(CREATOR_ID);
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            userId = LoginProviderFactory.get(activity).getUser().getId();
+        }
         getComments();
 
         items.setOnEndReachedListener(new OnEndReachedListener() {
@@ -99,6 +104,6 @@ public class CommentsFragment extends BaseFragment {
 
     private void getComments() {
         currentPage++;
-        ApiClient.getClient(activity).getUserComments(userId, new Pagination(currentPage, Constants.COMMENTS_PAGE_SIZE));
+        ApiClient.getClient(activity).getUserComments(creatorId, userId, new Pagination(currentPage, Constants.COMMENTS_PAGE_SIZE));
     }
 }

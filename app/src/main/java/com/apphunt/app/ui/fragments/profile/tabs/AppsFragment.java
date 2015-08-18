@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ import butterknife.InjectView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class AppsFragment extends BaseFragment {
-    public static final String USER_ID = "USER_ID";
+    public static final String CREATOR_ID = "CREATOR_ID";
     @InjectView(R.id.items)
     ScrollRecyclerView items;
 
@@ -37,10 +36,11 @@ public class AppsFragment extends BaseFragment {
     private AppCompatActivity activity;
     private SearchAppsAdapter adapter;
     private String userId;
+    private String creatorId;
 
-    public static AppsFragment newInstance(String userId) {
+    public static AppsFragment newInstance(String creatorId) {
         Bundle bundle = new Bundle();
-        bundle.putString(USER_ID, userId);
+        bundle.putString(CREATOR_ID, creatorId);
         AppsFragment fragment = new AppsFragment();
         fragment.setArguments(bundle);
 
@@ -52,10 +52,11 @@ public class AppsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
-        userId = getArguments().getString(USER_ID);
-        if(TextUtils.isEmpty(userId)) {
+        creatorId = getArguments().getString(CREATOR_ID);
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
             userId = LoginProviderFactory.get(activity).getUser().getId();
         }
+
         getApps();
         items.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
@@ -94,6 +95,6 @@ public class AppsFragment extends BaseFragment {
 
     private void getApps() {
         currentPage++;
-        ApiClient.getClient(activity).getUserApps(userId, new Pagination(currentPage, 5));
+        ApiClient.getClient(activity).getUserApps(creatorId, userId, new Pagination(currentPage, 5));
     }
 }

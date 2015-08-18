@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.adapters.rankings;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.hunters.Hunter;
 import com.apphunt.app.api.apphunt.models.collections.hunters.HuntersCollection;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -52,6 +54,14 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
                 .load(hunter.getUser().getProfilePicture())
                 .placeholder(R.drawable.placeholder_avatar)
                 .into(holder.picture);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.getInstance((AppCompatActivity) context)
+                        .presentUserProfileFragment(hunter.getUser().getId(), hunter.getUser().getName());
+            }
+        });
     }
 
     @Override
@@ -60,6 +70,8 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.card_view)
+        View cardView;
 
         @InjectView(R.id.place)
         TextView place;

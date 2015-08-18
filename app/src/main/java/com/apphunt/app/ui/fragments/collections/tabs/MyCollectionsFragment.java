@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,12 +44,13 @@ import butterknife.InjectView;
  */
 public class MyCollectionsFragment extends BaseFragment implements OnItemClickListener {
     public static final String TAG = MyCollectionsFragment.class.getSimpleName();
-    private static final String USER_ID = "USER_ID";
+    private static final String CREATOR_ID = "CREATOR_ID";
 
     private AppCompatActivity activity;
     private View view;
 
     private String appId;
+    private String creatorId;
     private String userId;
     private int currentPage = 0;
     private List<AppsCollection> collections;
@@ -64,13 +64,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
 
-    public static MyCollectionsFragment newInstance() {
-        return new MyCollectionsFragment();
-    }
-
-    public static MyCollectionsFragment newInstance(String userId) {
+    public static MyCollectionsFragment newInstance(String creatorId) {
         Bundle bundle = new Bundle();
-        bundle.putString(USER_ID, userId);
+        bundle.putString(CREATOR_ID, creatorId);
         MyCollectionsFragment fragment = new MyCollectionsFragment();
         fragment.setArguments(bundle);
 
@@ -82,6 +78,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlurryAgent.logEvent(TrackingEvents.UserViewedMyCollections);
         view = inflater.inflate(R.layout.fragment_my_collections, container, false);
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            userId = LoginProviderFactory.get(activity).getUser().getId();
+        }
         initUI();
 
         return view;
@@ -89,8 +88,8 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void initUI() {
         ButterKnife.inject(this, view);
-        if(getArguments() != null && getArguments().containsKey(USER_ID)) {
-            userId = getArguments().getString(USER_ID);
+        if(getArguments() != null && getArguments().containsKey(CREATOR_ID)) {
+            creatorId = getArguments().getString(CREATOR_ID);
         }
 
         getCollections();
@@ -105,19 +104,8 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void getCollections() {
         currentPage++;
-        if(!TextUtils.isEmpty(userId)) {
-            ApiClient.getClient(activity).getMyCollections(userId,
-                    currentPage, Constants.PAGE_SIZE);
-            return;
-        }
-
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(),
-                    currentPage, Constants.PAGE_SIZE);
-            vsNoCollection.setVisibility(View.GONE);
-        } else {
-            vsNoCollection.setVisibility(View.VISIBLE);
-        }
+        ApiClient.getClient(activity).getUserCollections(creatorId, userId,
+                currentPage, Constants.PAGE_SIZE);
     }
 
     @Override

@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileFragment extends BackStackFragment {
     public static final String TAG = UserProfileFragment.class.getSimpleName();
-    public static final String USER_ID = "USER_ID";
+    public static final String USER_ID = "CREATOR_ID";
     public static final String NAME = "NAME";
 
     private Activity activity;

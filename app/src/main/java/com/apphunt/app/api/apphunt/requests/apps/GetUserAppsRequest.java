@@ -8,8 +8,12 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserAppsApiEvent;
 
 public class GetUserAppsRequest extends BaseGetRequest<AppsList> {
-    public GetUserAppsRequest(String userId, Pagination pagination, Response.ErrorListener listener) {
-        super(BASE_URL + "/apps/mine?userId=" + userId + "&" + pagination.getPaginationString(), listener);
+    public GetUserAppsRequest(String creatorId, String userId, Pagination pagination, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/apps?userId=" + userId + "&" + pagination.getPaginationString(), listener);
+    }
+
+    public GetUserAppsRequest(String creatorId, Pagination pagination, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/apps?" + pagination.getPaginationString(), listener);
     }
 
     @Override

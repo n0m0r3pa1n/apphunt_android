@@ -10,8 +10,11 @@ import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragmen
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
 
 public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
-    public CollectionsPagerAdapter(FragmentManager fm) {
+    private final String creatorId;
+
+    public CollectionsPagerAdapter(FragmentManager fm, String creatorId) {
         super(fm);
+        this.creatorId = creatorId;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
             case 1: fragment = FavouriteCollectionsFragment.newInstance();
                 break;
             case 2:
-                fragment = MyCollectionsFragment.newInstance();
+                fragment = MyCollectionsFragment.newInstance(creatorId);
                 break;
         }
 

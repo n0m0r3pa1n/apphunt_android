@@ -56,7 +56,7 @@ public interface AppHuntApi {
 
     void downVoteCollection(String userId, String collectionId);
 
-    void getMyCollections(String userId, int page, int pageSize);
+    void getUserCollections(String creatorId, String userId, int page, int pageSize);
 
     void getMyAvailableCollections(String userId, String appId, int page, int pageSize);
 
@@ -84,7 +84,7 @@ public interface AppHuntApi {
 
     void getUserProfile(String userId);
 
-    void getUserComments(String userId, Pagination pagination);
+    void getUserComments(String creatorId, String userId, Pagination pagination);
 
-    void getUserApps(String userId, Pagination pagination);
+    void getUserApps(String creatorId, String userId, Pagination pagination);
 }

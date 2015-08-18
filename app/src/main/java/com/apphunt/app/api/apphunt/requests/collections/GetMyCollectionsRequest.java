@@ -6,13 +6,14 @@ import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetMyCollectionsApiEvent;
 
-/**
- * Created by nmp on 15-6-29.
- */
 public class GetMyCollectionsRequest extends BaseGetRequest<AppsCollections> {
 
-    public GetMyCollectionsRequest(String userId, int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections/mine?userId=" + userId + "&page=" + page + "&pageSize=" + pageSize, listener);
+    public GetMyCollectionsRequest(String creatorId, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/collections?page=" + page + "&pageSize=" + pageSize, listener);
+    }
+
+    public GetMyCollectionsRequest(String creatorId, String userId, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+creatorId+"/collections?userId=" + userId + "&page=" + page + "&pageSize=" + pageSize, listener);
     }
 
     @Override
