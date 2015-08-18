@@ -13,7 +13,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
-import com.apphunt.app.ui.fragments.profile.UserProfileFragment;
+import com.apphunt.app.ui.fragments.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
