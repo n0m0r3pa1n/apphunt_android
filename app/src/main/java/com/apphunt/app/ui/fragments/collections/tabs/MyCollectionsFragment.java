@@ -28,7 +28,6 @@ import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
-import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -90,8 +89,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void initUI() {
         ButterKnife.inject(this, view);
-        ActionBarUtils.getInstance().setTitle(R.string.title_my_collections);
-        if(getArguments() != null) {
+        if(getArguments() != null && getArguments().containsKey(USER_ID)) {
             userId = getArguments().getString(USER_ID);
         }
 

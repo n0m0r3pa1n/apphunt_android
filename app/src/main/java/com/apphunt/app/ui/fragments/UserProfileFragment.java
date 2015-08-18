@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.profile;
+package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.views.widgets.AHTextView;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -33,7 +34,7 @@ public class UserProfileFragment extends BackStackFragment {
     private String title;
 
     @InjectView(R.id.apps_count)
-    AHTextView appsCount;
+    AHTextView appsCountView;
 
     @InjectView(R.id.points)
     AHTextView points;
@@ -53,6 +54,12 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.profile_tabs)
     ViewPager profileTabsPager;
 
+    private int appsCount;
+    private int collectionsCount;
+    private int commentsCount;
+
+    private int selectedTabPosition = 0;
+
     public static UserProfileFragment newInstance(String userId, String name) {
         Bundle bundle = new Bundle();
         bundle.putString(USER_ID, userId);
@@ -71,18 +78,79 @@ public class UserProfileFragment extends BackStackFragment {
         String userId = getArguments().getString(USER_ID);
 
         pagerAdapter = new ProfileTabsPagerAdapter(getChildFragmentManager(), userId);
+        updateAbSubtitle(selectedTabPosition);
         profileTabsPager.setOffscreenPageLimit(1);
         profileTabsPager.setAdapter(pagerAdapter);
+        profileTabsPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                selectedTabPosition = position;
+                updateAbSubtitle(selectedTabPosition);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         ApiClient.getClient(activity).getUserProfile(userId);
 
         return view;
     }
 
+    private void updateAbSubtitle(int position) {
+        if(position == -1) {
+            ActionBarUtils.getInstance().setSubtitle("");
+            return;
+        }
+
+        String title = getTitleForTab(position, getNumberForTabPosition(position));
+        ActionBarUtils.getInstance().setSubtitle(title);
+
+    }
+
+    private String getTitleForTab(int position, int numberForTabPosition) {
+        switch (position) {
+            case 0:
+                return getResources().getQuantityString(R.plurals.apps, appsCount, appsCount);
+            case 1:
+                return getResources().getQuantityString(R.plurals.collections, collectionsCount, collectionsCount);
+            case 2:
+                return getResources().getQuantityString(R.plurals.comments, commentsCount, commentsCount);
+            default:
+                return "";
+        }
+    }
+
+    private int getNumberForTabPosition(int position) {
+        switch (position) {
+            case 0:
+                return appsCount;
+            case 1:
+                return collectionsCount;
+            case 2:
+                return commentsCount;
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initTabs();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        updateAbSubtitle(-1);
     }
 
     @Override
@@ -103,7 +171,13 @@ public class UserProfileFragment extends BackStackFragment {
         points.setText(userProfile.getScore() + " points");
         username.setText(userProfile.getUsername());
         name.setText(userProfile.getName());
-        appsCount.setText(event.getUserProfile().getApps() + "");
+        appsCountView.setText(event.getUserProfile().getApps() + "");
+
+        appsCount = userProfile.getApps();
+        collectionsCount = userProfile.getCollections();
+        commentsCount = userProfile.getComments();
+
+        updateAbSubtitle(selectedTabPosition);
     }
 
     private void initTabs() {
