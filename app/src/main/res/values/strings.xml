@@ -111,7 +111,7 @@
     <string name="more"><![CDATA[>]]></string>
 
     <!-- Details -->
-    <string name="posted_by">Posted by %s</string>
+    <string name="posted_by">by %s</string>
     <plurals name="header_voters">
         <item quantity="one">%d VOTER</item>
         <item quantity="other">%d VOTERS</item>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     android:layout_width="fill_parent"
@@ -28,7 +29,7 @@
                 android:layout_width="@dimen/list_item_icon_size"
                 android:layout_height="@dimen/list_item_icon_size"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/list_item_icon_margin_right" />
+                android:layout_marginRight="@dimen/list_item_icon_margin_right"/>
 
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/app_name"
@@ -40,14 +41,14 @@
                 android:layout_toLeftOf="@+id/btn_vote"
                 android:paddingRight="5dp"
                 android:textSize="@dimen/list_item_name"
-                app:typefacePath="fonts/OpenSans-Regular.ttf" />
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
             <com.apphunt.app.ui.views.vote.AppVoteButton
                 android:id="@+id/btn_vote"
                 android:layout_width="47dp"
                 android:layout_height="47dp"
                 android:layout_alignParentRight="true"
-                android:gravity="right" />
+                android:gravity="right"/>
 
             <Button
                 android:id="@+id/add_to_collection"
@@ -81,7 +82,7 @@
                     android:id="@+id/creator_avatar"
                     android:layout_width="@dimen/dimen_app_list_avatar_creator"
                     android:layout_height="@dimen/dimen_app_list_avatar_creator"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"/>
 
                 <com.apphunt.app.ui.views.widgets.AHTextView
                     android:id="@+id/creator_name"
@@ -90,11 +91,9 @@
                     android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/dimen_app_list_creator_name"
-                    app:typefacePath="fonts/OpenSans-SemiboldItalic.ttf" />
+                    app:typefacePath="fonts/OpenSans-Italic.ttf"/>
 
             </LinearLayout>
         </RelativeLayout>
-
     </android.support.v7.widget.CardView>
-
 </LinearLayout>

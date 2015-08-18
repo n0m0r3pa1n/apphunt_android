@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_semi_fragment"
     android:clickable="true">
 
@@ -14,12 +15,11 @@
         android:padding="@dimen/semi_fragment_layout_padding"
         android:visibility="invisible">
 
-        <EditText
+        <com.apphunt.app.ui.views.widgets.AHEditText
             android:id="@+id/suggestion_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/suggestion_send"
-            android:background="@color/desc_bg"
             android:elevation="@dimen/save_box_desc_elevation"
             android:gravity="top|start"
             android:hint="@string/suggestion_input_hint"
@@ -29,7 +29,8 @@
             android:textColor="@android:color/white"
             android:textColorHint="@color/desc_hint"
             android:textSize="@dimen/save_box_desc_text"
-            app:typefacePath="fonts/OpenSans-Light.ttf" />
+            android:background="@color/desc_bg"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
         <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/suggestion_dismiss"
@@ -45,7 +46,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
             android:textAllCaps="true"
-            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
         <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/suggestion_send"
@@ -61,8 +62,6 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
             android:textAllCaps="true"
-            app:typefacePath="fonts/OpenSans-Regular.ttf" />
-
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
     </RelativeLayout>
-
 </RelativeLayout>

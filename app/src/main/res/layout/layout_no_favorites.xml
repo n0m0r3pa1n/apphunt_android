@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/vs_no_collection"
     android:layout_width="match_parent"
     android:layout_height="150dp">
@@ -10,9 +11,9 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:background="@drawable/ic_no_favorite"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"/>
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,6 @@
         android:gravity="center"
         android:text="@string/no_collection_text"
         android:textSize="18sp"
-        android:textColor="#69000000"/>
-
+        android:textColor="#69000000"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 </RelativeLayout>

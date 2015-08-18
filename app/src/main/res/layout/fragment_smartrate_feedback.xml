@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_semi_fragment"
@@ -9,27 +11,28 @@
         android:id="@+id/smartrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/semi_fragment_layout_height"
+        android:padding="@dimen/semi_fragment_layout_padding"
         android:background="@color/bg_primary"
-        android:visibility="invisible"
-        android:padding="@dimen/semi_fragment_layout_padding">
+        android:visibility="invisible">
 
-        <EditText
+        <com.apphunt.app.ui.views.widgets.AHEditText
             android:id="@+id/smartrate_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/send"
-            android:gravity="top|start"
-            android:background="@color/desc_bg"
             android:singleLine="false"
             android:maxLength="100"
             android:padding="@dimen/save_box_desc_padding"
-            android:elevation="@dimen/save_box_desc_elevation"
             android:hint="@string/smartrate_feedback_input_hint"
             android:textSize="@dimen/save_box_desc_text"
             android:textColor="@android:color/white"
-            android:textColorHint="@color/desc_hint"/>
+            android:textColorHint="@color/desc_hint"
+            android:gravity="top|start"
+            android:background="@color/desc_bg"
+            android:elevation="@dimen/save_box_desc_elevation"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,9 +42,10 @@
             android:text="@string/smartrate_send"
             android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +55,7 @@
             android:text="@string/dismiss"
             android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
         </RelativeLayout>
-
 </RelativeLayout>

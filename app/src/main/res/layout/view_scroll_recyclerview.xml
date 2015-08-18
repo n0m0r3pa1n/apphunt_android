@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:elevation="@dimen/listview_elevation"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:elevation="@dimen/listview_elevation">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="8dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/list_divider_height"
-        android:elevation="@dimen/listview_elevation"
         android:layoutAnimation="@anim/list_view_entry"
-        android:padding="8dp"/>
+        android:elevation="@dimen/listview_elevation"/>
 
     <RelativeLayout
         android:id="@+id/more_loader_layout"
@@ -28,6 +29,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"/>
     </RelativeLayout>
 </RelativeLayout>

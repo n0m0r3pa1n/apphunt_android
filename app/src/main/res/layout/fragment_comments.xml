@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/box_comments"
-    android:clickable="true"
-    android:background="@color/bg_secondary"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/box_comments"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:background="@color/bg_secondary"
+    android:clickable="true">
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/header_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/show_comments"
         android:paddingLeft="@dimen/header_comments_padding_left"
         android:paddingRight="@dimen/header_comments_padding_left"
         android:paddingTop="@dimen/header_comments_padding_top"
         android:paddingBottom="@dimen/header_comments_padding_top"
-        android:layout_toLeftOf="@+id/show_comments"
-        android:textAllCaps="true"
+        android:text="0 comments"
         android:textStyle="bold"
         android:textColor="@color/text_headers"
-        android:text="0 comments"/>
+        android:textAllCaps="true"
+        app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
     <ImageView
         android:id="@+id/comments_arrow"
@@ -32,13 +33,13 @@
 
     <com.apphunt.app.ui.views.containers.ScrollListView
         android:id="@+id/comments_count"
-        android:visibility="gone"
-        android:descendantFocusability="afterDescendants"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_secondary"
-        android:layout_below="@+id/comments_arrow"
         android:layout_above="@+id/divider"
+        android:layout_below="@+id/comments_arrow"
+        android:background="@color/bg_secondary"
+        android:descendantFocusability="afterDescendants"
+        android:visibility="gone"
         android:elevation="0dp"/>
 
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
@@ -47,20 +48,19 @@
         android:layout_centerInParent="true"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:indeterminate="true"
-        />
+        android:indeterminate="true"/>
 
-
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/label_no_comments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/comments_arrow"
         android:layout_above="@+id/divider"
+        android:layout_below="@+id/comments_arrow"
         android:text="@string/be_first"
         android:gravity="center"
         android:visibility="gone"
-        android:elevation="0dp"/>
+        android:elevation="0dp"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
     <View
         android:id="@+id/divider"
@@ -69,7 +69,7 @@
         android:background="@color/divider"
         android:layout_above="@+id/comment_entry"/>
 
-    <EditText
+    <com.apphunt.app.ui.views.widgets.AHEditText
         android:id="@+id/comment_entry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,14 +80,15 @@
         android:paddingTop="@dimen/comment_entry_padding_top"
         android:paddingBottom="@dimen/comment_entry_padding_top"
         android:background="@color/bg_secondary"
-        android:gravity="top"
         android:singleLine="false"
         android:textSize="@dimen/comment_entry_text"
         android:hint="@string/comment_entry_hint"
         android:textColorHint="@color/comment_entry_hint"
-        android:visibility="invisible"/>
+        android:gravity="top"
+        android:visibility="invisible"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/label_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,13 +99,14 @@
         android:paddingTop="@dimen/comment_entry_padding_top"
         android:paddingBottom="@dimen/comment_entry_padding_top"
         android:background="@color/bg_secondary"
-        android:gravity="top"
         android:singleLine="false"
         android:textSize="@dimen/comment_entry_text"
         android:hint="@string/comment_entry_hint"
-        android:textColorHint="@color/comment_entry_hint"/>
+        android:textColorHint="@color/comment_entry_hint"
+        android:gravity="top"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/send_comment"
         android:layout_width="@dimen/send_comment_width"
         android:layout_height="@dimen/send_comment_height"
@@ -115,7 +117,7 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:textColor="@color/bg_primary"
-        android:gravity="center"/>
-
+        android:gravity="center"
+        app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 </RelativeLayout>
 

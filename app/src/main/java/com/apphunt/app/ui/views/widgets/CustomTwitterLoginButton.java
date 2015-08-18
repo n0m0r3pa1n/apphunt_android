@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.views;
+package com.apphunt.app.ui.views.widgets;
 
 import android.content.Context;
 import android.content.res.AssetManager;

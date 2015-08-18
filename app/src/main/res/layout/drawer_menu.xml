@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="48dp"
     android:layout_width="match_parent">
@@ -21,5 +22,5 @@
         android:textSize="14sp"
         android:gravity="center_vertical"
         android:textColor="@android:color/black"
-        app:typefacePath="fonts/OpenSans-Regular.ttf" />
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 </LinearLayout>

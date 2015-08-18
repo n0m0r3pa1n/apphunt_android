@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg_secondary"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/bg_secondary">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,28 +13,27 @@
         android:background="@color/bg_secondary">
 
         <LinearLayout
+            android:id="@+id/hexedView"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:id="@+id/hexedView"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
                 android:id="@+id/loading"
-                app:cpb_colors="@array/colors"
-                style="@style/CircularThemeProgressBar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                app:cpb_colors="@array/colors"
                 android:indeterminate="true"
-                />
+                style="@style/CircularThemeProgressBar"/>
         </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/box_details"
-            android:layout_marginTop="@dimen/details_box_name_margin_bottom"
-            android:layout_below="@id/hexedView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hexedView"
+            android:layout_marginTop="@dimen/details_box_name_margin_bottom">
 
             <ImageView
                 android:id="@+id/icon"
@@ -41,27 +41,25 @@
                 android:layout_height="@dimen/details_box_desc_icon_size"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/details_box_name_margin_bottom"
-                />
+                android:layout_marginLeft="@dimen/details_box_name_margin_bottom"/>
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/app_name"
-                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/details_box_name_padding"
                 android:layout_toRightOf="@+id/icon"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/details_box_name_padding"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/details_box_desc_app_name_text"
-                />
-
+                app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
             <RelativeLayout
                 android:id="@+id/box_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/details_box_name_height"
-                android:layout_below="@id/app_name"
                 android:layout_toRightOf="@id/icon"
+                android:layout_below="@id/app_name"
                 android:layout_marginTop="10dp"
                 android:paddingRight="@dimen/details_box_name_padding"
                 android:paddingLeft="@dimen/details_box_name_padding"
@@ -73,112 +71,108 @@
                     android:layout_height="@dimen/details_avatar_creator"
                     android:layout_centerVertical="true"/>
 
-                <TextView
+                <com.apphunt.app.ui.views.widgets.AHTextView
                     android:id="@+id/creator_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/details_box_name_creator_name_text"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
                     android:layout_toLeftOf="@+id/vote"
-                    android:layout_toRightOf="@+id/creator_avatar"/>
-
+                    android:layout_toRightOf="@+id/creator_avatar"
+                    android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
+                    android:textSize="@dimen/details_box_name_creator_name_text"
+                    android:textColor="@android:color/black"
+                    android:gravity="center_vertical"
+                    app:typefacePath="fonts/OpenSans-Italic.ttf"/>
             </RelativeLayout>
         </RelativeLayout>
 
         <com.apphunt.app.ui.views.widgets.DownloadButton
             android:id="@+id/download"
-            android:layout_marginRight="@dimen/details_box_name_creator_name_margin"
-            android:gravity="center"
-            android:layout_below="@id/box_details"
             android:layout_width="120dp"
             android:layout_height="@dimen/details_box_desc_ic_download_size"
             android:layout_alignParentRight="true"
-            />
+            android:layout_below="@id/box_details"
+            android:layout_marginRight="@dimen/details_box_name_creator_name_margin"
+            android:gravity="center"/>
 
         <View
             android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/download"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:elevation="0dp"
-            android:layout_below="@id/download"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_secondary" />
+            android:background="@color/text_secondary"
+            android:elevation="0dp"/>
 
         <LinearLayout
             android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_below="@id/divider"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:gravity="center">
 
             <RelativeLayout
-                android:background="@drawable/btn_circle_background"
                 android:layout_width="@dimen/details_box_vote_size"
-                android:layout_height="@dimen/details_box_vote_size">
+                android:layout_height="@dimen/details_box_vote_size"
+                android:background="@drawable/btn_circle_background">
 
-                <TextView
+                <com.apphunt.app.ui.views.widgets.AHTextView
                     android:id="@+id/rating"
-                    android:text="0"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="7dp"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textIsSelectable="true" />
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="7dp"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textIsSelectable="true"/>
 
-                <TextView
-                    android:text="Rating"
-                    android:textSize="11sp"
-                    android:layout_marginBottom="10dp"
+                <com.apphunt.app.ui.views.widgets.AHTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true" />
-
-
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="Rating"
+                    android:textSize="11sp"
+                    app:typefacePath="fonts/OpenSans-Regular.ttf"/>
             </RelativeLayout>
 
             <ImageView
                 android:id="@+id/share"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size"
                 android:layout_marginLeft="@dimen/details_buttons_margin"
                 android:padding="10dp"
                 android:scaleType="centerInside"
                 android:background="@drawable/selector_details_btn"
-                android:src="@drawable/ic_detail_share"
-                android:layout_width="@dimen/details_box_vote_size"
-                android:layout_height="@dimen/details_box_vote_size" />
+                android:src="@drawable/ic_detail_share"/>
 
             <ImageView
                 android:id="@+id/add_to_collection"
+                android:layout_width="@dimen/details_box_vote_size"
+                android:layout_height="@dimen/details_box_vote_size"
                 android:layout_marginLeft="@dimen/details_buttons_margin"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:background="@drawable/selector_details_btn"
-                android:src="@drawable/ic_add_to_collection"
-                android:layout_width="@dimen/details_box_vote_size"
-                android:layout_height="@dimen/details_box_vote_size" />
+                android:src="@drawable/ic_add_to_collection"/>
 
             <com.apphunt.app.ui.views.vote.AppVoteButton
-                android:layout_marginLeft="@dimen/details_buttons_margin"
                 android:id="@+id/vote_btn"
                 android:layout_width="@dimen/details_box_vote_size"
                 android:layout_height="@dimen/details_box_vote_size"
-                />
-
+                android:layout_marginLeft="@dimen/details_buttons_margin"/>
         </LinearLayout>
 
         <com.wefika.flowlayout.FlowLayout
+            android:id="@+id/tags_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/buttons_container"
-            android:id="@+id/tags_container"
             android:gravity="left"/>
 
         <RelativeLayout
@@ -192,73 +186,67 @@
             android:paddingTop="@dimen/details_box_desc_padding_top"
             android:elevation="0dp">
 
-            <!--android:layout_toRightOf="@+id/icon"-->
-            <!--android:layout_below="@+id/app_name"-->
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textColor="@android:color/black"
+                android:gravity="center"
                 android:textSize="@dimen/details_box_desc_text"
-                />
+                android:textColor="@android:color/black"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </RelativeLayout>
 
         <com.apphunt.app.ui.views.gallery.GalleryView
-            android:layout_below="@id/box_desc"
             android:id="@+id/gallery"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
-
-        </com.apphunt.app.ui.views.gallery.GalleryView>
+            android:layout_height="200dp"
+            android:layout_below="@id/box_desc"
+            android:layout_margin="10dp"/>
 
         <View
             android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/gallery"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:elevation="0dp"
-            android:layout_below="@id/gallery"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_secondary" />
+            android:background="@color/text_secondary"
+            android:elevation="0dp"/>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp"
-            android:layout_below="@id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider2"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
 
             <fr.castorflex.android.circularprogressbar.CircularProgressBar
                 android:id="@+id/loading_comments"
-                style="@style/CircularThemeProgressBar"
-                android:layout_gravity="center"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:indeterminate="true"
-                />
+                style="@style/CircularThemeProgressBar"/>
 
             <LinearLayout
                 android:id="@+id/comments"
-                android:orientation="vertical"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"/>
 
-            </LinearLayout>
-
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/comments_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
                 android:text="ALL COMMENTS"
                 android:textSize="14sp"
-                android:layout_marginTop="10dp"
                 android:textColor="@color/bg_primary"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

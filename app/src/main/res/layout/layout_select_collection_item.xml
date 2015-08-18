@@ -3,6 +3,4 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/collection_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</com.apphunt.app.ui.views.collection.CollectionView>
+    android:layout_height="match_parent"/>

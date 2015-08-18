@@ -10,4 +10,4 @@
     android:textSize="@dimen/list_header_text"
     android:gravity="center_vertical"
     android:clickable="false"
-    app:typefacePath="fonts/OpenSans-Regular.ttf" />
+    app:typefacePath="fonts/OpenSans-Regular.ttf"/>

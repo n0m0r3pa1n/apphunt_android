@@ -57,7 +57,7 @@ public class DownloadButton extends LinearLayout {
     }
 
     private void init(final Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.flat_blue_button, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
 
         textView.setOnClickListener(new OnClickListener() {

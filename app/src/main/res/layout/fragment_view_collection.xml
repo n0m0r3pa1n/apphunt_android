@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,9 +40,10 @@
                 android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:gravity="center"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-            <EditText
+            <com.apphunt.app.ui.views.widgets.AHEditText
                 android:id="@+id/edit_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +54,8 @@
                 android:gravity="center"
                 android:visibility="gone"
                 android:maxLength="100"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -73,7 +75,7 @@
             app:elevation="4dp"
             app:borderWidth="0dp"
             app:pressedTranslationZ="12dp"
-            app:backgroundTint="@color/bg_fab" />
+            app:backgroundTint="@color/bg_fab"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -84,5 +86,5 @@
         android:layout="@layout/layout_no_apps_in_collection"
         android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 </RelativeLayout>

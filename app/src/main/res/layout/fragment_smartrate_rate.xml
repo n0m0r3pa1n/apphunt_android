@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_semi_fragment"
@@ -9,22 +11,23 @@
         android:id="@+id/smartrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/semi_fragment_layout_height"
+        android:padding="@dimen/semi_fragment_layout_padding"
         android:background="@color/bg_primary"
-        android:visibility="invisible"
-        android:padding="@dimen/semi_fragment_layout_padding">
+        android:visibility="invisible">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/smartrate_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/yes"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_text"
+            android:layout_margin="@dimen/notification_text_margin"
             android:text="@string/smartrate_rate_dialog_message"
-            android:layout_margin="@dimen/notification_text_margin"/>
+            android:textSize="@dimen/notification_text"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,11 +35,12 @@
             android:layout_toLeftOf="@+id/yes"
             android:padding="@dimen/notification_button_padding"
             android:text="@string/smartrate_no"
-            android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
-            android:background="@android:color/transparent"/>
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,9 +48,9 @@
             android:layout_alignParentRight="true"
             android:padding="@dimen/notification_button_padding"
             android:text="@string/smartrate_yes"
-            android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
-            android:background="@android:color/transparent"/>
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
         </RelativeLayout>
-
 </RelativeLayout>

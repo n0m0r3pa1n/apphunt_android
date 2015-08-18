@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_semi_fragment"
@@ -13,7 +15,7 @@
         android:background="@color/bg_primary"
         android:visibility="invisible">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/notifications_section"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_section_height"
@@ -21,7 +23,8 @@
             android:layout_marginLeft="@dimen/settings_section_margin_left"
             android:text="@string/section_notifications"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/settings_section_text"/>
+            android:textSize="@dimen/settings_section_text"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         
         <RelativeLayout
             android:id="@+id/item_daily_notifications"
@@ -31,7 +34,7 @@
             android:layout_marginTop="@dimen/settings_item_margin_top"
             android:background="@drawable/shape_provider_background">
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/label_daily_notification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -40,7 +43,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/settings_label_text"
                 android:text="@string/enable_daily_notifications"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
             <ToggleButton
                 android:id="@+id/toggle_daily_notification"
@@ -51,8 +55,7 @@
                 android:layout_marginRight="3dp"
                 android:background="@drawable/selector_toggle_button"
                 android:textOn=""
-                android:textOff="" />
-
+                android:textOff=""/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -63,7 +66,7 @@
             android:layout_marginTop="@dimen/settings_item_margin_top"
             android:background="@drawable/shape_provider_background">
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/label_install_notifications"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -72,7 +75,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/settings_label_text"
                 android:text="@string/enable_install_notifications"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
             <ToggleButton
                 android:id="@+id/toggle_install_notifications"
@@ -83,10 +87,10 @@
                 android:layout_marginRight="3dp"
                 android:background="@drawable/selector_toggle_button"
                 android:textOn=""
-                android:textOff="" />
+                android:textOff=""/>
         </RelativeLayout>
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/sounds_section"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_section_height"
@@ -95,7 +99,8 @@
             android:layout_marginLeft="@dimen/settings_section_margin_left"
             android:text="@string/section_sounds"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/settings_section_text"/>
+            android:textSize="@dimen/settings_section_text"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
         <RelativeLayout
             android:id="@+id/item_sounds"
@@ -105,7 +110,7 @@
             android:layout_marginTop="@dimen/settings_item_margin_top"
             android:background="@drawable/shape_provider_background">
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/label_sounds"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -114,7 +119,8 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/settings_label_text"
                 android:text="@string/enable_sounds"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
             <ToggleButton
                 android:id="@+id/toggle_sounds"
@@ -125,10 +131,10 @@
                 android:layout_marginRight="3dp"
                 android:background="@drawable/selector_toggle_button"
                 android:textOn=""
-                android:textOff="" />
+                android:textOff=""/>
         </RelativeLayout>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,6 +144,7 @@
             android:text="@string/dismiss"
             android:textColor="@android:color/white"
             android:textSize="@dimen/settings_button_dismiss_text"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
     </RelativeLayout>
 </RelativeLayout>

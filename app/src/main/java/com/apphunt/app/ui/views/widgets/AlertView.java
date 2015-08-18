@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.views;
+package com.apphunt.app.ui.views.widgets;
 
 import android.annotation.TargetApi;
 import android.content.Context;

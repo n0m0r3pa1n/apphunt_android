@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-        android:background="@color/bg_primary"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:background="@color/bg_primary"
         app:tabIndicatorColor="@android:color/white"
         app:tabTextColor="@android:color/darker_gray"
-        app:tabSelectedTextColor="@android:color/white" />
+        app:tabSelectedTextColor="@android:color/white"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/collection_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/tabs"
         android:elevation="0dp"
-        app:elevation="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        app:elevation="0dp"/>
 
     <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:elevation="4dp"
-        android:elevation="4dp"
-        app:borderWidth="0dp"
-        app:pressedTranslationZ="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/add_btn_margin_top"
         android:layout_marginBottom="@dimen/add_btn_margin_bottom"
         android:layout_marginRight="@dimen/add_btn_margin_right"
-        android:layout_marginTop="@dimen/add_btn_margin_top"
+        android:layout_gravity="bottom|end"
         android:src="@drawable/ic_ab_add_to_collection"
-        app:backgroundTint="@color/bg_fab"/>
-
+        android:elevation="4dp"
+        app:backgroundTint="@color/bg_fab"
+        app:elevation="4dp"
+        app:borderWidth="0dp"
+        app:pressedTranslationZ="12dp"/>
 </RelativeLayout>

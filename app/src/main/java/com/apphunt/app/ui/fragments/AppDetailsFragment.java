@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
@@ -39,7 +38,6 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
@@ -102,11 +100,11 @@ public class AppDetailsFragment extends BackStackFragment {
     @InjectView(R.id.creator_avatar)
     CircleImageView creator;
 
-    @InjectView(R.id.vote_btn)
-    AppVoteButton voteBtn;
-
     @InjectView(R.id.creator_name)
     TextView creatorName;
+
+    @InjectView(R.id.vote_btn)
+    AppVoteButton voteBtn;
 
     @InjectView(R.id.rating)
     TextView rating;
@@ -282,7 +280,7 @@ public class AppDetailsFragment extends BackStackFragment {
 
     private void populateTags() {
         for(final String tag : baseApp.getTags()) {
-            View tagButtonView = getLayoutInflater(null).inflate(R.layout.flat_blue_button, tagsContainer, false);
+            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_flat_blue_button, tagsContainer, false);
             TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tv_download));
             textView.setText(tag);
             textView.setOnClickListener(new View.OnClickListener() {

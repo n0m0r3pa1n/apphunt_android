@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,15 +16,16 @@
         android:background="@color/bg_secondary"
         android:elevation="@dimen/save_box_elevation">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/save_box_title_height"
             android:layout_marginBottom="@dimen/save_box_title_margin_bottom"
             android:padding="@dimen/save_box_title_padding"
-            android:gravity="center"
+            android:textSize="@dimen/save_box_title_text"
             android:textColor="@color/save_app_text"
-            android:textSize="@dimen/save_box_title_text"/>
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
         <ImageView
             android:id="@+id/app_icon"
@@ -31,7 +33,7 @@
             android:layout_height="@dimen/save_box_icon_size"
             android:layout_below="@+id/title"
             android:layout_marginBottom="@dimen/save_box_icon_margin_bottom"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"/>
 
         <RelativeLayout
             android:id="@+id/container_desc"
@@ -44,7 +46,7 @@
             android:paddingBottom="2dp"
             android:elevation="0dp">
 
-            <EditText
+            <com.apphunt.app.ui.views.widgets.AHEditText
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -58,7 +60,8 @@
                 android:textSize="@dimen/save_box_desc_text"
                 android:textColor="@color/desc_text"
                 android:textColorHint="@color/desc_hint"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
             <com.apphunt.app.ui.views.widgets.TagGroup
                 android:id="@+id/tag_group"
@@ -68,21 +71,22 @@
                 android:padding="10dp"
                 android:background="@color/save_app_desc_bg"
                 app:atg_isAppendMode="true"
-                style="@style/TagGroup.Beauty_Blue" />
+                style="@style/TagGroup.Beauty_Blue"/>
 
         </RelativeLayout>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="@dimen/save_btn_height"
-            android:background="@android:color/transparent"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/save_app_text"
-            android:textSize="@dimen/save_btn_text"
+            android:background="@android:color/transparent"
             android:text="@string/save"
-            android:gravity="center"/>
+            android:textSize="@dimen/save_btn_text"
+            android:textColor="@color/save_app_text"
+            android:textAllCaps="true"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </RelativeLayout>
-
 </RelativeLayout>
