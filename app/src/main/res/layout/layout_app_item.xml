@@ -75,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/add_to_collection"
                 android:layout_toRightOf="@id/app_icon"
                 app:pictureHeight="@dimen/dimen_app_list_avatar_creator"
                 app:pictureWidth="@dimen/dimen_app_list_avatar_creator"
