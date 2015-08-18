@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="details_box_name_creator_name_text">14</integer>
+    <integer name="dimen_app_list_creator_name">12</integer>
+</resources>

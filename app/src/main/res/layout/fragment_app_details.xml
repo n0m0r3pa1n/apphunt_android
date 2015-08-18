@@ -54,35 +54,19 @@
                 android:textSize="@dimen/details_box_desc_app_name_text"
                 app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-            <RelativeLayout
+
+            <com.apphunt.app.ui.views.CreatorView
                 android:id="@+id/box_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/details_box_name_height"
-                android:layout_toRightOf="@id/icon"
                 android:layout_below="@id/app_name"
+                android:layout_toRightOf="@id/icon"
                 android:layout_marginTop="10dp"
                 android:paddingRight="@dimen/details_box_name_padding"
                 android:paddingLeft="@dimen/details_box_name_padding"
-                android:elevation="0dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/creator_avatar"
-                    android:layout_width="@dimen/details_avatar_creator"
-                    android:layout_height="@dimen/details_avatar_creator"
-                    android:layout_centerVertical="true"/>
-
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/creator_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@+id/vote"
-                    android:layout_toRightOf="@+id/creator_avatar"
-                    android:layout_marginLeft="@dimen/details_box_name_creator_name_margin"
-                    android:textSize="@dimen/details_box_name_creator_name_text"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical"
-                    app:typefacePath="fonts/OpenSans-Italic.ttf"/>
-            </RelativeLayout>
+                app:pictureHeight="@dimen/details_avatar_creator"
+                app:pictureWidth="@dimen/details_avatar_creator"
+                app:textSize="@integer/details_box_name_creator_name_text"/>
         </RelativeLayout>
 
         <com.apphunt.app.ui.views.widgets.DownloadButton

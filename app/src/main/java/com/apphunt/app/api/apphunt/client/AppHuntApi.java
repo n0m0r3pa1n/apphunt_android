@@ -1,6 +1,7 @@
 package com.apphunt.app.api.apphunt.client;
 
 import com.android.volley.Response;
+import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
@@ -80,4 +81,10 @@ public interface AppHuntApi {
     void getAppsByTags(String tags, int page, int pageSize, String userId);
 
     void getCollectionsByTags(String tags, int page, int pageSize, String userId);
+
+    void getUserProfile(String userId);
+
+    void getUserComments(String userId, Pagination pagination);
+
+    void getUserApps(String userId, Pagination pagination);
 }

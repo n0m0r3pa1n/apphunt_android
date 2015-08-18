@@ -10,6 +10,11 @@
     <declare-styleable name="CollectionView">
         <attr name="buttonsEnabled" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="CreatorView">
+        <attr name="pictureWidth" format="float" />
+        <attr name="pictureHeight" format="float" />
+        <attr name="textSize" format="float" />
+    </declare-styleable>
     <declare-styleable name="JHexedPhotoView">
         <attr name="cellWidth" format="integer"/>
         <attr name="cellHeight" format="integer"/>

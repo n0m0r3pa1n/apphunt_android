@@ -13,6 +13,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
+import com.apphunt.app.ui.fragments.profile.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
@@ -94,6 +95,14 @@ public class NavUtils {
                 .add(R.id.container, fragment, Constants.TAG_SELECT_COLLECTION_FRAGMENT)
                 .addToBackStack(Constants.TAG_SELECT_COLLECTION_FRAGMENT)
                 .commitAllowingStateLoss();
+    }
+
+    public void presentUserProfileFragment(String userId, String name) {
+        UserProfileFragment fragment = UserProfileFragment.newInstance(userId, name);
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, Constants.TAG_USER_PROFILE_FRAGMENT)
+                .addToBackStack(Constants.TAG_USER_PROFILE_FRAGMENT)
+                .commit();
     }
 
     public void presentCreateCollectionFragment() {

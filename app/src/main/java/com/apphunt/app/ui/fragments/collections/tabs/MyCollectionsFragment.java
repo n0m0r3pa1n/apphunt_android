@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,13 +46,16 @@ import butterknife.InjectView;
  */
 public class MyCollectionsFragment extends BaseFragment implements OnItemClickListener {
     public static final String TAG = MyCollectionsFragment.class.getSimpleName();
+    private static final String USER_ID = "USER_ID";
 
     private AppCompatActivity activity;
     private View view;
 
     private String appId;
+    private String userId;
+    private int currentPage = 0;
     private List<AppsCollection> collections;
-    int currentPage = 0;
+
 
     private SelectCollectionAdapter selectCollectionAdapter;
 
@@ -63,6 +67,15 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     public static MyCollectionsFragment newInstance() {
         return new MyCollectionsFragment();
+    }
+
+    public static MyCollectionsFragment newInstance(String userId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(USER_ID, userId);
+        MyCollectionsFragment fragment = new MyCollectionsFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Nullable
@@ -78,6 +91,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     private void initUI() {
         ButterKnife.inject(this, view);
         ActionBarUtils.getInstance().setTitle(R.string.title_my_collections);
+        if(getArguments() != null) {
+            userId = getArguments().getString(USER_ID);
+        }
 
         getCollections();
 
@@ -91,6 +107,12 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void getCollections() {
         currentPage++;
+        if(!TextUtils.isEmpty(userId)) {
+            ApiClient.getClient(activity).getMyCollections(userId,
+                    currentPage, Constants.PAGE_SIZE);
+            return;
+        }
+
         if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
             ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(),
                     currentPage, Constants.PAGE_SIZE);
