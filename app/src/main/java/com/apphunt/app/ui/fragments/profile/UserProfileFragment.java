@@ -5,16 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
-import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
@@ -78,7 +75,6 @@ public class UserProfileFragment extends BackStackFragment {
         profileTabsPager.setAdapter(pagerAdapter);
 
         ApiClient.getClient(activity).getUserProfile(userId);
-        ApiClient.getClient(activity).getUserComments(userId, new Pagination(1, 5));
 
         return view;
     }
@@ -108,12 +104,6 @@ public class UserProfileFragment extends BackStackFragment {
         username.setText(userProfile.getUsername());
         name.setText(userProfile.getName());
         appsCount.setText(event.getUserProfile().getApps() + "");
-    }
-
-    @Subscribe
-    public void onUserComments(GetUserCommentsApiEvent event) {
-        Log.d(TAG, "onUserComments " + event.getComments().getComments().size());
-        //ActionBarUtils.getInstance().setSubtitle("AAAAA");
     }
 
     private void initTabs() {

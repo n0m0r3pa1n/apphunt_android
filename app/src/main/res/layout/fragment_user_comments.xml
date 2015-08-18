@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/bg_secondary"
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <com.apphunt.app.ui.views.widgets.AHTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test" />
-</LinearLayout>
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/bg_secondary">
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        style="@style/CircularThemeProgressBar" />
+
+    <com.apphunt.app.ui.views.containers.ScrollListView
+        android:id="@+id/items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>
