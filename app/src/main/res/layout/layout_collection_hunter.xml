@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="110dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_gravity="center_horizontal"
         app:cardCornerRadius="2dp">
 
         <RelativeLayout
@@ -26,114 +25,154 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:paddingRight="20dp"
                 android:background="@drawable/ic_trapeze"
-                android:textSize="22sp"
-                android:textColor="@android:color/white"
                 android:gravity="center"
-                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+                android:paddingRight="20dp"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                app:typefacePath="fonts/OpenSans-Regular.ttf" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/picture"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_toRightOf="@id/place"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/place" />
 
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/picture"
+                android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/picture"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_gravity="center"
-                app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+                app:typefacePath="fonts/OpenSans-Bold.ttf" />
 
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/picture"
                 android:layout_below="@+id/name"
-                android:layout_marginLeft="20dp"
-                android:textSize="12sp"
                 android:layout_gravity="center"
-                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/picture"
+                android:textSize="12sp"
+                app:typefacePath="fonts/OpenSans-Regular.ttf" />
 
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/picture"
                 android:layout_below="@+id/username"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                app:typefacePath="fonts/OpenSans-Light.ttf"/>
+                android:layout_toRightOf="@+id/picture"
+                app:typefacePath="fonts/OpenSans-Light.ttf" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
-                android:layout_toRightOf="@+id/picture"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_toRightOf="@+id/picture">
 
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/apps_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="22"
-                    android:textSize="13sp"
-                    app:typefacePath="fonts/OpenSans-Light.ttf"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/ic_apps_count"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_toRightOf="@+id/apps_count"
-                    android:layout_marginLeft="3dp"
-                    android:background="@drawable/ic_android"/>
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/apps_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="22"
+                        android:textSize="13sp"
+                        app:typefacePath="fonts/OpenSans-Light.ttf" />
 
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/comments_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="22"
-                    android:textSize="13sp"
-                    app:typefacePath="fonts/OpenSans-Light.ttf"/>
+                    <ImageView
+                        android:id="@+id/ic_apps_count"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@+id/apps_count"
+                        android:background="@drawable/ic_android" />
+                </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/ic_comments_count"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:background="@drawable/ic_message"
-                    android:layout_toRightOf="@+id/comments_count"
-                    android:layout_marginLeft="3dp"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/votes_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/ic_votes_count"
-                    android:layout_centerVertical="true"
-                    android:text="22"
-                    android:textSize="13sp"
-                    app:typefacePath="fonts/OpenSans-Light.ttf"/>
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/comments_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="22"
+                        android:textSize="13sp"
+                        app:typefacePath="fonts/OpenSans-Light.ttf" />
 
-                <ImageView
-                    android:id="@+id/ic_votes_count"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:background="@drawable/ic_hunter_votes"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="3dp"/>
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/ic_comments_count"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@+id/comments_count"
+                        android:background="@drawable/ic_message" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/collections_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="22"
+                        android:textSize="13sp"
+                        app:typefacePath="fonts/OpenSans-Light.ttf" />
+
+                    <ImageView
+                        android:id="@+id/ic_collections_count"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@+id/collections_count"
+                        android:background="@drawable/ic_message" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/votes_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="22"
+                        android:textSize="13sp"
+                        app:typefacePath="fonts/OpenSans-Light.ttf" />
+
+                    <ImageView
+                        android:id="@+id/ic_votes_count"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_toRightOf="@+id/votes_count"
+                        android:background="@drawable/ic_hunter_votes" />
+                </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

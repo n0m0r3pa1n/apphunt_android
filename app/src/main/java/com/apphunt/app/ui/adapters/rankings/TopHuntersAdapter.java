@@ -48,6 +48,7 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         holder.username.setText("@" + hunter.getUser().getUsername());
         holder.appsCount.setText(String.valueOf(hunter.getAddedApps()));
         holder.commentsCount.setText(String.valueOf(hunter.getComments()));
+        holder.collectionsCount.setText(String.valueOf(hunter.getCollections()));
         holder.votesCount.setText(String.valueOf(hunter.getVotes()));
 
         Picasso.with(context)
@@ -93,6 +94,9 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
 
         @InjectView(R.id.comments_count)
         TextView commentsCount;
+
+        @InjectView(R.id.collections_count)
+        TextView collectionsCount;
 
         @InjectView(R.id.votes_count)
         TextView votesCount;
