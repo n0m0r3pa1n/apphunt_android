@@ -100,7 +100,6 @@ public class UserProfileFragment extends BackStackFragment {
         });
 
         ApiClient.getClient(activity).getUserProfile(userId);
-
         return view;
     }
 

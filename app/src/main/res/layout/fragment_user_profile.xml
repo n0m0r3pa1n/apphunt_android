@@ -1,64 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:clickable="true"
     android:background="@color/bg_secondary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:elevation="2dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_picture"
-            android:layout_width="@dimen/dimen_app_list_avatar_creator"
-            android:layout_height="@dimen/dimen_app_list_avatar_creator"
-            />
+        <LinearLayout
+            android:id="@+id/collapsing_toolbar2"
+            android:orientation="vertical"
+            android:elevation="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_picture"
+                android:layout_width="@dimen/dimen_app_list_avatar_creator"
+                android:layout_height="@dimen/dimen_app_list_avatar_creator"
+                />
 
-        <com.apphunt.app.ui.views.widgets.AHTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/name"/>
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"/>
 
-        <com.apphunt.app.ui.views.widgets.AHTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/username"/>
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/username"/>
 
-        <com.apphunt.app.ui.views.widgets.AHTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/points"/>
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/points"/>
 
 
-        <com.apphunt.app.ui.views.widgets.AHTextView
-            android:id="@+id/apps_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:id="@+id/apps_count"
+                android:text="Blah blah blah"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:background="@color/bg_primary"
-        android:layout_centerInParent="true"
-        android:elevation="1dp"
-        app:elevation="1dp"
-        android:layout_height="100dp"
-        android:layout_width="match_parent"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
-        app:tabTextColor="@android:color/white"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabSelectedTextColor="@android:color/white" />
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:elevation="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <TextView
+                android:elevation="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                app:layout_collapseMode="pin"
+                android:background="@color/bg_primary"
+                android:layout_gravity="top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tabMode="fixed"
+                app:tabGravity="center"
+                android:elevation="4dp"
+                app:tabTextColor="@android:color/white"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabSelectedTextColor="@android:color/white" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/profile_tabs"
-        android:elevation="0dp"
-        app:elevation="0dp"
-        android:layout_below="@id/tabs"
+        android:elevation="2dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
