@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -31,6 +32,9 @@ public class AppsFragment extends BaseFragment {
 
     @InjectView(R.id.loading)
     CircularProgressBar loader;
+
+    @InjectView(R.id.vs_no_apps)
+    ViewStub vsNoApps;
 
     int currentPage = 0;
     private AppCompatActivity activity;
@@ -84,6 +88,10 @@ public class AppsFragment extends BaseFragment {
     public void onUserApps(GetUserAppsApiEvent event) {
         loader.setVisibility(View.GONE);
         items.hideBottomLoader();
+        if(event.getApps() == null || event.getApps().getTotalCount() == 0) {
+            vsNoApps.setVisibility(View.VISIBLE);
+            return;
+        }
 
         if(adapter == null) {
             adapter = new SearchAppsAdapter(getActivity(), event.getApps().getApps());

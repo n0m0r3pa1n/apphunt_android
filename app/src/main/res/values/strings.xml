@@ -141,6 +141,8 @@
     <string name="top_hunters_points">Top Hunters Points</string>
     <string name="title_choose_collection_banner">Choose a banner</string>
     <string name="no_collection_text">No collections</string>
+    <string name="no_apps_text">No apps</string>
+    <string name="no_comments_text">No comments</string>
     <string name="delete_collection_menu_title">Delete</string>
     <string name="no_apps_in_collection">Go to Trending apps list and choose your apps</string>
     <string name="action_add_to_collection">Add to collection</string>

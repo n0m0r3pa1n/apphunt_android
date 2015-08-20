@@ -126,6 +126,13 @@ public class CollectionsAdapter extends BaseAdapter {
                 .resize(resources.getDimensionPixelSize(R.dimen.collection_creator_image_size),
                         resources.getDimensionPixelSize(R.dimen.collection_creator_image_size))
                 .into(viewHolder.createdByImage);
+        viewHolder.createdByImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavUtils.getInstance((AppCompatActivity) context).presentUserProfileFragment(appsCollection.getCreatedBy().getId(),
+                        appsCollection.getCreatedBy().getName());
+            }
+        });
 
         Picasso.with(context)
                 .load(appsCollection.getPicture())

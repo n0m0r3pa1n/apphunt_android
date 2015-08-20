@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -49,6 +50,9 @@ public class CommentsFragment extends BaseFragment {
 
     @InjectView(R.id.loading)
     CircularProgressBar loader;
+
+    @InjectView(R.id.vs_no_comments)
+    ViewStub vsNoComments;
 
     public static CommentsFragment newInstance(String creatorId) {
 
@@ -99,6 +103,7 @@ public class CommentsFragment extends BaseFragment {
 
         ProfileComments comments = event.getComments();
         if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
+            vsNoComments.setVisibility(View.VISIBLE);
             return;
         }
 
