@@ -1,13 +1,17 @@
 package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -19,6 +23,8 @@ import com.apphunt.app.ui.views.widgets.AHTextView;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,9 +38,6 @@ public class UserProfileFragment extends BackStackFragment {
     private Activity activity;
     private ProfileTabsPagerAdapter pagerAdapter;
     private String title;
-
-    @InjectView(R.id.apps_count)
-    AHTextView appsCountView;
 
     @InjectView(R.id.points)
     AHTextView points;
@@ -170,7 +173,6 @@ public class UserProfileFragment extends BackStackFragment {
         points.setText(userProfile.getScore() + " points");
         username.setText(userProfile.getUsername());
         name.setText(userProfile.getName());
-        appsCountView.setText(event.getUserProfile().getApps() + "");
 
         appsCount = userProfile.getApps();
         collectionsCount = userProfile.getCollections();

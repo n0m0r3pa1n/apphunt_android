@@ -2,6 +2,7 @@
  <resources>
     <color name="bg_primary">#23a2eb</color>
     <color name="bg_secondary">#eeeeee</color>
+    <color name="bg_primary_lighter">#90CAF9</color>
 
     <color name="bg_fab">#e91e63</color>
     <color name="primary_pressed">#e1bee7</color>

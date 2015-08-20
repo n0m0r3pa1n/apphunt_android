@@ -16,23 +16,36 @@
 
         <LinearLayout
             android:id="@+id/collapsing_toolbar2"
-            android:orientation="vertical"
             android:elevation="2dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/banner"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:cropToPadding="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_picture"
-                android:layout_width="@dimen/dimen_app_list_avatar_creator"
-                android:layout_height="@dimen/dimen_app_list_avatar_creator"
+                android:layout_below="@+id/banner"
+                android:layout_width="@dimen/list_header_height"
+                android:layout_height="@dimen/list_header_height"
                 />
 
             <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_above="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/name"/>
 
             <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/username"/>
@@ -40,14 +53,10 @@
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/username"
                 android:id="@+id/points"/>
 
-
-            <com.apphunt.app.ui.views.widgets.AHTextView
-                android:id="@+id/apps_count"
-                android:text="Blah blah blah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -65,16 +74,16 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 app:layout_collapseMode="pin"
-                android:background="@color/bg_primary"
+                android:background="@android:color/white"
                 android:layout_gravity="top"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:tabMode="fixed"
                 app:tabGravity="center"
                 android:elevation="4dp"
-                app:tabTextColor="@android:color/white"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabSelectedTextColor="@android:color/white" />
+                app:tabTextColor="@color/bg_primary_lighter"
+                app:tabIndicatorColor="@color/bg_primary"
+                app:tabSelectedTextColor="@color/bg_primary" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
