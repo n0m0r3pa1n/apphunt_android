@@ -63,7 +63,14 @@ public class AHTextView extends TextView {
 
                 setTypeface(typeface);
             }
+            else {
+                AssetManager assets = ctx.getAssets();
+                setTypeface(Typeface.createFromAsset(assets, "fonts/OpenSans-Light.ttf"));
+            }
             array.recycle();
+        } else {
+            AssetManager assets = ctx.getAssets();
+            setTypeface(Typeface.createFromAsset(assets, "fonts/OpenSans-Light.ttf"));
         }
     }
 }

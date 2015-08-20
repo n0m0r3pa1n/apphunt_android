@@ -147,7 +147,7 @@
                         android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_toRightOf="@+id/collections_count"
-                        android:background="@drawable/ic_message" />
+                        android:background="@drawable/ic_collection_top_hunters" />
                 </RelativeLayout>
 
                 <RelativeLayout

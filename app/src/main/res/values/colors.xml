@@ -37,6 +37,8 @@
 
    <color name="save_collection_color">#43A047</color>
 
+    <color name="percent_20_black">#33000000</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#36000000</color>

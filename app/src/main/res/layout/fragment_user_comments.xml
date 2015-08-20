@@ -13,7 +13,7 @@
         android:indeterminate="true"
         style="@style/CircularThemeProgressBar" />
 
-    <com.apphunt.app.ui.views.containers.ScrollListView
+    <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/items"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

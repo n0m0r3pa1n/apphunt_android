@@ -163,4 +163,5 @@
     <dimen name="view_collection_height">150dp</dimen>
 
     <dimen name="login_provider_text">12sp</dimen>
+    <dimen name="comment_app_icon_size">50dp</dimen>
 </resources>
