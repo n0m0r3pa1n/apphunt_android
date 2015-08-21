@@ -462,7 +462,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
         try {
             connectionResult.startResolutionForResult(activity, Constants.GPLUS_SIGN_IN);
         } catch (IntentSender.SendIntentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

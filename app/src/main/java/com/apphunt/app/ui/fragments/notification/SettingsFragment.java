@@ -77,8 +77,6 @@ public class SettingsFragment extends BaseFragment {
     @OnClick(R.id.dismiss)
     public void onDissmissClick() {
         activity.getSupportFragmentManager().popBackStack();
-
-        // TODO: Select the previously selected item in the navigation drawer
     }
 
     @OnCheckedChanged(R.id.toggle_daily_notification)
