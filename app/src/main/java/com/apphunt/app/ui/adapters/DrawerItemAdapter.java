@@ -128,20 +128,22 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Picasso.with(ctx).load(R.drawable.header_bg).into(headerViewHolder.cover);
                     }
 
-                    headerViewHolder.profileImage.setOnClickListener(new View.OnClickListener() {
+                    View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment(
                                     user.getId(), user.getName()
                             );
                         }
-                    });
+                    };
+
+                    headerViewHolder.cover.setOnClickListener(listener);
+                    headerViewHolder.profileImage.setOnClickListener(listener);
                     headerViewHolder.username.setText(user.getUsername());
                     headerViewHolder.email.setText(user.getEmail());
                     headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
                             LoginProviderFactory.get((Activity) ctx).logout();
                             FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
                         }

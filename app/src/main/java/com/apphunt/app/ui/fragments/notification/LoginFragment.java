@@ -300,6 +300,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                             user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                             LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
+
                             ApiClient.getClient(getActivity()).createUser(user);
                             FlurryAgent.logEvent(TrackingEvents.UserFacebookLogin);
                         }

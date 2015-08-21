@@ -65,43 +65,64 @@
                         android:id="@+id/name"
                         android:textSize="20sp"
                         android:layout_marginLeft="@dimen/profile_picture_margin"
-                        android:layout_toLeftOf="@+id/score"
+                        android:layout_toLeftOf="@+id/score_container"
                         android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <com.apphunt.app.ui.views.widgets.AHTextView
-                        android:id="@+id/text"
-                        app:typefacePath="fonts/OpenSans-Regular.ttf"
-                        android:textSize="18sp"
-                        android:text="Score: "
-                        android:textColor="#8A000000"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@+id/score"
+                        android:id="@+id/username"
+                        android:layout_below="@+id/name"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="@dimen/profile_picture_margin"
+                        app:typefacePath="fonts/OpenSans-Light.ttf"
+                        android:textSize="@dimen/list_item_category"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/score_container"
+                        android:orientation="horizontal"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <com.apphunt.app.ui.views.widgets.AHTextView
+                            android:id="@+id/score_text"
+                            app:typefacePath="fonts/OpenSans-Regular.ttf"
+                            android:textSize="16sp"
+                            android:text="Score: "
+                            android:textColor="#8A000000"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <com.apphunt.app.ui.views.widgets.AHTextView
+                            android:id="@+id/score"
+                            android:textColor="#8A000000"
+                            app:typefacePath="fonts/OpenSans-Regular.ttf"
+                            android:textSize="18sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
 
                     <com.apphunt.app.ui.views.widgets.AHTextView
-                        android:id="@+id/score"
+                        android:id="@+id/score_month"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/score_container"
                         android:textColor="#8A000000"
                         app:typefacePath="fonts/OpenSans-Regular.ttf"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/list_item_category"
+                        android:text="(Monthly)"
+                        android:layout_marginTop="4dp"
                         android:layout_marginRight="15dp"
-                        android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-
                 </RelativeLayout>
 
-                <com.apphunt.app.ui.views.widgets.AHTextView
-                    android:id="@+id/username"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginLeft="@dimen/profile_picture_margin"
-                    app:typefacePath="fonts/OpenSans-Light.ttf"
-                    android:textSize="@dimen/list_item_category"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
 
                 <View
                     android:layout_marginTop="10dp"

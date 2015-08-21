@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -21,11 +22,14 @@ import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.views.widgets.AHTextView;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,6 +58,9 @@ public class UserProfileFragment extends BackStackFragment {
 
     @InjectView(R.id.banner)
     ImageView banner;
+
+    @InjectView(R.id.score_month)
+    TextView scoreMonth;
 
     @InjectView(R.id.tabs)
     TabLayout tabLayout;
@@ -106,7 +113,10 @@ public class UserProfileFragment extends BackStackFragment {
             }
         });
 
-        ApiClient.getClient(activity).getUserProfile(userId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        ApiClient.getClient(activity).getUserProfile(userId, calendar.getTime(), new Date());
         return view;
     }
 
@@ -185,11 +195,16 @@ public class UserProfileFragment extends BackStackFragment {
     @Subscribe
     public void onUserProfileReceived(GetUserProfileApiEvent event) {
         UserProfile userProfile = event.getUserProfile();
-        Picasso.with(activity).load(userProfile.getProfilePicture()).into(userPicture);
         if(TextUtils.isEmpty(userProfile.getCoverPicture())) {
             banner.setImageResource(R.drawable.header_bg);
         } else {
             Picasso.with(activity).load(userProfile.getCoverPicture()).into(banner);
+        }
+
+        if(TextUtils.isEmpty(userProfile.getProfilePicture())) {
+            userPicture.setImageResource(R.drawable.ic_contact_picture);
+        } else {
+            Picasso.with(activity).load(userProfile.getProfilePicture()).into(userPicture);
         }
 
         score.setText("" + userProfile.getScore());
@@ -199,6 +214,9 @@ public class UserProfileFragment extends BackStackFragment {
         appsCount = userProfile.getApps();
         collectionsCount = userProfile.getCollections();
         commentsCount = userProfile.getComments();
+
+
+        scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 
         updateAbSubtitle(selectedTabPosition);
     }

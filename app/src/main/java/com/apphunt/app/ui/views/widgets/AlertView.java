@@ -20,7 +20,7 @@ import butterknife.InjectView;
  */
 public class AlertView extends LinearLayout {
     private LayoutInflater inflater;
-    @InjectView(R.id.text)
+    @InjectView(R.id.score_text)
     TextView textView;
     private TypedArray array;
 

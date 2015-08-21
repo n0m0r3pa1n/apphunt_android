@@ -194,7 +194,7 @@ public class CommentsAdapter extends BaseAdapter {
         @InjectView(R.id.name)
         TextView name;
 
-        @InjectView(R.id.text)
+        @InjectView(R.id.score_text)
         TextView comment;
 
         @InjectView(R.id.vote_btn)

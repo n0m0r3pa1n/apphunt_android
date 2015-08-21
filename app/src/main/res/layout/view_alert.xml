@@ -17,7 +17,7 @@
         android:src="@drawable/ic_warning"/>
 
     <com.apphunt.app.ui.views.widgets.AHTextView
-        android:id="@+id/text"
+        android:id="@+id/score_text"
         app:typefacePath="fonts/OpenSans-Light.ttf"
         style="@style/HelpText"/>
 </LinearLayout>

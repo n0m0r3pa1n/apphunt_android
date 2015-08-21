@@ -91,7 +91,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     private void showEmptyView() {
         vsNoCollection.setVisibility(View.VISIBLE);
-        ((TextView) view.findViewById(R.id.text)).setText(getResources().getString(R.string.no_favourite_collections));
+        ((TextView) view.findViewById(R.id.score_text)).setText(getResources().getString(R.string.no_favourite_collections));
     }
 
 

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
@@ -25,6 +26,7 @@ import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedE
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -194,6 +196,13 @@ public class CollectionView extends RelativeLayout {
             setVisibilityWhenPublic();
         }
 
+        createdByAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = appsCollection.getCreatedBy();
+                NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(user.getId(), user.getName());
+            }
+        });
         favouriteButton.setCollection(collection);
         voteButton.setCollection(collection);
         name.setText(collection.getName());

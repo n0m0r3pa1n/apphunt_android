@@ -9,6 +9,8 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 
+import java.util.Date;
+
 public interface AppHuntApi {
     void createUser(User user);
 
@@ -82,7 +84,7 @@ public interface AppHuntApi {
 
     void getCollectionsByTags(String tags, int page, int pageSize, String userId);
 
-    void getUserProfile(String userId);
+    void getUserProfile(String userId, Date from, Date to);
 
     void getUserComments(String creatorId, String userId, Pagination pagination);
 

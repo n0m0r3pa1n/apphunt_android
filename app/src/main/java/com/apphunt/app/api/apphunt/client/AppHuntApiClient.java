@@ -54,10 +54,14 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
+import com.apphunt.app.utils.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.UpdateCollectionModel;
@@ -318,8 +322,11 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getUserProfile(String userId) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, listener));
+    public void getUserProfile(String userId, Date fromDate, Date toDate) {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String fromStr = dayFormat.format(fromDate);
+        String toStr = dayFormat.format(toDate);
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
     }
 
     @Override

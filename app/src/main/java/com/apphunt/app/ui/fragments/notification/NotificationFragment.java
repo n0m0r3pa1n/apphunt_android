@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -107,26 +108,15 @@ public class NotificationFragment extends BaseFragment {
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
             Animation enterAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in);
-            enterAnim.setAnimationListener(new Animation.AnimationListener() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                    SoundsUtils.playSound(activity, R.raw.notification_2);
-                    Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(300);
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
+                public void run() {
                     Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
                             R.anim.slide_in_top_notification);
                     notificationEnterAnim.setFillAfter(true);
                     notificationLayout.startAnimation(notificationEnterAnim);
                 }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
+            }, enterAnim.getDuration());
 
             return enterAnim;
         } else {

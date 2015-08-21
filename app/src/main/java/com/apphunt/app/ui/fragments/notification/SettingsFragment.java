@@ -2,6 +2,7 @@ package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -124,24 +125,15 @@ public class SettingsFragment extends BaseFragment {
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
             Animation enterAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_in);
-            enterAnim.setAnimationListener(new Animation.AnimationListener() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
+                public void run() {
                     Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
                             R.anim.slide_in_top_notification);
                     notificationEnterAnim.setFillAfter(true);
                     container.startAnimation(notificationEnterAnim);
                 }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-
+            }, enterAnim.getDuration());
             return enterAnim;
         } else {
             Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
