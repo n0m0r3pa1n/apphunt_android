@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +40,8 @@ public class UserProfileFragment extends BackStackFragment {
     private ProfileTabsPagerAdapter pagerAdapter;
     private String title;
 
-    @InjectView(R.id.points)
-    AHTextView points;
+    @InjectView(R.id.score)
+    AHTextView score;
 
     @InjectView(R.id.username)
     AHTextView username;
@@ -50,6 +51,9 @@ public class UserProfileFragment extends BackStackFragment {
 
     @InjectView(R.id.user_picture)
     CircleImageView userPicture;
+
+    @InjectView(R.id.banner)
+    ImageView banner;
 
     @InjectView(R.id.tabs)
     TabLayout tabLayout;
@@ -166,11 +170,29 @@ public class UserProfileFragment extends BackStackFragment {
         this.activity = activity;
     }
 
+    @Override
+    public void unregisterForEvents() {
+        super.unregisterForEvents();
+        ActionBarUtils.getInstance().setSubtitle("");
+    }
+
+    @Override
+    public void registerForEvents() {
+        super.registerForEvents();
+        updateAbSubtitle(selectedTabPosition);
+    }
+
     @Subscribe
     public void onUserProfileReceived(GetUserProfileApiEvent event) {
         UserProfile userProfile = event.getUserProfile();
         Picasso.with(activity).load(userProfile.getProfilePicture()).into(userPicture);
-        points.setText(userProfile.getScore() + " points");
+        if(TextUtils.isEmpty(userProfile.getCoverPicture())) {
+            banner.setImageResource(R.drawable.header_bg);
+        } else {
+            Picasso.with(activity).load(userProfile.getCoverPicture()).into(banner);
+        }
+
+        score.setText("" + userProfile.getScore());
         username.setText(userProfile.getUsername());
         name.setText(userProfile.getName());
 
