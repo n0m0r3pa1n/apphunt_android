@@ -131,6 +131,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            FlurryAgent.logEvent(TrackingEvents.UserOpenedOwnProfileFromDrawer);
                             NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment(
                                     user.getId(), user.getName()
                             );

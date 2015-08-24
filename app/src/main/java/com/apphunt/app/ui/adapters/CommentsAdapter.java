@@ -2,6 +2,7 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,14 @@ import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.views.vote.CommentVoteButton;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -95,6 +99,17 @@ public class CommentsAdapter extends BaseAdapter {
             }
 
             commentViewHolder.vote.setComment(comment);
+
+            commentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromComment);
+                    NavUtils.getInstance((AppCompatActivity) ctx)
+                            .presentUserProfileFragment(comment.getUser().getId(), comment.getUser().getName());
+                }
+            });
+
+
         } else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
             final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
@@ -114,6 +129,15 @@ public class CommentsAdapter extends BaseAdapter {
             }
 
             subCommentViewHolder.vote.setComment(comment);
+
+            subCommentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromComment);
+                    NavUtils.getInstance((AppCompatActivity) ctx)
+                            .presentUserProfileFragment(comment.getUser().getId(), comment.getUser().getName());
+                }
+            });
         }
 
         return view;

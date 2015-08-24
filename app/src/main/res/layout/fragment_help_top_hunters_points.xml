@@ -75,6 +75,25 @@
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_collection_top_hunters"
+                style="@style/HelpTopHuntersImage"/>
+
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:text="create collection - 50 points"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
+        </LinearLayout>
+
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

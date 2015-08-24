@@ -201,8 +201,7 @@ public class UserProfileFragment extends BackStackFragment {
             userPicture.setImageResource(R.drawable.ic_contact_picture);
         } else {
             Picasso.with(activity).load(userProfile.getProfilePicture()).placeholder(R.drawable.placeholder_avatar)
-                    .resize(getResources().getDimensionPixelSize(R.dimen.header_profile_picture_size),
-                            getResources().getDimensionPixelSize(R.dimen.header_profile_picture_size)).into(userPicture);
+                    .into(userPicture);
         }
 
         score.setText("" + userProfile.getScore());

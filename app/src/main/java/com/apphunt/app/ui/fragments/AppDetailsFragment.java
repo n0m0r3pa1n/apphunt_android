@@ -280,6 +280,9 @@ public class AppDetailsFragment extends BackStackFragment {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    FlurryAgent.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>(){{
+                        put("Tag", tag);
+                    }});
                     activity.getSupportFragmentManager()
                             .beginTransaction()
                             .add(R.id.container, SearchAppsFragment.newInstance(tag), Constants.TAG_SEARCH_APPS_FRAGMENT)
@@ -292,7 +295,7 @@ public class AppDetailsFragment extends BackStackFragment {
             FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_desc_ic_download_size));
             params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
             textView.setPadding(20, 0, 20, 0);
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 textView.setElevation(0);
             }
 
