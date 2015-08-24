@@ -274,8 +274,8 @@ public class AppDetailsFragment extends BackStackFragment {
 
     private void populateTags() {
         for(final String tag : baseApp.getTags()) {
-            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_flat_blue_button, tagsContainer, false);
-            TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tv_download));
+            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_tag_button, tagsContainer, false);
+            TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tag));
             textView.setText(tag);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -289,14 +289,13 @@ public class AppDetailsFragment extends BackStackFragment {
             });
 
             Resources resources = getResources();
-            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_desc_ic_download_size));
-            params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
-            textView.setPadding(20, 0, 20, 0);
+            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_tag_height));
+            params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_tag_margin_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
+            textView.setPadding(15, 0, 15, 0);
             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 textView.setElevation(0);
             }
 
-            textView.setTypeface(Typeface.DEFAULT);
             textView.setLayoutParams(params);
             tagsContainer.addView(tagButtonView);
         }

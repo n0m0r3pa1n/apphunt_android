@@ -127,6 +127,8 @@
     <dimen name="details_box_desc_app_name_text">20sp</dimen>
     <dimen name="details_box_desc_text">15sp</dimen>
     <dimen name="details_box_desc_ic_download_size">30dp</dimen>
+    <dimen name="details_box_tag_height">25dp</dimen>
+    <dimen name="details_box_tag_margin_left">10dp</dimen>
     <dimen name="details_box_voters_padding_top">10dp</dimen>
     <dimen name="details_box_voters_padding_sides">15dp</dimen>
     <dimen name="details_box_voters_padding_bottom">5dp</dimen>

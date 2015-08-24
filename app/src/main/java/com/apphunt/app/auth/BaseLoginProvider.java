@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
+import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
-import com.apphunt.app.ui.fragments.notification.LoginFragment;
+import com.apphunt.app.ui.fragments.login.InvitesFragment;
+import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
@@ -64,7 +67,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
     private void onUserCreated(User user) {
         FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(user);
-        hideLoginFragment(activity);
+//        hideLoginFragment(activity);
+        presentInvitesScreen();
     }
 
     protected void saveSharedPreferences(User user) {
@@ -94,6 +98,13 @@ public abstract class BaseLoginProvider implements LoginProvider {
         if (loginFragment != null) {
             fragmentManager.popBackStack();
         }
+    }
+
+    private void presentInvitesScreen() {
+        ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new InvitesFragment(), "Invite")
+                .addToBackStack("Invite")
+                .commit();
     }
 
     protected Activity getActivity() {

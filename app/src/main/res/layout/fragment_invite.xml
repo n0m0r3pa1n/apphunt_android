@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@color/bg_primary"
+    android:clickable="true">
+
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:gravity="center"
+        android:text="Connect with friends and discover cool new apps"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center"
+        android:text="Invite your friends to AppHunt to get most out of your experience by discovering, commenting and sharing cool new apps."
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/skip"
+        android:layout_below="@+id/subtitle"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="center"
+            app:tabTextColor="@color/invite_tab"
+            app:tabIndicatorColor="@color/invite_tab_selected"
+            app:tabSelectedTextColor="@color/invite_tab_selected"
+            app:layout_collapseMode="pin"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/options_pagers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </LinearLayout>
+    
+    <com.apphunt.app.ui.views.widgets.AHButton
+        android:id="@+id/skip"
+        android:layout_width="120dp"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="Skip"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textAllCaps="true"
+        android:gravity="center"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.notification;
+package com.apphunt.app.ui.fragments.login;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
