@@ -14,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -80,6 +82,7 @@ public class CreatorView extends LinearLayout {
         Picasso.with(getContext())
                 .load(pictureUrl)
                 .into(creator);
+        FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +96,7 @@ public class CreatorView extends LinearLayout {
         Picasso.with(getContext())
                 .load(pictureUrl)
                 .into(creator);
+        FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

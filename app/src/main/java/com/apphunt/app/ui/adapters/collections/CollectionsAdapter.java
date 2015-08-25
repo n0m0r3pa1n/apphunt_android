@@ -18,9 +18,11 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.views.collection.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -129,6 +131,7 @@ public class CollectionsAdapter extends BaseAdapter {
         viewHolder.createdByImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromCollectionsList);
                 NavUtils.getInstance((AppCompatActivity) context).presentUserProfileFragment(appsCollection.getCreatedBy().getId(),
                         appsCollection.getCreatedBy().getName());
             }

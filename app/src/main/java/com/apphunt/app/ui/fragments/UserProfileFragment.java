@@ -1,11 +1,8 @@
 package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -27,7 +24,6 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -121,7 +117,7 @@ public class UserProfileFragment extends BackStackFragment {
     }
 
     private void updateAbSubtitle(int position) {
-        if(position == -1) {
+        if (position == -1) {
             ActionBarUtils.getInstance().setSubtitle("");
             return;
         }
@@ -195,16 +191,17 @@ public class UserProfileFragment extends BackStackFragment {
     @Subscribe
     public void onUserProfileReceived(GetUserProfileApiEvent event) {
         UserProfile userProfile = event.getUserProfile();
-        if(TextUtils.isEmpty(userProfile.getCoverPicture())) {
+        if (TextUtils.isEmpty(userProfile.getCoverPicture())) {
             banner.setImageResource(R.drawable.header_bg);
         } else {
             Picasso.with(activity).load(userProfile.getCoverPicture()).into(banner);
         }
 
-        if(TextUtils.isEmpty(userProfile.getProfilePicture())) {
+        if (TextUtils.isEmpty(userProfile.getProfilePicture())) {
             userPicture.setImageResource(R.drawable.ic_contact_picture);
         } else {
-            Picasso.with(activity).load(userProfile.getProfilePicture()).into(userPicture);
+            Picasso.with(activity).load(userProfile.getProfilePicture()).placeholder(R.drawable.placeholder_avatar)
+                    .into(userPicture);
         }
 
         score.setText("" + userProfile.getScore());

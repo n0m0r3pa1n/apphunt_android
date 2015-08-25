@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.hunters.Hunter;
 import com.apphunt.app.api.apphunt.models.collections.hunters.HuntersCollection;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -59,6 +61,7 @@ public class TopHuntersAdapter extends RecyclerView.Adapter<TopHuntersAdapter.Vi
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromTopHunters);
                 NavUtils.getInstance((AppCompatActivity) context)
                         .presentUserProfileFragment(hunter.getUser().getId(), hunter.getUser().getName());
             }
