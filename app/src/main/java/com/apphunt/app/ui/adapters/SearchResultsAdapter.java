@@ -25,6 +25,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollections;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
@@ -217,9 +218,14 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
-        if (event.getCollections().getTotalCount() > 0) {
+        AppsCollections collections = event.getCollections();
+        if (collections.getTotalCount() > 0) {
             items.add(new SeparatorItem("Collections"));
-            for (AppsCollection collection : event.getCollections().getCollections()) {
+            if(collections.getCollections() == null) {
+                return;
+            }
+
+            for (AppsCollection collection : collections.getCollections()) {
                 items.add(new CollectionItem(collection));
             }
 
@@ -278,7 +284,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
         @InjectView(R.id.created_by)
         TextView createdBy;
 
-        @InjectView(R.id.tags)
+        @InjectView(R.id.tags_container)
         TextView tags;
 
         @InjectView(R.id.vote_btn)

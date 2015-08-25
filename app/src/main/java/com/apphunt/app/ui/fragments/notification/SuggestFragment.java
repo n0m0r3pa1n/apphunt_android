@@ -3,9 +3,9 @@ package com.apphunt.app.ui.fragments.notification;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,21 +21,31 @@ import android.widget.Toast;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 2/20/15.
  */
-public class SuggestFragment extends BaseFragment implements View.OnClickListener {
+public class SuggestFragment extends BaseFragment {
 
-    private RelativeLayout suggestionLayout;
-    private EditText message;
+    private AppCompatActivity activity;
+
+    @InjectView(R.id.suggestion_layout)
+    RelativeLayout suggestionLayout;
+
+    @InjectView(R.id.suggestion_message)
+    EditText message;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,81 +59,88 @@ public class SuggestFragment extends BaseFragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_suggest, container, false);
-        suggestionLayout = (RelativeLayout) view.findViewById(R.id.suggestion_layout);
-        message = (EditText) view.findViewById(R.id.suggestion_message);
-
-        view.findViewById(R.id.suggestion_send).setOnClickListener(this);
-        view.findViewById(R.id.suggestion_dismiss).setOnClickListener(this);
+        ButterKnife.inject(this, view);
         return view;
     }
 
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter) {
-            Animation enterAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in);
-            enterAnim.setAnimationListener(new Animation.AnimationListener() {
+            Animation enterAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_in);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Animation notificationEnterAnim = AnimationUtils.loadAnimation(activity,
+                            R.anim.slide_in_top_notification);
+                    notificationEnterAnim.setFillAfter(true);
+                    suggestionLayout.startAnimation(notificationEnterAnim);
+                }
+            }, enterAnim.getDuration());
+
+            return enterAnim;
+        } else {
+            Animation slideOutAnim = AnimationUtils.loadAnimation(activity,
+                    R.anim.slide_out_top);
+            slideOutAnim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    closeKeyboard(message);
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    Animation notificationEnterAnim = AnimationUtils.loadAnimation(getActivity(),
-                            R.anim.slide_in_top_notification);
-                    notificationEnterAnim.setFillAfter(true);
-                    suggestionLayout.startAnimation(notificationEnterAnim);
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
+            suggestionLayout.startAnimation(slideOutAnim);
 
-            return enterAnim;
+            return AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
+        }
+    }
+
+    @OnClick(R.id.suggestion_send)
+    public void onSendBtnClick() {
+        Editable messageText = message.getText();
+        if (TextUtils.isEmpty(messageText)) {
+            message.setHint(R.string.suggestion_empty_text_error);
+            message.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+
+            SoundsUtils.vibrate(activity);
         } else {
-            Animation outAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out);
-            suggestionLayout.startAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    R.anim.slide_out_top));
+            Map<String, String> params = new HashMap<>();
+            params.put("suggestion", messageText.toString());
+            FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
+            Toast.makeText(activity, R.string.feedback_send, Toast.LENGTH_LONG).show();
 
-            return outAnim;
+            activity.getSupportFragmentManager().popBackStack();
         }
+
+        closeKeyboard(message);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.suggestion_send:
-                Editable messageText = message.getText();
-                if (TextUtils.isEmpty(messageText)) {
-                    message.setHint(R.string.suggestion_empty_text_error);
-                    message.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shake));
-                    Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(300);
-                } else {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(message.getWindowToken(), 0);
-                    getSupportFragmentManager().popBackStack(Constants.TAG_SUGGEST_FRAGMENT, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    Map<String, String> params = new HashMap<>();
-                    params.put("suggestion", messageText.toString());
-                    FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
-                    Toast.makeText(getActivity(), R.string.feedback_send, Toast.LENGTH_LONG).show();
-                    getSupportFragmentManager().popBackStack();
-                }
-                break;
-
-            case R.id.suggestion_dismiss:
-                getSupportFragmentManager().popBackStack();
-                break;
-        }
-    }
-
-    private FragmentManager getSupportFragmentManager() {
-        return getActivity().getSupportFragmentManager();
+    @OnClick(R.id.suggestion_dismiss)
+    public void onDismissBtnClick() {
+        activity.getSupportFragmentManager().popBackStack();
     }
 
     @Override
     public int getTitle() {
         return R.string.suggest_title;
+    }
+
+    private void closeKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

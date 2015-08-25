@@ -3,6 +3,7 @@ package com.apphunt.app.ui.views.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -32,6 +33,7 @@ import com.facebook.login.widget.ToolTipPopup;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,6 +44,7 @@ import java.util.List;
  */
 public class CustomFacebookButton extends FacebookButtonBase {
 
+    private HashMap<String, Typeface> typefaces;
     private static final int DEFAULT_REQUEST_CODE;
     private static final String TAG;
     private boolean confirmLogout;
@@ -62,7 +65,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
         this.toolTipStyle = ToolTipPopup.Style.BLUE;
         this.toolTipDisplayTime = 6000L;
 
-        init();
+        init(null);
     }
 
     public CustomFacebookButton(Context context, AttributeSet attrs) {
@@ -70,7 +73,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
         this.toolTipStyle = ToolTipPopup.Style.BLUE;
         this.toolTipDisplayTime = 6000L;
 
-        init();
+        init(attrs);
     }
 
     public CustomFacebookButton(Context context, AttributeSet attrs, int defStyle) {
@@ -78,7 +81,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
         this.toolTipStyle = ToolTipPopup.Style.BLUE;
         this.toolTipDisplayTime = 6000L;
 
-        init();
+        init(attrs);
     }
 
     public void setDefaultAudience(DefaultAudience defaultAudience) {
@@ -282,7 +285,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
 
         float density = res.getDisplayMetrics().density;
         int height = (int) (48 * density);
-        int width = (int) (250 * density);
+        int width = (int) (280 * density);
         setMeasuredDimension(width, height);
     }
 
@@ -467,9 +470,35 @@ public class CustomFacebookButton extends FacebookButtonBase {
         }
     }
 
-    private void init() {
-        if (isInEditMode()) {
+    private void init(AttributeSet attrs) {
+        if (typefaces == null) {
+            typefaces = new HashMap<String, Typeface>();
+        }
+
+        // prevent exception in Android Studio / ADT interface builder
+        if (this.isInEditMode()) {
             return;
+        }
+
+        final TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.AHTextView);
+        if (array != null) {
+            final String typefaceAssetPath = array.getString(
+                    R.styleable.AHTextView_typefacePath);
+
+            if (typefaceAssetPath != null) {
+                Typeface typeface = null;
+
+                if (typefaces.containsKey(typefaceAssetPath)) {
+                    typeface = typefaces.get(typefaceAssetPath);
+                } else {
+                    AssetManager assets = getContext().getAssets();
+                    typeface = Typeface.createFromAsset(assets, typefaceAssetPath);
+                    typefaces.put(typefaceAssetPath, typeface);
+                }
+
+                setTypeface(typeface);
+            }
+            array.recycle();
         }
 
         Resources res = this.getResources();
@@ -477,8 +506,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
         setBackgroundResource(R.drawable.shape_provider_background);
         setCompoundDrawablesWithIntrinsicBounds(null, null, res.getDrawable(R.drawable.ic_facebook), null);
         setPadding(60, 2, 8, 2);
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        setTypeface(Typeface.DEFAULT);
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         this.loginText = "Facebook";
     }

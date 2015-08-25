@@ -3,11 +3,11 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
@@ -20,6 +20,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
@@ -34,11 +35,13 @@ import com.apphunt.app.api.apphunt.requests.collections.PostCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.UnfavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.comments.GetAppCommentsRequest;
+import com.apphunt.app.api.apphunt.requests.comments.GetUserCommentsRequest;
 import com.apphunt.app.api.apphunt.requests.comments.PostNewCommentRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -51,10 +54,14 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
+import com.apphunt.app.utils.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsRequest.UpdateCollectionModel;
@@ -221,8 +228,12 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getMyCollections(String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetMyCollectionsRequest(userId, page, pageSize, listener));
+    public void getUserCollections(String creatorId, String userId, int page, int pageSize) {
+        if(!TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetMyCollectionsRequest(creatorId, userId, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetMyCollectionsRequest(creatorId, page, pageSize, listener));
+        }
     }
 
     @Override
@@ -282,6 +293,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getItemsByTags(String tags, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetItemsByTagsRequest(tags, listener));
         } else {
@@ -291,6 +303,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getAppsByTags(String tags, int page, int pageSize, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByTagsRequest(tags, page, pageSize, listener));
         } else {
@@ -300,10 +313,52 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getCollectionsByTags(String tags, int page, int pageSize, String userId) {
+        tags = getFormattedQuery(tags);
         if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, listener));
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetCollectionsByTagsRequest(tags, page, pageSize, userId, listener));
         }
+    }
+
+    @Override
+    public void getUserProfile(String userId, Date fromDate, Date toDate) {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String fromStr = dayFormat.format(fromDate);
+        String toStr = dayFormat.format(toDate);
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+    }
+
+    @Override
+    public void getUserComments(String creatorId, String userId, Pagination pagination) {
+        GetUserCommentsRequest getUserCommentsRequest;
+        if(!TextUtils.isEmpty(userId)) {
+            getUserCommentsRequest = new GetUserCommentsRequest(creatorId, userId, pagination, listener);
+        } else {
+            getUserCommentsRequest = new GetUserCommentsRequest(creatorId, pagination, listener);
+        }
+        VolleyInstance.getInstance(context).addToRequestQueue(getUserCommentsRequest);
+    }
+
+    @Override
+    public void getUserApps(String creatorId, String userId, Pagination pagination) {
+        GetUserAppsRequest getUserAppsRequest;
+        if(!TextUtils.isEmpty(userId)) {
+            getUserAppsRequest = new GetUserAppsRequest(creatorId, userId, pagination, listener);
+        } else {
+            getUserAppsRequest = new GetUserAppsRequest(creatorId, pagination, listener);
+        }
+        VolleyInstance.getInstance(context).addToRequestQueue(getUserAppsRequest);
+    }
+
+    private String getFormattedQuery(String q) {
+        String[] tags = q.split(" ");
+        String query = "?";
+
+        for (String tag : tags) {
+            query += "names[]=" + tag + "&";
+        }
+
+        return query;
     }
 }

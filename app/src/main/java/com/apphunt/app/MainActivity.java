@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
@@ -39,11 +38,12 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.smart_rate.variables.RateDialogVariable;
-import com.apphunt.app.ui.fragments.BaseFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
@@ -102,8 +102,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void initUI() {
         initToolbarAndNavigationDrawer();
-
         ActionBarUtils.getInstance().init(this);
+        addBackStackChangeListener();
+        showStartFragments(getIntent());
+    }
+
+    private int backStackCount = 0;
+
+    private boolean isFragmentAdded(int currentBackStackCount) {
+        return backStackCount < currentBackStackCount && currentBackStackCount > 1;
+    }
+
+    private void addBackStackChangeListener() {
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -111,27 +121,45 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-                if (fragmentManager.getBackStackEntryCount() > 0) {
+                int currentBackStackCount = fragmentManager.getBackStackEntryCount();
+                if (isFragmentAdded(currentBackStackCount)) {
+                    FragmentManager.BackStackEntry previousEntry = fragmentManager.getBackStackEntryAt(currentBackStackCount - 2);
+                    Fragment previousFragment = fragmentManager.findFragmentByTag(previousEntry.getName());
+                    if (previousFragment instanceof BackStackFragment) {
+                        ((BackStackFragment) previousFragment).unregisterForEvents();
+                    }
+                }
+
+                if (currentBackStackCount > 0) {
+                    FragmentManager.BackStackEntry e = fragmentManager.getBackStackEntryAt(currentBackStackCount - 1);
+                    Fragment topFragment = fragmentManager.findFragmentByTag(e.getName());
+                    if (topFragment instanceof BackStackFragment) {
+                        ((BackStackFragment) topFragment).registerForEvents();
+                    }
+
                     NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
                     getSupportActionBar().collapseActionView();
                     BusProvider.getInstance().post(new DrawerStatusEvent(true));
-                } else if (fragmentManager.getBackStackEntryCount() == 0) {
+                } else if (currentBackStackCount == 0) {
                     NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
                     BusProvider.getInstance().post(new DrawerStatusEvent(false));
                 }
 
-                BaseFragment fragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
-                if (fragment.getTitle() == 0) {
-                    getSupportActionBar().setTitle(fragment.getStringTitle());
-                } else {
-                    getSupportActionBar().setTitle(fragment.getTitle());
-                }
+                backStackCount = currentBackStackCount;
 
+                setActionBarTitle();
                 supportInvalidateOptionsMenu();
             }
         });
+    }
 
-        showStartFragments(getIntent());
+    private void setActionBarTitle() {
+        BaseFragment currentFragment = ((BaseFragment) getSupportFragmentManager().findFragmentById(R.id.container));
+        if (currentFragment.getTitle() == 0) {
+            getSupportActionBar().setTitle(currentFragment.getStringTitle());
+        } else {
+            getSupportActionBar().setTitle(currentFragment.getTitle());
+        }
     }
 
     private void initToolbarAndNavigationDrawer() {
@@ -144,7 +172,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+                if (backStackEntryCount == 0) {
                     if (!navigationDrawerFragment.isDrawerOpen()) {
                         navigationDrawerFragment.openDrawer();
                     } else {
@@ -154,7 +183,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     return;
                 }
 
-                onBackPressed();
+                for (int i = 0; i < backStackEntryCount; i++) {
+                    getSupportFragmentManager().popBackStack();
+                }
             }
         });
         navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
@@ -320,13 +351,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle().toString());
-                consumedBack = navigationDrawerFragment.getSelectedItemIndex() == Constants.TRENDING_APPS;
                 addToBackStack = true;
                 break;
             case Constants.HELP_ADD_APP:
@@ -340,19 +369,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
         }
 
-        if (position != Constants.TRENDING_APPS) {
-            consumedBack = false;
-        } else {
-            consumedBack = true;
+        if(fragment == null) {
+            return;
         }
-        previousPosition = position;
 
+        consumedBack = position == Constants.TRENDING_APPS;
 
         try {
             if (!addToBackStack) {
                 getSupportActionBar().setTitle(fragment.getTitle());
-                navigationDrawerFragment.markSelectedPosition(position);
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragment.getFragmentTag()).commit();
+                navigationDrawerFragment.markSelectedPosition(position);
+                previousPosition = position;
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0 ||
                         !getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1)
@@ -363,6 +391,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                             .addToBackStack(fragment.getFragmentTag())
                             .commit();
                 }
+                navigationDrawerFragment.markSelectedPosition(previousPosition);
             }
         } catch (Exception e) {
             Crashlytics.logException(e);

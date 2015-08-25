@@ -2,12 +2,14 @@ package com.apphunt.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +32,14 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppDetailsApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.VotersAdapter;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
+import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.DownloadButton;
@@ -48,6 +52,7 @@ import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+import com.wefika.flowlayout.FlowLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,10 +64,9 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BaseFragment {
+public class AppDetailsFragment extends BackStackFragment {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
@@ -74,7 +78,7 @@ public class AppDetailsFragment extends BaseFragment {
 
     private Animation enterAnimation;
     private View view;
-    private Activity activity;
+    private AppCompatActivity activity;
     private VotersAdapter votersAdapter;
     private JHexedPhotoView hexedView;
 
@@ -93,14 +97,11 @@ public class AppDetailsFragment extends BaseFragment {
     @InjectView(R.id.desc)
     TextView appDescription;
 
-    @InjectView(R.id.creator_avatar)
-    CircleImageView creator;
-
     @InjectView(R.id.vote_btn)
     AppVoteButton voteBtn;
 
-    @InjectView(R.id.creator_name)
-    TextView creatorName;
+    @InjectView(R.id.box_name)
+    CreatorView creator;
 
     @InjectView(R.id.rating)
     TextView rating;
@@ -120,15 +121,18 @@ public class AppDetailsFragment extends BaseFragment {
     @InjectView(R.id.hexedView)
     LinearLayout hexedPhotoView;
 
+    @InjectView(R.id.tags_container)
+    FlowLayout tagsContainer;
+
     @InjectView(R.id.comments)
     LinearLayout commentsList;
 
     @InjectView(R.id.loading_comments)
     CircularProgressBar loadingComments;
 
-    private Handler handler = new Handler();
     public static final int MIN_HEX_IMAGES_SIZE = 15;
     private boolean shouldStopLoading = false;
+    private Comments comments;
     //endregion
 
     @Override
@@ -184,13 +188,7 @@ public class AppDetailsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
+        shouldStopLoading = false;
     }
 
     @Override
@@ -212,7 +210,7 @@ public class AppDetailsFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
+        this.activity = (AppCompatActivity) activity;
 
     }
 
@@ -238,7 +236,10 @@ public class AppDetailsFragment extends BaseFragment {
     @Subscribe
     public void onAppDetailsLoaded(LoadAppDetailsApiEvent event) {
         baseApp = event.getBaseApp();
+        populateAppDetails();
+    }
 
+    private void populateAppDetails() {
         if (!isAdded() || baseApp == null) {
             return;
         }
@@ -246,11 +247,8 @@ public class AppDetailsFragment extends BaseFragment {
         baseApp.setPosition(itemPosition);
         voteBtn.setBaseApp(baseApp);
 
-        Picasso.with(activity)
-                .load(baseApp.getCreatedBy().getProfilePicture())
-                .into(creator);
-        creatorName.setText(String.format(getString(R.string.posted_by),
-                baseApp.getCreatedBy().getUsername()));
+        User createdBy = baseApp.getCreatedBy();
+        creator.setUser(createdBy.getId(), createdBy.getProfilePicture(), createdBy.getName());
 
         Picasso.with(activity)
                 .load(baseApp.getIcon())
@@ -269,6 +267,45 @@ public class AppDetailsFragment extends BaseFragment {
 
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 
+        populateVotersHexView();
+
+        populateTags();
+    }
+
+    private void populateTags() {
+        for(final String tag : baseApp.getTags()) {
+            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_flat_blue_button, tagsContainer, false);
+            TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tv_download));
+            textView.setText(tag);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FlurryAgent.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>(){{
+                        put("Tag", tag);
+                    }});
+                    activity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.container, SearchAppsFragment.newInstance(tag), Constants.TAG_SEARCH_APPS_FRAGMENT)
+                            .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
+                            .commit();
+                }
+            });
+
+            Resources resources = getResources();
+            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_desc_ic_download_size));
+            params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
+            textView.setPadding(20, 0, 20, 0);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                textView.setElevation(0);
+            }
+
+            textView.setTypeface(Typeface.DEFAULT);
+            textView.setLayoutParams(params);
+            tagsContainer.addView(tagButtonView);
+        }
+    }
+
+    private void populateVotersHexView() {
         new AsyncTask<Void, Void, Void>() {
             final List<Bitmap> icons = new ArrayList<Bitmap>();
             @Override
@@ -319,12 +356,16 @@ public class AppDetailsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
+        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
         if (event.shouldReload()  || fragment != null) {
             return;
         }
 
-        Comments comments = event.getComments();
+        comments = event.getComments();
+        populateComments();
+    }
+
+    private void populateComments() {
         if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
             loadingComments.setVisibility(View.GONE);
             commentsAction.setText("WRITE A COMMENT :)");
@@ -334,7 +375,7 @@ public class AppDetailsFragment extends BaseFragment {
             commentsList.setVisibility(View.VISIBLE);
         }
 
-        CommentsAdapter commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), null);
+        CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null);
         int size = comments.getComments().size() < MAX_DISPLAYED_COMMENTS ? comments.getComments().size() : MAX_DISPLAYED_COMMENTS;
         for (int i = 0; i < size; i++) {
             View view = commentsAdapter.getView(i, null, commentsList);
@@ -347,7 +388,6 @@ public class AppDetailsFragment extends BaseFragment {
             commentsList.addView(view);
         }
     }
-
 
 
     @OnClick(R.id.share)
@@ -364,8 +404,8 @@ public class AppDetailsFragment extends BaseFragment {
             return;
         }
 
-        if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_add_to_collection);
+        if(!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(activity, false, R.string.login_info_add_to_collection);
             return;
         }
 
@@ -381,7 +421,7 @@ public class AppDetailsFragment extends BaseFragment {
             return;
         }
 
-        getActivity().getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, CommentsFragment.newInstance(baseApp.getId()), Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
                 .commit();

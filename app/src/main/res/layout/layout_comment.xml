@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
@@ -15,7 +17,7 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"/>
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,10 +28,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
         android:textStyle="bold"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-    <TextView
-        android:id="@+id/text"
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/score_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
@@ -38,19 +41,20 @@
         android:layout_toLeftOf="@+id/bg_vote"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-    <TextView
+    <com.apphunt.app.ui.views.widgets.AHTextView
         android:id="@+id/reply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/avatar"
         android:layout_toEndOf="@+id/avatar"
-        android:layout_below="@+id/text"
+        android:layout_below="@+id/score_text"
         android:layout_marginLeft="15dp"
         android:text="Reply"
         android:textColor="@color/bg_primary"
-        />
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
     <RelativeLayout
         android:id="@+id/bg_vote"
@@ -66,6 +70,6 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:focusable="false"
-            android:layout_marginLeft="@dimen/list_item_vote_margin" />
+            android:layout_marginLeft="@dimen/list_item_vote_margin"/>
     </RelativeLayout>
 </RelativeLayout>

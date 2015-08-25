@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,8 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -54,11 +53,9 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(!app.getCategories().isEmpty()) {
             viewHolderItem.category.setText(app.getCategories().get(0));
         }
-        Picasso.with(ctx)
-                .load(app.getCreatedBy().getProfilePicture())
-                .placeholder(R.drawable.placeholder_avatar)
-                .into(viewHolderItem.creatorImageView);
-        viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
+
+        User createdBy = app.getCreatedBy();
+        viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
         viewHolderItem.vote.setBaseApp((App) app);
 
         viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {

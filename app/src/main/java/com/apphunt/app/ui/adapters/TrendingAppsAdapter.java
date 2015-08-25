@@ -21,6 +21,7 @@ import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -28,6 +29,7 @@ import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
+import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -45,7 +47,6 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -219,11 +220,10 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(!app.getCategories().isEmpty()) {
                 viewHolderItem.category.setText(app.getCategories().get(0));
             }
-            Picasso.with(ctx)
-                    .load(app.getCreatedBy().getProfilePicture())
-                    .placeholder(R.drawable.placeholder_avatar)
-                    .into(viewHolderItem.creatorImageView);
-            viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
+
+            User createdBy = app.getCreatedBy();
+            viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
+
             viewHolderItem.vote.setBaseApp((App) app);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
@@ -301,11 +301,9 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @InjectView(R.id.category)
         TextView category;
 
-        @InjectView(R.id.creator_avatar)
-        CircleImageView creatorImageView;
 
-        @InjectView(R.id.creator_name)
-        TextView creatorUsername;
+        @InjectView(R.id.creator_container)
+        CreatorView creatorView;
 
         @InjectView(R.id.btn_vote)
         AppVoteButton vote;

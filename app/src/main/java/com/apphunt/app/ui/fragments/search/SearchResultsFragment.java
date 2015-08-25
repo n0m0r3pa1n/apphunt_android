@@ -23,12 +23,12 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -43,7 +43,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 /**
  * Created by nmp on 15-8-11.
  */
-public class SearchResultsFragment extends BaseFragment {
+public class SearchResultsFragment extends BackStackFragment {
     public static final String TAG = SearchResultsFragment.class.getSimpleName();
     public static final String QUERY = "QUERY";
     public static final int COLLECTIONS_COUNT = 1;
@@ -75,7 +75,6 @@ public class SearchResultsFragment extends BaseFragment {
 
     private CollectionsAdapter collectionsAdapter;
     private TrendingAppsAdapter trendingAppsAdapter;
-    private String searchTerm;
 
     public static SearchResultsFragment newInstance(String query) {
         SearchResultsFragment fragment = new SearchResultsFragment();
@@ -94,16 +93,8 @@ public class SearchResultsFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
-        this.searchTerm = getArguments().getString(QUERY);
-        updateQuery(searchTerm);
+        query = getArguments().getString(QUERY);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Nullable
@@ -113,7 +104,7 @@ public class SearchResultsFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         apps.setItemAnimator(new DefaultItemAnimator());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         apps.setLayoutManager(layoutManager);
         apps.setHasFixedSize(true);
 
@@ -139,7 +130,7 @@ public class SearchResultsFragment extends BaseFragment {
         searchMenuItem.setVisible(true);
         searchMenuItem.expandActionView();
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
-        searchView.setQuery(searchTerm, false);
+        searchView.setQuery(query, false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -148,11 +139,10 @@ public class SearchResultsFragment extends BaseFragment {
                 params.put("query", s);
                 FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
 
-                updateQuery(s);
-
                 if (trendingAppsAdapter != null) trendingAppsAdapter.resetAdapter();
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
 
+                query = s;
                 ApiClient.getClient(activity).getAppsByTags(query, 1, APPS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
                 ApiClient.getClient(activity).getCollectionsByTags(query, 1, COLLECTIONS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
 
@@ -168,7 +158,7 @@ public class SearchResultsFragment extends BaseFragment {
     }
 
     private boolean isSearchShowing() {
-        return getActivity().getSupportFragmentManager().getBackStackEntryCount() > 1;
+        return activity.getSupportFragmentManager().getBackStackEntryCount() > 1;
     }
 
     @Override
@@ -180,7 +170,7 @@ public class SearchResultsFragment extends BaseFragment {
     @OnClick(R.id.more_apps)
     public void moreApps() {
         ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, SearchAppsFragment.newInstance(query))
+                .add(R.id.container, SearchAppsFragment.newInstance(query), Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .commit();
     }
@@ -188,7 +178,7 @@ public class SearchResultsFragment extends BaseFragment {
     @OnClick(R.id.more_collections)
     public void moreCollections() {
         ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, SearchCollectionsFragment.newInstance(query))
+                .add(R.id.container, SearchCollectionsFragment.newInstance(query), Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .commit();
     }
@@ -226,7 +216,7 @@ public class SearchResultsFragment extends BaseFragment {
             collectionsContainer.setVisibility(View.GONE);
         } else {
             collectionsContainer.setVisibility(View.VISIBLE);
-            collectionsAdapter = new CollectionsAdapter(getActivity() ,event.getCollections().getCollections());
+            collectionsAdapter = new CollectionsAdapter(activity ,event.getCollections().getCollections());
             collections.setAdapter(collectionsAdapter);
         }
         setSearchResults(appsCount, totalCount);
@@ -244,16 +234,5 @@ public class SearchResultsFragment extends BaseFragment {
 
     private boolean isResultFromQueriesEmpty() {
         return appsCount != -1 && collectionsCount != -1 && appsCount == 0 && collectionsCount == 0;
-    }
-
-    private void updateQuery(String q) {
-        String[] tags = q.split(" ");
-        String query = "?";
-
-        for (String tag : tags) {
-            query += "names[]=" + tag + "&";
-        }
-
-        this.query = query;
     }
 }

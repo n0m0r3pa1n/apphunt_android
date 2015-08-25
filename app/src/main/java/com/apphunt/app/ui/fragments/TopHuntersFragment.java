@@ -16,6 +16,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionApiEvent;
 import com.apphunt.app.ui.adapters.rankings.TopHuntersAdapter;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;

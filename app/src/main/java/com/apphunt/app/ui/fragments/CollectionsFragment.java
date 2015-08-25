@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Spinner;
 
 import com.apphunt.app.R;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -21,7 +16,9 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsPagerAdapter;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
@@ -43,13 +40,16 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     private CollectionsPagerAdapter pagerAdapter;
     private int title;
+    private  String creatorId;
+    private Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.inject(this, view);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        creatorId = LoginProviderFactory.get(activity).isUserLoggedIn() ? LoginProviderFactory.get(activity).getUser().getId() : null;
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         initTabs();
 
         pager.setOffscreenPageLimit(1);
@@ -84,6 +84,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.activity = activity;
         BusProvider.getInstance().register(this);
     }
 
@@ -98,7 +99,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public void onUserLogin(LoginEvent event) {
         pagerAdapter = null;
         pager.setAdapter(null);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         pager.setAdapter(pagerAdapter);
     }
 
@@ -106,7 +107,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     public void onUserLogout(LogoutEvent event) {
         pagerAdapter = null;
         pager.setAdapter(null);
-        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager());
+        pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
         pager.setAdapter(pagerAdapter);
     }
 
@@ -167,12 +168,14 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     }
 
     @OnClick(R.id.add_collection)
-    public void openCreateCollectionFragment() {
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
+    public void openCreateCollectionFragment(View view) {
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            NavUtils.getInstance((AppCompatActivity) activity).presentCreateCollectionFragment();
         } else {
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_create_collection);
+            LoginUtils.showLoginFragment(activity, false, R.string.login_info_create_collection);
         }
+
+        SoundsUtils.performHapticFeedback(view);
     }
 
     private void updateActionBarTitle(int position) {

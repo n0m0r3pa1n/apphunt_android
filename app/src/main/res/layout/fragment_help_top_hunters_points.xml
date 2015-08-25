@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Top Hunters is a monthly ranking of the most active users. Various actions are considered to make the final score:"
             android:textSize="14sp"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
-
-        <LinearLayout
             android:orientation="horizontal"
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_margin="10dp">
+
             <ImageView
                 android:src="@drawable/ic_android"
-                style="@style/HelpTopHuntersImage"
-                />
+                style="@style/HelpTopHuntersImage"/>
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
                 android:text="add approved app - 40 points"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
             <ImageView
-                style="@style/HelpTopHuntersImage"
                 android:src="@drawable/ic_message"
+                style="@style/HelpTopHuntersImage"/>
 
-                />
-
-            <TextView
-                android:text="write useful comment - 50 points"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:text="write useful comment - 50 points"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </LinearLayout>
 
         <LinearLayout
@@ -56,31 +61,54 @@
             android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:src="@drawable/ic_hunter_votes"
-                style="@style/HelpTopHuntersImage"
-                />
+                style="@style/HelpTopHuntersImage"/>
 
-            <TextView
-                android:text="vote app or comment - 10 points"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:text="vote app or comment - 10 points"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/ic_collection_top_hunters"
+                style="@style/HelpTopHuntersImage"/>
+
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                android:text="create collection - 50 points"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
+        </LinearLayout>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="At the beginning of each month the results are reset and statistics start again."
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Each logged in user who performs some of the above mentioned actions is automatically added in the rankings."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <com.apphunt.app.ui.views.AlertView
+        <com.apphunt.app.ui.views.widgets.AlertView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:text="To participate in the rankings, you must be logged in"/>

@@ -10,6 +10,8 @@ public class App extends BaseApp implements Serializable {
 
     private List<AppVote> votes = new ArrayList<>();
 
+    private List<String> tags = new ArrayList<>();
+
     public List<AppVote> getVotes() {
         return votes;
     }
@@ -18,10 +20,19 @@ public class App extends BaseApp implements Serializable {
         this.votes = votes;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public String toString() {
         return "App{" +
                 "votes=" + votes +
+                "tags=" + tags +
                 '}';
     }
 }

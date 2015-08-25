@@ -23,11 +23,10 @@ import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
-import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -45,13 +44,17 @@ import butterknife.InjectView;
  */
 public class MyCollectionsFragment extends BaseFragment implements OnItemClickListener {
     public static final String TAG = MyCollectionsFragment.class.getSimpleName();
+    private static final String CREATOR_ID = "CREATOR_ID";
 
     private AppCompatActivity activity;
     private View view;
 
     private String appId;
+    private String creatorId;
+    private String userId;
+    private int currentPage = 0;
     private List<AppsCollection> collections;
-    int currentPage = 0;
+
 
     private SelectCollectionAdapter selectCollectionAdapter;
 
@@ -61,8 +64,13 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
 
-    public static MyCollectionsFragment newInstance() {
-        return new MyCollectionsFragment();
+    public static MyCollectionsFragment newInstance(String creatorId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CREATOR_ID, creatorId);
+        MyCollectionsFragment fragment = new MyCollectionsFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Nullable
@@ -70,6 +78,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlurryAgent.logEvent(TrackingEvents.UserViewedMyCollections);
         view = inflater.inflate(R.layout.fragment_my_collections, container, false);
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            userId = LoginProviderFactory.get(activity).getUser().getId();
+        }
         initUI();
 
         return view;
@@ -77,7 +88,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void initUI() {
         ButterKnife.inject(this, view);
-        ActionBarUtils.getInstance().setTitle(R.string.title_my_collections);
+        if(getArguments() != null && getArguments().containsKey(CREATOR_ID)) {
+            creatorId = getArguments().getString(CREATOR_ID);
+        }
 
         getCollections();
 
@@ -91,13 +104,8 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void getCollections() {
         currentPage++;
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            ApiClient.getClient(activity).getMyCollections(LoginProviderFactory.get(activity).getUser().getId(),
-                    currentPage, Constants.PAGE_SIZE);
-            vsNoCollection.setVisibility(View.GONE);
-        } else {
-            vsNoCollection.setVisibility(View.VISIBLE);
-        }
+        ApiClient.getClient(activity).getUserCollections(creatorId, userId,
+                currentPage, Constants.PAGE_SIZE);
     }
 
     @Override

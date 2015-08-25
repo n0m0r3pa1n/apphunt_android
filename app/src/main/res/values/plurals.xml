@@ -5,4 +5,19 @@
         <item quantity="one">1 more app</item>
         <item quantity="other">%d more apps</item>
     </plurals>
+    <plurals
+        name="apps">
+        <item quantity="one">1 app</item>
+        <item quantity="other">%d apps</item>
+    </plurals>
+    <plurals
+        name="collections">
+        <item quantity="one">1 collection</item>
+        <item quantity="other">%d collections</item>
+    </plurals>
+    <plurals
+        name="comments">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
 </resources>

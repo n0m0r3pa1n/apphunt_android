@@ -1,6 +1,7 @@
 package com.apphunt.app.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.Serializable;
@@ -11,7 +12,8 @@ public class GsonInstance {
     private static Gson sGson;
 
     public static void init() {
-        sGson = new Gson();
+        GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+        sGson = builder.create();
     }
 
     public static <T> T fromJson(String json, Class<T> classOfT) {

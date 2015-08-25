@@ -33,8 +33,8 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
-import com.apphunt.app.ui.fragments.BaseFragment;
-import com.apphunt.app.ui.views.CustomTwitterLoginButton;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
 import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
 import com.apphunt.app.ui.views.widgets.CustomGooglePlusButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -77,7 +77,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LoginFragment extends BaseFragment implements OnConnectionFailedListener, ConnectionCallbacks {
+public class LoginFragment extends BackStackFragment implements OnConnectionFailedListener, ConnectionCallbacks {
 
     private static final String TAG = LoginFragment.class.getName();
 
@@ -160,7 +160,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                                 if(TextUtils.isEmpty(id)) {
                                     return;
                                 }
-                                setUserFbProfilePictureAndLogin(user, id);
+                                setUserFbProfiledDataAndLogin(user, id);
                             }
                         }).executeAsync();
             }
@@ -247,7 +247,7 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         return view;
     }
 
-    private void setUserFbProfilePictureAndLogin(final User user, String id) {
+    private void setUserFbProfiledDataAndLogin(final User user, final String id) {
         Bundle bundle = new Bundle();
         bundle.putBoolean("redirect", false);
         bundle.putString("type", "large");
@@ -266,10 +266,41 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         if(!TextUtils.isEmpty(pictureUrl)) {
                             user.setProfilePicture(pictureUrl);
+                            setUserCover(id, user);
+                        }
+                    }
+                }
+        ).executeAsync();
+    }
+
+    private void setUserCover(String id, final User user) {
+        Bundle params = new Bundle();
+        params.putString("fields", "cover");
+        params.putString("type", "large");
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/"+id,
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+
+                        JSONObject json = response.getJSONObject();
+                        String coverUrl = null;
+                        try {
+                            coverUrl = json.getJSONObject("cover").getString("source");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if(!TextUtils.isEmpty(coverUrl)) {
+                            user.setCoverPicture(coverUrl);
                             user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
+                            user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                             LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
+
                             ApiClient.getClient(getActivity()).createUser(user);
                             FlurryAgent.logEvent(TrackingEvents.UserFacebookLogin);
                         }
@@ -312,7 +343,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ActionBarActivity) activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
@@ -342,14 +372,11 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
     public void onDetach() {
         super.onDetach();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
-        BusProvider.getInstance().unregister(this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.e(TAG, requestCode + " " + resultCode);
 
         if (isTwitterLogin) {
             twitterLoginBtn.onActivityResult(requestCode, resultCode,
@@ -436,7 +463,6 @@ public class LoginFragment extends BaseFragment implements OnConnectionFailedLis
         try {
             connectionResult.startResolutionForResult(activity, Constants.GPLUS_SIGN_IN);
         } catch (IntentSender.SendIntentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

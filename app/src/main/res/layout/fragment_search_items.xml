@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_secondary">
 
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
@@ -11,10 +11,19 @@
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        style="@style/CircularThemeProgressBar" />
+        style="@style/CircularThemeProgressBar"/>
 
     <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
+
+    <ViewStub
+        android:id="@+id/vs_no_apps"
+        android:inflatedId="@+id/vs_no_apps"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:layout="@layout/layout_no_apps"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -2,12 +2,11 @@
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/vote"
-    android:focusable="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:textSize="@dimen/details_box_vote_text"
     android:text="0"
+    android:textSize="@dimen/details_box_vote_text"
     android:textColor="@color/bg_primary"
-    android:background="@drawable/btn_vote"
-    />
+    android:gravity="center"
+    android:focusable="false"
+    android:background="@drawable/btn_vote"/>

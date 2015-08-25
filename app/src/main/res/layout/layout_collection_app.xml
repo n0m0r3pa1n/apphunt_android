@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="160dp"
@@ -16,39 +18,40 @@
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
             android:scaleType="fitCenter"
-            android:cropToPadding="true" />
+            android:cropToPadding="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:padding="5dp"
             android:orientation="vertical"
-            android:background="@color/collection_transparent_background"
-            android:padding="5dp">
+            android:background="@color/collection_transparent_background">
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textColor="@android:color/white"
                 android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textColor="@android:color/white"
+                app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/created_by"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete"
             android:layout_alignParentRight="true"
-            android:visibility="gone" />
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -19,6 +19,7 @@ import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -65,13 +66,23 @@ public class AppVoteButton extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        BusProvider.getInstance().register(this);
+        try {
+            BusProvider.getInstance().register(this);
+        } catch(Exception e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        BusProvider.getInstance().unregister(this);
+        try {
+            BusProvider.getInstance().unregister(this);
+        } catch(Exception e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
     }
 
     protected LayoutInflater getLayoutInflater() {

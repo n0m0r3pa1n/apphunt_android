@@ -12,13 +12,14 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class SearchCollectionsFragment extends BaseFragment implements OnItemClickListener{
+public class SearchCollectionsFragment extends BackStackFragment implements OnItemClickListener{
     public static final String QUERY = "QUERY";
     @InjectView(R.id.items)
     ScrollRecyclerView items;
@@ -49,24 +50,13 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
         query = getArguments().getString(QUERY);
+        ActionBarUtils.getInstance().setTitle(query);
         getCollections();
         items.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
@@ -85,8 +75,8 @@ public class SearchCollectionsFragment extends BaseFragment implements OnItemCli
     }
 
     @Override
-    public int getTitle() {
-        return R.string.title_search_collections;
+    public String getStringTitle() {
+        return query;
     }
 
     @Override
