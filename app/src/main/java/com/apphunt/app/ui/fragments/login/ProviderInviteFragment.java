@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
+import com.apphunt.app.auth.GooglePlusLoginProvider;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,7 +25,10 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
@@ -49,12 +54,19 @@ public class ProviderInviteFragment extends BaseFragment implements ConnectionCa
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        googleApiClient = new GoogleApiClient.Builder(activity)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .build();
+//        googleApiClient = new GoogleApiClient.Builder(activity)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(Plus.API)
+//                .addScope(new Scope(Scopes.PROFILE))
+//                .build();
+
+        ((GooglePlusLoginProvider) LoginProviderFactory.get(activity)).loadFriends(new GooglePlusLoginProvider.OnResultListener() {
+            @Override
+            public void onFriendsReceived(ArrayList<Person> people) {
+                Log.e(TAG, people.toString());
+            }
+        });
     }
 
     @Nullable
@@ -75,7 +87,7 @@ public class ProviderInviteFragment extends BaseFragment implements ConnectionCa
     @Override
     public void onStart() {
         super.onStart();
-        googleApiClient.connect();
+//        googleApiClient.connect();
     }
 
     @Override
