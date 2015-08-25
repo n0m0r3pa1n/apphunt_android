@@ -12,7 +12,6 @@
         android:id="@+id/header_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/show_comments"
         android:paddingLeft="@dimen/header_comments_padding_left"
         android:paddingRight="@dimen/header_comments_padding_left"
         android:paddingTop="@dimen/header_comments_padding_top"
