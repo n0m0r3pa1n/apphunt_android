@@ -23,7 +23,7 @@ public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0: fragment = AllCollectionsFragment.newInstance();
                 break;
-            case 1: fragment = FavouriteCollectionsFragment.newInstance();
+            case 1: fragment = FavouriteCollectionsFragment.newInstance(creatorId);
                 break;
             case 2:
                 fragment = MyCollectionsFragment.newInstance(creatorId);

@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments.collections.tabs;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -36,8 +38,11 @@ import butterknife.InjectView;
  */
 public class FavouriteCollectionsFragment extends BaseFragment {
     public static final String TAG = FavouriteCollectionsFragment.class.getSimpleName();
+    private static final String CREATOR_ID = "CREATOR_ID";
+
     private CollectionsAdapter adapter;
     private int currentPage = 0;
+    private String creatorId;
 
     @InjectView(R.id.all_collections)
     ScrollListView allCollections;
@@ -52,8 +57,13 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         return R.string.title_favourite_collection;
     }
 
-    public static FavouriteCollectionsFragment newInstance() {
-        return new FavouriteCollectionsFragment();
+    public static FavouriteCollectionsFragment newInstance(String creatorId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CREATOR_ID, creatorId);
+        FavouriteCollectionsFragment fragment = new FavouriteCollectionsFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Nullable
@@ -63,6 +73,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 
+        creatorId = getArguments().getString(CREATOR_ID);
         getFavouriteCollections();
 
         allCollections.setOnEndReachedListener(new OnEndReachedListener() {
@@ -75,14 +86,18 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     private void getFavouriteCollections() {
+        currentPage++;
         if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            currentPage++;
-            ApiClient.getClient(getActivity()).getFavouriteCollections(
+            ApiClient.getClient(getActivity()).getFavouriteCollections(creatorId,
                     LoginProviderFactory.get(getActivity()).getUser().getId(), currentPage, Constants.PAGE_SIZE);
             hideEmptyView();
-        } else {
+            return;
+        } else if(TextUtils.isEmpty(creatorId)) {
             showEmptyView();
+            return;
         }
+
+        ApiClient.getClient(getActivity()).getFavouriteCollections(creatorId, null, currentPage, Constants.PAGE_SIZE);
     }
 
     private void hideEmptyView() {
@@ -120,7 +135,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionUnfavourited(UnfavouriteCollectionApiEvent event) {
-        if (adapter != null) {
+        if (adapter != null && creatorId.equals(LoginProviderFactory.get(getActivity()).getUser().getId())) {
             adapter.removeCollection(event.getCollectionId());
             if(adapter.getCount() == 0) {
                 showEmptyView();

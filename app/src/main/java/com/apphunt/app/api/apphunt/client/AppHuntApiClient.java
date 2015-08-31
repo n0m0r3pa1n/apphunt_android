@@ -3,6 +3,7 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -204,8 +205,13 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getFavouriteCollections(String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(userId, page, pageSize, listener));
+    public void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize) {
+        Log.d(TAG, "getFavouriteCollections " + favouritedBy + " " + userId);
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, userId, page, pageSize, listener));
+        }
     }
 
     @Override

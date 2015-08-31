@@ -50,7 +50,7 @@ public interface AppHuntApi {
 
     void getTopHuntersCollection(String criteria);
 
-    void getFavouriteCollections(String userId, int page, int pageSize);
+    void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize);
 
     void getAllCollections(String userId, String sortBy, int page, int pageSize);
 

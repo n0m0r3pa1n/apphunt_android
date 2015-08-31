@@ -10,8 +10,13 @@ import com.apphunt.app.event_bus.events.api.collections.GetFavouriteCollectionsA
  * Created by nmp on 15-6-29.
  */
 public class GetFavouriteCollectionsRequest extends BaseGetRequest<AppsCollections> {
-    public GetFavouriteCollectionsRequest(String userId, int page, int pageSize, Response.ErrorListener listener) {
-        super(BASE_URL + "/app-collections/favourites?userId=" + userId + "&page=" + page + "&pageSize=" + pageSize, listener);
+
+    public GetFavouriteCollectionsRequest(String favouritedBy, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+favouritedBy+"/favourite-collections?page=" + page + "&pageSize=" + pageSize, listener);
+    }
+
+    public GetFavouriteCollectionsRequest(String favouritedBy, String userId, int page, int pageSize, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/"+favouritedBy+"/favourite-collections?userId=" + userId + "&page=" + page + "&pageSize=" + pageSize, listener);
     }
 
     @Override
