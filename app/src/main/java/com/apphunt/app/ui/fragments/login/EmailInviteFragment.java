@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.DeepLinkingUtils;
 import com.apphunt.app.utils.StringUtils;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,6 +39,7 @@ import butterknife.OnClick;
  * * NaughtySpirit 2015
  */
 public class EmailInviteFragment extends BaseFragment {
+    private static final String TAG = EmailInviteFragment.class.getSimpleName();
 
     private AppCompatActivity activity;
 
@@ -83,10 +90,21 @@ public class EmailInviteFragment extends BaseFragment {
             Intent email = new Intent(Intent.ACTION_SEND);
             email.putExtra(Intent.EXTRA_EMAIL, new String[]{ emailStr});
             email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_invite_title));
-            email.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_invite_body));
+
+            ArrayList<DeepLinkingUtils.DeepLinkingParam> params = new ArrayList<>();
+            params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_ID, LoginProviderFactory.get(activity).getUser().getId()));
+            params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_NAME, LoginProviderFactory.get(activity).getUser().getName()));
+            params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_PROFILE_IMAGE_URL, LoginProviderFactory.get(activity).getUser().getProfilePicture()));
+
+            email.putExtra(Intent.EXTRA_TEXT, DeepLinkingUtils.getInstance(activity).generateShortUrl(params));
+
+            closeKeyboard(this.email);
 
             email.setType("message/rfc822");
             startActivity(Intent.createChooser(email, "Send via..."));
+
+            activity.getSupportFragmentManager().popBackStack();
+            // TODO: Present notification fragment for successful invite
         }
     }
 

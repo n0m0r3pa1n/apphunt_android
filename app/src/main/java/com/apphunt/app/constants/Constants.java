@@ -126,8 +126,8 @@ public class Constants {
         put("userComment", 104);
         put("userMentioned", 105);
     }};
-    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
-    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+    public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
+    public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
 
     public static final int TRENDING_APPS = 1;
     public static final int TOP_HUNTERS = 2;
@@ -175,4 +175,10 @@ public class Constants {
             return value;
         }
     }
+
+    // DeepLinking values
+    public static final String KEY_SENDER_ID = "sender_id";
+    public static final String KEY_SENDER_NAME = "sender_name";
+    public static final String KEY_SENDER_PROFILE_IMAGE_URL = "sender_profile_image_url";
+
 }

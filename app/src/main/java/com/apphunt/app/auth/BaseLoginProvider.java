@@ -9,15 +9,18 @@ import android.text.TextUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.auth.models.Friend;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.fragments.login.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.TrackingEvents;
 import com.flurry.android.FlurryAgent;
+
+import java.util.ArrayList;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -26,6 +29,10 @@ import com.flurry.android.FlurryAgent;
 public abstract class BaseLoginProvider implements LoginProvider {
 
     private final Activity activity;
+
+    public interface OnFriendsResultListener {
+        void onFriendsReceived(ArrayList<Friend> friends);
+    }
 
     public BaseLoginProvider(Activity activity) {
         this.activity = activity;
@@ -101,10 +108,15 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void presentInvitesScreen() {
+        ((AppCompatActivity) activity).getSupportFragmentManager().popBackStack();
         ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new InvitesFragment(), "Invite")
+                .add(R.id.container, new InvitesFragment(), "Invite")
                 .addToBackStack("Invite")
                 .commit();
+    }
+
+    @Override
+    public void loadFriends(BaseLoginProvider.OnFriendsResultListener listener) {
     }
 
     protected Activity getActivity() {

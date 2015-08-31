@@ -151,9 +151,9 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                 try {
                                     id = json.getString("id");
                                     user.setEmail(json.getString("email"));
-                                    String name = json.getString("name");
-                                    user.setName(name);
-                                    user.setUsername(name);
+                                    user.setName(json.getString("name"));
+                                    user.setUsername(json.getString("name"));
+                                    Log.e(TAG, user.toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

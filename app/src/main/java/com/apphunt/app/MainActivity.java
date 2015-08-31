@@ -61,9 +61,13 @@ import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 
@@ -255,6 +259,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         showStartFragments(intent);
+        this.setIntent(intent);
     }
 
     private boolean isStartedFromShareIntent(Intent intent) {
@@ -465,6 +470,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onStart() {
         super.onStart();
         AppSpice.onStart(this);
+
+        Branch branch = Branch.getInstance();
+        branch.initSession(new Branch.BranchReferralInitListener() {
+            @Override
+            public void onInitFinished(JSONObject referringParams, BranchError error) {
+                if (error == null) {
+                    // params are the deep linked params associated with the link that the user clicked before showing up
+                    Log.e("BranchConfigTest", "deep link data: " + referringParams.toString());
+                }
+            }
+        }, this.getIntent().getData(), this);
     }
 
     @Override

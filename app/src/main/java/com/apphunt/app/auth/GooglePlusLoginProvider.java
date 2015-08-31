@@ -3,7 +3,9 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.apphunt.app.auth.models.Friend;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -29,11 +31,7 @@ public class GooglePlusLoginProvider extends BaseLoginProvider implements Google
     public static final String PROVIDER_NAME = "google-plus";
 
     private GoogleApiClient googleApiClient;
-    private OnResultListener listener;
-
-    public interface OnResultListener {
-        void onFriendsReceived(ArrayList<Person> people);
-    }
+    private OnFriendsResultListener listener;
 
     public GooglePlusLoginProvider(Activity activity) {
         super(activity);
@@ -47,10 +45,16 @@ public class GooglePlusLoginProvider extends BaseLoginProvider implements Google
         googleApiClient.connect();
     }
 
-    public void loadFriends(OnResultListener listener) {
-        Log.e(TAG, "loadFriends");
+
+    @Override
+    public void loadFriends(OnFriendsResultListener listener) {
         this.listener = listener;
-        Plus.PeopleApi.loadVisible(googleApiClient, "me").setResultCallback(this);
+
+        if (!googleApiClient.isConnected()) {
+            googleApiClient.connect();
+        } else {
+            Plus.PeopleApi.loadVisible(googleApiClient, "me").setResultCallback(this);
+        }
     }
 
     @Override
@@ -70,8 +74,6 @@ public class GooglePlusLoginProvider extends BaseLoginProvider implements Google
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.e(TAG, "Connected " + (listener != null) );
-
         if (listener != null) {
             Plus.PeopleApi.loadVisible(googleApiClient, "me").setResultCallback(this);
         }
@@ -89,15 +91,22 @@ public class GooglePlusLoginProvider extends BaseLoginProvider implements Google
 
     @Override
     public void onResult(People.LoadPeopleResult loadPeopleResult) {
-        ArrayList<Person> people = new ArrayList<>();
+        ArrayList<Friend> people = new ArrayList<>();
 
         if (loadPeopleResult.getStatus().getStatusCode() == CommonStatusCodes.SUCCESS) {
             PersonBuffer personBuffer = loadPeopleResult.getPersonBuffer();
             try {
                 int count = personBuffer.getCount();
                 Log.e(TAG, "Friends count: " + count);
+                Toast.makeText(getActivity(), "Friends count: " + count, Toast.LENGTH_LONG).show();
                 for (int i = 0; i < count; i++) {
-                    people.add(personBuffer.get(i));
+                    Person person = personBuffer.get(i);
+                    Friend friend = new Friend();
+                    friend.setId(person.getId());
+                    friend.setName(person.getName().getFormatted());
+                    friend.setUsername(person.getNickname());
+                    friend.setProfileImage(person.getImage().getUrl());
+                    people.add(friend);
                     Log.d(TAG, "Display name: " + personBuffer.get(i).getDisplayName());
                 }
             } finally {
@@ -105,6 +114,7 @@ public class GooglePlusLoginProvider extends BaseLoginProvider implements Google
             }
         } else {
             Log.e(TAG, "Error requesting visible circles: " + loadPeopleResult.getStatus());
+            Toast.makeText(getActivity(), "Error requesting visible circles: " + loadPeopleResult.getStatus(), Toast.LENGTH_LONG).show();
         }
 
         listener.onFriendsReceived(people);

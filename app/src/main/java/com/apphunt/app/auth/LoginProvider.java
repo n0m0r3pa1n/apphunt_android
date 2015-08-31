@@ -12,4 +12,5 @@ public interface LoginProvider {
     User getUser();
     boolean isUserLoggedIn();
     String getName();
+    void loadFriends(BaseLoginProvider.OnFriendsResultListener listener);
 }

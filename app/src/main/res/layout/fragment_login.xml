@@ -76,11 +76,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="center_horizontal"
         android:text="@string/login_not_now"
         android:textColor="@android:color/white"
         android:textSize="@dimen/settings_button_dismiss_text"
         android:textAllCaps="false"
+        android:gravity="center_horizontal"
         android:background="@android:color/transparent"
         android:visibility="gone"
         app:typefacePath="fonts/OpenSans-Regular.ttf"/>

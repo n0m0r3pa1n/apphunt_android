@@ -172,4 +172,5 @@
     <string name="more_button">More</string>
     <string name="email_invite_title">email_invite_title</string>
     <string name="email_invite_body">Invite text</string>
+    <string name="sms_invite_body">Hey, %1$s invites you to AppHunt. Download it now: %2$s</string>
 </resources>

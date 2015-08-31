@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.login.EmailInviteFragment;
 import com.apphunt.app.ui.fragments.login.ProviderInviteFragment;
@@ -20,16 +21,27 @@ import com.apphunt.app.ui.fragments.login.SMSInviteFragment;
 public class InviteOptionsAdapter extends FragmentStatePagerAdapter {
 
     private final String providerName;
+    private AppCompatActivity activity;
+    private boolean withProviderInvite = false;
 
     public InviteOptionsAdapter(FragmentManager fm, AppCompatActivity activity) {
         super(fm);
 
+        this.activity = activity;
         this.providerName = LoginProviderFactory.get(activity).getName();
+
+        if (LoginProviderFactory.get(activity).getName().equals(TwitterLoginProvider.PROVIDER_NAME)) {
+            withProviderInvite = true;
+        }
     }
 
     @Override
     public Fragment getItem(int position) {
         BaseFragment fragment = null;
+
+        if (!withProviderInvite) {
+            position += 1;
+        }
 
         switch (position) {
             case 0:
@@ -47,11 +59,19 @@ public class InviteOptionsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        if (LoginProviderFactory.get(activity).getName().equals(TwitterLoginProvider.PROVIDER_NAME)) {
+            return 3;
+        } else {
+            return 2;
+        }
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
+        if (!withProviderInvite) {
+            position += 1;
+        }
+
         switch (position) {
             case 0:
                 return providerName;
