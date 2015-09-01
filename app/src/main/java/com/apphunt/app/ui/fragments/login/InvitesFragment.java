@@ -7,6 +7,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -18,7 +21,6 @@ import com.apphunt.app.ui.fragments.base.BackStackFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -30,10 +32,10 @@ public class InvitesFragment extends BackStackFragment {
 
     private AppCompatActivity activity;
     private InviteOptionsAdapter optionsAdapter;
+    private MenuItem skipAction;
 
     @InjectView(R.id.tabs)
     TabLayout tabLayout;
-
     @InjectView(R.id.options_pagers)
     ViewPager optionsPager;
 
@@ -49,17 +51,13 @@ public class InvitesFragment extends BackStackFragment {
     }
 
     private void initUI() {
-        optionsAdapter = new InviteOptionsAdapter(activity.getSupportFragmentManager(), activity);
+        setHasOptionsMenu(true);
 
+        optionsAdapter = new InviteOptionsAdapter(activity.getSupportFragmentManager(), activity);
         optionsPager.setOffscreenPageLimit(1);
         optionsPager.setAdapter(optionsAdapter);
 
         tabLayout.setupWithViewPager(optionsPager);
-    }
-
-    @OnClick(R.id.skip)
-    public void onSkipClick() {
-        activity.getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -72,8 +70,34 @@ public class InvitesFragment extends BackStackFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        skipAction = menu.findItem(R.id.action_skip);
+        skipAction.setVisible(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_skip) {
+            activity.getSupportFragmentManager().popBackStack();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public int getTitle() {
+        return R.string.invite;
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        skipAction.setVisible(false);
     }
 }

@@ -38,7 +38,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/skip"
         android:layout_below="@+id/subtitle"
         android:layout_marginTop="40dp"
         android:orientation="vertical"
@@ -61,17 +60,4 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </LinearLayout>
-    
-    <com.apphunt.app.ui.views.widgets.AHButton
-        android:id="@+id/skip"
-        android:layout_width="120dp"
-        android:layout_height="25dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:text="Skip"
-        android:textColor="@android:color/white"
-        android:textSize="15sp"
-        android:textAllCaps="true"
-        android:gravity="center"
-        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 </RelativeLayout>

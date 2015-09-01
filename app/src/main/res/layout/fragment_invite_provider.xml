@@ -17,15 +17,37 @@
         android:indeterminate="true"
         app:cpb_colors="@array/colors_sec"/>
 
+    <com.apphunt.app.ui.views.widgets.AHButton
+        android:id="@+id/select_all"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:text="Select all"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:gravity="center_vertical|left"
+        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friends_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/more_loader_layout"
-        android:paddingTop="7dp"
+        android:layout_below="@+id/select_all"
+        android:layout_above="@+id/send"
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/list_divider_height"
-        android:elevation="2dp"
-        android:layoutAnimation="@anim/list_view_entry"
-        app:layout_behavior="com.apphunt.app.ui.listeners.ScrollAwareFABBehaviour"/>
+        android:layoutAnimation="@anim/list_view_entry"/>
+
+    <com.apphunt.app.ui.views.widgets.AHButton
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:text="Send invites"
+        android:textSize="17sp"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 </RelativeLayout>

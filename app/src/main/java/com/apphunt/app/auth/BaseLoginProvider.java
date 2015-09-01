@@ -110,8 +110,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
     private void presentInvitesScreen() {
         ((AppCompatActivity) activity).getSupportFragmentManager().popBackStack();
         ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new InvitesFragment(), "Invite")
-                .addToBackStack("Invite")
+                .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
+                .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
                 .commit();
     }
 

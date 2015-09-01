@@ -128,6 +128,7 @@
     <string name="hide_all_comments">hide all</string>
     <string name="be_first">Be the first one to comment! :)</string>
     <string name="action_search">Search</string>
+    <string name="action_skip">Skip</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">Nothing was found...</string>
     <string name="details">Details</string>
@@ -166,11 +167,16 @@
     <string name="title_comments">Comments</string>
     <string name="title_update_required">Update Required</string>
     <string name="title_search">Search Results</string>
+    <string name="invite">Invitation</string>
     <string name="tags">Tags: %s</string>
     <string name="add_tag">Add Tag</string>
     <string name="title_search_collections">Collections</string>
     <string name="more_button">More</string>
-    <string name="email_invite_title">email_invite_title</string>
+    <string name="email_invite_title">AppHunt Invitation</string>
     <string name="email_invite_body">Invite text</string>
     <string name="sms_invite_body">Hey, %1$s invites you to AppHunt. Download it now: %2$s</string>
+    <string name="msg_successful_invite">You have successfully sent an invite to your friend! :)</string>
+    <string name="msg_successful_invites">You have successfully sent invites to %d of your followers! :)</string>
+    <string name="msg_failure_invites">Something gone wrong and your invites couldn\'t be sent. Please try later... :(</string>
+    <string name="msg_email_invite">Hi, \nDo you know %1$s? \n%2$s has sent you an invite to join the hunt on AppHunt: \n%3$s. :) \n\nBest regards!\nAppHunt Inc </string>
 </resources>

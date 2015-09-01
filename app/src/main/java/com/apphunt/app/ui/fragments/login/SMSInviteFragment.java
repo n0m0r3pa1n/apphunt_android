@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.view.KeyEvent;
@@ -24,6 +25,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
+import com.apphunt.app.utils.ui.NotificationsUtils;
 
 import java.util.ArrayList;
 
@@ -106,7 +108,7 @@ public class SMSInviteFragment extends BaseFragment {
                             DeepLinkingUtils.getInstance(activity).generateShortUrl(params)), null, null);
 
             activity.getSupportFragmentManager().popBackStack();
-            // TODO: Present notification fragment for successful invite
+            NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.msg_successful_invite), false, false);
         }
     }
 

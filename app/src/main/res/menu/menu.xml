@@ -12,6 +12,13 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
+        android:id="@+id/action_skip"
+        android:title="@string/action_skip"
+        android:showAsAction="always|withText"
+        app:showAsAction="always|withText"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/action_delete_collection"
         android:icon="@drawable/btn_delete"
         android:title="@string/delete_collection_menu_title"
