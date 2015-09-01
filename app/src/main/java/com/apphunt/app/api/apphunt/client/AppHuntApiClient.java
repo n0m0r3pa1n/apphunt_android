@@ -17,12 +17,14 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
+import com.apphunt.app.api.apphunt.requests.apps.FavouriteAppRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.apps.UnfavouriteAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
@@ -55,7 +57,6 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
-import com.apphunt.app.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -355,6 +356,16 @@ public class AppHuntApiClient implements AppHuntApi {
             getUserAppsRequest = new GetUserAppsRequest(creatorId, pagination, listener);
         }
         VolleyInstance.getInstance(context).addToRequestQueue(getUserAppsRequest);
+    }
+
+    @Override
+    public void favouriteApp(String appId, String userId) {
+         VolleyInstance.getInstance(context).addToRequestQueue(new FavouriteAppRequest(appId, userId, listener));
+    }
+
+    @Override
+    public void unfavouriteApp(String appId, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new UnfavouriteAppRequest(appId, userId, listener));
     }
 
     private String getFormattedQuery(String q) {

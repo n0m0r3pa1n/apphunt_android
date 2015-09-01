@@ -27,6 +27,7 @@ public class BaseApp implements Serializable {
     private String shortUrl;
     private String url;
     private boolean hasVoted;
+    private boolean isFavourite;
     private User createdBy;
     private int commentsCount;
     private ArrayList<String> categories = new ArrayList<>();
@@ -155,6 +156,14 @@ public class BaseApp implements Serializable {
 
     public void setScreenshots(ArrayList<String> screenshots) {
         this.screenshots = screenshots;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
     }
 
     @Override

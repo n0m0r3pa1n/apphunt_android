@@ -32,9 +32,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by nmp on 15-6-26.
- */
 public class CollectionsAdapter extends BaseAdapter {
     public static final String TAG = CollectionsAdapter.class.getSimpleName();
     public static final int COMPAT_PADDING = 5;

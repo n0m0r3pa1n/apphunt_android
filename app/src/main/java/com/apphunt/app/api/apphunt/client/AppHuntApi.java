@@ -89,4 +89,8 @@ public interface AppHuntApi {
     void getUserComments(String creatorId, String userId, Pagination pagination);
 
     void getUserApps(String creatorId, String userId, Pagination pagination);
+
+    void favouriteApp(String appId, String userId);
+
+    void unfavouriteApp(String appId, String userId);
 }

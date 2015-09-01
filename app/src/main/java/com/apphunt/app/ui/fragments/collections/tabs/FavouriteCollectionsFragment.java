@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.fragments.collections.tabs;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
-import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -39,10 +37,11 @@ import butterknife.InjectView;
 public class FavouriteCollectionsFragment extends BaseFragment {
     public static final String TAG = FavouriteCollectionsFragment.class.getSimpleName();
     private static final String CREATOR_ID = "CREATOR_ID";
+    public static final String FAVOURITED_BY = "FAVOURITED_BY";
 
     private CollectionsAdapter adapter;
     private int currentPage = 0;
-    private String creatorId;
+    private String favouriteBy;
 
     @InjectView(R.id.all_collections)
     ScrollListView allCollections;
@@ -69,11 +68,11 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FlurryAgent.logEvent(TrackingEvents.UserViewedFavouriteCollections);
+            FlurryAgent.logEvent(TrackingEvents.UserViewedFavouriteCollections);
         view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 
-        creatorId = getArguments().getString(CREATOR_ID);
+        favouriteBy = getArguments().getString(CREATOR_ID);
         getFavouriteCollections();
 
         allCollections.setOnEndReachedListener(new OnEndReachedListener() {
@@ -88,16 +87,16 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     private void getFavouriteCollections() {
         currentPage++;
         if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            ApiClient.getClient(getActivity()).getFavouriteCollections(creatorId,
+            ApiClient.getClient(getActivity()).getFavouriteCollections(favouriteBy,
                     LoginProviderFactory.get(getActivity()).getUser().getId(), currentPage, Constants.PAGE_SIZE);
             hideEmptyView();
             return;
-        } else if(TextUtils.isEmpty(creatorId)) {
+        } else if(TextUtils.isEmpty(favouriteBy)) {
             showEmptyView();
             return;
         }
 
-        ApiClient.getClient(getActivity()).getFavouriteCollections(creatorId, null, currentPage, Constants.PAGE_SIZE);
+        ApiClient.getClient(getActivity()).getFavouriteCollections(favouriteBy, null, currentPage, Constants.PAGE_SIZE);
     }
 
     private void hideEmptyView() {
@@ -109,11 +108,15 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.score_text)).setText(getResources().getString(R.string.no_favourite_collections));
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(FAVOURITED_BY, favouriteBy);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         BusProvider.getInstance().register(this);
     }
 
@@ -135,7 +138,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionUnfavourited(UnfavouriteCollectionApiEvent event) {
-        if (adapter != null && creatorId.equals(LoginProviderFactory.get(getActivity()).getUser().getId())) {
+        if (adapter != null && favouriteBy.equals(LoginProviderFactory.get(getActivity()).getUser().getId())) {
             adapter.removeCollection(event.getCollectionId());
             if(adapter.getCount() == 0) {
                 showEmptyView();

@@ -97,6 +97,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     @Subscribe
     public void onUserLogin(LoginEvent event) {
+        creatorId = LoginProviderFactory.get(activity).getUser().getId();
         pagerAdapter = null;
         pager.setAdapter(null);
         pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);
@@ -105,6 +106,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
+        creatorId = null;
         pagerAdapter = null;
         pager.setAdapter(null);
         pagerAdapter = new CollectionsPagerAdapter(getChildFragmentManager(), creatorId);

@@ -12,9 +12,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -40,9 +44,10 @@ import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
 import com.apphunt.app.ui.views.CreatorView;
+import com.apphunt.app.ui.views.app.DownloadButton;
+import com.apphunt.app.ui.views.app.FavouriteAppButton;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
-import com.apphunt.app.ui.views.widgets.DownloadButton;
 import com.apphunt.app.ui.views.widgets.JHexedPhotoView;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.LoginUtils;
@@ -129,6 +134,8 @@ public class AppDetailsFragment extends BackStackFragment {
 
     @InjectView(R.id.loading_comments)
     CircularProgressBar loadingComments;
+
+    FavouriteAppButton favouriteAppButton;
 
     public static final int MIN_HEX_IMAGES_SIZE = 15;
     private boolean shouldStopLoading = false;
@@ -225,6 +232,19 @@ public class AppDetailsFragment extends BackStackFragment {
         ActionBarUtils.getInstance().showActionBarShadow();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem favouriteAppAction = menu.findItem(R.id.action_favourite_app);
+        if(activity.getSupportFragmentManager().findFragmentById(R.id.container) instanceof AppDetailsFragment) {
+            favouriteAppAction.setVisible(true);
+        } else {
+            favouriteAppAction.setVisible(false);
+        }
+
+        favouriteAppButton = (FavouriteAppButton) MenuItemCompat.getActionView(favouriteAppAction).findViewById(R.id.favourite_app_button);
+    }
+
     @Subscribe
     public void onVotersReceived(AppVoteEvent event) {
         user = new User();
@@ -244,6 +264,7 @@ public class AppDetailsFragment extends BackStackFragment {
             return;
         }
 
+        favouriteAppButton.setApp(baseApp);
         baseApp.setPosition(itemPosition);
         voteBtn.setBaseApp(baseApp);
 
