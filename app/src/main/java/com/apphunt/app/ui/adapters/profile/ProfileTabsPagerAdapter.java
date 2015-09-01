@@ -9,6 +9,7 @@ import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragmen
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
 import com.apphunt.app.ui.fragments.profile.tabs.AppsFragment;
 import com.apphunt.app.ui.fragments.profile.tabs.CommentsFragment;
+import com.apphunt.app.ui.fragments.profile.tabs.FavouriteAppsFragment;
 
 public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
     private String userId;
@@ -23,7 +24,7 @@ public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0: fragment = AppsFragment.newInstance(userId);
                 break;
-            case 1: fragment = CommentsFragment.newInstance(userId);
+            case 1: fragment = FavouriteAppsFragment.newInstance(userId);
                 break;
             case 2: fragment = MyCollectionsFragment.newInstance(userId);
                 break;

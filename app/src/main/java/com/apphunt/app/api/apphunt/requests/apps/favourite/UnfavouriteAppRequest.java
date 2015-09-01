@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.requests.apps;
+package com.apphunt.app.api.apphunt.requests.apps.favourite;
 
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;

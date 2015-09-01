@@ -3,7 +3,6 @@ package com.apphunt.app.api.apphunt.client;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,14 +16,15 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
-import com.apphunt.app.api.apphunt.requests.apps.FavouriteAppRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
-import com.apphunt.app.api.apphunt.requests.apps.UnfavouriteAppRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.FavouriteAppRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.GetFavouriteAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.UnfavouriteAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
@@ -207,7 +207,6 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize) {
-        Log.d(TAG, "getFavouriteCollections " + favouritedBy + " " + userId);
         if(TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, page, pageSize, listener));
         } else {
@@ -366,6 +365,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void unfavouriteApp(String appId, String userId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new UnfavouriteAppRequest(appId, userId, listener));
+    }
+
+    @Override
+    public void getFavouriteApps(String favouritedBy, String userId, Pagination pagination) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, userId, pagination, listener));
     }
 
     private String getFormattedQuery(String q) {

@@ -93,4 +93,6 @@ public interface AppHuntApi {
     void favouriteApp(String appId, String userId);
 
     void unfavouriteApp(String appId, String userId);
+
+    void getFavouriteApps(String favouritedBy, String userId, Pagination pagination);
 }
