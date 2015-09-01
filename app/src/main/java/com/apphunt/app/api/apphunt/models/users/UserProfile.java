@@ -4,6 +4,7 @@ public class UserProfile extends User {
     private int apps, votes;
     private int comments, collections;
     private int score;
+    private int favouriteApps, favouriteCollections;
 
     public int getApps() {
         return apps;
@@ -23,5 +24,13 @@ public class UserProfile extends User {
 
     public int getScore() {
         return score;
+    }
+
+    public int getFavouriteApps() {
+        return favouriteApps;
+    }
+
+    public int getFavouriteCollections() {
+        return favouriteCollections;
     }
 }
