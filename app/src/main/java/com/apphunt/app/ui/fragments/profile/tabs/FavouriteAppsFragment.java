@@ -16,12 +16,14 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetFavouriteAppsApiEvent;
 import com.apphunt.app.ui.adapters.SearchAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -52,6 +54,8 @@ public class FavouriteAppsFragment extends BaseFragment {
         bundle.putString(FAVOURITED_BY, favouritedBy);
         FavouriteAppsFragment fragment = new FavouriteAppsFragment();
         fragment.setArguments(bundle);
+
+        FlurryAgent.logEvent(TrackingEvents.UserViewedFavouriteApp);
 
         return fragment;
     }
