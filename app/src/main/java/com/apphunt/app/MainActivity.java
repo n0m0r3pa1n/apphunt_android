@@ -522,6 +522,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Subscribe
     public void compareAppVersionWithLatest(GetAppVersionApiEvent event) {
+        if(event == null || event.getVersion() == null) {
+            return;
+        }
+
         if(versionCode < event.getVersion().getVersionCode()) {
             FlurryAgent.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
             UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
