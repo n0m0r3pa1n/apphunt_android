@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B4000000">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/shape_welcome_box">
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Welcome to AppHunt"
+            android:textSize="20sp"
+            android:textColor="#B4FFFFFF"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+        
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/sender_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/title"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/sender_name"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sender_avatar"
+            android:layout_marginLeft="15dp"
+            android:textColor="#B4FFFFFF"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/welcome_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sender_avatar"
+            android:layout_below="@+id/title"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="25dp"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHButton
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_above="@+id/not_now"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:text="Login"
+            android:gravity="center"
+            android:background="@drawable/shape_provider_background"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+        
+        <com.apphunt.app.ui.views.widgets.AHButton
+            android:id="@+id/not_now"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:text="Continue"
+            android:textSize="12sp"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+    </RelativeLayout>
+</RelativeLayout>

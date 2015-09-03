@@ -92,6 +92,7 @@ public class EmailInviteFragment extends BaseFragment {
         } else {
             User user = LoginProviderFactory.get(activity).getUser();
             ArrayList<DeepLinkingUtils.DeepLinkingParam> params = new ArrayList<>();
+            params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_DL_TYPE, "welcome"));
             params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_ID, user.getId()));
             params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_NAME, user.getName()));
             params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_PROFILE_IMAGE_URL, user.getProfilePicture()));

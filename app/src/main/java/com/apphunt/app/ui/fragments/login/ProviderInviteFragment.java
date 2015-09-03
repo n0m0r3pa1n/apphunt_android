@@ -121,9 +121,11 @@ public class ProviderInviteFragment extends BaseFragment {
 
     private void sendInvite(Friend friend, final Boolean isLastInvite) {
         ArrayList<DeepLinkingUtils.DeepLinkingParam> params = new ArrayList<>();
+        params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_DL_TYPE, "welcome"));
         params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_ID, LoginProviderFactory.get(activity).getUser().getId()));
         params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_NAME, LoginProviderFactory.get(activity).getUser().getName()));
         params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_SENDER_PROFILE_IMAGE_URL, LoginProviderFactory.get(activity).getUser().getProfilePicture()));
+        params.add(new DeepLinkingUtils.DeepLinkingParam(Constants.KEY_RECEIVER_NAME, friend.getName()));
 
         AppHuntTwitterApiClient twitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
         twitterApiClient.getFriendsService().sendDirectMessage(friend.getId(),

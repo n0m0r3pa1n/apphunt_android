@@ -8,7 +8,7 @@ import com.apphunt.app.event_bus.BusProvider;
 
 public class BaseFragment extends Fragment {
 
-    private int title;
+    private int title = -1;
     private String previousTitle;
     private String fragmentTag;
     public String getStringTitle() {
