@@ -1,25 +1,24 @@
 package com.apphunt.app;
 
-import android.app.Application;
 import android.text.TextUtils;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import io.branch.referral.BranchApp;
 import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 3/6/15.
  */
-public class AppHuntApplication extends Application {
+public class AppHuntApplication extends BranchApp {
 
     @Override
     public void onCreate() {

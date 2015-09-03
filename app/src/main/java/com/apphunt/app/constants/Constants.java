@@ -73,6 +73,8 @@ public class Constants {
     public static final String TAG_SEARCH_COLLECTIONS_FRAGMENT = "search_collections_fragment";
     public static final String TAG_SEARCH_APPS_FRAGMENT = "search_apps_fragment";
     public static final String TAG_USER_PROFILE_FRAGMENT = "user_profile_fragment";
+    public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
+    public static final String TAG_WELCOME_FRAGMENT = "fragment_welcome";
 
 
     // RequestCodes
@@ -99,8 +101,10 @@ public class Constants {
     public static final String LAUNCHROCK_ICON = "https://launchrock-assets.s3.amazonaws.com/logo-files/LWPRHM35_1421410706452.png?_=4";
     // Invites
     public static final int REQUEST_ACCOUNT_EMAIL = 5;
-    public static int GPLUS_SIGN_IN = 0;
-    public static int FACEBOOK_SIGN_IN = 12;
+    public static final int GPLUS_SIGN_IN = 0;
+    public static final int FACEBOOK_SIGN_IN = 12;
+    public static final int SHOW_LOGIN = 15;
+    public static final int SHOW_INVITE = 16;
 
     public static final String DEFAULT_NOTIFICATION_TITLE = "Check out today's useful apps";
     public static final String DEFAULT_NOTIFICATION_MSG = "Which are the trending apps today?";
@@ -126,8 +130,8 @@ public class Constants {
         put("userComment", 104);
         put("userMentioned", 105);
     }};
-    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
-    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+    public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
+    public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
 
     public static final int TRENDING_APPS = 1;
     public static final int TOP_HUNTERS = 2;
@@ -175,4 +179,12 @@ public class Constants {
             return value;
         }
     }
+
+    // DeepLinking values
+    public static final String KEY_DL_TYPE = "dl_type";
+    public static final String KEY_SENDER_ID = "sender_id";
+    public static final String KEY_SENDER_NAME = "sender_name";
+    public static final String KEY_SENDER_PROFILE_IMAGE_URL = "sender_profile_image_url";
+    public static final String KEY_RECEIVER_NAME = "receiver_name";
+
 }

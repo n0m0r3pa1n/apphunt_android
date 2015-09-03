@@ -1,6 +1,5 @@
 package com.apphunt.app.utils.ui;
 
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

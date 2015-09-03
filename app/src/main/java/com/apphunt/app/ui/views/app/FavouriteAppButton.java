@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.views.app;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
@@ -13,9 +14,8 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
  public class FavouriteAppButton extends BaseFavouriteButton {
-    private BaseApp app;
-
-    public FavouriteAppButton(Context context) {
+     private BaseApp app;
+     public FavouriteAppButton(Context context) {
         super(context);
     }
 
@@ -67,4 +67,4 @@ import com.squareup.otto.Subscribe;
         app.setIsFavourite(false);
         favouriteButton.setChecked(false);
     }
-}
+ }

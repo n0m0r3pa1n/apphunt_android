@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.views;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ public abstract class BaseFavouriteButton extends LinearLayout {
 
     @InjectView(R.id.favourite_button)
     public ToggleButton favouriteButton;
+    private AppCompatActivity activity;
 
     public BaseFavouriteButton(Context context) {
         super(context);
@@ -76,7 +78,7 @@ public abstract class BaseFavouriteButton extends LinearLayout {
     @OnClick(R.id.favourite_button)
     public void onFavouriteButtonClicked() {
         if(TextUtils.isEmpty(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID))) {
-            LoginUtils.showLoginFragment(getContext(), false, R.string.login_info_fav_collection);
+            LoginUtils.showLoginFragment(activity, false, R.string.login_info_fav_collection);
             favouriteButton.setChecked(false);
             return;
         }
@@ -95,4 +97,8 @@ public abstract class BaseFavouriteButton extends LinearLayout {
     protected abstract void favourite();
 
     protected abstract void unfavourite();
+
+    public void setActivity(AppCompatActivity activity) {
+        this.activity = activity;
+    }
 }

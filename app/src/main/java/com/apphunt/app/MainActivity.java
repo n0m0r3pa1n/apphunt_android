@@ -52,6 +52,7 @@ import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -61,9 +62,14 @@ import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 
@@ -118,31 +124,31 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             @Override
             public void onBackStackChanged() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
+
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
 
                 int currentBackStackCount = fragmentManager.getBackStackEntryCount();
+                if (currentBackStackCount > 0) {
+                    FragmentManager.BackStackEntry e = fragmentManager.getBackStackEntryAt(currentBackStackCount - 1);
+                    Fragment topFragment = fragmentManager.findFragmentByTag(e.getName());
+                    if (topFragment instanceof BackStackFragment) {
+                        ((BackStackFragment) topFragment).registerForEvents();
+                        NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
+                        getSupportActionBar().collapseActionView();
+                    }
+                    BusProvider.getInstance().post(new DrawerStatusEvent(true));
+                } else if (currentBackStackCount == 0) {
+                    NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
+                    BusProvider.getInstance().post(new DrawerStatusEvent(false));
+                }
+
                 if (isFragmentAdded(currentBackStackCount)) {
                     FragmentManager.BackStackEntry previousEntry = fragmentManager.getBackStackEntryAt(currentBackStackCount - 2);
                     Fragment previousFragment = fragmentManager.findFragmentByTag(previousEntry.getName());
                     if (previousFragment instanceof BackStackFragment) {
                         ((BackStackFragment) previousFragment).unregisterForEvents();
                     }
-                }
-
-                if (currentBackStackCount > 0) {
-                    FragmentManager.BackStackEntry e = fragmentManager.getBackStackEntryAt(currentBackStackCount - 1);
-                    Fragment topFragment = fragmentManager.findFragmentByTag(e.getName());
-                    if (topFragment instanceof BackStackFragment) {
-                        ((BackStackFragment) topFragment).registerForEvents();
-                    }
-
-                    NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
-                    getSupportActionBar().collapseActionView();
-                    BusProvider.getInstance().post(new DrawerStatusEvent(true));
-                } else if (currentBackStackCount == 0) {
-                    NavigationDrawerFragment.setDrawerIndicatorEnabled(false);
-                    BusProvider.getInstance().post(new DrawerStatusEvent(false));
                 }
 
                 backStackCount = currentBackStackCount;
@@ -255,6 +261,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         showStartFragments(intent);
+        this.setIntent(intent);
     }
 
     private boolean isStartedFromShareIntent(Intent intent) {
@@ -402,6 +409,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == Constants.SHOW_INVITE && resultCode == Constants.SHOW_LOGIN) {
+            LoginUtils.showLoginFragment(this, false);
+            return;
+        }
+
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
         if (fragment != null) {
@@ -465,6 +477,33 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onStart() {
         super.onStart();
         AppSpice.onStart(this);
+
+        Branch branch = Branch.getInstance();
+        branch.initSession(new Branch.BranchReferralInitListener() {
+            @Override
+            public void onInitFinished(JSONObject referringParams, BranchError error) {
+                if (error == null) {
+                    try {
+                        if (referringParams.has(Constants.KEY_DL_TYPE) && referringParams.getString(Constants.KEY_DL_TYPE).equals("welcome")
+                                && !referringParams.getBoolean("+clicked_branch_link")) {
+                            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                            intent.putExtra(Constants.KEY_SENDER_ID, referringParams.getString(Constants.KEY_SENDER_ID));
+                            intent.putExtra(Constants.KEY_SENDER_NAME, referringParams.getString(Constants.KEY_SENDER_NAME));
+                            intent.putExtra(Constants.KEY_SENDER_PROFILE_IMAGE_URL, referringParams.getString(Constants.KEY_SENDER_PROFILE_IMAGE_URL));
+                            String receiverName = referringParams.has(Constants.KEY_RECEIVER_NAME) ?  referringParams.getString(Constants.KEY_RECEIVER_NAME) : null;
+                            intent.putExtra(Constants.KEY_RECEIVER_NAME, receiverName);
+                            startActivityForResult(intent, Constants.SHOW_INVITE);
+                            overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.toString());
+                    }
+
+                    // params are the deep linked params associated with the link that the user clicked before showing up
+                    Log.e("BranchConfigTest", "deep link data: " + referringParams.toString());
+                }
+            }
+        }, this.getIntent().getData(), this);
     }
 
     @Override

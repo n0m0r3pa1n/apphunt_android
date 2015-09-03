@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.notification.LoginFragment;
+import com.apphunt.app.ui.fragments.login.LoginFragment;
 
 public class LoginUtils {
 
