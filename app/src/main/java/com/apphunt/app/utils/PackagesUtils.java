@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.apphunt.app.constants.Constants;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,22 @@ import java.util.List;
 public class PackagesUtils {
     private static final String TAG = PackagesUtils.class.getName();
 
-    public static List<ApplicationInfo> getInstalledPackages(PackageManager packageManager) {
-        List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();
+    private static PackagesUtils instance;
+    private List<ApplicationInfo> installedPackages = new ArrayList<ApplicationInfo>();
+    public static PackagesUtils getInstance() {
+        if(instance == null) {
+            instance = new PackagesUtils();
+        }
+        return instance;
+    }
 
+    public List<ApplicationInfo> getInstalledPackages(PackageManager packageManager) {
         try {
-            List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+            if(installedPackages.size() > 0) {
+                return installedPackages;
+            }
 
+            List<ApplicationInfo> packages = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
             for (ApplicationInfo applicationInfo : packages) {
                 if (!isSystemPackage(applicationInfo)) {
                     if (!applicationInfo.packageName.equals(Constants.PACKAGE_NAME))
@@ -29,6 +40,7 @@ public class PackagesUtils {
                 }
             }
         } catch (Exception e) {
+            Crashlytics.logException(e);
             Log.e(TAG, e.toString());
         }
 

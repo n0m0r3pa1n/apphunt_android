@@ -80,7 +80,7 @@ public class InstallService extends Service {
             return START_FLAG_RETRY;
         }
 
-        data = PackagesUtils.getInstalledPackages(getPackageManager());
+        data = PackagesUtils.getInstance().getInstalledPackages(getPackageManager());
         ApiClient.getClient(this).filterApps(getInstalledPackageNames(), new Response.Listener<Packages>() {
             @Override
             public void onResponse(Packages response) {
