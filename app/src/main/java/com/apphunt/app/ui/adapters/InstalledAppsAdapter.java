@@ -70,6 +70,11 @@ public class InstalledAppsAdapter extends BaseAdapter {
         return position;
     }
 
+    public void addAll(List<ApplicationInfo> appsList) {
+        this.appsList.addAll(appsList);
+        this.notifyDataSetChanged();
+    }
+
     static class ViewHolder {
         @InjectView(R.id.app_icon)
         ImageView icon;

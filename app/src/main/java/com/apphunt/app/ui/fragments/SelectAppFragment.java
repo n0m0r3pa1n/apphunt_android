@@ -23,7 +23,8 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.ui.adapters.InstalledAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -41,6 +42,9 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 public class SelectAppFragment extends BackStackFragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = SelectAppFragment.class.getName();
+    private static final int PAGE_SIZE = 10;
+    private int currentPage = 0;
+    private int totalPages = -1;
 
     @InjectView(R.id.loading)
     CircularProgressBar loader;
@@ -82,8 +86,14 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
         ActionBarUtils.getInstance().hideActionBarShadow();
 
         gridView.setOnItemClickListener(this);
+        gridView.setOnScrollListener(new EndlessScrollListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                filterApps();
+            }
+        }));
+        filterApps();
 
-        new LoadInstalledApps().execute();
     }
 
     @Override
@@ -132,17 +142,29 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
            }
 
            LoadersUtils.hideCenterLoader(activity);
-           userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
-
-           Handler delayHandler = new Handler();
-           delayHandler.postDelayed(new Runnable() {
-               @Override
-               public void run() {
-                   loader.progressiveStop();
-                   gridView.setAdapter(userAppsAdapter);
-               }
-           }, 250);
+           if(userAppsAdapter == null) {
+               userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
+               Handler delayHandler = new Handler();
+               delayHandler.postDelayed(new Runnable() {
+                   @Override
+                   public void run() {
+                       loader.progressiveStop();
+                       gridView.setAdapter(userAppsAdapter);
+                   }
+               }, 250);
+           } else {
+               userAppsAdapter.addAll(tempData);
+           }
        }
+    }
+
+    private void filterApps() {
+        if(currentPage == totalPages) {
+            return;
+        }
+
+        currentPage++;
+        new LoadInstalledApps().execute();
     }
 
     private class LoadInstalledApps extends AsyncTask<Void, Void, Packages> {
@@ -155,9 +177,24 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
         @Override
         protected Packages doInBackground(Void... params) {
             Packages packages = new Packages();
-            data = PackagesUtils.getInstalledPackages(activity.getPackageManager());
-            for (ApplicationInfo info : data) {
-                packages.getPackages().add(info.packageName);
+            data = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
+            if(totalPages == -1) {
+                if(data.size() % PAGE_SIZE > 0) {
+                    totalPages = (data.size() / PAGE_SIZE) + 1;
+                } else {
+                    totalPages = (data.size() / PAGE_SIZE);
+                }
+            }
+
+            int totalSize = currentPage * PAGE_SIZE;
+            if(totalSize > data.size()) {
+                totalSize = data.size();
+                currentPage = totalPages;
+            }
+
+            final int startPoint = (currentPage - 1) * PAGE_SIZE;
+            for (int i = startPoint; i < totalSize; i++) {
+                packages.getPackages().add(data.get(i).packageName);
             }
 
             return packages;
@@ -166,7 +203,6 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
         @Override
         protected void onPostExecute(Packages packages) {
             super.onPostExecute(packages);
-
             ApiClient.getClient(getActivity()).filterApps(packages);
         }
     }

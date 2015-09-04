@@ -1,6 +1,7 @@
 package com.apphunt.app.ui.fragments.base;
 
 import com.apphunt.app.event_bus.BusProvider;
+import com.crashlytics.android.Crashlytics;
 
 /**
  * Created by nmp on 15-8-14.
@@ -26,6 +27,10 @@ public class BackStackFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        BusProvider.getInstance().unregister(this);
+        try {
+            BusProvider.getInstance().unregister(this);
+        } catch(Exception e) {
+            Crashlytics.logException(e);
+        }
     }
 }

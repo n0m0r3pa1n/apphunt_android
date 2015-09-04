@@ -28,7 +28,6 @@ import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.apphunt.app.utils.LoginUtils;
@@ -48,8 +47,8 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     private static final String KEY_APP_ID = "APP_ID";
 
     private String appId;
-    private boolean endOfList;
 
+    private OnCommentEnteredListener listener;
     private CommentsAdapter commentsAdapter;
     private Comment replyToComment;
 
@@ -181,6 +180,9 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
 
         closeKeyboard(send);
         commentBox.getText().clear();
+        if(this.listener != null) {
+            listener.onCommentEntered(comment);
+        }
 
     }
 
@@ -217,13 +219,6 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
         commentsList.hideBottomLoader();
-        if (event.shouldReload()) {
-            if(commentsAdapter != null) {
-                commentsAdapter.resetAdapter(event.getComments());
-            }
-            return;
-        }
-
         Comments comments = event.getComments();
         if(comments == null || comments.getComments() == null) {
             return;
@@ -237,11 +232,19 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
         headerComments.setText(comments.getTotalCount() + " comments");
         loading.setVisibility(View.GONE);
         commentsList.setVisibility(View.VISIBLE);
-        if(commentsAdapter == null) {
+        if(commentsAdapter == null || event.shouldReload()) {
             commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), commentsList.getListView());
             commentsList.setAdapter(commentsAdapter, event.getComments().getTotalCount());
         } else {
             commentsAdapter.addItems(comments);
         }
+    }
+
+    public void setOnCommentEnteredListener(OnCommentEnteredListener listener) {
+        this.listener = listener;
+    }
+
+    interface OnCommentEnteredListener {
+        void onCommentEntered(NewComment comment);
     }
 }

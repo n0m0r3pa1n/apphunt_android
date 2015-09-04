@@ -25,6 +25,7 @@ public class GooglePlusLoginProvider extends BaseLoginProvider {
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
+        googleApiClient.connect();
     }
 
     @Override

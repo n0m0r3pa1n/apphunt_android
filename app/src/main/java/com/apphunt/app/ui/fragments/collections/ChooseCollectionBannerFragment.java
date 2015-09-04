@@ -20,7 +20,6 @@ import com.apphunt.app.event_bus.events.api.collections.GetBannersApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -45,6 +44,7 @@ public class ChooseCollectionBannerFragment extends BackStackFragment {
 
     @InjectView(R.id.banners_list)
     ListView bannersList;
+    private OnBannerChosenListener listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,9 @@ public class ChooseCollectionBannerFragment extends BackStackFragment {
     public void onBannersListItemSelected(int position) {
         FlurryAgent.logEvent(TrackingEvents.UserSelectedCollectionBanner);
         BusProvider.getInstance().post(new CollectionBannerSelectedEvent(list.getBanners().get(position)));
+        if(this.listener != null) {
+            this.listener.onBannerChosen(list.getBanners().get(position));
+        }
         activity.getSupportFragmentManager().popBackStack();
     }
 
@@ -99,5 +102,13 @@ public class ChooseCollectionBannerFragment extends BackStackFragment {
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
         hideSoftKeyboard();
+    }
+
+    public void setOnBannerChosenListener(OnBannerChosenListener listener) {
+        this.listener = listener;
+    }
+
+    interface OnBannerChosenListener {
+        void onBannerChosen(String url);
     }
 }

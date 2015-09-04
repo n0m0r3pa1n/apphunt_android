@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.apphunt.app.ui.views.widgets.AHTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tag"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:textSize="@dimen/details_download_text_size"
+    android:textColor="@color/bg_primary"
+    android:textStyle="bold"
+    android:textAllCaps="true"
+    android:gravity="center"
+    android:background="@drawable/shape_tag_button"
+    app:typefacePath="fonts/OpenSans-Regular.ttf"/>

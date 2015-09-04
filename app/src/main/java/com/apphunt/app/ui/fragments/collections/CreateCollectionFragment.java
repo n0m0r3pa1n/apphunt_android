@@ -28,7 +28,6 @@ import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent
 import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
@@ -46,7 +45,7 @@ import butterknife.OnClick;
  * *
  * * NaughtySpirit 2015
  */
-public class CreateCollectionFragment extends BackStackFragment {
+public class CreateCollectionFragment extends BackStackFragment implements ChooseCollectionBannerFragment.OnBannerChosenListener {
 
     private static final String TAG = CreateCollectionFragment.class.getSimpleName();
 
@@ -110,6 +109,7 @@ public class CreateCollectionFragment extends BackStackFragment {
     @OnClick(R.id.choose_banner)
     public void onChooseBannerClick() {
         ChooseCollectionBannerFragment fragment = new ChooseCollectionBannerFragment();
+        fragment.setOnBannerChosenListener(this);
         ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
                 .add(R.id.container, fragment, Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
@@ -179,5 +179,11 @@ public class CreateCollectionFragment extends BackStackFragment {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ActionBarUtils.getInstance().hideActionBarShadow();
+    }
+
+    @Override
+    public void onBannerChosen(String url) {
+        bannerUrl = url;
+        Picasso.with(activity).load(bannerUrl).placeholder(R.drawable.collection_placeholder).into(chooseBanner);
     }
 }

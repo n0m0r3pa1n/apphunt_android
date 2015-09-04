@@ -33,6 +33,7 @@
 
             <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/app_name"
+                android:maxLines="2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/app_icon"

@@ -1,6 +1,5 @@
 package com.apphunt.app;
 
-import android.app.Application;
 import android.text.TextUtils;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
@@ -13,13 +12,14 @@ import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import io.branch.referral.BranchApp;
 import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 3/6/15.
  */
-public class AppHuntApplication extends Application {
+public class AppHuntApplication extends BranchApp {
 
     @Override
     public void onCreate() {
@@ -40,7 +40,7 @@ public class AppHuntApplication extends Application {
                 new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
                         Constants.TWITTER_CONSUMER_SECRET);
         // TODO: Add before deployment: new Crashlytics()
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
         FacebookSdk.sdkInitialize(getApplicationContext(), Constants.FACEBOOK_SIGN_IN);
 
         if (BuildConfig.DEBUG) {

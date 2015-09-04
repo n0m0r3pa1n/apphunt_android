@@ -22,6 +22,9 @@ import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.FavouriteAppRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.GetFavouriteAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.favourite.UnfavouriteAppRequest;
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
@@ -54,7 +57,6 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
-import com.apphunt.app.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -204,8 +206,12 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getFavouriteCollections(String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(userId, page, pageSize, listener));
+    public void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, userId, page, pageSize, listener));
+        }
     }
 
     @Override
@@ -349,6 +355,25 @@ public class AppHuntApiClient implements AppHuntApi {
             getUserAppsRequest = new GetUserAppsRequest(creatorId, pagination, listener);
         }
         VolleyInstance.getInstance(context).addToRequestQueue(getUserAppsRequest);
+    }
+
+    @Override
+    public void favouriteApp(String appId, String userId) {
+         VolleyInstance.getInstance(context).addToRequestQueue(new FavouriteAppRequest(appId, userId, listener));
+    }
+
+    @Override
+    public void unfavouriteApp(String appId, String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new UnfavouriteAppRequest(appId, userId, listener));
+    }
+
+    @Override
+    public void getFavouriteApps(String favouritedBy, String userId, Pagination pagination) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, pagination, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, userId, pagination, listener));
+        }
     }
 
     private String getFormattedQuery(String q) {

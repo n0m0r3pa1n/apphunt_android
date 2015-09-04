@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_provider_background"
+        android:elevation="0dp">
+
+        <com.apphunt.app.ui.views.widgets.AHEditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/send"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:ems="10"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:singleLine="true"
+            android:maxLength="100"
+            android:inputType="textEmailAddress"
+            android:hint="Email"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:imeOptions="actionSend"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHButton
+            android:id="@+id/send"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="Send"
+            android:textColor="@color/bg_primary"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:background="@drawable/shape_invite_send"
+            android:elevation="0dp"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+    </RelativeLayout>
+</RelativeLayout>

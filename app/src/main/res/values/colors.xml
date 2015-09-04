@@ -71,4 +71,8 @@
     <color name="holo_purple_dark">#9933cc</color>
     <color name="holo_red_dark">#cc0000</color>
 
+    <!-- Invite Screen -->
+    <color name="invite_tab">#B4FFFFFF</color>
+    <color name="invite_tab_selected">#B4044869</color>
+
 </resources>

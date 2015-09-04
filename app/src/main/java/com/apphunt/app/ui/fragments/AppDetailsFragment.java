@@ -5,16 +5,18 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,6 +30,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -40,21 +43,22 @@ import com.apphunt.app.ui.adapters.VotersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.search.SearchAppsFragment;
 import com.apphunt.app.ui.views.CreatorView;
+import com.apphunt.app.ui.views.app.DownloadButton;
+import com.apphunt.app.ui.views.app.FavouriteAppButton;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
-import com.apphunt.app.ui.views.widgets.DownloadButton;
 import com.apphunt.app.ui.views.widgets.JHexedPhotoView;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.wefika.flowlayout.FlowLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +70,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BackStackFragment {
+public class AppDetailsFragment extends BackStackFragment implements CommentsFragment.OnCommentEnteredListener {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
@@ -130,9 +134,12 @@ public class AppDetailsFragment extends BackStackFragment {
     @InjectView(R.id.loading_comments)
     CircularProgressBar loadingComments;
 
+    FavouriteAppButton favouriteAppButton;
+
     public static final int MIN_HEX_IMAGES_SIZE = 15;
     private boolean shouldStopLoading = false;
     private Comments comments;
+    private boolean shouldReload;
     //endregion
 
     @Override
@@ -225,6 +232,20 @@ public class AppDetailsFragment extends BackStackFragment {
         ActionBarUtils.getInstance().showActionBarShadow();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem favouriteAppAction = menu.findItem(R.id.action_favourite_app);
+        if(activity.getSupportFragmentManager().findFragmentById(R.id.container) instanceof AppDetailsFragment) {
+            favouriteAppAction.setVisible(true);
+        } else {
+            favouriteAppAction.setVisible(false);
+        }
+
+        favouriteAppButton = (FavouriteAppButton) MenuItemCompat.getActionView(favouriteAppAction).findViewById(R.id.favourite_app_button);
+        favouriteAppButton.setActivity(activity);
+    }
+
     @Subscribe
     public void onVotersReceived(AppVoteEvent event) {
         user = new User();
@@ -244,6 +265,7 @@ public class AppDetailsFragment extends BackStackFragment {
             return;
         }
 
+        favouriteAppButton.setApp(baseApp);
         baseApp.setPosition(itemPosition);
         voteBtn.setBaseApp(baseApp);
 
@@ -274,13 +296,13 @@ public class AppDetailsFragment extends BackStackFragment {
 
     private void populateTags() {
         for(final String tag : baseApp.getTags()) {
-            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_flat_blue_button, tagsContainer, false);
-            TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tv_download));
+            View tagButtonView = getLayoutInflater(null).inflate(R.layout.view_tag_button, tagsContainer, false);
+            TextView textView =  ((TextView)tagButtonView.findViewById(R.id.tag));
             textView.setText(tag);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>(){{
+                    FlurryAgent.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>() {{
                         put("Tag", tag);
                     }});
                     activity.getSupportFragmentManager()
@@ -292,14 +314,13 @@ public class AppDetailsFragment extends BackStackFragment {
             });
 
             Resources resources = getResources();
-            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_desc_ic_download_size));
-            params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
-            textView.setPadding(20, 0, 20, 0);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            FlowLayout.LayoutParams params = new FlowLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, resources.getDimensionPixelSize(R.dimen.details_box_tag_height));
+            params.setMargins(resources.getDimensionPixelSize(R.dimen.details_box_tag_margin_left), resources.getDimensionPixelSize(R.dimen.details_box_desc_padding_top), 0, 0);
+            textView.setPadding(15, 0, 15, 0);
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                 textView.setElevation(0);
             }
 
-            textView.setTypeface(Typeface.DEFAULT);
             textView.setLayoutParams(params);
             tagsContainer.addView(tagButtonView);
         }
@@ -331,7 +352,8 @@ public class AppDetailsFragment extends BackStackFragment {
 
                         icons.add(Picasso.with(getActivity()).load(user.getProfilePicture())
                                 .tag(TAG_LOAD_VOTERS_REQ).get());
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        Crashlytics.logException(e);
                         e.printStackTrace();
                     }
                 }
@@ -356,8 +378,7 @@ public class AppDetailsFragment extends BackStackFragment {
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
-        if (event.shouldReload()  || fragment != null) {
+        if (event.shouldReload()) {
             return;
         }
 
@@ -420,9 +441,10 @@ public class AppDetailsFragment extends BackStackFragment {
         if(baseApp == null) {
             return;
         }
-
+        CommentsFragment commentsFragment = CommentsFragment.newInstance(baseApp.getId());
+        commentsFragment.setOnCommentEnteredListener(this);
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, CommentsFragment.newInstance(baseApp.getId()), Constants.TAG_COMMENTS)
+                .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
                 .commit();
     }
@@ -438,5 +460,20 @@ public class AppDetailsFragment extends BackStackFragment {
         Map<String, String> params = new HashMap<>();
         params.put("appId", baseApp.getId());
         FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
+    }
+
+    @Override
+    public void registerForEvents() {
+        super.registerForEvents();
+        if(shouldReload) {
+            ApiService.getInstance(activity).loadAppComments(appId, userId, 1, MAX_DISPLAYED_COMMENTS);
+            shouldReload = false;
+        }
+    }
+
+    @Override
+    public void onCommentEntered(NewComment comment) {
+        shouldReload = true;
+        commentsList.removeAllViews();
     }
 }

@@ -67,6 +67,8 @@ public class UserProfileFragment extends BackStackFragment {
     private int appsCount;
     private int collectionsCount;
     private int commentsCount;
+    private int favouriteAppsCount;
+    private int favouriteCollectionsCount;
 
     private int selectedTabPosition = 0;
 
@@ -132,8 +134,12 @@ public class UserProfileFragment extends BackStackFragment {
             case 0:
                 return getResources().getQuantityString(R.plurals.apps, appsCount, appsCount);
             case 1:
-                return getResources().getQuantityString(R.plurals.collections, collectionsCount, collectionsCount);
+                return getResources().getQuantityString(R.plurals.apps, favouriteAppsCount, favouriteAppsCount);
             case 2:
+                return getResources().getQuantityString(R.plurals.collections, collectionsCount, collectionsCount);
+            case 3:
+                return getResources().getQuantityString(R.plurals.collections, favouriteCollectionsCount, favouriteCollectionsCount);
+            case 4:
                 return getResources().getQuantityString(R.plurals.comments, commentsCount, commentsCount);
             default:
                 return "";
@@ -145,8 +151,12 @@ public class UserProfileFragment extends BackStackFragment {
             case 0:
                 return appsCount;
             case 1:
-                return collectionsCount;
+                return favouriteAppsCount;
             case 2:
+                return collectionsCount;
+            case 3:
+                return favouriteCollectionsCount;
+            case 4:
                 return commentsCount;
             default:
                 return 0;
@@ -211,7 +221,8 @@ public class UserProfileFragment extends BackStackFragment {
         appsCount = userProfile.getApps();
         collectionsCount = userProfile.getCollections();
         commentsCount = userProfile.getComments();
-
+        favouriteAppsCount = userProfile.getFavouriteApps();
+        favouriteCollectionsCount = userProfile.getFavouriteCollections();
 
         scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 

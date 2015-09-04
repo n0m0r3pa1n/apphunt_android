@@ -12,11 +12,26 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
+        android:id="@+id/action_skip"
+        android:title="@string/action_skip"
+        android:showAsAction="always|withText"
+        app:showAsAction="always|withText"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/action_delete_collection"
         android:icon="@drawable/btn_delete"
         android:title="@string/delete_collection_menu_title"
         android:showAsAction="collapseActionView|always"
         app:showAsAction="collapseActionView|always"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_favourite_app"
+        app:actionLayout="@layout/action_favourite"
+        android:title="@string/delete_collection_menu_title"
+        android:showAsAction="always"
+        app:showAsAction="always"
         android:visible="false" />
 
     <item

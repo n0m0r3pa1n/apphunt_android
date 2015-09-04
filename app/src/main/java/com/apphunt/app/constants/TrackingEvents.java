@@ -84,6 +84,6 @@ public interface TrackingEvents {
     String UserOpenedProfileFromCollection = "user.opened.profile.from.collection";
 
     String UserSearchedWithTagFromAppDetails = "user.searched.with.tag.from.app.details";
-
+    String UserViewedFavouriteApp = "user.viewed.favourite.app";
 
 }

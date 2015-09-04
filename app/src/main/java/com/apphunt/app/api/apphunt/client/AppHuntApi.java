@@ -50,7 +50,7 @@ public interface AppHuntApi {
 
     void getTopHuntersCollection(String criteria);
 
-    void getFavouriteCollections(String userId, int page, int pageSize);
+    void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize);
 
     void getAllCollections(String userId, String sortBy, int page, int pageSize);
 
@@ -89,4 +89,10 @@ public interface AppHuntApi {
     void getUserComments(String creatorId, String userId, Pagination pagination);
 
     void getUserApps(String creatorId, String userId, Pagination pagination);
+
+    void favouriteApp(String appId, String userId);
+
+    void unfavouriteApp(String appId, String userId);
+
+    void getFavouriteApps(String favouritedBy, String userId, Pagination pagination);
 }

@@ -12,7 +12,7 @@ import com.apphunt.app.R;
 import com.squareup.picasso.Picasso;
 
 public class GalleryFragment extends Fragment {
-    public static GalleryFragment newInstance(String imageUrl) {
+     public static GalleryFragment newInstance(String imageUrl) {
         GalleryFragment fragment = new GalleryFragment();
         Bundle bundle = new Bundle();
         bundle.putString("URL", imageUrl);
