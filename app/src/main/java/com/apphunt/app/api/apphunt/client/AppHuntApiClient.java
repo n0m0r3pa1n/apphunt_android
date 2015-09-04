@@ -369,7 +369,11 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getFavouriteApps(String favouritedBy, String userId, Pagination pagination) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, userId, pagination, listener));
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, pagination, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, userId, pagination, listener));
+        }
     }
 
     private String getFormattedQuery(String q) {

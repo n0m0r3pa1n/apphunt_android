@@ -8,6 +8,11 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetFavouriteAppsApiEvent;
 
 public class GetFavouriteAppsRequest extends BaseGetRequest<AppsList>{
+
+    public GetFavouriteAppsRequest(String creatorId, Pagination pagination, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/" + creatorId + "/favourite-apps?" + pagination.getPaginationString(), listener);
+    }
+
     public GetFavouriteAppsRequest(String creatorId, String userId, Pagination pagination, Response.ErrorListener listener) {
         super(BASE_URL + "/users/" + creatorId + "/favourite-apps?userId="+userId+ "&" + pagination.getPaginationString(), listener);
     }

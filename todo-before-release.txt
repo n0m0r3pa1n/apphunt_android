@@ -1,8 +1,3 @@
-Remove
-  @Override
-    public boolean isUserLoggedIn() {
-        //TODO: Remove
-        SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, "553554860b9ce203003112a9");
-        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, "twitter");
-
-in the BaseLoginProvider
+1. Change url to production server
+2. Add new Crashlytics() to Application class
+3. Change build gradle version and versionCode
