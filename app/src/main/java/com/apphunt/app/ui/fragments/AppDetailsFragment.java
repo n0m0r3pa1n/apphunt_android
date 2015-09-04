@@ -53,12 +53,12 @@ import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.wefika.flowlayout.FlowLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -352,7 +352,8 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
 
                         icons.add(Picasso.with(getActivity()).load(user.getProfilePicture())
                                 .tag(TAG_LOAD_VOTERS_REQ).get());
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        Crashlytics.logException(e);
                         e.printStackTrace();
                     }
                 }
