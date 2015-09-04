@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
@@ -32,6 +30,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
+import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -71,7 +70,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class AppDetailsFragment extends BackStackFragment {
+public class AppDetailsFragment extends BackStackFragment implements CommentsFragment.OnCommentEnteredListener {
 
     private static final String TAG = AppDetailsFragment.class.getName();
     private static final String TAG_LOAD_VOTERS_REQ = "LOAD_VOTERS_IMAGE";
@@ -140,6 +139,7 @@ public class AppDetailsFragment extends BackStackFragment {
     public static final int MIN_HEX_IMAGES_SIZE = 15;
     private boolean shouldStopLoading = false;
     private Comments comments;
+    private boolean shouldReload;
     //endregion
 
     @Override
@@ -377,8 +377,7 @@ public class AppDetailsFragment extends BackStackFragment {
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        Fragment fragment = activity.getSupportFragmentManager().findFragmentByTag(Constants.TAG_COMMENTS);
-        if (event.shouldReload()  || fragment != null) {
+        if (event.shouldReload()) {
             return;
         }
 
@@ -441,9 +440,10 @@ public class AppDetailsFragment extends BackStackFragment {
         if(baseApp == null) {
             return;
         }
-
+        CommentsFragment commentsFragment = CommentsFragment.newInstance(baseApp.getId());
+        commentsFragment.setOnCommentEnteredListener(this);
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, CommentsFragment.newInstance(baseApp.getId()), Constants.TAG_COMMENTS)
+                .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
                 .commit();
     }
@@ -459,5 +459,20 @@ public class AppDetailsFragment extends BackStackFragment {
         Map<String, String> params = new HashMap<>();
         params.put("appId", baseApp.getId());
         FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
+    }
+
+    @Override
+    public void registerForEvents() {
+        super.registerForEvents();
+        if(shouldReload) {
+            ApiService.getInstance(activity).loadAppComments(appId, userId, 1, MAX_DISPLAYED_COMMENTS);
+            shouldReload = false;
+        }
+    }
+
+    @Override
+    public void onCommentEntered(NewComment comment) {
+        shouldReload = true;
+        commentsList.removeAllViews();
     }
 }
