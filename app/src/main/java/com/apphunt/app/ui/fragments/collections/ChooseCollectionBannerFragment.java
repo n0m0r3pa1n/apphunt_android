@@ -16,10 +16,11 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.CollectionBannersList;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetBannersEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetBannersApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -34,7 +35,7 @@ import butterknife.OnItemClick;
  * *
  * * NaughtySpirit 2015
  */
-public class ChooseCollectionBannerFragment extends BaseFragment {
+public class ChooseCollectionBannerFragment extends BackStackFragment {
 
     private static final String TAG = ChooseCollectionBannerFragment.class.getSimpleName();
 
@@ -88,7 +89,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onBannersReceived(GetBannersEvent event) {
+    public void onBannersReceived(GetBannersApiEvent event) {
         list = event.getBannersList();
         bannersList.setAdapter(new CollectionBannersAdapter(activity, list));
     }
@@ -96,17 +97,7 @@ public class ChooseCollectionBannerFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = (AppCompatActivity) activity;
-        BusProvider.getInstance().register(this);
-
         hideSoftKeyboard();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        BusProvider.getInstance().unregister(this);
     }
 }

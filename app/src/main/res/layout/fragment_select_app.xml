@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@color/bg_primary">
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        app:cpb_colors="@array/colors_sec"/>
+
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/select_apps_info_padding"
+        android:text="@string/info_select_app"
+        android:textSize="@dimen/select_apps_info_text"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+    <GridView
+        android:id="@+id/gv_apps_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/info"
+        android:verticalSpacing="@dimen/select_apps_gridview_vertical_spacing"
+        android:horizontalSpacing="@dimen/select_apps_gridview_horizontal_spacing"
+        android:padding="@dimen/select_apps_gridview_padding"
+        android:layoutAnimation="@anim/list_view_entry"
+        android:numColumns="2"
+        android:animationCache="true"
+        android:elevation="@dimen/select_apps_gridview_elevation"/>
+</RelativeLayout>

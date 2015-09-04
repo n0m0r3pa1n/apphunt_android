@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -9,7 +10,5 @@
         android:id="@+id/banners_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        />
-
+        android:divider="@null"/>
 </RelativeLayout>

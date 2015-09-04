@@ -2,9 +2,7 @@ package com.apphunt.app.ui.views.widgets;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.TypedArray;
 import android.graphics.*;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,11 +13,8 @@ import com.igormaznitsa.jhexed.engine.misc.HexPoint2D;
 import com.igormaznitsa.jhexed.engine.misc.HexPosition;
 import com.igormaznitsa.jhexed.engine.misc.HexRect2D;
 import com.igormaznitsa.jhexed.engine.renders.HexEngineRender;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -216,7 +211,7 @@ public class JHexedPhotoView extends View implements HexEngineRender<Canvas> {
         for (final String s : assetImageNames) {
             //final InputStream in = assetManager.open(s);
             try {
-                final Bitmap loaded = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_logo_a);
+                final Bitmap loaded = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.ic_logo);
                 result[index++] = loaded;
             } finally {
                 //in.close();

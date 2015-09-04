@@ -15,14 +15,14 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetFavouriteCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetFavouriteCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.flurry.android.FlurryAgent;
@@ -91,7 +91,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     private void showEmptyView() {
         vsNoCollection.setVisibility(View.VISIBLE);
-        ((TextView) view.findViewById(R.id.text)).setText(getResources().getString(R.string.no_favourite_collections));
+        ((TextView) view.findViewById(R.id.score_text)).setText(getResources().getString(R.string.no_favourite_collections));
     }
 
 
@@ -109,7 +109,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionFavourited(FavouriteCollectionEvent event) {
+    public void onCollectionFavourited(FavouriteCollectionApiEvent event) {
         if (adapter != null) {
             adapter.addCollection(event.getCollection());
             if(adapter.getCount() > 0) {
@@ -119,7 +119,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionUnfavourited(UnfavouriteCollectionEvent event) {
+    public void onCollectionUnfavourited(UnfavouriteCollectionApiEvent event) {
         if (adapter != null) {
             adapter.removeCollection(event.getCollectionId());
             if(adapter.getCount() == 0) {
@@ -129,7 +129,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onFavouriteCollectionReceived(GetFavouriteCollectionsEvent event) {
+    public void onFavouriteCollectionReceived(GetFavouriteCollectionsApiEvent event) {
         allCollections.hideBottomLoader();
 
         if (adapter == null) {
@@ -149,7 +149,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionDeleted(DeleteCollectionEvent event) {
+    public void onCollectionDeleted(DeleteCollectionApiEvent event) {
         String collectionId = event.getCollectionId();
         adapter.removeCollection(collectionId);
     }

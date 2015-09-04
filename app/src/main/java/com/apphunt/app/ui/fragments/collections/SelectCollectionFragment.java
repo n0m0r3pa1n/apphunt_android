@@ -17,12 +17,12 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
@@ -34,10 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by nmp on 15-7-4.
- */
-public class SelectCollectionFragment extends BaseFragment implements OnItemClickListener {
+public class SelectCollectionFragment extends BackStackFragment implements OnItemClickListener {
     public static final String TAG = SelectCollectionFragment.class.getSimpleName();
 
     private static final String APP_KEY = "App";
@@ -51,6 +48,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     private SelectCollectionAdapter selectCollectionAdapter;
     private BaseApp app;
+    private AppCompatActivity activity;
 
     public static SelectCollectionFragment newInstance(App app) {
         SelectCollectionFragment fragment = new SelectCollectionFragment();
@@ -100,7 +98,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     }
 
     @Subscribe
-    public void onMyCollectionsReceive(GetMyAvailableCollectionsEvent event) {
+    public void onMyCollectionsReceive(GetMyAvailableCollectionsApiEvent event) {
         myCollections.hideBottomLoader();
 
         if(selectCollectionAdapter == null) {
@@ -117,19 +115,6 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
             vsNoCollection.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        BusProvider.getInstance().unregister(this);
-    }
-
 
 
     @OnClick(R.id.add_collection)
@@ -148,15 +133,21 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+    }
+
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if(event.getAppsCollection() != null) {
-            getActivity().getSupportFragmentManager().popBackStack();
+            activity.getSupportFragmentManager().popBackStack();
         }
     }
 
     @Subscribe
-    public void onCollectionCreated(CreateCollectionEvent event) {
+    public void onCollectionCreated(CreateCollectionApiEvent event) {
         FlurryAgent.logEvent(TrackingEvents.UserCreatedCollectionFromSelectCollection);
         currentPage = 0;
         selectCollectionAdapter = null;

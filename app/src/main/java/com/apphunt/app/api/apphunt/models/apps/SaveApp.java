@@ -9,6 +9,7 @@ public class SaveApp {
     @SerializedName("package")
     private String packageName;
     private String description;
+    private String[] tags = {};
 
     public String getPlatform() {
         return platform;
@@ -40,5 +41,24 @@ public class SaveApp {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    @Override
+    public String toString() {
+        return "SaveApp{" +
+                "platform='" + platform + '\'' +
+                ", userId='" + userId + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", description='" + description + '\'' +
+                ", tags=" + tags +
+                '}';
     }
 }

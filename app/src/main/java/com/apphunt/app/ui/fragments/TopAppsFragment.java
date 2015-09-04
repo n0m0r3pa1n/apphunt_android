@@ -3,7 +3,6 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,9 +14,10 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionApiEvent;
 import com.apphunt.app.ui.adapters.rankings.TopAppsAdapter;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -73,7 +73,7 @@ public class TopAppsFragment extends BaseFragment {
 
     @Subscribe
     @SuppressWarnings("unused")
-    public void onCollectionReceived(GetTopAppsCollectionEvent event) {
+    public void onCollectionReceived(GetTopAppsCollectionApiEvent event) {
         TopAppsAdapter adapter = new TopAppsAdapter(getActivity(), event.getAppsCollection().getCollections().get(0).getApps());
         collectionAppsList.setAdapter(adapter);
         title = event.getAppsCollection().getCollections().get(0).getName();

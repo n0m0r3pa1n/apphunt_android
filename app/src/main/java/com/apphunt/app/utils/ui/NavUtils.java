@@ -1,9 +1,8 @@
 package com.apphunt.app.utils.ui;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,13 +14,12 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
+import com.apphunt.app.ui.fragments.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
+import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 
-/**
- * Created by nmp on 15-5-9.
- */
 public class NavUtils {
 
     private static NavUtils instance;
@@ -33,10 +31,15 @@ public class NavUtils {
             instance = new NavUtils(activity);
         }
 
+        instance.setActivity(activity);
         return instance;
     }
 
     private NavUtils(AppCompatActivity activity) {
+        this.activity = activity;
+    }
+
+    private void setActivity(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -51,6 +54,10 @@ public class NavUtils {
     }
 
     public void startSaveAppFragment(ApplicationInfo data) {
+        if (activity.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            return;
+        }
+
         String curFragmentTag = activity.getSupportFragmentManager().getBackStackEntryAt(activity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
 
         if (!curFragmentTag.equals(Constants.TAG_SAVE_APP_FRAGMENT)) {
@@ -68,6 +75,20 @@ public class NavUtils {
         }
     }
 
+    public void presentSaveAppFragment(AppCompatActivity act, ApplicationInfo data) {
+        Bundle extras = new Bundle();
+        extras.putParcelable(Constants.KEY_DATA, data);
+
+        SaveAppFragment saveAppFragment = new SaveAppFragment();
+        saveAppFragment.setArguments(extras);
+
+        act.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
+                .add(R.id.container, saveAppFragment, Constants.TAG_SAVE_APP_FRAGMENT)
+                .addToBackStack(Constants.TAG_SAVE_APP_FRAGMENT)
+                .commitAllowingStateLoss();
+    }
+
     public void presentSelectCollectionFragment(App app) {
         SelectCollectionFragment fragment = SelectCollectionFragment.newInstance(app);
 
@@ -75,6 +96,14 @@ public class NavUtils {
                 .add(R.id.container, fragment, Constants.TAG_SELECT_COLLECTION_FRAGMENT)
                 .addToBackStack(Constants.TAG_SELECT_COLLECTION_FRAGMENT)
                 .commitAllowingStateLoss();
+    }
+
+    public void presentUserProfileFragment(String userId, String name) {
+        UserProfileFragment fragment = UserProfileFragment.newInstance(userId, name);
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, Constants.TAG_USER_PROFILE_FRAGMENT)
+                .addToBackStack(Constants.TAG_USER_PROFILE_FRAGMENT)
+                .commit();
     }
 
     public void presentCreateCollectionFragment() {
@@ -110,10 +139,19 @@ public class NavUtils {
         extras.putString(Constants.KEY_APP_NAME, app.getName());
         detailsFragment.setArguments(extras);
 
-        ((FragmentActivity) activity).getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
                 .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                .commit();
+                .commitAllowingStateLoss();
+    }
+
+    public void presentSearchResultsFragment(String query) {
+        SearchResultsFragment searchFragment = SearchResultsFragment.newInstance(query);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
+                .addToBackStack(Constants.TAG_SEARCH_RESULTS_FRAGMENT)
+                .commitAllowingStateLoss();
     }
 
     public boolean isOnBackBlocked() {

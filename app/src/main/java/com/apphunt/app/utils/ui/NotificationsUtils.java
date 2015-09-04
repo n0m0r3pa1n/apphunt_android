@@ -18,9 +18,9 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.User;
-import com.apphunt.app.services.DailyNotificationService;
-import com.apphunt.app.ui.fragments.NotificationFragment;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.services.DailyNotificationService;
+import com.apphunt.app.ui.fragments.notification.NotificationFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
@@ -39,7 +39,8 @@ public class NotificationsUtils {
     public static void setupDailyNotificationService(Context ctx) {
 
         Intent intent = new Intent(ctx, DailyNotificationService.class);
-        PendingIntent alarmIntent = PendingIntent.getService(ctx, 123, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent = PendingIntent.getService(ctx, Constants.RC_DAILY_SERVICE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmMgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
 
@@ -107,15 +108,22 @@ public class NotificationsUtils {
         }
     }
 
-    public static void displayNotification(Context context, Class targetClass, Notification notification, Bitmap largeIcon) {
+    public static void displayNotification(Context context, Class targetClass, Bundle extras,
+                                           Notification notification, Bitmap largeIcon) {
 
         Intent notifyIntent = new Intent(context, targetClass);
-        notifyIntent.putExtra(Constants.KEY_NOTIFICATION_TYPE, notification.getType());
+        if(extras == null) {
+            extras = new Bundle();
+        }
+        extras.putString(Constants.KEY_NOTIFICATION_TYPE, notification.getType());
+        notifyIntent.putExtras(extras);
 
         if (largeIcon == null) {
             largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
         }
         try {
+            Integer notificationCode = Constants.NOTIFICATION_TYPE_TO_REQUEST_CODE.get(notification.getType());
+            notificationCode = notificationCode == null ? 200 : notificationCode;
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -124,20 +132,21 @@ public class NotificationsUtils {
                             .setLargeIcon(largeIcon)
                             .setContentTitle(notification.getTitle())
                             .setContentText(notification.getMessage())
-                            .setContentIntent(PendingIntent.getActivity(context, Constants.NOTIFICATION_TYPE_TO_REQUEST_CODE.get(notification.getType()), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                            .setContentIntent(PendingIntent.getActivity(context, notificationCode, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(notification.getMessage()))
                             .setAutoCancel(true);
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(Constants.NOTIFICATION_TYPE_TO_ID.get(notification.getType()), mBuilder.build());
+            mNotificationManager.notify(notificationCode, mBuilder.build());
         } catch (Exception e) {
+            e.printStackTrace();
             Crashlytics.logException(e);
         }
     }
 
     public static void displayNotification(Context context, Class targetClass, Notification notification) {
-        displayNotification(context, targetClass, notification, null);
+        displayNotification(context, targetClass, null, notification, null);
     }
 
     private static int getDefaults() {

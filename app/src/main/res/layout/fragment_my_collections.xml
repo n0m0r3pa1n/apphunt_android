@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:elevation="1dp"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_secondary"
-    android:clickable="true">
+    android:clickable="true"
+    android:elevation="1dp">
 
     <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/collections_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <ViewStub
         android:id="@+id/vs_no_collection"
@@ -18,5 +19,4 @@
         android:layout="@layout/layout_no_collection"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
-
 </RelativeLayout>

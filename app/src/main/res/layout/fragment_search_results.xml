@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_secondary"
+    android:orientation="vertical"
+    android:clickable="true">
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        style="@style/CircularThemeProgressBar"/>
+
+    <RelativeLayout
+        android:id="@+id/no_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_results_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_search_not_found"
+            android:layout_centerInParent="true"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_results_icon"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_results_found"
+            android:textSize="22sp"
+            android:textColor="#32000000"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/collections_container"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/collections_header"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:textSize="@dimen/list_header_text"
+            android:gravity="center_vertical"
+            android:text="Collections"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/more_collections"
+            android:elevation="2dp"
+            android:textAllCaps="true"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/more_button"
+            android:layout_alignParentRight="true"
+            android:background="@color/bg_primary"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <ListView
+            android:id="@+id/collections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/collections_header"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/apps_container"
+        android:elevation="2dp"
+        android:layout_below="@+id/collections_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/apps_header"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:textSize="@dimen/list_header_text"
+            android:gravity="center_vertical"
+            android:text="Apps"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/more_apps"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/more_button"
+            android:elevation="2dp"
+            android:textAllCaps="true"
+            android:layout_alignParentRight="true"
+            android:background="@color/bg_primary"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:scrollbars="none"
+            android:layoutAnimation="@anim/list_view_entry"
+            android:id="@+id/apps"
+            android:layout_below="@+id/apps_header"/>
+    </RelativeLayout>
+</RelativeLayout>

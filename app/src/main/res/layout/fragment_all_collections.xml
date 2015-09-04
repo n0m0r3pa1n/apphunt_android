@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.apphunt.app.ui.views.containers.ScrollListView
         android:id="@+id/all_collections"
@@ -14,7 +15,7 @@
         android:inflatedId="@+id/vs_no_collection"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout="@layout/layout_no_favorites"
         android:layout_centerInParent="true"
+        android:layout="@layout/layout_no_collection"
         android:visibility="gone"/>
 </RelativeLayout>

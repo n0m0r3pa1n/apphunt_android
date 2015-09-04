@@ -2,11 +2,11 @@ package com.apphunt.app.ui.fragments.navigation;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,16 +17,17 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
-import com.apphunt.app.constants.Constants;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -37,10 +38,10 @@ import static com.apphunt.app.constants.Constants.HELP_ADD_APP;
 import static com.apphunt.app.constants.Constants.HELP_APPS_REQUIREMENTS;
 import static com.apphunt.app.constants.Constants.HELP_TOP_HUNTERS_POINTS;
 import static com.apphunt.app.constants.Constants.SETTINGS;
+import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 import static com.apphunt.app.constants.Constants.TOP_APPS;
 import static com.apphunt.app.constants.Constants.TOP_HUNTERS;
 import static com.apphunt.app.constants.Constants.TRENDING_APPS;
-import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -190,8 +191,7 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 if (!isAdded()) return;
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                getActivity().supportInvalidateOptionsMenu();
             }
 
             @Override
@@ -204,7 +204,8 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
+                getActivity().supportInvalidateOptionsMenu();
             }
         };
 
@@ -235,7 +236,7 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
-        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
+//        ((DrawerItemAdapter) mDrawerList.getAdapter()).selectPosition(position);
         this.selectedPosition = position;
     }
 

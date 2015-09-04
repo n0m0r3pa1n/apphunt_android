@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +16,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,17 +28,20 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.StatusCode;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppSavedApiEvent;
+import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
-import com.apphunt.app.constants.Constants;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.constants.StatusCode;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
@@ -50,7 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SaveAppFragment extends BaseFragment implements OnClickListener {
+public class SaveAppFragment extends BackStackFragment implements OnClickListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
@@ -58,12 +64,25 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private ApplicationInfo data;
     private ActionBarActivity activity;
+    private AutoCompleteTextView tagView;
+
+    @InjectView(R.id.container)
+    RelativeLayout container;
+
+    @InjectView(R.id.title)
+    TextView title;
+
+    @InjectView(R.id.app_icon)
+    ImageView icon;
 
     @InjectView(R.id.save)
     Button saveButton;
 
     @InjectView(R.id.description)
     EditText desc;
+
+    @InjectView(R.id.tag_group)
+    TagGroup tagGroup;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,26 +105,20 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
-    }
-
     private void initUI() {
-        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.container);
+        container.setAnimation(AnimationUtils.loadAnimation(activity, R.anim.vertical_flip));
         container.setOnClickListener(this);
-        TextView title = (TextView) view.findViewById(R.id.title);
-        title.setText(data.loadLabel(activity.getPackageManager()));
 
-        ImageView icon = (ImageView) view.findViewById(R.id.app_icon);
+        title.setText(data.loadLabel(activity.getPackageManager()));
         icon.setImageDrawable(data.loadIcon(activity.getPackageManager()));
+
+        tagGroup.setOnTagTextEntryListener(new TagGroup.OnTagTextEntryListener() {
+            @Override
+            public void onTextEntry(AutoCompleteTextView view, String text) {
+                tagView = view;
+                if (!TextUtils.isEmpty(text)) ApiClient.getClient(activity).getTagsSuggestion(text);
+            }
+        });
     }
 
     @Override
@@ -130,24 +143,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     public void saveApp() {
         if(!LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
             showLoginFragment();
-            return;
-        }
-
-        if (desc.getText() != null && desc.getText().length() >= 50) {
-            if (LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-                saveApp(saveButton, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-            } else {
-                showLoginFragment();
-            }
-        } else if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
-            desc.setHint(R.string.hint_short_description);
-            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-            desc.setError("Min 50 chars");
-            vibrate();
-        } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
-            desc.setHint(R.string.hint_please_enter_description);
-            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
-            vibrate();
+        } else {
+            saveApp(saveButton, LoginProviderFactory.get(activity).getUser().getId());
         }
     }
 
@@ -169,14 +166,29 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     private void saveApp(final View v, String userId) {
-        v.setEnabled(false);
-        SaveApp app = new SaveApp();
-        app.setDescription(desc.getText().toString());
-        app.setPackageName(data.packageName);
-        app.setPlatform(Constants.PLATFORM);
-        app.setUserId(userId);
+        if (desc.getText() != null && desc.getText().length() > 0 && desc.getText().length() <= 50) {
+            desc.setHint(R.string.hint_short_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            desc.setError("Min 50 chars");
+            vibrate();
+        } else if (desc.getText() == null || desc.getText() != null && desc.getText().length() == 0) {
+            desc.setHint(R.string.hint_please_enter_description);
+            desc.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.shake));
+            vibrate();
+        } else {
+            v.setEnabled(false);
+            SaveApp app = new SaveApp();
+            app.setDescription(desc.getText().toString());
+            app.setPackageName(data.packageName);
+            app.setPlatform(Constants.PLATFORM);
+            app.setUserId(userId);
 
-        ApiClient.getClient(getActivity()).saveApp(app);
+            if (tagGroup.getTags().length > 0) {
+                app.setTags(tagGroup.getTags());
+            }
+
+            ApiClient.getClient(getActivity()).saveApp(app);
+        }
     }
 
     private void closeKeyboard(View v) {
@@ -247,4 +259,8 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         }
     }
 
+    @Subscribe
+    public void onTagsSuggestionReceive(TagsSuggestionApiEvent event) {
+        tagView.setAdapter(new ArrayAdapter<>(activity, R.layout.layout_tags_suggestion, event.getTags().getTags()));
+    }
 }

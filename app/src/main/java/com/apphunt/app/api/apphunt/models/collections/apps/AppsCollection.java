@@ -1,16 +1,14 @@
 package com.apphunt.app.api.apphunt.models.collections.apps;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.Constants.CollectionStatus;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +26,12 @@ public class AppsCollection implements Serializable {
     private String name;
     private String description;
     @SerializedName("status")
-    private Constants.CollectionStatus status;
+    private CollectionStatus status;
     private boolean hasVoted;
     private boolean isFavourite;
     private int votesCount;
     private User createdBy;
+    private ArrayList<String> tags = new ArrayList<>();
 
     private List<BaseApp> apps = new ArrayList<>();
     public String getId() {
@@ -67,11 +66,11 @@ public class AppsCollection implements Serializable {
         this.description = description;
     }
 
-    public Constants.CollectionStatus getStatus() {
+    public CollectionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Constants.CollectionStatus status) {
+    public void setStatus(CollectionStatus status) {
         this.status = status;
     }
 
@@ -107,6 +106,18 @@ public class AppsCollection implements Serializable {
         this.createdBy = createdBy;
     }
 
+    public boolean isHasVoted() {
+        return hasVoted;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
     public boolean isFavourite() {
         return isFavourite;
     }
@@ -129,6 +140,12 @@ public class AppsCollection implements Serializable {
                 ", picture='" + picture + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", status=" + status +
+                ", hasVoted=" + hasVoted +
+                ", isFavourite=" + isFavourite +
+                ", votesCount=" + votesCount +
+                ", createdBy=" + createdBy +
+                ", tags=" + tags +
                 ", apps=" + apps +
                 '}';
     }

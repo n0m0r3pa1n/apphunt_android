@@ -20,6 +20,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -27,6 +29,7 @@ import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
+import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -39,11 +42,11 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -150,7 +153,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
-    public void showSearchResult(ArrayList<App> apps) {
+    public void showSearchResult(List<App> apps) {
         backup.addAll(items);
         items.clear();
 
@@ -207,7 +210,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == Constants.ItemType.ITEM.getValue()) {
             final ViewHolderItem viewHolderItem = (ViewHolderItem) holder;
-            final App app = ((AppItem) getItem(position)).getData();
+            final BaseApp app = ((AppItem) getItem(position)).getData();
 
             int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
 
@@ -217,18 +220,17 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(!app.getCategories().isEmpty()) {
                 viewHolderItem.category.setText(app.getCategories().get(0));
             }
-            Picasso.with(ctx)
-                    .load(app.getCreatedBy().getProfilePicture())
-                    .placeholder(R.drawable.placeholder_avatar)
-                    .into(viewHolderItem.creatorImageView);
-            viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-            viewHolderItem.vote.setBaseApp(app);
+
+            User createdBy = app.getCreatedBy();
+            viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
+
+            viewHolderItem.vote.setBaseApp((App) app);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment(app);
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
                     } else {
                         LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
                     }
@@ -299,11 +301,9 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @InjectView(R.id.category)
         TextView category;
 
-        @InjectView(R.id.creator_avatar)
-        CircleImageView creatorImageView;
 
-        @InjectView(R.id.creator_name)
-        TextView creatorUsername;
+        @InjectView(R.id.creator_container)
+        CreatorView creatorView;
 
         @InjectView(R.id.btn_vote)
         AppVoteButton vote;

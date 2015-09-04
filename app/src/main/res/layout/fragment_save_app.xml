@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_primary"
@@ -8,21 +10,22 @@
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/save_box_margin"
         android:background="@color/bg_secondary"
         android:elevation="@dimen/save_box_elevation">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/save_box_title_height"
             android:layout_marginBottom="@dimen/save_box_title_margin_bottom"
             android:padding="@dimen/save_box_title_padding"
-            android:gravity="center"
+            android:textSize="@dimen/save_box_title_text"
             android:textColor="@color/save_app_text"
-            android:textSize="@dimen/save_box_title_text"/>
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
         <ImageView
             android:id="@+id/app_icon"
@@ -30,53 +33,60 @@
             android:layout_height="@dimen/save_box_icon_size"
             android:layout_below="@+id/title"
             android:layout_marginBottom="@dimen/save_box_icon_margin_bottom"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true"/>
 
-        <EditText
-            android:id="@+id/description"
+        <RelativeLayout
+            android:id="@+id/container_desc"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/save_box_desc_height"
+            android:layout_height="match_parent"
             android:layout_below="@+id/app_icon"
-            android:gravity="top|start"
-            android:background="@color/desc_bg"
-            android:singleLine="false"
-            android:maxLength="100"
-            android:padding="@dimen/save_box_desc_padding"
-            android:elevation="@dimen/save_box_desc_elevation"
-            android:hint="@string/hint_description"
-            android:textSize="@dimen/save_box_desc_text"
-            android:textColor="@color/desc_text"
-            android:textColorHint="@color/desc_hint"
-            android:inputType="textMultiLine"/>
-        
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/desc_shadow_height"
-            android:background="@drawable/shadow"
-            android:layout_alignTop="@+id/description"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_above="@+id/save"
+            android:background="#32000000"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:elevation="0dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/desc_shadow_height"
-            android:background="@drawable/shadow_bottom"
-            android:layout_alignBottom="@+id/description"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            <com.apphunt.app.ui.views.widgets.AHEditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/tag_group"
+                android:gravity="top|start"
+                android:background="@color/save_app_desc_bg"
+                android:singleLine="false"
+                android:maxLength="100"
+                android:padding="@dimen/save_box_desc_padding"
+                android:hint="@string/hint_description"
+                android:textSize="@dimen/save_box_desc_text"
+                android:textColor="@color/desc_text"
+                android:textColorHint="@color/desc_hint"
+                android:inputType="textMultiLine"
+                app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <Button
+            <com.apphunt.app.ui.views.widgets.TagGroup
+                android:id="@+id/tag_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:background="@color/save_app_desc_bg"
+                app:atg_isAppendMode="true"
+                style="@style/TagGroup.Beauty_Blue"/>
+
+        </RelativeLayout>
+
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="@dimen/save_btn_height"
-            android:background="@android:color/transparent"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/description"
-            android:textColor="@color/save_app_text"
-            android:textSize="@dimen/save_btn_text"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/transparent"
             android:text="@string/save"
-            android:gravity="center"/>
+            android:textSize="@dimen/save_btn_text"
+            android:textColor="@color/save_app_text"
+            android:textAllCaps="true"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </RelativeLayout>
-
 </RelativeLayout>

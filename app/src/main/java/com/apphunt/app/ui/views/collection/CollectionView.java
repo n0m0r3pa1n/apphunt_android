@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +18,17 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
+import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +63,9 @@ public class CollectionView extends RelativeLayout {
 
     @InjectView(R.id.created_by)
     TextView createdBy;
+
+    @InjectView(R.id.tags_container)
+    TextView tags;
 
     @InjectView(R.id.collection_status)
     ImageView status;
@@ -141,7 +149,7 @@ public class CollectionView extends RelativeLayout {
     }
 
     @Subscribe
-    public void onCollectionUpdate(UpdateCollectionEvent event) {
+    public void onCollectionUpdate(UpdateCollectionApiEvent event) {
         AppsCollection newCollection = event.getAppsCollection();
         if (!newCollection.getId().equals(appsCollection.getId())) {
             return;
@@ -190,11 +198,29 @@ public class CollectionView extends RelativeLayout {
             setVisibilityWhenPublic();
         }
 
+        createdByAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromCollection);
+                User user = appsCollection.getCreatedBy();
+                NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(user.getId(), user.getName());
+            }
+        });
         favouriteButton.setCollection(collection);
         voteButton.setCollection(collection);
         name.setText(collection.getName());
         createdBy.setText(collection.getCreatedBy().getUsername());
         Picasso.with(getContext()).load(collection.getCreatedBy().getProfilePicture()).into(createdByAvatar);
+
+        String tags = "";
+        for (int i = 0; i < collection.getTags().size(); i++) {
+            if (i > 0 && i < collection.getTags().size()) {
+                tags += ", ";
+            }
+
+            tags += collection.getTags().get(i);
+        }
+        this.tags.setText(String.format(getContext().getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
 
         final ViewTreeObserver viewTree = banner.getViewTreeObserver();
         viewTree.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

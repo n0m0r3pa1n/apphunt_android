@@ -2,6 +2,7 @@
  <resources>
     <color name="bg_primary">#23a2eb</color>
     <color name="bg_secondary">#eeeeee</color>
+    <color name="bg_primary_lighter">#90CAF9</color>
 
     <color name="bg_fab">#e91e63</color>
     <color name="primary_pressed">#e1bee7</color>
@@ -11,9 +12,11 @@
     <color name="vote_btn_text">#2f90de</color>
     <color name="vote_btn_voted_text">#FFFFFF</color>
 
-    <color name="desc_bg">#e7e7e7</color>
+    <color name="desc_bg">#50FFFFFF</color>
     <color name="desc_text">#96000000</color>
     <color name="desc_hint">#69000000</color>
+
+    <color name="save_app_desc_bg">#e7e7e7</color>
 
     <color name="select_app_text">#96000000</color>
     
@@ -35,6 +38,8 @@
 
    <color name="save_collection_color">#43A047</color>
 
+    <color name="percent_20_black">#33000000</color>
+
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>
     <color name="text_headers">#36000000</color>
@@ -54,6 +59,10 @@
         <item>@color/holo_green_dark</item>
         <item>@color/holo_purple_dark</item>
         <item>@color/holo_red_dark</item>
+    </integer-array>
+
+    <integer-array name="colors_sec">
+        <item>@android:color/white</item>
     </integer-array>
 
     <color name="holo_blue_dark">#0099cc</color>

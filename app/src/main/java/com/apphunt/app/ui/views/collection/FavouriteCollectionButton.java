@@ -14,8 +14,8 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionApiEvent;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -109,7 +109,7 @@ public class FavouriteCollectionButton extends LinearLayout{
     }
 
     @Subscribe
-    public void onFavouriteCollection(FavouriteCollectionEvent event) {
+    public void onFavouriteCollection(FavouriteCollectionApiEvent event) {
         if(!event.getCollection().getId().equals(collection.getId())){
             return;
         }
@@ -118,7 +118,7 @@ public class FavouriteCollectionButton extends LinearLayout{
     }
 
     @Subscribe
-    public void onUnfavouriteCollection(UnfavouriteCollectionEvent event) {
+    public void onUnfavouriteCollection(UnfavouriteCollectionApiEvent event) {
         if(!event.getCollectionId().equals(collection.getId())){
             return;
         }

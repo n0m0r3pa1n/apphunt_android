@@ -3,30 +3,25 @@ package com.apphunt.app.ui.views.widgets;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.utils.InstalledPackagesUtils;
+import com.apphunt.app.db.models.ClickedApp;
+import com.apphunt.app.utils.PackagesUtils;
 import com.flurry.android.FlurryAgent;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.realm.Realm;
 
 public class DownloadButton extends LinearLayout {
     private TextView textView;
@@ -61,8 +56,8 @@ public class DownloadButton extends LinearLayout {
         }
     }
 
-    private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_download, this, true);
+    private void init(final Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
 
         textView.setOnClickListener(new OnClickListener() {
@@ -75,29 +70,39 @@ public class DownloadButton extends LinearLayout {
                 Map<String, String> params = new HashMap<>();
                 params.put("appPackage", appPackage);
 
-                if (InstalledPackagesUtils.isPackageInstalled(appPackage, getContext())) {
+                if (PackagesUtils.isPackageInstalled(appPackage, getContext())) {
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
                     Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackage);
                     getContext().startActivity(intent);
                 } else {
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
-                    Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appPackage));
-                    marketIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        marketIntent.setData(Uri.parse("market://details?id=" + appPackage));
-                        getContext().startActivity(marketIntent);
-                    } catch (android.content.ActivityNotFoundException anfe) {
-                        marketIntent.setData(Uri.parse(appPackage));
-                        getContext().startActivity(marketIntent);
-                    }
+                    PackagesUtils.openInMarket(getContext(), appPackage);
+
+                    updateOrCreateClickedAppObject();
                 }
             }
         });
     }
 
+    private void updateOrCreateClickedAppObject() {
+        Realm realm = Realm.getInstance(getContext());
+        ClickedApp clickedApp = realm.where(ClickedApp.class).equalTo("packageName", appPackage).findFirst();
+        realm.beginTransaction();
+
+        if (clickedApp != null) {
+            clickedApp.setDateClicked(new Date());
+        } else {
+            clickedApp = realm.createObject(ClickedApp.class);
+            clickedApp.setPackageName(appPackage);
+            clickedApp.setDateClicked(new Date());
+        }
+
+        realm.commitTransaction();
+    }
+
     public void setAppPackage(String appPackage) {
         this.appPackage = appPackage;
-        if(InstalledPackagesUtils.isPackageInstalled(appPackage, getContext())) {
+        if(PackagesUtils.isPackageInstalled(appPackage, getContext())) {
             textView.setText(R.string.open);
         } else {
             textView.setText(R.string.install);

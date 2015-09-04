@@ -9,7 +9,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,10 @@ import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
@@ -141,6 +142,7 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @OnClick(R.id.reload)
     public void reloadApps() {
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
         btnReload.setVisibility(View.GONE);
         trendingAppsAdapter.resetAdapter();
         ApiService.getInstance(activity).loadAppsForToday();
@@ -151,7 +153,7 @@ public class TrendingAppsFragment extends BaseFragment {
     @OnClick(R.id.add_app)
     public void addApp() {
         startSelectAppFragment();
-        btnAddApp.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        SoundsUtils.performHapticFeedback(btnAddApp);
     }
 
     private void startSelectAppFragment() {
@@ -179,6 +181,7 @@ public class TrendingAppsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         BusProvider.getInstance().register(this);
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -231,6 +234,7 @@ public class TrendingAppsFragment extends BaseFragment {
         if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
             btnReload.setVisibility(View.VISIBLE);
             rvTrendingApps.setVisibility(View.GONE);
+            swipeRefreshLayout.setVisibility(View.GONE);
         } else {
             reloadApps();
         }

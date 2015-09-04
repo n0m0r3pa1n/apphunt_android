@@ -1,4 +1,3 @@
-include ':app', ':volley', ':jhexed'
+include ':app', ':jhexed'
 
-project(':volley').projectDir = new File('libs/volley')
 project(':jhexed').projectDir = new File('libs/jhexed')

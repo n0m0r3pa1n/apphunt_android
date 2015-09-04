@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
-    android:layout_height="140dp"
+    android:layout_height="160dp"
     android:layout_gravity="center_horizontal"
-    cardview:cardCornerRadius="2dp"
-    cardview:cardUseCompatPadding="true">
+    app:cardCornerRadius="2dp"
+    app:cardUseCompatPadding="true">
 
     <ImageView
+        android:id="@+id/banner_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/banner"
-        android:id="@+id/banner_background"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner"/>
 
     <LinearLayout
         android:id="@+id/banner"
@@ -22,52 +22,69 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingTop="4dp"
-            android:background="#CC818181">
+            android:layout_weight="1"
+            android:background="#b4818181">
 
-            <TextView
+            <com.apphunt.app.ui.views.widgets.AHTextView
                 android:id="@+id/collection_name"
-                android:textSize="20sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_below="@+id/collection_name"
+                android:layout_toLeftOf="@+id/vote_btn"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/created_by_image"
-                    android:src="@drawable/ic_add"
                     android:layout_width="@dimen/collection_creator_image_size"
-                    android:layout_height="30dp"
-                    />
+                    android:layout_height="@dimen/collection_creator_image_size"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_add"/>
 
-                <TextView
+                <com.apphunt.app.ui.views.widgets.AHTextView
                     android:id="@+id/created_by"
-                    android:text="Janet Perkins"
-                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/created_by_image"
+                    android:layout_alignParentTop="true"
                     android:singleLine="true"
+                    android:textSize="12sp"
                     android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    android:gravity="center_vertical"
+                    app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+                
+                <com.apphunt.app.ui.views.widgets.AHTextView
+                    android:id="@+id/tags_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_toRightOf="@+id/created_by_image"
+                    android:layout_below="@+id/created_by"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="10sp"
+                    android:text="@string/tags"
+                    android:textColor="@android:color/white"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+            </RelativeLayout>
 
             <com.apphunt.app.ui.views.vote.CollectionVoteButton
                 android:id="@+id/vote_btn"
@@ -75,18 +92,15 @@
                 android:layout_marginRight="16dp"
                 android:layout_alignParentRight="true"
                 android:layout_width="55dp"
-                android:layout_height="55dp" />
-
+                android:layout_height="55dp"/>
         </RelativeLayout>
-
     </LinearLayout>
+
     <com.apphunt.app.ui.views.collection.FavouriteCollectionButton
         android:id="@+id/favourite_collection"
-        android:layout_gravity="top|right"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       />
-
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="top|right"/>
 </android.support.v7.widget.CardView>

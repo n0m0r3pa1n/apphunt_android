@@ -18,11 +18,11 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsApiEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.flurry.android.FlurryAgent;
@@ -98,11 +98,14 @@ public class AllCollectionsFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(getActivity().getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            MenuItem sortMenu = menu.findItem(R.id.action_sort).setVisible(true);
-            Spinner spinner = (Spinner) sortMenu.getActionView().findViewById(R.id.sort_by);
+            MenuItem sortMenuItem = menu.findItem(R.id.action_sort).setVisible(true);
+            Spinner spinner = (Spinner) sortMenuItem.getActionView().findViewById(R.id.sort_by);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(!isAdded()) {
+                        return;
+                    }
                     String[] items = getResources().getStringArray(R.array.order_values);
                     String selectedItem = items[position];
                     if (previousSelectedSortItem.equals(selectedItem)) {
@@ -126,10 +129,8 @@ public class AllCollectionsFragment extends BaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-
-
     @Subscribe
-    public void onCollectionsReceived(GetAllCollectionsEvent event) {
+    public void onCollectionsReceived(GetAllCollectionsApiEvent event) {
         allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(getActivity() ,event.getAppsCollection().getCollections());
@@ -142,13 +143,13 @@ public class AllCollectionsFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onCollectionDeleted(DeleteCollectionEvent event) {
+    public void onCollectionDeleted(DeleteCollectionApiEvent event) {
         String collectionId = event.getCollectionId();
         adapter.removeCollection(collectionId);
     }
 
     @Subscribe
-    public void onCollectionEdit(UpdateCollectionEvent event) {
+    public void onCollectionEdit(UpdateCollectionApiEvent event) {
         if(!event.isSuccess()) {
             return;
         }

@@ -4,12 +4,8 @@ import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.requests.base.BasePutRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +21,7 @@ public class PutCollectionsRequest extends BasePutRequest<AppsCollection> {
 
     @Override
     public void deliverResponse(AppsCollection response) {
-        BusProvider.getInstance().post(new UpdateCollectionEvent(response));
+        BusProvider.getInstance().post(new UpdateCollectionApiEvent(response));
     }
 
     public static class UpdateCollectionModel {

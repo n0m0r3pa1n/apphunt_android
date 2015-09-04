@@ -10,7 +10,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
-import com.apphunt.app.ui.fragments.LoginFragment;
+import com.apphunt.app.ui.fragments.notification.LoginFragment;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
@@ -74,6 +74,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
         SharedPreferencesHelper.setPreference(Constants.KEY_USERNAME, user.getUsername());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_PROFILE_PICTURE, user.getProfilePicture());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_COVER_PICTURE, user.getCoverPicture());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, user.getLoginType());
     }
 
     protected void removeSharedPreferences() {

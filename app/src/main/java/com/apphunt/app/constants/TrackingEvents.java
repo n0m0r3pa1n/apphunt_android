@@ -29,6 +29,9 @@ public interface TrackingEvents {
     String UserMadeSuggestion = "user.made.suggestion";
     String UserViewedAppDetails = "user.viewed.app.details";
     String UserViewedLogin = "user.viewed.login";
+    String UserTwitterLogin = "user.login.twitter";
+    String UserGooglePlusLogin = "user.login.googleplus";
+    String UserFacebookLogin = "user.login.facebook";
     String UserViewedSettings = "user.viewed.settings";
     String UserViewedAddApp = "user.viewed.add.app";
     String UserViewedSelectApp = "user.viewed.select.app";
@@ -67,4 +70,20 @@ public interface TrackingEvents {
     String UserEditDescription = "user.edit.description";
 
     String UserOpenedInstalledApp = "user.opened.installed.app";
+    String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
+    String UserViewedAddAppToAppHuntNotification = "user.viewed.add.app.to.apphunt.notification";
+    String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
+    String UserViewedUpdateAppDialog = "user.viewed.update.app.dialog";
+
+    String UserOpenedOwnProfileFromDrawer = "user.opened.own.profile.from.drawer";
+    String UserOpenedProfileFromTrendingOrSearchApps = "user.opened.profile.from.trending.or.search.apps";
+    String UserOpenedProfileFromAppDetails = "user.opened.profile.from.app.details";
+    String UserOpenedProfileFromComment = "user.opened.profile.from.comment";
+    String UserOpenedProfileFromTopHunters = "user.opened.profile.from.top.hunters";
+    String UserOpenedProfileFromCollectionsList = "user.opened.profile.from.collections.list";
+    String UserOpenedProfileFromCollection = "user.opened.profile.from.collection";
+
+    String UserSearchedWithTagFromAppDetails = "user.searched.with.tag.from.app.details";
+
+
 }

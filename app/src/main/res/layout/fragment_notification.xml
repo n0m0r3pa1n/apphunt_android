@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_semi_fragment"
@@ -13,7 +15,7 @@
         android:visibility="invisible"
         android:padding="@dimen/semi_fragment_layout_padding">
 
-        <TextView
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/notification_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,9 +23,10 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/notification_text"
-            android:layout_margin="@dimen/notification_text_margin"/>
+            android:layout_margin="@dimen/notification_text_margin"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/open_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,12 +34,13 @@
             android:layout_toLeftOf="@+id/dismiss"
             android:padding="@dimen/notification_button_padding"
             android:text="@string/settings"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
             android:background="@android:color/transparent"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/show_continue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,12 +48,13 @@
             android:layout_toLeftOf="@+id/dismiss"
             android:padding="@dimen/notification_button_padding"
             android:text="@string/show_continue"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
             android:background="@android:color/transparent"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-        <Button
+        <com.apphunt.app.ui.views.widgets.AHButton
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,9 +62,9 @@
             android:layout_alignParentRight="true"
             android:padding="@dimen/notification_button_padding"
             android:text="@string/dismiss"
+            android:textSize="@dimen/settings_button_dismiss_text"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/notification_button_text"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
         </RelativeLayout>
-
 </RelativeLayout>

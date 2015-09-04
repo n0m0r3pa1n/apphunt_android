@@ -4,14 +4,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.AllCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
 
 public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
-    public CollectionsPagerAdapter(FragmentManager fm) {
+    private final String creatorId;
+
+    public CollectionsPagerAdapter(FragmentManager fm, String creatorId) {
         super(fm);
+        this.creatorId = creatorId;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class CollectionsPagerAdapter extends FragmentStatePagerAdapter {
             case 1: fragment = FavouriteCollectionsFragment.newInstance();
                 break;
             case 2:
-                fragment = MyCollectionsFragment.newInstance();
+                fragment = MyCollectionsFragment.newInstance(creatorId);
                 break;
         }
 

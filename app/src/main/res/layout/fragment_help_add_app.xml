@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,14 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            style="@style/HelpText"
-            android:text="To add APP is really easy. Be sure to choose app which is quite new or updated soon. Try to offer something new and unknown to other hunters. Just follow these steps:" />
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:text="To add APP is really easy. Be sure to choose app which is quite new or updated soon. Try to offer something new and unknown to other hunters. Just follow these steps:"
+            app:typefacePath="fonts/OpenSans-Light.ttf"
+            style="@style/HelpText"/>
 
-        <TextView
-            style="@style/HelpText"
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:text="Step 1: Press the red add button "
-            android:textStyle="bold" />
+            app:typefacePath="fonts/OpenSans-Regular.ttf"
+            style="@style/HelpText"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,53 +28,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_add" />
+                android:src="@drawable/ic_add"/>
 
-            <TextView
-                style="@style/HelpText"
-                android:text="Press this red button on the home screen" />
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:text="Press this red button on the home screen"
+                app:typefacePath="fonts/OpenSans-Light.ttf"
+                style="@style/HelpText"/>
         </LinearLayout>
 
-        <com.apphunt.app.ui.views.AlertView
+        <com.apphunt.app.ui.views.widgets.AlertView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:text="The app you want to add must be installed on your device"/>
+            app:text="The app you want to add must be installed on your device"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <TextView
-            style="@style/HelpText"
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:text="Step2: Choose the app from the list"
-            android:textStyle="bold" />
+            app:typefacePath="fonts/OpenSans-Regular.ttf"
+            style="@style/HelpText"/>
 
-        <TextView
-            style="@style/HelpText"
-            android:text="Available apps on your device are visualized in a list. Select the one you want to add by pressing it" />
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:text="Available apps on your device are visualized in a list. Select the one you want to add by pressing it"
+            app:typefacePath="fonts/OpenSans-Light.ttf"
+            style="@style/HelpText"/>
 
-        <com.apphunt.app.ui.views.AlertView
+        <com.apphunt.app.ui.views.widgets.AlertView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:text="If you don't find the app, then it is already added in AppHunt by another hunter"/>
+            app:text="If you don't find the app, then it is already added in AppHunt by another hunter"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <TextView
-            style="@style/HelpText"
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:text="Step3: Write short description"
-            android:textStyle="bold" />
+            app:typefacePath="fonts/OpenSans-Regular.ttf"
+            style="@style/HelpText"/>
 
-        <TextView
-            style="@style/HelpText"
-            android:text="Write short description about the app in English - why is the app interesting for you, how you use it, why it will be useful for other hunters. This description should be between 50 and 100 symbols. When you are ready just press the SAVE button." />
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:text="Write short description about the app in English - why is the app interesting for you, how you use it, why it will be useful for other hunters. This description should be between 50 and 100 symbols. When you are ready just press the SAVE button."
+            app:typefacePath="fonts/OpenSans-Light.ttf"
+            style="@style/HelpText"/>
 
-        <com.apphunt.app.ui.views.AlertView
+        <com.apphunt.app.ui.views.widgets.AlertView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:text="If you are not logged in, the app will be be added with @TheAppHunt user"/>
+            app:text="If you are not logged in, the app will be be added with @TheAppHunt user"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
-        <TextView
-            style="@style/HelpText"
+        <com.apphunt.app.ui.views.widgets.AHTextView
             android:text="Step4: Wait for approval"
-            android:textStyle="bold" />
+            app:typefacePath="fonts/OpenSans-Light.ttf"
+            style="@style/HelpText"/>
 
-        <TextView
-            style="@style/HelpText"
-            android:text="AppHunt team then checks if the app meets all requirements and approves or rejects it. In case the app is approved, you will receive a notification." />
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:text="AppHunt team then checks if the app meets all requirements and approves or rejects it. In case the app is approved, you will receive a notification."
+            app:typefacePath="fonts/OpenSans-Light.ttf"
+            style="@style/HelpText"/>
     </LinearLayout>
 </ScrollView>

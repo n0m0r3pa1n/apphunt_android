@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -19,9 +18,11 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.views.collection.FavouriteCollectionButton;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
 import com.apphunt.app.utils.ui.NavUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -110,6 +111,16 @@ public class CollectionsAdapter extends BaseAdapter {
             viewHolder.favouriteButton.setVisibility(View.GONE);
         }
 
+        String tags = "";
+        for (int i = 0; i < appsCollection.getTags().size(); i++) {
+            if (i > 0 && i < appsCollection.getTags().size()) {
+                tags += ", ";
+            }
+
+            tags += appsCollection.getTags().get(i);
+        }
+        viewHolder.tags.setText(String.format(context.getString(R.string.tags), (!TextUtils.isEmpty(tags) ? tags : "none")));
+
         final Resources resources = context.getResources();
         Picasso.with(context)
                 .load(appsCollection.getCreatedBy().getProfilePicture())
@@ -117,6 +128,14 @@ public class CollectionsAdapter extends BaseAdapter {
                 .resize(resources.getDimensionPixelSize(R.dimen.collection_creator_image_size),
                         resources.getDimensionPixelSize(R.dimen.collection_creator_image_size))
                 .into(viewHolder.createdByImage);
+        viewHolder.createdByImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromCollectionsList);
+                NavUtils.getInstance((AppCompatActivity) context).presentUserProfileFragment(appsCollection.getCreatedBy().getId(),
+                        appsCollection.getCreatedBy().getName());
+            }
+        });
 
         Picasso.with(context)
                 .load(appsCollection.getPicture())
@@ -141,6 +160,11 @@ public class CollectionsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void resetAdapter() {
+        appsCollections.clear();
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder {
         @InjectView(R.id.card_view)
         CardView cardView;
@@ -156,6 +180,9 @@ public class CollectionsAdapter extends BaseAdapter {
 
         @InjectView(R.id.created_by)
         TextView createdBy;
+
+        @InjectView(R.id.tags_container)
+        TextView tags;
 
         @InjectView(R.id.vote_btn)
         CollectionVoteButton voteButton;

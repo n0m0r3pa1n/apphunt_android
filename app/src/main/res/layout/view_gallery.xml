@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
         android:id="@+id/loading"
-        android:layout_marginTop="10dp"
-        style="@style/CircularThemeProgressBar"
-        android:layout_gravity="center"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:indeterminate="true"
-        />
+        style="@style/CircularThemeProgressBar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:visibility="gone"
-        android:background="@color/bg_secondary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/bg_secondary"
+        android:visibility="gone"/>
 </LinearLayout>
 

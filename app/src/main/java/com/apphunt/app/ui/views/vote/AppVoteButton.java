@@ -5,8 +5,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,12 +13,13 @@ import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -67,13 +66,23 @@ public class AppVoteButton extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        BusProvider.getInstance().register(this);
+        try {
+            BusProvider.getInstance().register(this);
+        } catch(Exception e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        BusProvider.getInstance().unregister(this);
+        try {
+            BusProvider.getInstance().unregister(this);
+        } catch(Exception e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
     }
 
     protected LayoutInflater getLayoutInflater() {

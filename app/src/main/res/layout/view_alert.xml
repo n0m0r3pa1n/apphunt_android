@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="10dp"
     android:background="@color/alert_color"
-    android:elevation="0dp"
-    android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:elevation="0dp">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/ic_warning" />
+        android:src="@drawable/ic_warning"/>
 
-    <TextView
-        android:id="@+id/text"
-        style="@style/HelpText" />
-
-
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/score_text"
+        app:typefacePath="fonts/OpenSans-Light.ttf"
+        style="@style/HelpText"/>
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.apphunt.app.ui.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.apphunt.app.ui.models.DrawerItem;
 import com.apphunt.app.ui.models.DrawerLabel;
 import com.apphunt.app.ui.models.DrawerMenu;
 import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
@@ -116,7 +118,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (drawerItem.getType()) {
             case HEADER:
                 if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                    User user = LoginProviderFactory.get((Activity) ctx).getUser();
+                    final User user = LoginProviderFactory.get((Activity) ctx).getUser();
                     HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
                     Picasso.with(ctx).load(user.getProfilePicture()).into(headerViewHolder.profileImage);
 
@@ -126,6 +128,18 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Picasso.with(ctx).load(R.drawable.header_bg).into(headerViewHolder.cover);
                     }
 
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FlurryAgent.logEvent(TrackingEvents.UserOpenedOwnProfileFromDrawer);
+                            NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment(
+                                    user.getId(), user.getName()
+                            );
+                        }
+                    };
+
+                    headerViewHolder.cover.setOnClickListener(listener);
+                    headerViewHolder.profileImage.setOnClickListener(listener);
                     headerViewHolder.username.setText(user.getUsername());
                     headerViewHolder.email.setText(user.getEmail());
                     headerViewHolder.logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +151,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     });
                 } else {
                     HeaderLoggedOutViewHolder headerViewHolder = (HeaderLoggedOutViewHolder) holder;
+                    headerViewHolder.profileImage.setOnClickListener(null);
                     Picasso.with(ctx).load(R.drawable.avatar_placeholder).into(headerViewHolder.profileImage);
                     headerViewHolder.loginButton.setOnClickListener(new View.OnClickListener() {
                         @Override

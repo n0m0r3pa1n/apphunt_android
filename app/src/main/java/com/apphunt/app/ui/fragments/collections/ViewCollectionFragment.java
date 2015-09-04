@@ -29,13 +29,15 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
+import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
@@ -51,7 +53,7 @@ import butterknife.OnClick;
 /**
  * Created by nmp on 15-7-3.
  */
-public class ViewCollectionFragment extends BaseFragment {
+public class ViewCollectionFragment extends BackStackFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
 
     private boolean isSave;
@@ -176,7 +178,7 @@ public class ViewCollectionFragment extends BaseFragment {
     }
 
     @OnClick(R.id.edit_collection)
-    public void editCollection() {
+    public void editCollection(View view) {
         if(isSave) {
             String desc = editDescription.getText().toString();
             if(TextUtils.isEmpty(collectionView.editName.getText().toString())) {
@@ -228,10 +230,11 @@ public class ViewCollectionFragment extends BaseFragment {
         }
 
         isSave = !isSave;
+        SoundsUtils.performHapticFeedback(view);
     }
 
     @Subscribe
-    public void onUpdateCollection(UpdateCollectionEvent event) {
+    public void onUpdateCollection(UpdateCollectionApiEvent event) {
         if (appsCollection.getApps().size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -241,18 +244,15 @@ public class ViewCollectionFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
-
         hideSoftKeyboard();
         if(isSave) {
             FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
-            BusProvider.getInstance().post(new UpdateCollectionEvent(appsCollection, false));
+            BusProvider.getInstance().post(new UpdateCollectionApiEvent(appsCollection, false));
         }
     }
 }

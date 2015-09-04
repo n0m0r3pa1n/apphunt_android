@@ -3,12 +3,9 @@ package com.apphunt.app.utils.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 
-import com.apphunt.app.R;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
@@ -63,6 +60,10 @@ public class ActionBarUtils {
 
     public void setTitle(String title) {
         ((ActionBarActivity) activity).getSupportActionBar().setTitle(title);
+    }
+
+    public void setSubtitle(String title) {
+        ((ActionBarActivity) activity).getSupportActionBar().setSubtitle(title);
     }
 
     public void setTitle(int titleRes) {

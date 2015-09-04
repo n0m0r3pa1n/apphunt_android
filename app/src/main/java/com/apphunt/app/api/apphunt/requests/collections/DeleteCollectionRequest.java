@@ -1,13 +1,10 @@
 package com.apphunt.app.api.apphunt.requests.collections;
 
-import android.util.Log;
-
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.requests.base.BaseGsonRequest;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionEvent;
-import com.apphunt.app.event_bus.events.api.collections.GetAllCollectionsEvent;
+import com.apphunt.app.event_bus.events.api.collections.DeleteCollectionApiEvent;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -29,6 +26,6 @@ public class DeleteCollectionRequest extends BaseGsonRequest<AppsCollection> {
 
     @Override
     public void deliverResponse(AppsCollection response) {
-        BusProvider.getInstance().post(new DeleteCollectionEvent(collectionId));
+        BusProvider.getInstance().post(new DeleteCollectionApiEvent(collectionId));
     }
 }

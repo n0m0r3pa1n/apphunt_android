@@ -122,6 +122,10 @@ public class ScrollRecyclerView extends LinearLayout {
         }, layoutManager));
     }
 
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     public RecyclerView.Adapter getAdapter() {
         return recyclerView.getAdapter();
     }

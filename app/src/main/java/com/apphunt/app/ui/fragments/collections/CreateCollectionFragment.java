@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,10 +24,12 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.collections.CreateCollectionEvent;
+import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
+import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
-import com.apphunt.app.ui.fragments.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
@@ -42,10 +46,13 @@ import butterknife.OnClick;
  * *
  * * NaughtySpirit 2015
  */
-public class CreateCollectionFragment extends BaseFragment {
+public class CreateCollectionFragment extends BackStackFragment {
+
+    private static final String TAG = CreateCollectionFragment.class.getSimpleName();
 
     private Activity activity;
     private View view;
+    private AutoCompleteTextView tagView;
     private String bannerUrl;
 
     @InjectView(R.id.collection_name_layout)
@@ -66,6 +73,9 @@ public class CreateCollectionFragment extends BaseFragment {
     @InjectView(R.id.choose_banner)
     ImageButton chooseBanner;
 
+    @InjectView(R.id.tags_container)
+    TagGroup tagGroup;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +92,14 @@ public class CreateCollectionFragment extends BaseFragment {
 
         collectionNameLayout.setErrorEnabled(true);
         collectionDescLayout.setErrorEnabled(true);
+
+        tagGroup.setOnTagTextEntryListener(new TagGroup.OnTagTextEntryListener() {
+            @Override
+            public void onTextEntry(AutoCompleteTextView view, String text) {
+                tagView = view;
+                if (!TextUtils.isEmpty(text)) ApiClient.getClient(activity).getTagsSuggestion(text);
+            }
+        });
     }
 
     @Override
@@ -124,11 +142,15 @@ public class CreateCollectionFragment extends BaseFragment {
         collection.setPicture(bannerUrl);
         collection.setUserId(LoginProviderFactory.get(activity).getUser().getId());
 
+        if (tagGroup.getTags().length > 0) {
+            collection.setTags(tagGroup.getTags());
+        }
+
         ApiClient.getClient(activity).createCollection(collection);
     }
 
     @Subscribe
-    public void onCollectionCreateSuccess(CreateCollectionEvent event) {
+    public void onCollectionCreateSuccess(CreateCollectionApiEvent event) {
         ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
         NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.notification_delete_confirmation), false, false);
     }
@@ -139,23 +161,23 @@ public class CreateCollectionFragment extends BaseFragment {
         Picasso.with(activity).load(bannerUrl).placeholder(R.drawable.collection_placeholder).into(chooseBanner);
     }
 
+    @Subscribe
+    public void onTagsSuggestionReceive(TagsSuggestionApiEvent event) {
+        tagView.setAdapter(new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, event.getTags().getTags()));
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         this.activity = activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        BusProvider.getInstance().register(this);
     }
-
 
     @Override
     public void onDetach() {
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ActionBarUtils.getInstance().hideActionBarShadow();
-
-        BusProvider.getInstance().unregister(this);
     }
 }

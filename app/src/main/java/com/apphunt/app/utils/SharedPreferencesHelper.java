@@ -107,11 +107,11 @@ public class SharedPreferencesHelper {
      * @param key preference's key.
      */
     public static Boolean getBooleanPreference(String key) {
-        if (key.equals(Constants.SETTING_NOTIFICATIONS_ENABLED) || key.equals(Constants.IS_SOUNDS_ENABLED)) {
-            return sharedPreferences.getBoolean(key, true);
-        } else {
-            return sharedPreferences.getBoolean(key, false);
-        }
+        return sharedPreferences.getBoolean(key, false);
+    }
+
+    public static Boolean getBooleanPreference(String key, boolean defaultValue) {
+        return sharedPreferences.getBoolean(key, defaultValue);
     }
 
     /**
