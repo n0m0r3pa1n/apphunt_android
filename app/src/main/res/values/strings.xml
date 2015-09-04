@@ -179,5 +179,5 @@
     <string name="msg_successful_invites">You have successfully sent invites to %d of your followers! :)</string>
     <string name="msg_failure_invites">Something gone wrong and your invites couldn\'t be sent. Please try later... :(</string>
     <string name="msg_email_invite">Hi, \nDo you know %1$s? \n%2$s has sent you an invite to join the hunt on AppHunt: \n%3$s. :) \n\nBest regards!\nAppHunt Inc </string>
-    <string name="msg_welcome">Hey, %s!\n\n I\'m using this app for quite some time and it\'s amazing! You will find lots of useful apps that you cannot find fast and easy in the PlayStore!</string>
+    <string name="msg_welcome">Hey, %s!\n\nI\'m using this app for quite some time and it\'s amazing! You will find lots of useful and cool apps that you cannot find fast and easy in the PlayStore!</string>
 </resources>

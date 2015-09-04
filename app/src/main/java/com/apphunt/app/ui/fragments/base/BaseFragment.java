@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.inputmethod.InputMethodManager;
 
-import com.apphunt.app.event_bus.BusProvider;
-
 public class BaseFragment extends Fragment {
 
-    private int title = -1;
+    private int title;
     private String previousTitle;
     private String fragmentTag;
     public String getStringTitle() {

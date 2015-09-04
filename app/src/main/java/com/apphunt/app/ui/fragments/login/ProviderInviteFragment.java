@@ -47,7 +47,6 @@ public class ProviderInviteFragment extends BaseFragment {
 
     private AppCompatActivity activity;
     private FriendsInviteAdapter adapter;
-    private boolean lastInvite;
     private int successfulInvites = 0;
 
     @InjectView(R.id.friends_list)
