@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
@@ -485,7 +486,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 if (error == null) {
                     try {
                         if (referringParams.has(Constants.KEY_DL_TYPE) && referringParams.getString(Constants.KEY_DL_TYPE).equals("welcome")
-                                && !referringParams.getBoolean("+clicked_branch_link")) {
+                                && !LoginProviderFactory.get(MainActivity.this).isUserLoggedIn()) {
                             Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                             intent.putExtra(Constants.KEY_SENDER_ID, referringParams.getString(Constants.KEY_SENDER_ID));
                             intent.putExtra(Constants.KEY_SENDER_NAME, referringParams.getString(Constants.KEY_SENDER_NAME));
