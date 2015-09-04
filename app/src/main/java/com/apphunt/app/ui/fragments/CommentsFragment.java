@@ -47,8 +47,8 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     private static final String KEY_APP_ID = "APP_ID";
 
     private String appId;
-    private boolean endOfList;
 
+    private OnCommentEnteredListener listener;
     private CommentsAdapter commentsAdapter;
     private Comment replyToComment;
 
@@ -180,6 +180,9 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
 
         closeKeyboard(send);
         commentBox.getText().clear();
+        if(this.listener != null) {
+            listener.onCommentEntered(comment);
+        }
 
     }
 
@@ -235,5 +238,13 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
         } else {
             commentsAdapter.addItems(comments);
         }
+    }
+
+    public void setOnCommentEnteredListener(OnCommentEnteredListener listener) {
+        this.listener = listener;
+    }
+
+    interface OnCommentEnteredListener {
+        void onCommentEntered(NewComment comment);
     }
 }
