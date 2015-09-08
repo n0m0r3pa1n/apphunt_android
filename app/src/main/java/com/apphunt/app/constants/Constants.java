@@ -11,8 +11,8 @@ public class Constants {
     //TODO: use production url before release
 //    public static final String BASE_URL = "http://apphunt.herokuapp.com";
 
-    public static final String BASE_URL = "http://apphunt.herokuapp.com";
-    //public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
+    //public static final String BASE_URL = "http://apphunt.herokuapp.com";
+    public static final String BASE_URL = "http://apphunt-dev.herokuapp.com";
 
     // User's Keys
     public static final String KEY_USER_ID = "user_id";

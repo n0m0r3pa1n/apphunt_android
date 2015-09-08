@@ -42,7 +42,7 @@
                 android:paddingLeft="@dimen/settings_label_padding_left"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/settings_label_text"
-                android:text="@string/enable_daily_notifications"
+                android:text="@string/enable_app_notifications"
                 android:gravity="center_vertical"
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
@@ -74,7 +74,7 @@
                 android:paddingLeft="@dimen/settings_label_padding_left"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/settings_label_text"
-                android:text="@string/enable_install_notifications"
+                android:text="@string/enable_suggestions"
                 android:gravity="center_vertical"
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
 

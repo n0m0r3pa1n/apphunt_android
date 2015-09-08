@@ -79,8 +79,8 @@
     <string name="smartrate_send">SEND</string>
     <string name="smartrate_rate_dialog_title">Rate</string>
     <string name="smartrate_rate_hint_feedback_please_enter_text">Please enter your feedback…</string>
-    <string name="enable_daily_notifications">Daily Notifications</string>
-    <string name="enable_install_notifications">Install Notifications</string>
+    <string name="enable_app_notifications">App Notifications</string>
+    <string name="enable_suggestions">Suggestions</string>
     <string name="enable_sounds">Sounds &amp; Vibrations</string>
     <string name="title_invite">AppHunt is invite only</string>
     <string name="invite_text">Share with %s friends to\nsign up for invite</string>

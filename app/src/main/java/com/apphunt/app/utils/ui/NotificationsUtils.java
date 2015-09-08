@@ -161,7 +161,7 @@ public class NotificationsUtils {
     public static void updateNotificationIdIfNeeded(final Activity activity) {
         final String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
-        if (!TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId)) {
+        if (userDoesNotHaveNotificationId(userId, notificationId)) {
             FruityGcmClient.start(activity, Constants.GCM_SENDER_ID, new FruityGcmListener() {
 
                 @Override
@@ -183,5 +183,9 @@ public class NotificationsUtils {
                 }
             });
         }
+    }
+
+    protected static boolean userDoesNotHaveNotificationId(String userId, String notificationId) {
+        return !TextUtils.isEmpty(userId) && TextUtils.isEmpty(notificationId);
     }
 }
