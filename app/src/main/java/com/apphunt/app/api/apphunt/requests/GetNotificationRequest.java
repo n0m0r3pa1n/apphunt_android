@@ -6,8 +6,11 @@ import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 
 
 public class GetNotificationRequest extends BaseGetRequest<Notification> {
-    public GetNotificationRequest(String type, Response.ErrorListener listener) {
+    private final Response.Listener<Notification> callback;
+
+    public GetNotificationRequest(String type, Response.Listener<Notification> callback, Response.ErrorListener listener) {
         super(BASE_URL + "/notifications?type=" + type, listener);
+        this.callback = callback;
     }
 
     @Override
@@ -17,6 +20,8 @@ public class GetNotificationRequest extends BaseGetRequest<Notification> {
 
     @Override
     public void deliverResponse(Notification response) {
-
+        if(callback != null) {
+            callback.onResponse(response);
+        }
     }
 }

@@ -4,18 +4,16 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.android.volley.Response;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
-import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.NotificationReceivedApiEvent;
-import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
-import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,25 +27,7 @@ public class DailyNotificationService extends IntentService {
         setIntentRedelivery(true);
         SharedPreferencesHelper.init(this);
     }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        BusProvider.getInstance().register(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        BusProvider.getInstance().unregister(this);
-    }
-
-    @Subscribe
-    public void onNotificationReceived(NotificationReceivedApiEvent event) {
-        displayNotification(event.getNotification());
-        saveNotification(event.getNotification());
-    }
-
+    
     @Override
     protected void onHandleIntent(Intent intent) {
         if (!ConnectivityUtils.isNetworkAvailable(this)) {
@@ -63,7 +43,13 @@ public class DailyNotificationService extends IntentService {
             FlurryAgent.setUserId(userId);
         }
         FlurryAgent.init(this, Constants.FLURRY_API_KEY);
-        ApiClient.getClient(this).getNotification("DailyReminder");
+        ApiClient.getClient(this).getNotification("DailyReminder", new Response.Listener<Notification>() {
+            @Override
+            public void onResponse(Notification response) {
+                displayNotification(response);
+                saveNotification(response);
+            }
+        });
     }
 
     private void saveNotification(Notification notification) {
