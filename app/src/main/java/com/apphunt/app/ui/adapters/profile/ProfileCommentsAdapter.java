@@ -2,7 +2,6 @@ package com.apphunt.app.ui.adapters.profile;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.ProfileComment;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;
@@ -50,7 +48,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(comment.getApp());
+                NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(comment.getApp().getId());
             }
         });
     }

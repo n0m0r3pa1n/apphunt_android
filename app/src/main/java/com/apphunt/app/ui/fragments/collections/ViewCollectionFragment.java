@@ -125,7 +125,7 @@ public class ViewCollectionFragment extends BackStackFragment {
             @Override
             public void onClick(View view, int position) {
                 FlurryAgent.logEvent(TrackingEvents.UserViewedCollectionApp);
-                NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position));
+                NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position).getId());
             }
         });
 

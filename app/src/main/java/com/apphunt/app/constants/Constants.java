@@ -3,8 +3,6 @@ package com.apphunt.app.constants;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashMap;
-
 public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
@@ -24,6 +22,7 @@ public class Constants {
     public static final String KEY_USER_TEXT_COLOR = "text_color";
 
     public static final String KEY_NOTIFICATION_ID = "notification_id";
+    public static final String KEY_NOTIFICATION_APP_ID = "appId";
 
     public static final String KEY_DATA = "data";
     public static final String KEY_NOTIFICATION = "notification";
@@ -117,22 +116,6 @@ public class Constants {
 
     // GCM
     public static final String GCM_SENDER_ID = "437946264894";
-
-    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_ID = new HashMap<String, Integer>() {{
-        put("dailyReminder", 1);
-        put("appApproved", 2);
-        put("appRejected", 3);
-        put("userComment", 4);
-        put("userMentioned", 5);
-    }};
-
-    public static final HashMap<String, Integer> NOTIFICATION_TYPE_TO_REQUEST_CODE = new HashMap<String, Integer>() {{
-        put("dailyReminder", 101);
-        put("appApproved", 102);
-        put("appRejected", 103);
-        put("userComment", 104);
-        put("userMentioned", 105);
-    }};
     public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
     public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
 

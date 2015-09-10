@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ConnectivityUtils;
@@ -72,10 +73,10 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void displayNotification(Notification notification) {
-        notification.setType("dailyReminder");
+        notification.setType(NotificationType.DAILY);
         NotificationsUtils.displayNotification(this, MainActivity.class, notification);
         Map<String, String> params = new HashMap<>();
-        params.put("type", notification.getType());
+        params.put("type", notification.getType().toString());
         FlurryAgent.logEvent(TrackingEvents.AppShowedNotification, params);
     }
 }
