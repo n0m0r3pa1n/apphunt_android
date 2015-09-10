@@ -34,9 +34,9 @@ import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
 import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
 import com.apphunt.app.ui.views.widgets.CustomGooglePlusButton;
+import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -150,9 +150,10 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                 String id = "";
                                 try {
                                     id = json.getString("id");
-                                    user.setEmail(json.getString("email"));
+                                    String email = json.getString("email");
+                                    user.setEmail(email);
                                     user.setName(json.getString("name"));
-                                    user.setUsername(json.getString("name"));
+                                    user.setUsername(email.split("@")[0]);
                                     Log.e(TAG, user.toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
