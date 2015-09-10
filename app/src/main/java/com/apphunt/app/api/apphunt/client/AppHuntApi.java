@@ -7,6 +7,7 @@ import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
+import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.User;
 
 import java.util.Date;
@@ -34,7 +35,7 @@ public interface AppHuntApi {
     void searchApps(String query, String userId, int page,
                     int pageSize, String platform);
 
-    void getNotification(String type);
+    void getNotification(String type, Response.Listener<Notification> listener);
 
     void sendComment(NewComment comment);
 

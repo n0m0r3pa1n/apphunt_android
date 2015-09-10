@@ -35,7 +35,7 @@ public class GcmMessageReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         SharedPreferencesHelper.init(context);
         final Bundle e = intent.getExtras();
-        if (SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED)) {
+        if (SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true)) {
             final Notification notification = new Notification(e.getString(NOTIFICATION_KEY_TITLE), e.getString(NOTIFICATION_KEY_MESSAGE), e.getString(NOTIFICATION_KEY_IMAGE), e.getString(NOTIFICATION_KEY_TYPE));
             new Thread() {
                 @Override
