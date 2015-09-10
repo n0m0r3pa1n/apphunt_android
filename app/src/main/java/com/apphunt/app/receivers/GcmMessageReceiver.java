@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
@@ -47,17 +48,17 @@ public class GcmMessageReceiver extends BroadcastReceiver {
             new Thread() {
                 @Override
                 public void run() {
-
                     super.run();
                     Bitmap largeIcon = null;
                     try {
-                        largeIcon = Picasso.with(context).load(e.getString(NOTIFICATION_KEY_IMAGE)).get();
+                        if(!TextUtils.isEmpty(notification.getImage())) {
+                            largeIcon = Picasso.with(context).load(e.getString(NOTIFICATION_KEY_IMAGE)).get();
+                        }
                     } catch (IOException ex) {
                         Crashlytics.logException(ex);
                     }
 
                     Bundle bundle = null;
-
                     if (e.containsKey("data")) {
                         try {
                             JSONObject json = new JSONObject(e.getString("data"));
