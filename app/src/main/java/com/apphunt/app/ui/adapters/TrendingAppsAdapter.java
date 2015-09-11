@@ -241,7 +241,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     try {
-                        NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
+                        NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app.getId());
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");
                         e.printStackTrace();

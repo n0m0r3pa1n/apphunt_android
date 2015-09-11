@@ -19,6 +19,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.InstalledApp;
@@ -151,7 +152,7 @@ public class InstallService extends Service {
             NotificationsUtils.displayNotification(this, MainActivity.class,
                     bundle,
                     new Notification("Did you like " + appName + "?",
-                            "Share your opinion with the AppHunt community!", "", ""),
+                            "Share your opinion with the AppHunt community!", "", NotificationType.INSTALL),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         }
     }

@@ -4,15 +4,14 @@ public class Notification {
     private String title;
     private String message;
     private String image;
+    private NotificationType type;
 
-    public Notification(String title, String message, String image, String type) {
+    public Notification(String title, String message, String image, NotificationType type) {
         this.title = title;
         this.message = message;
         this.image = image;
         this.type = type;
     }
-
-    private String type;
 
     public Notification() {
 
@@ -34,11 +33,11 @@ public class Notification {
         this.message = message;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 

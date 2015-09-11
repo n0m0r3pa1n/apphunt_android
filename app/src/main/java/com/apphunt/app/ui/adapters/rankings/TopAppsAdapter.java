@@ -77,7 +77,6 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
                 Bundle extras = new Bundle();
                 extras.putString(Constants.KEY_APP_ID, app.getId());
-                extras.putString(Constants.KEY_APP_NAME, app.getName());
                 detailsFragment.setArguments(extras);
 
                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()

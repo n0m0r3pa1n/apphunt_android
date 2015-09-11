@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -202,12 +203,37 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private void initNotifications() {
         String notificationType = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_TYPE);
         if (!TextUtils.isEmpty(notificationType)) {
-            Map<String, String> params = new HashMap<>();
-            params.put("type", notificationType);
-            FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
+            sendNotificationStatsToFlurry(notificationType);
+
+            NotificationType type = NotificationType.getType(notificationType);
+
+            switch (type) {
+                case USER_COMMENT:
+                case USER_MENTIONED:
+                    String appId = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_APP_ID);
+                    NavUtils.getInstance(this).presentCommentsFragment(appId);
+                    break;
+                case TOP_APPS:
+                    onNavigationDrawerItemSelected(Constants.TOP_APPS);
+                    break;
+                case TOP_HUNTER:
+                    onNavigationDrawerItemSelected(Constants.TOP_HUNTERS);
+                    break;
+                case INSTALL:
+                    displaySaveAppFragment();
+                    break;
+
+            }
+
         }
 
         NotificationsUtils.updateNotificationIdIfNeeded(this);
+    }
+
+    private void sendNotificationStatsToFlurry(String notificationType) {
+        Map<String, String> params = new HashMap<>();
+        params.put("type", notificationType);
+        FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
     }
 
     private void initDeepLinking() {
@@ -428,8 +454,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
         AppSpice.onResume(this);
-
-        displaySaveAppFragment();
     }
 
     private void displaySaveAppFragment() {

@@ -2,15 +2,16 @@ package com.apphunt.app.utils.ui;
 
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
-import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.AppDetailsFragment;
+import com.apphunt.app.ui.fragments.CommentsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.UserProfileFragment;
@@ -129,14 +130,8 @@ public class NavUtils {
                 .commit();
     }
 
-    public void presentAppDetailsFragment(BaseApp app) {
-        AppDetailsFragment detailsFragment = new AppDetailsFragment();
-        detailsFragment.setPreviousTitle(activity.getString(R.string.title_home));
-
-        Bundle extras = new Bundle();
-        extras.putString(Constants.KEY_APP_ID, app.getId());
-        extras.putString(Constants.KEY_APP_NAME, app.getName());
-        detailsFragment.setArguments(extras);
+    public void presentAppDetailsFragment(String appId) {
+        AppDetailsFragment detailsFragment = getAppDetailsFragment(appId);
 
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
@@ -151,6 +146,35 @@ public class NavUtils {
                 .add(R.id.container, searchFragment, Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_RESULTS_FRAGMENT)
                 .commitAllowingStateLoss();
+    }
+
+    public void presentCommentsFragment(String appId) {
+
+        AppDetailsFragment detailsFragment = getAppDetailsFragment(appId);
+
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
+                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                .commitAllowingStateLoss();
+
+
+        CommentsFragment commentsFragment = CommentsFragment.newInstance(appId);
+        commentsFragment.setOnCommentEnteredListener(detailsFragment);
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
+                .addToBackStack(Constants.TAG_COMMENTS)
+                .commit();
+    }
+
+    @NonNull
+    protected AppDetailsFragment getAppDetailsFragment(String appId) {
+        AppDetailsFragment detailsFragment = new AppDetailsFragment();
+        detailsFragment.setPreviousTitle(activity.getString(R.string.title_home));
+
+        Bundle extras = new Bundle();
+        extras.putString(Constants.KEY_APP_ID, appId);
+        detailsFragment.setArguments(extras);
+        return detailsFragment;
     }
 
     public boolean isOnBackBlocked() {

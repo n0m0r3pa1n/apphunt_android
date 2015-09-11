@@ -115,15 +115,14 @@ public class NotificationsUtils {
         if(extras == null) {
             extras = new Bundle();
         }
-        extras.putString(Constants.KEY_NOTIFICATION_TYPE, notification.getType());
+        extras.putString(Constants.KEY_NOTIFICATION_TYPE, notification.getType().toString());
         notifyIntent.putExtras(extras);
 
         if (largeIcon == null) {
             largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
         }
         try {
-            Integer notificationCode = Constants.NOTIFICATION_TYPE_TO_REQUEST_CODE.get(notification.getType());
-            notificationCode = notificationCode == null ? 200 : notificationCode;
+            Integer notificationCode = notification.getType().getRequestCode();
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

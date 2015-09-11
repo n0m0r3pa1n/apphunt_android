@@ -73,7 +73,7 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             @Override
             public void onClick(View v) {
                 try {
-                    NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app);
+                    NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
