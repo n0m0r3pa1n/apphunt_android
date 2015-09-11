@@ -6,6 +6,7 @@ import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
@@ -39,7 +40,7 @@ public class AppHuntApplication extends BranchApp {
                 new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
                         Constants.TWITTER_CONSUMER_SECRET);
         // TODO: Add before deployment: new Crashlytics()
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
         FacebookSdk.sdkInitialize(getApplicationContext(), Constants.FACEBOOK_SIGN_IN);
 
         if (BuildConfig.DEBUG) {
