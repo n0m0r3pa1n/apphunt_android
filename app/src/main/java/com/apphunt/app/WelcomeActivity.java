@@ -10,7 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -48,11 +53,17 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+
         Bundle bundle = getIntent().getExtras();
         this.senderIdStr = bundle.getString(Constants.KEY_SENDER_ID);
         this.senderNameStr = bundle.getString(Constants.KEY_SENDER_NAME);
         this.senderAvatarStr = bundle.getString(Constants.KEY_SENDER_PROFILE_IMAGE_URL);
         this.receiverNameStr = bundle.getString(Constants.KEY_RECEIVER_NAME);
+
+        Map<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_SENDER_ID, senderIdStr);
+        params.put(Constants.KEY_RECEIVER_NAME, receiverNameStr);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedWelcomeScreen, params);
 
         initUI();
     }

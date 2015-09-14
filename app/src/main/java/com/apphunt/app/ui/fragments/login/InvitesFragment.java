@@ -16,8 +16,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.login.InviteOptionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -79,6 +82,7 @@ public class InvitesFragment extends BackStackFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_skip) {
+            FlurryAgent.logEvent(TrackingEvents.UserSkippedInvitation);
             activity.getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
