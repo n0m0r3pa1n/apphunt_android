@@ -25,10 +25,12 @@ import android.view.View;
 
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -303,8 +305,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
+            menu.findItem(R.id.action_random).setVisible(true);
+            menu.findItem(R.id.action_random).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    LoginProvider loginProvider = LoginProviderFactory.get(MainActivity.this);
+                    String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
+                    ApiClient.getClient(MainActivity.this).getRandomApp(userId);
+                    return true;
+                }
+            });
         } else {
             menu.findItem(R.id.action_search).setVisible(false);
+            menu.findItem(R.id.action_random).setVisible(false);
         }
 
         if (backstackEntryCount > 0 &&
@@ -515,7 +528,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                             intent.putExtra(Constants.KEY_SENDER_ID, referringParams.getString(Constants.KEY_SENDER_ID));
                             intent.putExtra(Constants.KEY_SENDER_NAME, referringParams.getString(Constants.KEY_SENDER_NAME));
                             intent.putExtra(Constants.KEY_SENDER_PROFILE_IMAGE_URL, referringParams.getString(Constants.KEY_SENDER_PROFILE_IMAGE_URL));
-                            String receiverName = referringParams.has(Constants.KEY_RECEIVER_NAME) ?  referringParams.getString(Constants.KEY_RECEIVER_NAME) : null;
+                            String receiverName = referringParams.has(Constants.KEY_RECEIVER_NAME) ? referringParams.getString(Constants.KEY_RECEIVER_NAME) : null;
                             intent.putExtra(Constants.KEY_RECEIVER_NAME, receiverName);
                             startActivityForResult(intent, Constants.SHOW_INVITE);
                             overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
@@ -540,6 +553,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             Crashlytics.logException(e);
         }
         AppSpice.onStop(this);
+    }
+
+    @Subscribe
+    public void onRandomAppReceived(GetRandomAppApiEvent event) {
+        NavUtils.getInstance(this).presentAppDetailsFragment(event.getApp().getId());
     }
 
     @Subscribe

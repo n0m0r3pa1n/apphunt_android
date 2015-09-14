@@ -20,6 +20,7 @@ import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
+import com.apphunt.app.api.apphunt.requests.apps.GetRandomApp;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
@@ -375,6 +376,16 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteAppsRequest(favouritedBy, userId, pagination, listener));
         }
+    }
+
+    @Override
+    public void getRandomApp(String userId) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomApp(listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomApp(userId, listener));
+        }
+
     }
 
     private String getFormattedQuery(String q) {
