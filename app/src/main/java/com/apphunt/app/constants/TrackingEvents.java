@@ -86,4 +86,14 @@ public interface TrackingEvents {
     String UserSearchedWithTagFromAppDetails = "user.searched.with.tag.from.app.details";
     String UserViewedFavouriteApp = "user.viewed.favourite.app";
 
+    String UserSkippedInvitation = "user.skipped.invitation";
+    String UserViewedTwitterInvitation = "user.viewed.invitation.twitter";
+    String UserViewedEmailInvitation = "user.viewed.invitation.email";
+    String UserViewedSMSInvitation = "user.viewed.invitation.sms";
+    String UserSentTwitterInvite = "user.sent.invites.twitter";
+    String UserSentEmailInvite = "user.sent.invite.email";
+    String UserSentSMSInvite = "user.sent.invite.sms";
+
+    String UserViewedWelcomeScreen = "user.viewed.welcome";
+
 }

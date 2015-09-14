@@ -18,16 +18,20 @@ import com.apphunt.app.auth.BaseLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.models.Friend;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.login.FriendsInviteAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,6 +66,7 @@ public class ProviderInviteFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FlurryAgent.logEvent(TrackingEvents.UserViewedTwitterInvitation);
 
         LoginProviderFactory.get(activity).loadFriends(new BaseLoginProvider.OnFriendsResultListener() {
             @Override
@@ -134,6 +139,9 @@ public class ProviderInviteFragment extends BaseFragment {
                         successfulInvites += 1;
 
                         if (isLastInvite) {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("invites", String.valueOf(successfulInvites));
+                            FlurryAgent.logEvent(TrackingEvents.UserSentTwitterInvite, params);
                             activity.getSupportFragmentManager().popBackStack();
                             NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, String.format(getString(R.string.msg_successful_invites), successfulInvites), false, false);
                         }
