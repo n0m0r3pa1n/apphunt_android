@@ -181,4 +181,5 @@
     <string name="msg_email_invite">Hi, \nDo you know %1$s? \n%2$s has sent you an invite to join the hunt on AppHunt: \n%3$s. :) \n\nBest regards!\nAppHunt Inc </string>
     <string name="msg_welcome">Hey, %s!\n\nI\'m using this app for quite some time and it\'s amazing! You will find lots of useful and cool apps that you cannot find fast and easy in the PlayStore!</string>
     <string name="msg_sms_charge">* Your carrier may charge for SMS messages used to send an AppHunt invites.</string>
+    <string name="title_find_friends">Find Friends</string>
 </resources>

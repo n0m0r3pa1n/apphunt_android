@@ -75,6 +75,7 @@ public class Constants {
     public static final String TAG_USER_PROFILE_FRAGMENT = "user_profile_fragment";
     public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
     public static final String TAG_WELCOME_FRAGMENT = "fragment_welcome";
+    public static final String TAG_FIND_FRIENDS_FRAGMENT = "fragment_find_friends";
 
 
     // RequestCodes

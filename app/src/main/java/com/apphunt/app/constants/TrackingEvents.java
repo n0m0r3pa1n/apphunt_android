@@ -96,4 +96,5 @@ public interface TrackingEvents {
 
     String UserViewedWelcomeScreen = "user.viewed.welcome";
 
+    String UserSkippedFriendsSuggestions = "user.skipped.friends_suggetsions";
 }
