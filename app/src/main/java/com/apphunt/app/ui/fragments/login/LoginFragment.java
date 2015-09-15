@@ -64,6 +64,7 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -220,9 +221,29 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                     following.add(user.screenName);
                                 }
                                 user.setFollowing(following);
-                                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                        false, null, null, null, null);
-                                startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
+
+                                TwitterAuthClient authClient = new TwitterAuthClient();
+                                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback<String>() {
+                                    @Override
+                                    public void success(Result<String> result) {
+                                        user.setEmail(result.data);
+                                        LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
+                                        ApiClient.getClient(getActivity()).createUser(user);
+                                        LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+
+                                        FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
+
+                                        // TODO: To be removed
+                                        Log.e(TAG, result.data);
+                                    }
+
+                                    @Override
+                                    public void failure(TwitterException e) {
+                                        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                                false, null, null, null, null);
+                                        startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
+                                    }
+                                });
                             }
 
                             @Override
