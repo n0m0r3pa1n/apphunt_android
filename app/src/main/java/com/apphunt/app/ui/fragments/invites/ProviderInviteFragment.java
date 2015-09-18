@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.login;
+package com.apphunt.app.ui.fragments.invites;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.models.Friend;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.ui.adapters.login.FriendsInviteAdapter;
+import com.apphunt.app.ui.adapters.invite.FriendsInviteAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;

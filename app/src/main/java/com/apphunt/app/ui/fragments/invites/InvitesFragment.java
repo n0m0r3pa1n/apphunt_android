@@ -1,8 +1,10 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.invites;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,26 +18,35 @@ import android.view.animation.AnimationUtils;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.adapters.invite.InviteOptionsAdapter;
+import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
- * * on 9/15/15.
+ * * on 8/24/15.
  * *
  * * NaughtySpirit 2015
  */
-public class FindFriendsFragment extends BackStackFragment {
+public class InvitesFragment extends BackStackFragment {
 
     private AppCompatActivity activity;
+    private InviteOptionsAdapter optionsAdapter;
     private MenuItem skipAction;
+
+    @InjectView(R.id.tabs)
+    TabLayout tabLayout;
+    @InjectView(R.id.options_pagers)
+    ViewPager optionsPager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_find_friends, container, false);
+        View view = inflater.inflate(R.layout.fragment_invite, container, false);
         ButterKnife.inject(this, view);
 
         initUI();
@@ -45,11 +56,12 @@ public class FindFriendsFragment extends BackStackFragment {
 
     private void initUI() {
         setHasOptionsMenu(true);
-    }
 
-    @Override
-    public int getTitle() {
-        return R.string.title_find_friends;
+        optionsAdapter = new InviteOptionsAdapter(activity.getSupportFragmentManager(), activity);
+        optionsPager.setOffscreenPageLimit(1);
+        optionsPager.setAdapter(optionsAdapter);
+
+        tabLayout.setupWithViewPager(optionsPager);
     }
 
     @Override
@@ -71,17 +83,26 @@ public class FindFriendsFragment extends BackStackFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_skip) {
-            FlurryAgent.logEvent(TrackingEvents.UserSkippedFriendsSuggestions);
+            FlurryAgent.logEvent(TrackingEvents.UserSkippedInvitation);
+
             activity.getSupportFragmentManager().popBackStack();
+            activity.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                    .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                    .commit();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public int getTitle() {
+        return R.string.invite;
+    }
 
-        this.activity = (AppCompatActivity) context;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

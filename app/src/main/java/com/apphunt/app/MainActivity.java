@@ -48,6 +48,7 @@ import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
@@ -115,6 +116,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ActionBarUtils.getInstance().init(this);
         addBackStackChangeListener();
         showStartFragments(getIntent());
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                .commit();
     }
 
     private int backStackCount = 0;
@@ -454,10 +460,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             return;
         }
 
-        Fragment fragment = getSupportFragmentManager()
-                .findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
         if (fragment != null) {
             fragment.onActivityResult(requestCode, resultCode, data);
+        }
+
+        fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_FIND_FRIENDS_FRAGMENT);
+        if(fragment != null){
+            ((FindFriendsFragment) fragment).onTwitterButtonActivityResult(requestCode, resultCode, data);
         }
     }
 

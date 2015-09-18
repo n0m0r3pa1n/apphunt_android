@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/layout_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:padding="40dp">
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:text="@string/title_friends_fb_follow"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_above="@+id/fb_login_button"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:text="@string/subtitle_friends_to_follow"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <com.apphunt.app.ui.views.widgets.CustomFacebookButton
+            android:id="@+id/fb_login_button"
+            android:layout_width="280dp"
+            android:layout_height="48dp"
+            android:layout_below="@+id/gplus_login_button"
+            android:layout_centerInParent="true"
+            app:typefacePath="fonts/OpenSans-Light.ttf"/>
+    </RelativeLayout>
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loader_friends"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:cpb_colors="@array/colors_sec"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/friends_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/list_divider_height"
+        android:layoutAnimation="@anim/list_view_entry"
+        android:visibility="gone"/>
+</RelativeLayout>

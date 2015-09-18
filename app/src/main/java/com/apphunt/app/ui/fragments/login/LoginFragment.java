@@ -239,6 +239,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
                                     @Override
                                     public void failure(TwitterException e) {
+                                        Log.e(TAG, e.getMessage());
                                         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                                                 false, null, null, null, null);
                                         startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
