@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.api.apphunt.models.users.UsersList;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,10 +30,10 @@ public class TwitterFriendsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final String TAG = TwitterFriendsAdapter.class.getSimpleName();
 
     private Context ctx;
-    private ArrayList<User> friends = new ArrayList<>();
+    private UsersList friends = new UsersList();
     private ArrayList<Boolean> positionsArray = new ArrayList<>();
 
-    public TwitterFriendsAdapter(Context ctx, ArrayList<User> friends) {
+    public TwitterFriendsAdapter(Context ctx, UsersList friends) {
         this.ctx = ctx;
         this.friends = friends;
 
@@ -54,6 +55,7 @@ public class TwitterFriendsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         Picasso.with(ctx)
                 .load(friend.getProfilePicture())
+                .placeholder(R.drawable.avatar_placeholder)
                 .into(viewHolder.profileImage);
 
         viewHolder.name.setText(friend.getName());
@@ -67,6 +69,7 @@ public class TwitterFriendsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         });
         viewHolder.invite.setChecked(positionsArray.get(position));
+        viewHolder.invite.setText(R.string.follow);
     }
 
     @Override

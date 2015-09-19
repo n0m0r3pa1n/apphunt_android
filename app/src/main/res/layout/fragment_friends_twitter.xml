@@ -3,14 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp">
 
     <RelativeLayout
         android:id="@+id/layout_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        android:padding="40dp">
+        android:visibility="visible">
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/title"
@@ -53,12 +56,44 @@
         android:visibility="gone"
         app:cpb_colors="@array/colors_sec"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/friends_list"
+    <RelativeLayout
+        android:id="@+id/layout_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/list_divider_height"
-        android:layoutAnimation="@anim/list_view_entry"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
+
+        <com.apphunt.app.ui.views.widgets.AHButton
+            android:id="@+id/select_all"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:text="Select all"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:gravity="center_vertical|left"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/select_all"
+            android:layout_above="@+id/follow"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/list_divider_height"
+            android:layoutAnimation="@anim/list_view_entry"/>
+
+        <com.apphunt.app.ui.views.widgets.AHButton
+            android:id="@+id/follow"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:text="Follow them"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+    </RelativeLayout>
 </RelativeLayout>

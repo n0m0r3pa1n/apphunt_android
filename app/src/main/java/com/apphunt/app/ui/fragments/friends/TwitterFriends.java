@@ -5,23 +5,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
-import com.apphunt.app.auth.models.Friend;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.TwitterFriendsAdapter;
-import com.apphunt.app.ui.adapters.invite.FriendsInviteAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
+import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -29,8 +34,11 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
@@ -47,10 +55,14 @@ public class TwitterFriends extends BaseFragment {
 
     private AppCompatActivity activity;
     private AppHuntTwitterApiClient twitterApiClient;
+    private TwitterFriendsAdapter adapter;
     private boolean isLoginProvider = false;
 
     @InjectView(R.id.layout_login)
     RelativeLayout layoutLogin;
+
+    @InjectView(R.id.layout_list)
+    RelativeLayout layoutList;
 
     @InjectView(R.id.login_button)
     CustomTwitterLoginButton twitterLoginBtn;
@@ -60,6 +72,11 @@ public class TwitterFriends extends BaseFragment {
 
     @InjectView(R.id.friends_list)
     RecyclerView friendsList;
+
+    @InjectView(R.id.select_all)
+    Button selectAll;
+    @InjectView(R.id.follow)
+    Button follow;
 
     public static TwitterFriends getInstance() {
         if (instance == null) {
@@ -90,29 +107,25 @@ public class TwitterFriends extends BaseFragment {
     }
 
     private void initUI() {
-        Log.e(TAG, isLoginProvider + " " + LoginProviderFactory.get(activity).getName());
         if (isLoginProvider) {
             layoutLogin.setVisibility(View.GONE);
-            friendsList.setVisibility(View.VISIBLE);
+            layoutList.setVisibility(View.VISIBLE);
             loader.setVisibility(View.VISIBLE);
 
             twitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
             obtainAndFilterFriends(LoginProviderFactory.get(activity).getUser().getUsername());
         } else {
             layoutLogin.setVisibility(View.VISIBLE);
-            friendsList.setVisibility(View.GONE);
+            layoutList.setVisibility(View.GONE);
             loader.setVisibility(View.GONE);
 
             twitterLoginBtn.setCallback(new Callback<TwitterSession>() {
                 @Override
                 public void success(Result<TwitterSession> result) {
-                    twitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
-                    Log.e(TAG, result.data.getUserName());
-                    obtainAndFilterFriends(result.data.getUserName());
-
                     layoutLogin.setVisibility(View.GONE);
-                    friendsList.setVisibility(View.VISIBLE);
-                    loader.setVisibility(View.VISIBLE);
+
+                    twitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
+                    obtainAndFilterFriends(result.data.getUserName());
                 }
 
                 @Override
@@ -121,16 +134,23 @@ public class TwitterFriends extends BaseFragment {
                 }
             });
         }
+
+        friendsList.setItemAnimator(new DefaultItemAnimator());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+        friendsList.setLayoutManager(layoutManager);
+        friendsList.setHasFixedSize(true);
     }
 
     private void obtainAndFilterFriends(String username) {
+        loader.setVisibility(View.VISIBLE);
         twitterApiClient.getFriendsService().getFriends(username, new Callback<Friends>() {
             @Override
             public void success(Result<Friends> result) {
-               // TODO: Create server filter request
+                ArrayList<String> names = new ArrayList<>();
                 for (User f : result.data.getUsers()) {
-                    Log.e(TAG, f.idStr + "\n");
+                    names.add(f.name);
                 }
+                ApiClient.getClient(activity).filterFriends(names);
             }
 
             @Override
@@ -138,6 +158,29 @@ public class TwitterFriends extends BaseFragment {
                 Log.e(TAG, e.getMessage());
             }
         });
+    }
+
+    @OnClick(R.id.select_all)
+    public void onSelectAllClick() {
+        if (adapter == null) {
+            return;
+        }
+
+        adapter.selectAllItems();
+    }
+
+    @OnClick(R.id.follow)
+    public void onFollowClick() {
+        // ToDo: Follow users
+    }
+
+    @Subscribe
+    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
+        adapter = new TwitterFriendsAdapter(activity, event.getUsers());
+        friendsList.setAdapter(adapter);
+
+        loader.setVisibility(View.GONE);
+        layoutList.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -152,5 +195,12 @@ public class TwitterFriends extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (AppCompatActivity) context;
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        BusProvider.getInstance().unregister(this);
     }
 }

@@ -46,6 +46,7 @@ import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
@@ -84,7 +85,6 @@ public class AppHuntApiClient implements AppHuntApi {
             BusProvider.getInstance().post(new ApiErrorEvent());
         }
     };
-
 
     @Override
     public void createUser(User user) {
@@ -385,7 +385,15 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomApp(userId, listener));
         }
+    }
 
+    @Override
+    public void filterFriends(ArrayList<String> names) {
+        String query = "?";
+        for (String s : names) {
+            query += "names[]=" + s + "&";
+        }
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(query, listener));
     }
 
     private String getFormattedQuery(String q) {

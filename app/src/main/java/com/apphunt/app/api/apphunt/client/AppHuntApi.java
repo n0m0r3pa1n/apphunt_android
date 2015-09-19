@@ -10,6 +10,7 @@ import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public interface AppHuntApi {
@@ -98,4 +99,6 @@ public interface AppHuntApi {
     void getFavouriteApps(String favouritedBy, String userId, Pagination pagination);
 
     void getRandomApp(String userId);
+
+    void filterFriends(ArrayList<String> names);
 }
