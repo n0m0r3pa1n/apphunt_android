@@ -40,7 +40,7 @@
     </LinearLayout>
 
     <fragment
-        android:id="@+id/fragment_chat_drawer"
+        android:id="@+id/fragment_right_drawer"
         android:name="com.apphunt.app.ui.fragments.navigation.RightDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
