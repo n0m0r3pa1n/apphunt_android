@@ -53,6 +53,7 @@ import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
+import com.apphunt.app.ui.fragments.navigation.RightDrawerFragment;
 import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
@@ -82,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private NavigationDrawerFragment navigationDrawerFragment;
+    private RightDrawerFragment rightDrawerFragment;
     private Toolbar toolbar;
     private boolean consumedBack;
     private Boolean hasInternet = null;
@@ -185,6 +187,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
 
+        rightDrawerFragment = (RightDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_right_drawer);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +210,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             }
         });
         navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer));
+        rightDrawerFragment.setup((DrawerLayout) findViewById(R.id.drawer));
         onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
     }
 
@@ -312,6 +318,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
             menu.findItem(R.id.action_random).setVisible(true);
+            menu.findItem(R.id.action_history).setVisible(true);
+
+
             menu.findItem(R.id.action_random).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -321,9 +330,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     return true;
                 }
             });
+
+            menu.findItem(R.id.action_history).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if(rightDrawerFragment.isDrawerOpen()) {
+                        rightDrawerFragment.closeDrawer();
+                    } else {
+                        rightDrawerFragment.openDrawer();
+                    }
+                    return true;
+                }
+            });
         } else {
             menu.findItem(R.id.action_search).setVisible(false);
             menu.findItem(R.id.action_random).setVisible(false);
+            menu.findItem(R.id.action_history).setVisible(false);
         }
 
         if (backstackEntryCount > 0 &&
@@ -505,6 +527,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onBackPressed() {
         if (navigationDrawerFragment.isDrawerOpen()) {
             navigationDrawerFragment.closeDrawer();
+            return;
+        }
+
+        if(rightDrawerFragment.isDrawerOpen()) {
+            rightDrawerFragment.closeDrawer();
             return;
         }
 

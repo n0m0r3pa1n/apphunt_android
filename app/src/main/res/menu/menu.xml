@@ -20,6 +20,14 @@
         />
 
     <item
+        android:id="@+id/action_history"
+        android:icon="@drawable/ic_android"
+        android:title="@string/action_search"
+        android:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="collapseActionView|ifRoom"
+        />
+
+    <item
         android:id="@+id/action_skip"
         android:title="@string/action_skip"
         android:showAsAction="always|withText"

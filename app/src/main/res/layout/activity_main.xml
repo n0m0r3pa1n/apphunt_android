@@ -36,7 +36,16 @@
             android:layout_height="match_parent"
             android:elevation="0dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment_right_drawer"
+        android:name="com.apphunt.app.ui.fragments.navigation.RightDrawerFragment"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:layout="@layout/fragment_right_drawer"/>
 
     <com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout
         android:id="@+id/scrimInsetsFrameLayout"
