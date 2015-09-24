@@ -8,6 +8,7 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.users.FollowingsList;
 import com.apphunt.app.api.apphunt.models.users.User;
 
 import java.util.ArrayList;
@@ -101,4 +102,14 @@ public interface AppHuntApi {
     void getRandomApp(String userId);
 
     void filterFriends(ArrayList<String> names);
+
+    void followUser(String userId, String followingId);
+
+    void followUsers(String userId, FollowingsList followingIds);
+
+    void unfollowUser(String userId, String followingId);
+
+    void getFollowers(String userId, int page, int pageSize);
+
+    void getFollowings(String userId, int page, int pageSize);
 }

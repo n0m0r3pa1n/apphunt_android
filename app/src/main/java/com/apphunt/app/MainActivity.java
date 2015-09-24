@@ -489,7 +489,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         fragment = getSupportFragmentManager().findFragmentByTag(Constants.TAG_FIND_FRIENDS_FRAGMENT);
         if(fragment != null){
-            ((FindFriendsFragment) fragment).onTwitterButtonActivityResult(requestCode, resultCode, data);
+            ((FindFriendsFragment) fragment).onReceivedActivityResult(requestCode, resultCode, data);
         }
     }
 

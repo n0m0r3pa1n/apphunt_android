@@ -31,7 +31,7 @@ public class FriendsSuggestionsOptAdapter extends FragmentStatePagerAdapter {
                 fragment = TwitterFriends.getInstance();
                 break;
             case 1:
-                fragment = FacebookFriends.newInstance();
+                fragment = FacebookFriends.getInstance();
                 break;
         }
 

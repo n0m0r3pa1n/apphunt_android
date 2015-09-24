@@ -15,6 +15,7 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.users.FollowingsList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
@@ -48,6 +49,7 @@ import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -394,6 +396,31 @@ public class AppHuntApiClient implements AppHuntApi {
             query += "names[]=" + s + "&";
         }
         VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(query, listener));
+    }
+
+    @Override
+    public void followUser(String userId, String followingId) {
+
+    }
+
+    @Override
+    public void followUsers(String userId, FollowingsList followingIds) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostFollowUsersRequest(userId, followingIds, listener));
+    }
+
+    @Override
+    public void unfollowUser(String userId, String followingId) {
+
+    }
+
+    @Override
+    public void getFollowers(String userId, int page, int pageSize) {
+
+    }
+
+    @Override
+    public void getFollowings(String userId, int page, int pageSize) {
+
     }
 
     private String getFormattedQuery(String q) {

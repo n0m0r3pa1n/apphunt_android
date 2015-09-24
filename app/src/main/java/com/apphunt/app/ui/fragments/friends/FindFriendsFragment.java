@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,9 +20,12 @@ import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsSuggestionsOptAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.flurry.android.FlurryAgent;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -77,6 +81,17 @@ public class FindFriendsFragment extends BackStackFragment {
         }
     }
 
+    @Subscribe
+    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
+        Fragment fragment = optionsAdapter.getItem(optionsPager.getCurrentItem());
+
+        if (fragment instanceof TwitterFriends) {
+            ((TwitterFriends) fragment).setReceivedData(event.getUsers());
+        } else if (fragment instanceof FacebookFriends) {
+            ((FacebookFriends) fragment).setReceivedData(event.getUsers());
+        }
+    }
+
     @Override
     public int getTitle() {
         return R.string.title_find_friends;
@@ -107,8 +122,8 @@ public class FindFriendsFragment extends BackStackFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onTwitterButtonActivityResult(int requestCode, int resultCode, Intent data) {
-        optionsAdapter.getItem(0).onActivityResult(requestCode, resultCode, data);
+    public void onReceivedActivityResult(int requestCode, int resultCode, Intent data) {
+        optionsAdapter.getItem(optionsPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -26,14 +26,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * *
  * * NaughtySpirit 2015
  */
-public class TwitterFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String TAG = TwitterFriendsAdapter.class.getSimpleName();
+public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = FriendsAdapter.class.getSimpleName();
 
     private Context ctx;
     private UsersList friends = new UsersList();
     private ArrayList<Boolean> positionsArray = new ArrayList<>();
 
-    public TwitterFriendsAdapter(Context ctx, UsersList friends) {
+    public FriendsAdapter(Context ctx, UsersList friends) {
         this.ctx = ctx;
         this.friends = friends;
 

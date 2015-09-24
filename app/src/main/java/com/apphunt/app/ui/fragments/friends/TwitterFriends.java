@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,16 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.UsersList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
-import com.apphunt.app.ui.adapters.friends.TwitterFriendsAdapter;
+import com.apphunt.app.ui.adapters.friends.FriendsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
-import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -55,7 +54,7 @@ public class TwitterFriends extends BaseFragment {
 
     private AppCompatActivity activity;
     private AppHuntTwitterApiClient twitterApiClient;
-    private TwitterFriendsAdapter adapter;
+    private FriendsAdapter adapter;
     private boolean isLoginProvider = false;
 
     @InjectView(R.id.layout_login)
@@ -75,6 +74,7 @@ public class TwitterFriends extends BaseFragment {
 
     @InjectView(R.id.select_all)
     Button selectAll;
+
     @InjectView(R.id.follow)
     Button follow;
 
@@ -130,7 +130,6 @@ public class TwitterFriends extends BaseFragment {
 
                 @Override
                 public void failure(TwitterException e) {
-                    Log.e(TAG, "Bla1 " +  e.getMessage());
                 }
             });
         }
@@ -155,7 +154,6 @@ public class TwitterFriends extends BaseFragment {
 
             @Override
             public void failure(TwitterException e) {
-                Log.e(TAG, e.getMessage());
             }
         });
     }
@@ -171,12 +169,25 @@ public class TwitterFriends extends BaseFragment {
 
     @OnClick(R.id.follow)
     public void onFollowClick() {
-        // ToDo: Follow users
+        if (adapter == null) {
+            return;
+        }
+
+        FollowingsList followingsList = new FollowingsList();
+
+        for (int i = 0; i < adapter.getSelectedFriends().size(); i++) {
+            followingsList.addId(adapter.getSelectedFriends().get(i).getId());
+        }
+
+        followUsers(followingsList);
     }
 
-    @Subscribe
-    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
-        adapter = new TwitterFriendsAdapter(activity, event.getUsers());
+    private void followUsers(FollowingsList ids) {
+        ApiClient.getClient(activity).followUsers(LoginProviderFactory.get(activity).getUser().getId(), ids);
+    }
+
+    public void setReceivedData(UsersList users) {
+        adapter = new FriendsAdapter(activity, users);
         friendsList.setAdapter(adapter);
 
         loader.setVisibility(View.GONE);
