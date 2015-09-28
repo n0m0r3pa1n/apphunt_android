@@ -16,6 +16,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
@@ -391,12 +392,8 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void filterFriends(ArrayList<String> names, LoginProviders provider) {
-        String query = "?";
-        for (String s : names) {
-            query += "names[]=" + s + "&";
-        }
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(query, provider, listener));
+    public void filterFriends(String userId, NamesList names, LoginProviders provider) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(userId, names, provider, listener));
     }
 
     @Override

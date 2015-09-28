@@ -9,6 +9,7 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants.LoginProviders;
 
@@ -102,7 +103,7 @@ public interface AppHuntApi {
 
     void getRandomApp(String userId);
 
-    void filterFriends(ArrayList<String> names, LoginProviders provider);
+    void filterFriends(String userId, NamesList names, LoginProviders provider);
 
     void followUser(String userId, String followingId);
 

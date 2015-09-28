@@ -1,8 +1,10 @@
 package com.apphunt.app.api.apphunt.models.users;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable{
@@ -15,9 +17,10 @@ public class User implements Serializable{
     private String loginType;
     private String locale;
     private String username;
-    private List<String> following;
     private String notificationId;
     private String coverPicture;
+    @Expose(serialize = false)
+    private boolean isFollowing;
 
     public String getId() {
         return id;
@@ -79,12 +82,12 @@ public class User implements Serializable{
         this.coverPicture = coverPicture;
     }
 
-    public List<String> getFollowing() {
-        return following;
+    public boolean isFollowing() {
+        return isFollowing;
     }
 
-    public void setFollowing(List<String> following) {
-        this.following = following;
+    public void setIsFollowing(boolean isFollowing) {
+        this.isFollowing = isFollowing;
     }
 
     public void setUsername(String username) {
@@ -109,9 +112,9 @@ public class User implements Serializable{
                 ", loginType='" + loginType + '\'' +
                 ", locale='" + locale + '\'' +
                 ", username='" + username + '\'' +
-                ", following=" + following +
                 ", notificationId='" + notificationId + '\'' +
                 ", coverPicture='" + coverPicture + '\'' +
+                ", isFollowing=" + isFollowing +
                 '}';
     }
 }

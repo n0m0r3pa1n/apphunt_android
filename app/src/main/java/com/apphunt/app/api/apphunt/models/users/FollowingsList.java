@@ -9,17 +9,17 @@ import java.util.ArrayList;
  * * NaughtySpirit 2015
  */
 public class FollowingsList {
-    ArrayList<String> followerIds = new ArrayList<>();
+    ArrayList<String> followingIds = new ArrayList<>();
 
-    public ArrayList<String> getFollowerIds() {
-        return followerIds;
+    public ArrayList<String> getFollowingIds() {
+        return followingIds;
     }
 
-    public void setFollowerIds(ArrayList<String> followerIds) {
-        this.followerIds = followerIds;
+    public void setFollowingIds(ArrayList<String> followingIds) {
+        this.followingIds = followingIds;
     }
 
     public void addId(String id) {
-        followerIds.add(id);
+        followingIds.add(id);
     }
 }

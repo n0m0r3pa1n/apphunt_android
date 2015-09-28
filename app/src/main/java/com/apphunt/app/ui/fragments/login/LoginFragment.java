@@ -212,44 +212,24 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
-                        appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
+                        TwitterAuthClient authClient = new TwitterAuthClient();
+                        authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback<String>() {
                             @Override
-                            public void success(Result<Friends> friendsResult) {
-                                List<String> following = new ArrayList<>();
-                                for (com.twitter.sdk.android.core.models.User user :
-                                        friendsResult.data.getUsers()) {
-                                    following.add(user.screenName);
-                                }
-                                user.setFollowing(following);
+                            public void success(Result<String> result) {
+                                user.setEmail(result.data);
+                                LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
+                                ApiClient.getClient(getActivity()).createUser(user);
+                                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
 
-                                TwitterAuthClient authClient = new TwitterAuthClient();
-                                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback<String>() {
-                                    @Override
-                                    public void success(Result<String> result) {
-                                        user.setEmail(result.data);
-                                        LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
-                                        ApiClient.getClient(getActivity()).createUser(user);
-                                        LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-
-                                        FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
-
-                                        // TODO: To be removed
-                                        Log.e(TAG, result.data);
-                                    }
-
-                                    @Override
-                                    public void failure(TwitterException e) {
-                                        Log.e(TAG, e.getMessage());
-                                        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                                false, null, null, null, null);
-                                        startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
-                                    }
-                                });
+                                FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
                             }
 
                             @Override
                             public void failure(TwitterException e) {
-                                onLoginFailed();
+                                Log.e(TAG, e.getMessage());
+                                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                        false, null, null, null, null);
+                                startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
                             }
                         });
                     }

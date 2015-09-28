@@ -17,8 +17,10 @@ import android.widget.RelativeLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.constants.Constants;
@@ -150,11 +152,12 @@ public class TwitterFriends extends BaseFragment {
         twitterApiClient.getFriendsService().getFriends(username, new Callback<Friends>() {
             @Override
             public void success(Result<Friends> result) {
-                ArrayList<String> names = new ArrayList<>();
+                NamesList names = new NamesList();
                 for (User f : result.data.getUsers()) {
-                    names.add(f.name);
+                    names.addName(f.name);
                 }
-                ApiClient.getClient(activity).filterFriends(names, LoginProviders.TWITTER);
+                ApiClient.getClient(activity).filterFriends(LoginProviderFactory.get(activity).getUser().getId(),
+                        names, LoginProviders.TWITTER);
             }
 
             @Override

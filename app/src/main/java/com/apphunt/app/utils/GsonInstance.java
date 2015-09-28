@@ -1,8 +1,11 @@
 package com.apphunt.app.utils;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -13,6 +16,18 @@ public class GsonInstance {
 
     public static void init() {
         GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+        builder.addSerializationExclusionStrategy(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                final Expose expose = f.getAnnotation(Expose.class);
+                return expose != null && !expose.serialize();
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        });
         sGson = builder.create();
     }
 

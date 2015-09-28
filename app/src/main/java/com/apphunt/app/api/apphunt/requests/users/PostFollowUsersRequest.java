@@ -16,8 +16,8 @@ import org.json.JSONObject;
  */
 public class PostFollowUsersRequest extends BasePostRequest<JSONObject> {
 
-    public PostFollowUsersRequest(String userId, FollowingsList followerIds, Response.ErrorListener listener) {
-        super(BASE_URL + "/users/" + userId + "/followers", followerIds, listener);
+    public PostFollowUsersRequest(String userId, FollowingsList followingIds, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/" + userId + "/following", followingIds, listener);
     }
 
     @Override

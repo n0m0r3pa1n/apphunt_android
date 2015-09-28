@@ -30,12 +30,17 @@ public class FriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final String TAG = FriendsAdapter.class.getSimpleName();
 
     private Context ctx;
-    private UsersList friends = new UsersList();
+    private ArrayList<User> friends = new ArrayList<>();
     private ArrayList<Boolean> positionsArray = new ArrayList<>();
 
-    public FriendsAdapter(Context ctx, UsersList friends) {
+    public FriendsAdapter(Context ctx, UsersList users) {
         this.ctx = ctx;
-        this.friends = friends;
+
+        for (User user : users.getUsers()) {
+            if (!user.isFollowing()) {
+                friends.add(user);
+            }
+        }
 
         for (int i = 0; i < friends.size(); i++) {
             positionsArray.add(i, false);
