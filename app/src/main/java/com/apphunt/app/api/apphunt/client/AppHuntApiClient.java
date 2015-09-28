@@ -60,6 +60,7 @@ import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
 
@@ -390,12 +391,12 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void filterFriends(ArrayList<String> names) {
+    public void filterFriends(ArrayList<String> names, LoginProviders provider) {
         String query = "?";
         for (String s : names) {
             query += "names[]=" + s + "&";
         }
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(query, listener));
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(query, provider, listener));
     }
 
     @Override

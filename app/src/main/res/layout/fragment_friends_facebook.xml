@@ -75,7 +75,7 @@
             app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/friends_list"
+            android:id="@+id/fb_friends_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/select_all"

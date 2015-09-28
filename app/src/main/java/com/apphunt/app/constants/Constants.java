@@ -77,7 +77,7 @@ public class Constants {
     public static final String TAG_WELCOME_FRAGMENT = "fragment_welcome";
     public static final String TAG_FIND_FRIENDS_FRAGMENT = "fragment_find_friends";
     public static final String TAG_FIND_TWITTER_FRIENDS = "fragment_find_twitter_friends";
-
+    public static final String TAG_FIND_FACEBOOK_FRIENDS = "fragment_find_facebook_friends";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
@@ -165,6 +165,18 @@ public class Constants {
         }
 
         public String getValue() {
+            return value;
+        }
+    }
+
+    public enum LoginProviders {
+        FACEBOOK(0), GOOGLEPLUS(1), TWITTER(2);
+
+        private int value;
+
+        LoginProviders(int value) { this.value = value; }
+
+        public int getValue() {
             return value;
         }
     }

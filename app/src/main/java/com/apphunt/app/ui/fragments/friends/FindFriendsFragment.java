@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,12 +19,9 @@ import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsSuggestionsOptAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.flurry.android.FlurryAgent;
-import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,8 +59,9 @@ public class FindFriendsFragment extends BackStackFragment {
     private void initUI() {
         setHasOptionsMenu(true);
 
-        optionsAdapter = new FriendsSuggestionsOptAdapter(activity.getSupportFragmentManager());
-        optionsPager.setOffscreenPageLimit(0);
+        optionsAdapter = new FriendsSuggestionsOptAdapter(getChildFragmentManager());
+        optionsAdapter.instantiateFragments();
+        optionsPager.setOffscreenPageLimit(1);
         optionsPager.setAdapter(optionsAdapter);
 
         tabLayout.setupWithViewPager(optionsPager);
@@ -78,17 +75,6 @@ public class FindFriendsFragment extends BackStackFragment {
             tabLayout.getTabAt(1).setIcon(R.drawable.ic_facebook);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-        }
-    }
-
-    @Subscribe
-    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
-        Fragment fragment = optionsAdapter.getItem(optionsPager.getCurrentItem());
-
-        if (fragment instanceof TwitterFriends) {
-            ((TwitterFriends) fragment).setReceivedData(event.getUsers());
-        } else if (fragment instanceof FacebookFriends) {
-            ((FacebookFriends) fragment).setReceivedData(event.getUsers());
         }
     }
 
@@ -137,5 +123,6 @@ public class FindFriendsFragment extends BackStackFragment {
     public void onDetach() {
         super.onDetach();
         skipAction.setVisible(false);
+        optionsAdapter.removeFragments();
     }
 }

@@ -17,15 +17,18 @@ import android.widget.RelativeLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
-import com.apphunt.app.api.apphunt.models.users.UsersList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
+import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -69,7 +72,7 @@ public class TwitterFriends extends BaseFragment {
     @InjectView(R.id.loader_friends)
     CircularProgressBar loader;
 
-    @InjectView(R.id.friends_list)
+    @InjectView(R.id.tw_friends_list)
     RecyclerView friendsList;
 
     @InjectView(R.id.select_all)
@@ -93,6 +96,8 @@ public class TwitterFriends extends BaseFragment {
         if (LoginProviderFactory.get(activity) != null) {
             this.isLoginProvider = LoginProviderFactory.get(activity).getName().equals(TwitterLoginProvider.PROVIDER_NAME);
         }
+
+        setFragmentTag(Constants.TAG_FIND_TWITTER_FRIENDS);
     }
 
     @Nullable
@@ -149,7 +154,7 @@ public class TwitterFriends extends BaseFragment {
                 for (User f : result.data.getUsers()) {
                     names.add(f.name);
                 }
-                ApiClient.getClient(activity).filterFriends(names);
+                ApiClient.getClient(activity).filterFriends(names, LoginProviders.TWITTER);
             }
 
             @Override
@@ -186,12 +191,15 @@ public class TwitterFriends extends BaseFragment {
         ApiClient.getClient(activity).followUsers(LoginProviderFactory.get(activity).getUser().getId(), ids);
     }
 
-    public void setReceivedData(UsersList users) {
-        adapter = new FriendsAdapter(activity, users);
-        friendsList.setAdapter(adapter);
+    @Subscribe
+    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
+        if (friendsList != null && event.getProvider().equals(Constants.LoginProviders.TWITTER)) {
+            adapter = new FriendsAdapter(activity, event.getUsers());
+            friendsList.setAdapter(adapter);
 
-        loader.setVisibility(View.GONE);
-        layoutList.setVisibility(View.VISIBLE);
+            loader.setVisibility(View.GONE);
+            layoutList.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

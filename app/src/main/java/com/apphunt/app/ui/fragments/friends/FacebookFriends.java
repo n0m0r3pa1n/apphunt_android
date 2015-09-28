@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,11 @@ import android.widget.RelativeLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
-import com.apphunt.app.api.apphunt.models.users.UsersList;
 import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
@@ -34,6 +36,7 @@ import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.squareup.otto.Subscribe;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -74,7 +77,7 @@ public class FacebookFriends extends BaseFragment {
     @InjectView(R.id.loader_friends)
     CircularProgressBar loader;
 
-    @InjectView(R.id.friends_list)
+    @InjectView(R.id.fb_friends_list)
     RecyclerView friendsList;
 
     @InjectView(R.id.select_all)
@@ -94,9 +97,16 @@ public class FacebookFriends extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate()");
 
         if (LoginProviderFactory.get(activity) != null) {
             this.isLoginProvider = LoginProviderFactory.get(activity).getName().equals(FacebookLoginProvider.PROVIDER_NAME);
+        }
+
+        if (!isLoginProvider) {
+            AccessToken.setCurrentAccessToken(null);
+            Profile.setCurrentProfile(null);
+            LoginManager.getInstance().logOut();
         }
     }
 
@@ -105,6 +115,8 @@ public class FacebookFriends extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends_facebook, container, false);
         ButterKnife.inject(this, view);
+
+        Log.e(TAG, "onCreateView()");
 
         initUI();
 
@@ -119,15 +131,16 @@ public class FacebookFriends extends BaseFragment {
 
             obtainAndFilterFriends();
         } else {
+            Log.e(TAG, "called");
             layoutLogin.setVisibility(View.VISIBLE);
             layoutList.setVisibility(View.GONE);
             loader.setVisibility(View.GONE);
 
-            fbLoginBtn.setFragment(this);
             fbLoginBtn.setReadPermissions(Arrays.asList("user_friends", "email"));
             fbLoginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
+                    Log.e(TAG, loginResult.toString());
                     layoutLogin.setVisibility(View.GONE);
                     obtainAndFilterFriends();
                 }
@@ -138,6 +151,7 @@ public class FacebookFriends extends BaseFragment {
 
                 @Override
                 public void onError(FacebookException error) {
+                    Log.e(TAG, error.getMessage());
                 }
             });
         }
@@ -157,6 +171,7 @@ public class FacebookFriends extends BaseFragment {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
+                        Log.e(TAG, response.toString());
                         AccessToken.setCurrentAccessToken(null);
                         Profile.setCurrentProfile(null);
                         LoginManager.getInstance().logOut();
@@ -167,10 +182,10 @@ public class FacebookFriends extends BaseFragment {
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject user = data.getJSONObject(i);
                                 names.add(user.getString("name"));
-                                ApiClient.getClient(activity).filterFriends(names);
+                                ApiClient.getClient(activity).filterFriends(names, LoginProviders.FACEBOOK);
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Log.e(TAG, e.getMessage());
                         }
                     }
                 }
@@ -205,9 +220,11 @@ public class FacebookFriends extends BaseFragment {
         ApiClient.getClient(activity).followUsers(LoginProviderFactory.get(activity).getUser().getId(), ids);
     }
 
-    public void setReceivedData(UsersList users) {
-        if (friendsList != null) {
-            adapter = new FriendsAdapter(activity, users);
+    @Subscribe
+    public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
+        Log.e(TAG, "onObtainFilteredUsers");
+        if (friendsList != null && event.getProvider().equals(LoginProviders.FACEBOOK)) {
+            adapter = new FriendsAdapter(activity, event.getUsers());
             friendsList.setAdapter(adapter);
 
             loader.setVisibility(View.GONE);
@@ -218,17 +235,14 @@ public class FacebookFriends extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (callbackManager == null) {
-            callbackManager = CallbackManager.Factory.create();
-        }
-
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.e(TAG, "onAttach()");
+
         this.activity = (AppCompatActivity) context;
         this.callbackManager = CallbackManager.Factory.create();
         BusProvider.getInstance().register(this);
@@ -237,6 +251,7 @@ public class FacebookFriends extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.e(TAG, "onDetach()");
         BusProvider.getInstance().unregister(this);
     }
 }

@@ -118,11 +118,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         ActionBarUtils.getInstance().init(this);
         addBackStackChangeListener();
         showStartFragments(getIntent());
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
-                .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
-                .commit();
     }
 
     private int backStackCount = 0;

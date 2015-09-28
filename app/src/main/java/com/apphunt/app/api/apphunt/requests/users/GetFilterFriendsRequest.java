@@ -3,6 +3,7 @@ package com.apphunt.app.api.apphunt.requests.users;
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.users.UsersList;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
+import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 
@@ -14,8 +15,11 @@ import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
  */
 public class GetFilterFriendsRequest extends BaseGetRequest<UsersList> {
 
-    public GetFilterFriendsRequest(String names, Response.ErrorListener listener) {
+    private final LoginProviders provider;
+
+    public GetFilterFriendsRequest(String names, LoginProviders provider, Response.ErrorListener listener) {
         super(BASE_URL + "/users/actions/filter" + names, listener);
+        this.provider = provider;
     }
 
     @Override
@@ -25,6 +29,6 @@ public class GetFilterFriendsRequest extends BaseGetRequest<UsersList> {
 
     @Override
     public void deliverResponse(UsersList response) {
-        BusProvider.getInstance().post(new GetFilterUsersApiEvent(response));
+        BusProvider.getInstance().post(new GetFilterUsersApiEvent(response, provider));
     }
 }
