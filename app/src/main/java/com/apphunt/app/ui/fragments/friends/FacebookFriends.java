@@ -19,7 +19,6 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.client.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
-import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants.LoginProviders;
@@ -71,6 +70,9 @@ public class FacebookFriends extends BaseFragment {
 
     @InjectView(R.id.layout_list)
     RelativeLayout layoutList;
+
+    @InjectView(R.id.no_results)
+    RelativeLayout noResults;
 
     @InjectView(R.id.fb_login_button)
     CustomFacebookButton fbLoginBtn;
@@ -219,10 +221,16 @@ public class FacebookFriends extends BaseFragment {
     @Subscribe
     public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
         if (friendsList != null && event.getProvider().equals(LoginProviders.FACEBOOK)) {
-            adapter = new FriendsAdapter(activity, event.getUsers());
-            friendsList.setAdapter(adapter);
-
             loader.setVisibility(View.GONE);
+
+
+            adapter = new FriendsAdapter(activity, event.getUsers());
+            if (adapter.getItemCount() == 0) {
+                noResults.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            friendsList.setAdapter(adapter);
             layoutList.setVisibility(View.VISIBLE);
         }
     }

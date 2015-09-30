@@ -338,7 +338,12 @@ public class AppHuntApiClient implements AppHuntApi {
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String fromStr = dayFormat.format(fromDate);
         String toStr = dayFormat.format(toDate);
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+        if (LoginProviderFactory.get((Activity) context).isUserLoggedIn()) {
+            String currentUserId = LoginProviderFactory.get((Activity) context).getUser().getId();
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, currentUserId, fromStr, toStr, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+        }
     }
 
     @Override

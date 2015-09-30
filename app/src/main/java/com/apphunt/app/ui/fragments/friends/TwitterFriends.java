@@ -20,7 +20,6 @@ import com.apphunt.app.api.apphunt.models.users.FollowingsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
-import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.constants.Constants;
@@ -37,8 +36,6 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,6 +64,9 @@ public class TwitterFriends extends BaseFragment {
 
     @InjectView(R.id.layout_list)
     RelativeLayout layoutList;
+
+    @InjectView(R.id.no_results)
+    RelativeLayout noResults;
 
     @InjectView(R.id.login_button)
     CustomTwitterLoginButton twitterLoginBtn;
@@ -197,10 +197,16 @@ public class TwitterFriends extends BaseFragment {
     @Subscribe
     public void onObtainFilteredUsers(GetFilterUsersApiEvent event) {
         if (friendsList != null && event.getProvider().equals(Constants.LoginProviders.TWITTER)) {
-            adapter = new FriendsAdapter(activity, event.getUsers());
-            friendsList.setAdapter(adapter);
-
             loader.setVisibility(View.GONE);
+
+
+            adapter = new FriendsAdapter(activity, event.getUsers());
+            if (adapter.getItemCount() == 0) {
+                noResults.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            friendsList.setAdapter(adapter);
             layoutList.setVisibility(View.VISIBLE);
         }
     }
