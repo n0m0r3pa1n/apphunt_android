@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.models;
+package com.apphunt.app.ui.models.drawer;
 
 /**
  * Created by nmp on 15-6-9.

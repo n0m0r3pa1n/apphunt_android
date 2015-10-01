@@ -4,8 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
-import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.votes.CollectionVote;

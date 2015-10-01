@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.models;
+package com.apphunt.app.ui.models.drawer;
 
 public class DrawerMenu extends DrawerItem {
 

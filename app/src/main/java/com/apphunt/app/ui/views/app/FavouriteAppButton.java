@@ -1,10 +1,9 @@
 package com.apphunt.app.ui.views.app;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.apps.FavouriteAppApiEvent;

@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.client;
+package com.apphunt.app.api.apphunt.clients.rest;
 
 import android.content.Context;
 

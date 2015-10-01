@@ -23,11 +23,10 @@ import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.DrawerItemAdapter;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
-import com.apphunt.app.ui.models.DrawerItem;
-import com.apphunt.app.ui.models.DrawerLabel;
-import com.apphunt.app.ui.models.DrawerMenu;
+import com.apphunt.app.ui.models.drawer.DrawerItem;
+import com.apphunt.app.ui.models.drawer.DrawerLabel;
+import com.apphunt.app.ui.models.drawer.DrawerMenu;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;

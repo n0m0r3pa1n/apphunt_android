@@ -3,7 +3,6 @@ package com.apphunt.app.ui.fragments.profile.tabs;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,19 +14,16 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.Pagination;
-import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.ProfileComments;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
-import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.adapters.profile.ProfileCommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
-import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
 import com.squareup.otto.Subscribe;
 

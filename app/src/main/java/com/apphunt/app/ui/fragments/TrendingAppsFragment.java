@@ -17,7 +17,7 @@ import android.widget.Button;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiService;
+import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;

@@ -25,7 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -39,7 +39,6 @@ import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
