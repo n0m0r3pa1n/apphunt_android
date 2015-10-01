@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class User implements Serializable{
 
@@ -20,7 +18,7 @@ public class User implements Serializable{
     private String notificationId;
     private String coverPicture;
     @Expose(serialize = false)
-    private boolean isFollowing;
+    protected boolean isFollowing;
 
     public String getId() {
         return id;

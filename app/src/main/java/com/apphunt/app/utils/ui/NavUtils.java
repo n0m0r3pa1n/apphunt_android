@@ -18,6 +18,7 @@ import com.apphunt.app.ui.fragments.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
+import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 
 public class NavUtils {
@@ -163,6 +164,13 @@ public class NavUtils {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)
+                .commit();
+    }
+
+    public void presentFindFriendsFragment() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
                 .commit();
     }
 

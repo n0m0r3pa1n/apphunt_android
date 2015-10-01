@@ -57,4 +57,12 @@
         android:showAsAction="always"
         app:showAsAction="always"
         android:visible="false" />
+
+    <item
+        android:id="@+id/action_find_friends"
+        android:icon="@drawable/ic_add_friends"
+        android:title="@string/action_find_friends"
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 </menu>

@@ -53,6 +53,7 @@ public class UserProfile extends User {
                 ", score=" + score +
                 ", favouriteApps=" + favouriteApps +
                 ", favouriteCollections=" + favouriteCollections +
+                ", isFollowing=" + isFollowing +
                 ", followingCount=" + followingCount +
                 ", followersCount=" + followersCount +
                 '}';

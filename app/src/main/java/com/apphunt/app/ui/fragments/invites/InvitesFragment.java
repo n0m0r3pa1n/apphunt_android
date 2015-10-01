@@ -16,11 +16,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.invite.InviteOptionsAdapter;
-import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
@@ -86,10 +85,7 @@ public class InvitesFragment extends BackStackFragment {
             FlurryAgent.logEvent(TrackingEvents.UserSkippedInvitation);
 
             activity.getSupportFragmentManager().popBackStack();
-            activity.getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
-                    .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
-                    .commit();
+            NavUtils.getInstance(activity).presentFindFriendsFragment();
         }
         return super.onOptionsItemSelected(item);
     }
