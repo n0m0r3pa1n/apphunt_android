@@ -22,7 +22,6 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
-import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.GooglePlusLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -64,14 +63,11 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -159,7 +155,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                if(TextUtils.isEmpty(id)) {
+                                if (TextUtils.isEmpty(id)) {
                                     return;
                                 }
                                 setUserFbProfiledDataAndLogin(user, id);
@@ -180,7 +176,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
         Button notNowButton = (Button) view.findViewById(R.id.not_now);
         notNowButton.setVisibility(View.GONE);
-        if(canBeSkipped) {
+        if (canBeSkipped) {
             notNowButton.setVisibility(View.VISIBLE);
             notNowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -212,23 +208,21 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
-                                FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
-Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                        false, null, null, null, null);
-                                startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
-                            }
-                        });
+                        FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
+                        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                false, null, null, null, null);
+                        startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
                     }
 
                     @Override
-                    public void failure(TwitterException e) {
+                    public void failure (TwitterException e){
                         onLoginFailed();
                     }
                 });
             }
 
             @Override
-            public void failure(TwitterException e) {
+            public void failure (TwitterException e){
                 onLoginFailed();
             }
         });

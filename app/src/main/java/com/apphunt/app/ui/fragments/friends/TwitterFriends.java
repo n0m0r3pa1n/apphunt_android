@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.FollowingsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
