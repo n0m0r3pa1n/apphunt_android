@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.adapters.login;
+package com.apphunt.app.ui.adapters.invite;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

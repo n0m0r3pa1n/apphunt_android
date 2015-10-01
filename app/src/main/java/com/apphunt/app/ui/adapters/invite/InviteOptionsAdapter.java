@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.adapters.login;
+package com.apphunt.app.ui.adapters.invite;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
-import com.apphunt.app.ui.fragments.login.EmailInviteFragment;
-import com.apphunt.app.ui.fragments.login.ProviderInviteFragment;
-import com.apphunt.app.ui.fragments.login.SMSInviteFragment;
+import com.apphunt.app.ui.fragments.invites.EmailInviteFragment;
+import com.apphunt.app.ui.fragments.invites.ProviderInviteFragment;
+import com.apphunt.app.ui.fragments.invites.SMSInviteFragment;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>

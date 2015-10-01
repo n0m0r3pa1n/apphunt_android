@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.Button;
 
 import com.apphunt.app.R;
+import com.apphunt.app.ui.interfaces.CustomButton;
 
 import java.util.HashMap;
 
@@ -17,7 +18,8 @@ import java.util.HashMap;
  * *
  * * NaughtySpirit 2015
  */
-public class AHButton extends Button {
+public class AHButton extends Button implements CustomButton {
+
     private HashMap<String, Typeface> typefaces;
 
     public AHButton(Context context) {
@@ -34,6 +36,7 @@ public class AHButton extends Button {
         init(context, attrs);
     }
 
+    @Override
     public void init(Context ctx, AttributeSet attrs) {
 
         if (typefaces == null) {

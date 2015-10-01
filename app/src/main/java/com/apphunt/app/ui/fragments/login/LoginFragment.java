@@ -212,43 +212,10 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
-                        appHuntTwitterApiClient.getFriendsService().getFriends(userResult.data.screenName, new Callback<Friends>() {
-                            @Override
-                            public void success(Result<Friends> friendsResult) {
-                                List<String> following = new ArrayList<>();
-                                for (com.twitter.sdk.android.core.models.User user :
-                                        friendsResult.data.getUsers()) {
-                                    following.add(user.screenName);
-                                }
-                                user.setFollowing(following);
-
-                                TwitterAuthClient authClient = new TwitterAuthClient();
-                                authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback<String>() {
-                                    @Override
-                                    public void success(Result<String> result) {
-                                        user.setEmail(result.data);
-                                        LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
-                                        ApiClient.getClient(getActivity()).createUser(user);
-                                        LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
-
-                                        FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
-
-                                        // TODO: To be removed
-                                        Log.e(TAG, result.data);
-                                    }
-
-                                    @Override
-                                    public void failure(TwitterException e) {
-                                        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                                false, null, null, null, null);
-                                        startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void failure(TwitterException e) {
-                                onLoginFailed();
+                                FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
+Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                        false, null, null, null, null);
+                                startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
                             }
                         });
                     }
@@ -320,6 +287,8 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         if(!TextUtils.isEmpty(coverUrl)) {
                             user.setCoverPicture(coverUrl);
                         }
+
+
                         user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));

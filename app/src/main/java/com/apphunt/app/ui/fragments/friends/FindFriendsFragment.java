@@ -1,9 +1,13 @@
-package com.apphunt.app.ui.fragments;
+package com.apphunt.app.ui.fragments.friends;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,12 +18,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.apphunt.app.R;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.adapters.friends.FriendsSuggestionsOptAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
@@ -29,8 +34,16 @@ import butterknife.ButterKnife;
  */
 public class FindFriendsFragment extends BackStackFragment {
 
+    private static final String TAG = FindFriendsFragment.class.getSimpleName();
+
     private AppCompatActivity activity;
     private MenuItem skipAction;
+    private FriendsSuggestionsOptAdapter optionsAdapter;
+
+    @InjectView(R.id.tabs)
+    TabLayout tabLayout;
+    @InjectView(R.id.options_pagers)
+    ViewPager optionsPager;
 
     @Nullable
     @Override
@@ -45,6 +58,24 @@ public class FindFriendsFragment extends BackStackFragment {
 
     private void initUI() {
         setHasOptionsMenu(true);
+
+        optionsAdapter = new FriendsSuggestionsOptAdapter(getChildFragmentManager());
+        optionsAdapter.instantiateFragments();
+        optionsPager.setOffscreenPageLimit(1);
+        optionsPager.setAdapter(optionsAdapter);
+
+        tabLayout.setupWithViewPager(optionsPager);
+        initTabs();
+    }
+
+    private void initTabs() {
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        try {
+            tabLayout.getTabAt(0).setIcon(R.drawable.ic_twitter);
+            tabLayout.getTabAt(1).setIcon(R.drawable.ic_facebook);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
@@ -77,6 +108,10 @@ public class FindFriendsFragment extends BackStackFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onReceivedActivityResult(int requestCode, int resultCode, Intent data) {
+        optionsAdapter.getItem(optionsPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -88,5 +123,6 @@ public class FindFriendsFragment extends BackStackFragment {
     public void onDetach() {
         super.onDetach();
         skipAction.setVisible(false);
+        optionsAdapter.removeFragments();
     }
 }

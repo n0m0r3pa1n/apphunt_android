@@ -5,6 +5,7 @@ public class UserProfile extends User {
     private int comments, collections;
     private int score;
     private int favouriteApps, favouriteCollections;
+    private int followingCount, followersCount;
 
     public int getApps() {
         return apps;
@@ -32,5 +33,28 @@ public class UserProfile extends User {
 
     public int getFavouriteCollections() {
         return favouriteCollections;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "apps=" + apps +
+                ", votes=" + votes +
+                ", comments=" + comments +
+                ", collections=" + collections +
+                ", score=" + score +
+                ", favouriteApps=" + favouriteApps +
+                ", favouriteCollections=" + favouriteCollections +
+                ", followingCount=" + followingCount +
+                ", followersCount=" + followersCount +
+                '}';
     }
 }

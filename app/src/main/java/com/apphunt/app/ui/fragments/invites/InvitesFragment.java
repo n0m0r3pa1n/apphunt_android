@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.login;
+package com.apphunt.app.ui.fragments.invites;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,8 +18,8 @@ import android.view.animation.AnimationUtils;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.ui.adapters.login.InviteOptionsAdapter;
-import com.apphunt.app.ui.fragments.FindFriendsFragment;
+import com.apphunt.app.ui.adapters.invite.InviteOptionsAdapter;
+import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.flurry.android.FlurryAgent;
 

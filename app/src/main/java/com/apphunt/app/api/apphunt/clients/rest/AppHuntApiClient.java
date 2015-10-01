@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.clients.rest;
+package com.apphunt.app.api.apphunt.client;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,8 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
@@ -47,8 +49,10 @@ import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -59,6 +63,7 @@ import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
 
@@ -87,7 +92,6 @@ public class AppHuntApiClient implements AppHuntApi {
             BusProvider.getInstance().post(new ApiErrorEvent());
         }
     };
-
 
     @Override
     public void createUser(User user) {
@@ -346,7 +350,12 @@ public class AppHuntApiClient implements AppHuntApi {
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String fromStr = dayFormat.format(fromDate);
         String toStr = dayFormat.format(toDate);
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+        if (LoginProviderFactory.get((Activity) context).isUserLoggedIn()) {
+            String currentUserId = LoginProviderFactory.get((Activity) context).getUser().getId();
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, currentUserId, fromStr, toStr, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+        }
     }
 
     @Override
@@ -397,6 +406,36 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomAppRequest(userId, listener));
         }
+    }
+
+    @Override
+    public void filterFriends(String userId, NamesList names, LoginProviders provider) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetFilterFriendsRequest(userId, names, provider, listener));
+    }
+
+    @Override
+    public void followUser(String userId, String followingId) {
+
+    }
+
+    @Override
+    public void followUsers(String userId, FollowingsList followingIds) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostFollowUsersRequest(userId, followingIds, listener));
+    }
+
+    @Override
+    public void unfollowUser(String userId, String followingId) {
+
+    }
+
+    @Override
+    public void getFollowers(String userId, int page, int pageSize) {
+
+    }
+
+    @Override
+    public void getFollowings(String userId, int page, int pageSize) {
+    
     }
 
     @Override

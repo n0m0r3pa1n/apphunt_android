@@ -15,10 +15,14 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
+import com.apphunt.app.auth.LoginProvider;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.views.widgets.AHButton;
 import com.apphunt.app.ui.views.widgets.AHTextView;
+import com.apphunt.app.ui.views.widgets.FollowButton;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.squareup.otto.Subscribe;
@@ -55,6 +59,9 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.banner)
     ImageView banner;
 
+    @InjectView(R.id.follow)
+    FollowButton follow;
+
     @InjectView(R.id.score_month)
     TextView scoreMonth;
 
@@ -86,6 +93,7 @@ public class UserProfileFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         ButterKnife.inject(this, view);
+
         title = getArguments().getString(NAME);
         String userId = getArguments().getString(USER_ID);
 
@@ -223,6 +231,8 @@ public class UserProfileFragment extends BackStackFragment {
         commentsCount = userProfile.getComments();
         favouriteAppsCount = userProfile.getFavouriteApps();
         favouriteCollectionsCount = userProfile.getFavouriteCollections();
+
+        follow.init(activity, event.getUserProfile());
 
         scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 

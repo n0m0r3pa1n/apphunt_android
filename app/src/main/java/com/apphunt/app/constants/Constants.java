@@ -78,7 +78,8 @@ public class Constants {
     public static final String TAG_INVITE_FRAGMENT = "invite_fragment";
     public static final String TAG_WELCOME_FRAGMENT = "fragment_welcome";
     public static final String TAG_FIND_FRIENDS_FRAGMENT = "fragment_find_friends";
-
+    public static final String TAG_FIND_TWITTER_FRIENDS = "fragment_find_twitter_friends";
+    public static final String TAG_FIND_FACEBOOK_FRIENDS = "fragment_find_facebook_friends";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;
@@ -119,6 +120,9 @@ public class Constants {
     public static final String GCM_SENDER_ID = "437946264894";
     public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
     public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
+//    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
+//    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+
 
     public static final int TRENDING_APPS = 1;
     public static final int TOP_HUNTERS = 2;
@@ -163,6 +167,18 @@ public class Constants {
         }
 
         public String getValue() {
+            return value;
+        }
+    }
+
+    public enum LoginProviders {
+        FACEBOOK(0), GOOGLEPLUS(1), TWITTER(2);
+
+        private int value;
+
+        LoginProviders(int value) { this.value = value; }
+
+        public int getValue() {
             return value;
         }
     }

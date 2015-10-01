@@ -131,6 +131,7 @@
     <string name="action_skip">Skip</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">Nothing was found...</string>
+    <string name="no_friends_found">No friends found...</string>
     <string name="details">Details</string>
     <string name="title_home">Home</string>
     <string name="title_top_hunters">Top Hunters</string>
@@ -182,4 +183,13 @@
     <string name="msg_welcome">Hey, %s!\n\nI\'m using this app for quite some time and it\'s amazing! You will find lots of useful and cool apps that you cannot find fast and easy in the PlayStore!</string>
     <string name="msg_sms_charge">* Your carrier may charge for SMS messages used to send an AppHunt invites.</string>
     <string name="title_find_friends">Find Friends</string>
+
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="google_plus">Google Plus</string>
+    <string name="title_friends_fb_follow">Follow your friends on Facebook</string>
+    <string name="subtitle_friends_to_follow">Connect now to see what apps your friends hunt!</string>
+    <string name="title_friends_tw_follow">Follow your friends on Twitter</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">unfollow</string>
 </resources>

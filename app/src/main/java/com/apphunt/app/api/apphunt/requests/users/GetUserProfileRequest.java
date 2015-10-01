@@ -1,5 +1,7 @@
 package com.apphunt.app.api.apphunt.requests.users;
 
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
@@ -13,6 +15,11 @@ public class GetUserProfileRequest extends BaseGetRequest<UserProfile> {
         super(BASE_URL + "/users/" + userId +"?fromDate=" + fromDate + "&toDate=" + toDate, listener);
     }
 
+    public GetUserProfileRequest(String userId, String currentUserId, String fromDate, String toDate, Response.ErrorListener listener) {
+        super(BASE_URL + "/users/" + userId +"?currentUserId=" + currentUserId
+                + "&fromDate=" + fromDate + "&toDate=" + toDate, listener);
+    }
+
     @Override
     public Class<UserProfile> getParsedClass() {
         return UserProfile.class;
@@ -20,6 +27,7 @@ public class GetUserProfileRequest extends BaseGetRequest<UserProfile> {
 
     @Override
     public void deliverResponse(UserProfile response) {
+        Log.e(TAG, response.toString());
         BusProvider.getInstance().post(new GetUserProfileApiEvent(response));
     }
 }

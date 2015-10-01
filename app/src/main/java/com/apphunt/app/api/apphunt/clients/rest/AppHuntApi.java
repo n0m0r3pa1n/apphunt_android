@@ -8,8 +8,12 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.constants.Constants.LoginProviders;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public interface AppHuntApi {
@@ -102,4 +106,16 @@ public interface AppHuntApi {
     void getRandomApp(String userId);
 
     void getUserHistory(String userId, Date date);
+
+    void filterFriends(String userId, NamesList names, LoginProviders provider);
+
+    void followUser(String userId, String followingId);
+
+    void followUsers(String userId, FollowingsList followingIds);
+
+    void unfollowUser(String userId, String followingId);
+
+    void getFollowers(String userId, int page, int pageSize);
+
+    void getFollowings(String userId, int page, int pageSize);
 }

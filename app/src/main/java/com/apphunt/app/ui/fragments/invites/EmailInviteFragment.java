@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.fragments.login;
+package com.apphunt.app.ui.fragments.invites;
 
 import android.app.Activity;
 import android.content.Context;

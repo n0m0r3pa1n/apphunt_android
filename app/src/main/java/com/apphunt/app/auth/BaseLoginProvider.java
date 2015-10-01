@@ -15,7 +15,7 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
-import com.apphunt.app.ui.fragments.login.InvitesFragment;
+import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;

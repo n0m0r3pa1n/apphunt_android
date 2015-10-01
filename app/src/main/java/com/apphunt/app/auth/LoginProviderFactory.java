@@ -16,7 +16,7 @@ public class LoginProviderFactory {
 
     public static LoginProvider get(Activity activity) {
         if (loginProvider == null) {
-            return new TwitterLoginProvider(activity);
+            return new NullLoginProvider(activity);
         }
         return loginProvider;
     }
