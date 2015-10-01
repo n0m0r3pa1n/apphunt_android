@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.client;
+package com.apphunt.app.api.apphunt.clients.rest;
 
 import android.content.Context;
 
@@ -11,6 +11,7 @@ import java.util.Calendar;
 public class ApiService {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
     private static Calendar calendar = Calendar.getInstance();
+    private static Calendar historyCalendar = Calendar.getInstance();
     private static ApiService apiService;
     private Context context;
 
@@ -37,6 +38,16 @@ public class ApiService {
         ApiClient.getClient(context).getApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 date, 1, 5, Constants.PLATFORM);
     }
+
+    public void loadHistoryForToday() {
+        historyCalendar = Calendar.getInstance();
+        ApiClient.getClient(context).getUserHistory(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), historyCalendar.getTime());
+    }
+
+    public void loadHistoryForPreviousDate() {
+        ApiClient.getClient(context).getUserHistory(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), historyCalendar.getTime());
+    }
+
 
     public void loadMoreApps(String userId, String date, String platform, int page, int pageSize) {
         ApiClient.getClient(context).getApps(userId, date, page, pageSize, platform);

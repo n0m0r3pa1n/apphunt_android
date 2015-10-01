@@ -21,9 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by nmp on 15-8-11.
- */
 public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     private final List<App> apps;

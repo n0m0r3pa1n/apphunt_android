@@ -58,6 +58,7 @@ dependencies {
     compile project(':jhexed')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.github.nkzawa:socket.io-client:0.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.6'
     compile 'com.squareup.picasso:picasso:2.4.0'

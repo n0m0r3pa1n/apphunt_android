@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiService;
+import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;

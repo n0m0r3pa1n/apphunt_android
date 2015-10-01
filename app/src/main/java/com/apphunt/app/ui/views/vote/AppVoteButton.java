@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.auth.LoginProviderFactory;

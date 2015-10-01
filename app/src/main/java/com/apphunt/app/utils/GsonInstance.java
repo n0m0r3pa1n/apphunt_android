@@ -12,7 +12,7 @@ public class GsonInstance {
     private static Gson sGson;
 
     public static void init() {
-        GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+        GsonBuilder builder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").disableHtmlEscaping();
         sGson = builder.create();
     }
 

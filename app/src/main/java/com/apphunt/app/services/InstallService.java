@@ -16,7 +16,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;

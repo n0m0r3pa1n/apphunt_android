@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.client;
+package com.apphunt.app.api.apphunt.clients.rest;
 
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.Pagination;
@@ -53,6 +53,8 @@ public interface AppHuntApi {
 
     void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize);
 
+    void getAppCollection(String collectionId, String userId);
+
     void getAllCollections(String userId, String sortBy, int page, int pageSize);
 
     void voteCollection(String userId, String collectionId);
@@ -98,4 +100,6 @@ public interface AppHuntApi {
     void getFavouriteApps(String favouritedBy, String userId, Pagination pagination);
 
     void getRandomApp(String userId);
+
+    void getUserHistory(String userId, Date date);
 }

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionApiEvent;

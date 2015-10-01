@@ -1,4 +1,4 @@
-package com.apphunt.app.api.apphunt.client;
+package com.apphunt.app.api.apphunt.clients.rest;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +20,7 @@ import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
-import com.apphunt.app.api.apphunt.requests.apps.GetRandomApp;
+import com.apphunt.app.api.apphunt.requests.apps.GetRandomAppRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
@@ -30,6 +30,7 @@ import com.apphunt.app.api.apphunt.requests.apps.favourite.UnfavouriteAppRequest
 import com.apphunt.app.api.apphunt.requests.collections.DeleteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.FavouriteCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetAllCollectionsRequest;
+import com.apphunt.app.api.apphunt.requests.collections.GetAppCollectionRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetCollectionBannersRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetFavouriteCollectionsRequest;
 import com.apphunt.app.api.apphunt.requests.collections.GetMyAvailableCollectionsRequest;
@@ -46,6 +47,7 @@ import com.apphunt.app.api.apphunt.requests.tags.GetAppsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
@@ -73,6 +75,7 @@ import static com.apphunt.app.api.apphunt.requests.collections.PutCollectionsReq
 
 public class AppHuntApiClient implements AppHuntApi {
     public static final String TAG = AppHuntApiClient.class.getSimpleName();
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
 
     private Context context;
     public AppHuntApiClient(Context context) {
@@ -213,6 +216,15 @@ public class AppHuntApiClient implements AppHuntApi {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, page, pageSize, listener));
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, userId, page, pageSize, listener));
+        }
+    }
+
+    @Override
+    public void getAppCollection(String collectionId, String userId) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppCollectionRequest(collectionId, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetAppCollectionRequest(collectionId, userId, listener));
         }
     }
 
@@ -381,11 +393,15 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getRandomApp(String userId) {
         if(TextUtils.isEmpty(userId)) {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomApp(listener));
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomAppRequest(listener));
         } else {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomApp(userId, listener));
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetRandomAppRequest(userId, listener));
         }
+    }
 
+    @Override
+    public void getUserHistory(String userId, Date date) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserHistoryRequest(userId, dateFormat.format(date), listener));
     }
 
     private String getFormattedQuery(String q) {

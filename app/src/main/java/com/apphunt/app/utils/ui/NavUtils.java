@@ -130,6 +130,14 @@ public class NavUtils {
                 .commit();
     }
 
+    public void presentViewCollectionFragment(String collectionId) {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, ViewCollectionFragment.newInstance(collectionId),
+                        Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
+                .addToBackStack(Constants.TAG_COLLECTION_DETAILS_FRAGMENT)
+                .commit();
+    }
+
     public void presentAppDetailsFragment(String appId) {
         AppDetailsFragment detailsFragment = getAppDetailsFragment(appId);
 

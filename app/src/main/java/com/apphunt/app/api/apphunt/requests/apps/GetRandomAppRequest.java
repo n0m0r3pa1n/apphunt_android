@@ -6,12 +6,12 @@ import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
 
-public class GetRandomApp extends BaseGetRequest<App> {
-    public GetRandomApp(Response.ErrorListener listener) {
+public class GetRandomAppRequest extends BaseGetRequest<App> {
+    public GetRandomAppRequest(Response.ErrorListener listener) {
         super(BASE_URL + "/apps/random", listener);
     }
 
-    public GetRandomApp(String userId, Response.ErrorListener listener) {
+    public GetRandomAppRequest(String userId, Response.ErrorListener listener) {
         super(BASE_URL + "/apps/random?userId=" + userId, listener);
     }
 

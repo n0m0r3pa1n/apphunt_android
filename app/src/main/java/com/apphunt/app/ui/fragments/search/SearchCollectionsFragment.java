@@ -9,13 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;

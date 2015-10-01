@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;

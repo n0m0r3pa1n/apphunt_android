@@ -23,12 +23,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.collections.GetCollectionApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionAppsAdapter;
@@ -37,6 +38,7 @@ import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
 import com.apphunt.app.utils.SoundsUtils;
+import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.flurry.android.FlurryAgent;
@@ -54,6 +56,7 @@ import butterknife.OnClick;
  */
 public class ViewCollectionFragment extends BackStackFragment {
     private static final String APPS_COLLECTION_KEY = "AppsCollection";
+    private static final String APPS_COLLECTION_ID = "AppsCollectionId";
 
     private boolean isSave;
 
@@ -81,6 +84,7 @@ public class ViewCollectionFragment extends BackStackFragment {
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
     private Activity activity;
+    private String title = "";
 
     public ViewCollectionFragment() {
     }
@@ -89,6 +93,14 @@ public class ViewCollectionFragment extends BackStackFragment {
         ViewCollectionFragment fragment = new ViewCollectionFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(APPS_COLLECTION_KEY, appsCollection);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static ViewCollectionFragment newInstance(String collectionId) {
+        ViewCollectionFragment fragment = new ViewCollectionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(APPS_COLLECTION_ID, collectionId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -114,6 +126,20 @@ public class ViewCollectionFragment extends BackStackFragment {
         collectionApps.setHasFixedSize(true);
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
+        if(appsCollection == null) {
+            String collectionId = getArguments().getString(APPS_COLLECTION_ID);
+            String userId = LoginProviderFactory.get(activity).isUserLoggedIn() ? LoginProviderFactory.get(activity).getUser().getId() : null;
+            ApiClient.getClient(activity).getAppCollection(collectionId, userId);
+        } else {
+            setupAppsCollection();
+        }
+
+        return view;
+    }
+
+    private void setupAppsCollection() {
+        title = appsCollection.getName();
+        ActionBarUtils.getInstance().setTitle(title);
         List<BaseApp> apps = new ArrayList<>(appsCollection.getApps());
         collectionAppsAdapter = new CollectionAppsAdapter(activity, apps);
         collectionApps.setAdapter(collectionAppsAdapter);
@@ -136,20 +162,18 @@ public class ViewCollectionFragment extends BackStackFragment {
         if (appsCollection.getApps().size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
         }
-
-        return view;
     }
 
     @Override
     public String getStringTitle() {
-        return appsCollection.getName();
+        return title;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
-        if(appsCollection.isOwnedByCurrentUser(activity)) {
+        if(appsCollection != null && appsCollection.isOwnedByCurrentUser(activity)) {
             deleteCollectionAction.setVisible(true);
         }
     }
@@ -169,11 +193,6 @@ public class ViewCollectionFragment extends BackStackFragment {
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
     }
 
     @OnClick(R.id.edit_collection)
@@ -237,6 +256,12 @@ public class ViewCollectionFragment extends BackStackFragment {
         if (appsCollection.getApps().size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Subscribe
+    public void onLoadCollection(GetCollectionApiEvent event) {
+        appsCollection = event.getResponse();
+        setupAppsCollection();
     }
 
     @Override

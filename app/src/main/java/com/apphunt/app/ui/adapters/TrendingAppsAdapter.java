@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiService;
+import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;

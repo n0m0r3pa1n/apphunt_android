@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -28,7 +28,6 @@ import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultE
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 

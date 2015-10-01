@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.widget.ToggleButton;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.client.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
