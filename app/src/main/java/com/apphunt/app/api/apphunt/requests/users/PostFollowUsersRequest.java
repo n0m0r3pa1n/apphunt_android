@@ -28,5 +28,6 @@ public class PostFollowUsersRequest extends BasePostRequest<JSONObject> {
     @Override
     public void deliverResponse(JSONObject response) {
         Log.e(TAG, response.toString());
+        // TODO: Bus event for follow users response
     }
 }

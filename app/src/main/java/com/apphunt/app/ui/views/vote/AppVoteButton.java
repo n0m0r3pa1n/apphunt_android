@@ -70,7 +70,7 @@ public class AppVoteButton extends LinearLayout {
             BusProvider.getInstance().register(this);
         } catch(Exception e) {
             e.printStackTrace();
-            Crashlytics.logException(e);
+//            Crashlytics.logException(e);
         }
     }
 

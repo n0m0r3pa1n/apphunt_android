@@ -52,7 +52,9 @@ import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostFollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostUnfollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -415,7 +417,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void followUser(String userId, String followingId) {
-
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostFollowUserRequest(userId, followingId, listener));
     }
 
     @Override
@@ -425,7 +427,7 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void unfollowUser(String userId, String followingId) {
-
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostUnfollowUserRequest(userId, followingId, listener));
     }
 
     @Override

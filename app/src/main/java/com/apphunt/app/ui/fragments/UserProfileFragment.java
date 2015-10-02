@@ -146,7 +146,6 @@ public class UserProfileFragment extends BackStackFragment {
 
         String title = getTitleForTab(position, getNumberForTabPosition(position));
         ActionBarUtils.getInstance().setSubtitle(title);
-
     }
 
     private String getTitleForTab(int position, int numberForTabPosition) {

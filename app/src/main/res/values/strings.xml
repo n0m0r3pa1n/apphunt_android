@@ -191,6 +191,6 @@
     <string name="subtitle_friends_to_follow">Connect now to see what apps your friends hunt!</string>
     <string name="title_friends_tw_follow">Follow your friends on Twitter</string>
     <string name="follow">Follow</string>
-    <string name="unfollow">unfollow</string>
+    <string name="unfollow">Unfollow</string>
     <string name="action_find_friends">find_friends</string>
 </resources>
