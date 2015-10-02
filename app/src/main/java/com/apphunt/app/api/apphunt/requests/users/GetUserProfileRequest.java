@@ -8,8 +8,6 @@ import com.apphunt.app.api.apphunt.requests.base.BaseGetRequest;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 
-import java.util.Date;
-
 public class GetUserProfileRequest extends BaseGetRequest<UserProfile> {
     public GetUserProfileRequest(String userId, String fromDate, String toDate, Response.ErrorListener listener) {
         super(BASE_URL + "/users/" + userId +"?fromDate=" + fromDate + "&toDate=" + toDate, listener);

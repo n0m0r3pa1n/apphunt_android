@@ -20,7 +20,7 @@
             android:id="@+id/no_results_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_search_not_found"
+            android:background="@drawable/ic_search_not_found_white"
             android:layout_centerInParent="true"/>
 
         <com.apphunt.app.ui.views.widgets.AHTextView

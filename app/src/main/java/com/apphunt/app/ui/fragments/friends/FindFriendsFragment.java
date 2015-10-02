@@ -42,6 +42,7 @@ public class FindFriendsFragment extends BackStackFragment {
 
     @InjectView(R.id.tabs)
     TabLayout tabLayout;
+
     @InjectView(R.id.options_pagers)
     ViewPager optionsPager;
 
@@ -97,6 +98,8 @@ public class FindFriendsFragment extends BackStackFragment {
         super.onCreateOptionsMenu(menu, inflater);
         skipAction = menu.findItem(R.id.action_skip);
         skipAction.setVisible(true);
+
+        menu.findItem(R.id.action_find_friends).setVisible(false);
     }
 
     @Override

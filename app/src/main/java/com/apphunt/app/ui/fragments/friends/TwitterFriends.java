@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
-import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.FollowingsIdsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
@@ -181,16 +181,16 @@ public class TwitterFriends extends BaseFragment {
             return;
         }
 
-        FollowingsList followingsList = new FollowingsList();
+        FollowingsIdsList followingsIdsList = new FollowingsIdsList();
 
         for (int i = 0; i < adapter.getSelectedFriends().size(); i++) {
-            followingsList.addId(adapter.getSelectedFriends().get(i).getId());
+            followingsIdsList.addId(adapter.getSelectedFriends().get(i).getId());
         }
 
-        followUsers(followingsList);
+        followUsers(followingsIdsList);
     }
 
-    private void followUsers(FollowingsList ids) {
+    private void followUsers(FollowingsIdsList ids) {
         ApiClient.getClient(activity).followUsers(LoginProviderFactory.get(activity).getUser().getId(), ids);
     }
 

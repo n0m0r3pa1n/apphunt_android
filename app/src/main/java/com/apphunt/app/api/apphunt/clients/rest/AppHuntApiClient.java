@@ -15,7 +15,7 @@ import com.apphunt.app.api.apphunt.models.collections.NewCollection;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
-import com.apphunt.app.api.apphunt.models.users.FollowingsList;
+import com.apphunt.app.api.apphunt.models.users.FollowingsIdsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
@@ -50,9 +50,13 @@ import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserFollowersRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserFollowingsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostFollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
+import com.apphunt.app.api.apphunt.requests.users.PostUnfollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PutUserRequest;
 import com.apphunt.app.api.apphunt.requests.version.GetLatestAppVersionRequest;
@@ -415,27 +419,27 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void followUser(String userId, String followingId) {
-
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostFollowUserRequest(userId, followingId, listener));
     }
 
     @Override
-    public void followUsers(String userId, FollowingsList followingIds) {
+    public void followUsers(String userId, FollowingsIdsList followingIds) {
         VolleyInstance.getInstance(context).addToRequestQueue(new PostFollowUsersRequest(userId, followingIds, listener));
     }
 
     @Override
     public void unfollowUser(String userId, String followingId) {
-
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostUnfollowUserRequest(userId, followingId, listener));
     }
 
     @Override
     public void getFollowers(String userId, int page, int pageSize) {
-
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserFollowersRequest(userId, page, pageSize, listener));
     }
 
     @Override
     public void getFollowings(String userId, int page, int pageSize) {
-    
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserFollowingsRequest(userId, page, pageSize, listener));
     }
 
     @Override

@@ -4,22 +4,25 @@ import java.util.ArrayList;
 
 /**
  * * Created by Seishin <atanas@naughtyspirit.co>
- * * on 9/22/15.
+ * * on 10/2/15.
  * *
  * * NaughtySpirit 2015
  */
 public class FollowingsList {
-    ArrayList<String> followingIds = new ArrayList<>();
+    private ArrayList<User> followings = new ArrayList<>();
 
-    public ArrayList<String> getFollowingIds() {
-        return followingIds;
+    public ArrayList<User> getFollowings() {
+        return followings;
     }
 
-    public void setFollowingIds(ArrayList<String> followingIds) {
-        this.followingIds = followingIds;
+    public void setFollowings(ArrayList<User> followings) {
+        this.followings = followings;
     }
 
-    public void addId(String id) {
-        followingIds.add(id);
+    @Override
+    public String toString() {
+        return "FollowingsList{" +
+                "followings=" + followings +
+                '}';
     }
 }
