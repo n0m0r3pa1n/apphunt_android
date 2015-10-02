@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
@@ -255,6 +256,8 @@ public class UserProfileFragment extends BackStackFragment {
         scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 
         updateAbSubtitle(selectedTabPosition);
+
+        ApiClient.getClient(activity).getFollowers(userProfile.getId(), 1, 10);
     }
 
     private void initTabs() {
