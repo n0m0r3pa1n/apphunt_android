@@ -14,17 +14,18 @@
     <item
         android:id="@+id/action_random"
         android:icon="@drawable/ic_random"
-        android:title="@string/action_search"
+        android:title="@string/action_random"
         android:showAsAction="collapseActionView|ifRoom"
         app:showAsAction="collapseActionView|ifRoom"
         />
 
     <item
         android:id="@+id/action_history"
-        android:icon="@drawable/ic_android"
-        android:title="@string/action_search"
-        android:showAsAction="collapseActionView|ifRoom"
-        app:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_history"
+        android:actionLayout="@layout/action_history"
+        app:actionLayout="@layout/action_history"
+        app:showAsAction="always"
+        android:showAsAction="always"
         />
 
     <item

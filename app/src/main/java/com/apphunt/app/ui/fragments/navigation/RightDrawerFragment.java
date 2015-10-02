@@ -22,9 +22,13 @@ import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserHistoryApiEvent;
+import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.ui.adapters.HistoryAdapter;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
-import com.apphunt.app.ui.models.history.row.base.HistoryRow;
+import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
+import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -44,17 +48,21 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     RecyclerView historyEventsList;
 
     DrawerLayout drawerLayout;
-    
+
     private AppCompatActivity activity;
+    private LinearLayoutManager layoutManager;
     private HistoryAdapter adapter;
+    private List<HistoryRowComponent> previousRows;
+
+    private int historyRequestsCount = 0;
+    private boolean isFirstRequest = true;
+    private int previousItemsCount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BusProvider.getInstance().register(this);
-        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            HistoryConnectionManager.getInstance().addRefreshListener(this);
-            HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
+        if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
             ApiClient.getClient(activity).getUserHistory(LoginProviderFactory.get(activity).getUser().getId(), new Date());
         }
     }
@@ -65,8 +73,18 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         View view = inflater.inflate(R.layout.fragment_right_drawer, container, false);
         ButterKnife.inject(this, view);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity());
         historyEventsList.setLayoutManager(layoutManager);
+        historyEventsList.addOnScrollListener(new EndlessRecyclerScrollListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                if (isFirstRequest) {
+                    isFirstRequest = false;
+                    return;
+                }
+                ApiService.getInstance(activity).loadHistoryForPreviousDate();
+            }
+        }, layoutManager));
 
         return view;
     }
@@ -75,7 +93,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     public void onDestroy() {
         super.onDestroy();
         BusProvider.getInstance().unregister(this);
-        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+        if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
             HistoryConnectionManager.getInstance().removeRefreshListener(this);
         }
     }
@@ -87,30 +105,63 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     }
 
     @Override
-    public void onRefresh() {
-        ApiService.getInstance(activity).loadHistoryForToday();
+    public void onRefresh(final HistoryEvent event) {
+        BusProvider.getInstance().post(new UnseenHistoryEvent(1));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                historyRequestsCount = 0;
+                adapter.addRow(HistoryRowBuilder.build(activity, event));
+            }
+        });
     }
-    
-    
+
+    @Override
+    public void onUnseenEvents(final List<String> eventIds) {
+        BusProvider.getInstance().post(new UnseenHistoryEvent(eventIds.size()));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.markUnseenEvents(eventIds);
+            }
+        });
+    }
+
+
     @Subscribe
     public void onUserHistory(GetUserHistoryApiEvent event) {
-        List<HistoryRow> rows = new ArrayList<>();
+        if (historyRequestsCount >= 6) {
+            // Show empty view
+            Log.d(TAG, "Empty user history");
+            return;
+        }
+
+        if (event.getEventsList().getEvents() == null || event.getEventsList().getEvents().size() == 0) {
+            historyRequestsCount++;
+            ApiService.getInstance(activity).loadHistoryForPreviousDate();
+            return;
+        }
+
+        List<HistoryRowComponent> rows = new ArrayList<>();
         List<HistoryEvent> events = event.getEventsList().getEvents();
-        for(HistoryEvent e : events) {
+        rows.add(new HeaderHistoryRow(event.getEventsList().getFromDate()));
+
+        for (HistoryEvent e : events) {
             rows.add(HistoryRowBuilder.build(activity, e));
         }
 
-        if(adapter == null) {
+        if (adapter == null) {
             adapter = new HistoryAdapter(activity, rows);
+            historyEventsList.setAdapter(adapter);
+            HistoryConnectionManager.getInstance().addRefreshListener(this);
+            HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
+            HistoryConnectionManager.getInstance().emitLastSeenId(LoginProviderFactory.get(activity).getUser().getId(), "", "");
         } else {
             adapter.addRows(rows);
         }
 
-        historyEventsList.setAdapter(adapter);
-
         Log.d(TAG, "onUserHistory " + event.getEventsList().getEvents().size());
     }
-    
 
     public void setup(DrawerLayout drawerLayout) {
         this.drawerLayout = drawerLayout;
@@ -123,6 +174,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     }
 
     public void openDrawer() {
+        BusProvider.getInstance().post(new UnseenHistoryEvent(UnseenHistoryEvent.RESET_COUNTER));
         drawerLayout.openDrawer(Gravity.RIGHT);
     }
 
@@ -130,5 +182,5 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         drawerLayout.closeDrawer(Gravity.RIGHT);
     }
 
-    
+
 }

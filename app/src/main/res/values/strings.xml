@@ -128,6 +128,9 @@
     <string name="hide_all_comments">hide all</string>
     <string name="be_first">Be the first one to comment! :)</string>
     <string name="action_search">Search</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="action_random">Random</string>
+    <string name="action_history">History</string>
     <string name="action_skip">Skip</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">Nothing was found...</string>

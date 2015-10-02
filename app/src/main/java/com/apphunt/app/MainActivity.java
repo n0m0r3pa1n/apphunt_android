@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
@@ -38,6 +39,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.smart_rate.SmartRate;
@@ -91,6 +93,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private int previousPosition = 0;
     private int versionCode;
     private String query;
+    private MenuItem menuItemHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -313,7 +316,19 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
             menu.findItem(R.id.action_search).setVisible(true);
             menu.findItem(R.id.action_random).setVisible(true);
-            menu.findItem(R.id.action_history).setVisible(true);
+            menuItemHistory = menu.findItem(R.id.action_history);
+            ((TextView)MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count)).setText(eventCount + "");
+            MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.action_history_container).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (rightDrawerFragment.isDrawerOpen()) {
+                        rightDrawerFragment.closeDrawer();
+                    } else {
+                        rightDrawerFragment.openDrawer();
+                    }
+                }
+            });
+            menuItemHistory.setVisible(true);
 
 
             menu.findItem(R.id.action_random).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -322,18 +337,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                     LoginProvider loginProvider = LoginProviderFactory.get(MainActivity.this);
                     String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
                     ApiClient.getClient(MainActivity.this).getRandomApp(userId);
-                    return true;
-                }
-            });
-
-            menu.findItem(R.id.action_history).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if(rightDrawerFragment.isDrawerOpen()) {
-                        rightDrawerFragment.closeDrawer();
-                    } else {
-                        rightDrawerFragment.openDrawer();
-                    }
                     return true;
                 }
             });
@@ -605,6 +608,26 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onRateDialogVariableReady(RateDialogVariable rateDialogVariable) {
         SmartRate.setRateDialogVariable(rateDialogVariable);
     }
+
+    private int eventCount = 0;
+    @Subscribe
+    public void onUnseenEvents(final UnseenHistoryEvent event) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(event.getCount() == -1) {
+                    eventCount = 0;
+                } else {
+                    eventCount += event.getCount();
+                }
+
+                TextView textView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
+                textView.setText(eventCount + "");
+            }
+        });
+
+    }
+
 
     @Subscribe
     @SuppressWarnings("unused")

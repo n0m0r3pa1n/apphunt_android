@@ -9,10 +9,10 @@ import com.apphunt.app.ui.models.history.row.CollectionHistoryRow;
 import com.apphunt.app.ui.models.history.row.CommentHistoryRow;
 import com.apphunt.app.ui.models.history.row.TopHunterHistoryRow;
 import com.apphunt.app.ui.models.history.row.UserProfileHistoryRow;
-import com.apphunt.app.ui.models.history.row.base.HistoryRow;
+import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
 
 public class HistoryRowBuilder {
-    public static HistoryRow build(AppCompatActivity activity, HistoryEvent event) {
+    public static HistoryRowComponent build(AppCompatActivity activity, HistoryEvent event) {
         switch(event.getType()) {
             case APP_APPROVED:
             case APP_FAVOURITED:

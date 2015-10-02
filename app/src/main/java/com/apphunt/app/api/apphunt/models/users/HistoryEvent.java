@@ -2,8 +2,11 @@ package com.apphunt.app.api.apphunt.models.users;
 
 import com.apphunt.app.ui.models.history.HistoryEventType;
 import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
 public class HistoryEvent {
+    @SerializedName("_id")
+    private String id;
     private HistoryEventType type;
     private String text;
     private User user;
@@ -23,5 +26,9 @@ public class HistoryEvent {
 
     public JsonObject getParams() {
         return params;
+    }
+
+    public String getId() {
+        return id;
     }
 }

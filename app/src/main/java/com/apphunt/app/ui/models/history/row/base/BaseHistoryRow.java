@@ -4,15 +4,32 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.ui.NavUtils;
 
-public abstract class BaseHistoryRow implements HistoryRow {
+public abstract class BaseHistoryRow implements HistoryRowComponent {
     protected final AppCompatActivity activity;
     protected final HistoryEvent event;
+    private boolean isSeen;
 
     public BaseHistoryRow(AppCompatActivity activity, HistoryEvent event) {
         this.activity = activity;
         this.event = event;
+    }
+
+    @Override
+    public String getId() {
+        return event.getId();
+    }
+
+    @Override
+    public void setIsUnseen(boolean isSeen) {
+        this.isSeen = isSeen;
+    }
+
+    @Override
+    public Constants.ItemType getType() {
+        return Constants.ItemType.ITEM;
     }
 
     @Override
@@ -30,4 +47,8 @@ public abstract class BaseHistoryRow implements HistoryRow {
         NavUtils.getInstance(activity).presentUserProfileFragment(event.getUser().getId(), event.getUser().getName());
     }
 
+    @Override
+    public boolean isUnseen() {
+        return true;
+    }
 }
