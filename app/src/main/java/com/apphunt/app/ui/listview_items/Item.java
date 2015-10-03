@@ -3,5 +3,5 @@ package com.apphunt.app.ui.listview_items;
 import com.apphunt.app.constants.Constants;
 
 public interface Item {
-    public Constants.ItemType getType();
+    Constants.ItemType getType();
 }

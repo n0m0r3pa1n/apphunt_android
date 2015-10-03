@@ -45,6 +45,8 @@ public class ApiService {
     }
 
     public void loadHistoryForPreviousDate() {
+        historyCalendar.add(Calendar.DATE, -1);
+        String date = dateFormat.format(historyCalendar.getTime());
         ApiClient.getClient(context).getUserHistory(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), historyCalendar.getTime());
     }
 
