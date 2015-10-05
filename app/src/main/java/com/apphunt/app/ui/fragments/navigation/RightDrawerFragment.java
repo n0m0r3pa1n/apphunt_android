@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
@@ -20,8 +21,11 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.clients.sockets.HistoryConnectionManager;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserHistoryApiEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.ui.adapters.HistoryAdapter;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -29,6 +33,7 @@ import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -38,14 +43,14 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by nmp on 15-9-20.
- */
 public class RightDrawerFragment extends Fragment implements HistoryConnectionManager.OnRefreshListener {
     public static final String TAG = RightDrawerFragment.class.getSimpleName();
 
     @InjectView(R.id.history_events_list)
     RecyclerView historyEventsList;
+
+    @InjectView(R.id.no_history)
+    RelativeLayout noHistoryView;
 
     DrawerLayout drawerLayout;
 
@@ -57,6 +62,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     private int historyRequestsCount = 0;
     private boolean isFirstRequest = true;
     private int previousItemsCount;
+    private String fromDate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +70,8 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         BusProvider.getInstance().register(this);
         if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
             ApiClient.getClient(activity).getUserHistory(LoginProviderFactory.get(activity).getUser().getId(), new Date());
+            HistoryConnectionManager.getInstance().addRefreshListener(this);
+            HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
         }
     }
 
@@ -106,14 +114,25 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Override
     public void onRefresh(final HistoryEvent event) {
-        BusProvider.getInstance().post(new UnseenHistoryEvent(1));
+        if (isDrawerClosed()) {
+            BusProvider.getInstance().post(new UnseenHistoryEvent(1));
+        }
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                noHistoryView.setVisibility(View.GONE);
                 historyRequestsCount = 0;
-                adapter.addRow(HistoryRowBuilder.build(activity, event));
+                HistoryRowComponent row = HistoryRowBuilder.build(activity, fromDate, event);
+                row.setIsUnseen(true);
+                if (adapter == null) {
+                    adapter = new HistoryAdapter(activity, row);
+                    historyEventsList.setAdapter(adapter);
+                } else {
+                    adapter.addRow(row);
+                }
             }
         });
+
     }
 
     @Override
@@ -127,12 +146,24 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         });
     }
 
+    @Subscribe
+    public void onUserLogin(LoginEvent loginEvent) {
+        HistoryConnectionManager.getInstance().addRefreshListener(this);
+        HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
+        ApiService.getInstance(activity).loadHistoryForToday();
+    }
+
+    @Subscribe
+    public void onUserLogout(LogoutEvent logoutEvent) {
+        adapter.reset();
+        noHistoryView.setVisibility(View.VISIBLE);
+        HistoryConnectionManager.getInstance().removeRefreshListener(this);
+    }
+
 
     @Subscribe
     public void onUserHistory(GetUserHistoryApiEvent event) {
         if (historyRequestsCount >= 6) {
-            // Show empty view
-            Log.d(TAG, "Empty user history");
             return;
         }
 
@@ -144,21 +175,27 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
         List<HistoryRowComponent> rows = new ArrayList<>();
         List<HistoryEvent> events = event.getEventsList().getEvents();
-        rows.add(new HeaderHistoryRow(event.getEventsList().getFromDate()));
+        fromDate = event.getEventsList().getFromDate();
 
+        rows.add(new HeaderHistoryRow(event.getEventsList().getFromDate()));
         for (HistoryEvent e : events) {
-            rows.add(HistoryRowBuilder.build(activity, e));
+            rows.add(HistoryRowBuilder.build(activity, fromDate, e));
         }
 
         if (adapter == null) {
             adapter = new HistoryAdapter(activity, rows);
             historyEventsList.setAdapter(adapter);
-            HistoryConnectionManager.getInstance().addRefreshListener(this);
-            HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
-            HistoryConnectionManager.getInstance().emitLastSeenId(LoginProviderFactory.get(activity).getUser().getId(), "", "");
+
+            String lastSeenEventDate = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_DATE);
+            String lastSeenEventId = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_ID);
+            if (lastSeenEventDate != null && lastSeenEventId != null) {
+                HistoryConnectionManager.getInstance().emitLastSeenId(LoginProviderFactory.get(activity).getUser().getId(), lastSeenEventId, lastSeenEventDate);
+            }
         } else {
             adapter.addRows(rows);
         }
+
+        noHistoryView.setVisibility(View.GONE);
 
         Log.d(TAG, "onUserHistory " + event.getEventsList().getEvents().size());
     }
@@ -166,6 +203,29 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     public void setup(DrawerLayout drawerLayout) {
         this.drawerLayout = drawerLayout;
         drawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.bg_primary));
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                if (drawerView.getId() == R.id.fragment_right_drawer) {
+                    updateLastSeenEvent();
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
     }
 
@@ -179,8 +239,22 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     }
 
     public void closeDrawer() {
+        updateLastSeenEvent();
         drawerLayout.closeDrawer(Gravity.RIGHT);
     }
 
+    private void updateLastSeenEvent() {
+        if(adapter == null || adapter.isEmpty()) {
+            return;
+        }
+        adapter.markEventsAsSeen();
+        HistoryRowComponent row = adapter.getRow(1);
+        SharedPreferencesHelper.setPreference(Constants.KEY_LAST_SEEN_EVENT_ID, row.getId());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LAST_SEEN_EVENT_DATE, row.getDate());
+    }
+
+    public boolean isDrawerClosed() {
+        return !drawerLayout.isDrawerOpen(Gravity.RIGHT);
+    }
 
 }

@@ -317,7 +317,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             menu.findItem(R.id.action_search).setVisible(true);
             menu.findItem(R.id.action_random).setVisible(true);
             menuItemHistory = menu.findItem(R.id.action_history);
-            ((TextView)MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count)).setText(eventCount + "");
+
+            TextView eventsCountTextView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
+            if(eventCount <= 0) {
+                eventsCountTextView.setVisibility(View.INVISIBLE);
+            } else {
+                eventsCountTextView.setVisibility(View.VISIBLE);
+                eventsCountTextView.setText(eventCount + "");
+            }
+
             MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.action_history_container).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -615,13 +623,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(event.getCount() == -1) {
+                TextView textView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
+                if(event.getCount() == 0) {
                     eventCount = 0;
+                    textView.setVisibility(View.INVISIBLE);
                 } else {
                     eventCount += event.getCount();
+                    textView.setVisibility(View.VISIBLE);
                 }
-
-                TextView textView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
                 textView.setText(eventCount + "");
             }
         });

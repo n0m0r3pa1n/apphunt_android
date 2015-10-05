@@ -5,6 +5,7 @@ import com.apphunt.app.constants.Constants;
 
 public interface HistoryRowComponent {
     String getId();
+    String getDate();
     void openEvent();
     void openUserProfile();
     int getIconResId();
@@ -13,5 +14,5 @@ public interface HistoryRowComponent {
     User getUser();
 
     boolean isUnseen();
-    void setIsUnseen(boolean isSeen);
+    void setIsUnseen(boolean isUnseen);
 }

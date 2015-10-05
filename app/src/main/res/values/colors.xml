@@ -75,4 +75,7 @@
     <color name="invite_tab">#B4FFFFFF</color>
     <color name="invite_tab_selected">#B4044869</color>
 
+    <!-- History -->
+    <color name="history_events_circle">#FF1744</color>
+
 </resources>

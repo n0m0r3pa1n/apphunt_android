@@ -12,7 +12,8 @@ import com.apphunt.app.ui.models.history.row.UserProfileHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
 
 public class HistoryRowBuilder {
-    public static HistoryRowComponent build(AppCompatActivity activity, HistoryEvent event) {
+    public static HistoryRowComponent build(AppCompatActivity activity, String date, HistoryEvent event) {
+        event.setDate(date);
         switch(event.getType()) {
             case APP_APPROVED:
             case APP_FAVOURITED:

@@ -32,7 +32,7 @@ public class HeaderHistoryRow implements HistoryRowComponent {
     }
 
     @Override
-    public void setIsUnseen(boolean isSeen) {
+    public void setIsUnseen(boolean isUnseen) {
 
     }
 
@@ -48,6 +48,10 @@ public class HeaderHistoryRow implements HistoryRowComponent {
 
     @Override
     public String getText() {
+        return date;
+    }
+
+    public String getDate() {
         return date;
     }
 

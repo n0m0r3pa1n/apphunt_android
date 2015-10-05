@@ -8,7 +8,7 @@ public class Constants {
 
     //TODO: use production url before release
 //    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "c6628373.ngrok.io";
+    public static final String MAIN_URL = "e02aead7.ngrok.io";
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
 
@@ -42,6 +42,8 @@ public class Constants {
     public static final String KEY_COLLECTION = "collection";
     public static final String KEY_SHOW_SHADOW = "show_shadow";
     public static final String KEY_SHOW_CONTINUE = "show_continue";
+    public static final String KEY_LAST_SEEN_EVENT_ID = "last_seen_event_id";
+    public static final String KEY_LAST_SEEN_EVENT_DATE = "last_seen_event_date";
 
     public static final String PLATFORM = "Android";
 

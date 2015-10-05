@@ -83,9 +83,7 @@ public class HistoryConnectionManager {
     }
 
     public void emitLastSeenId(String userId, String eventId, String date) {
-//        socket.emit("last seen event", userId, eventId, date);
-
-        socket.emit("last seen event", userId, "123", "sss");
+        socket.emit("last seen event", userId, eventId, date);
     }
 
     public void addRefreshListener(OnRefreshListener listener) {

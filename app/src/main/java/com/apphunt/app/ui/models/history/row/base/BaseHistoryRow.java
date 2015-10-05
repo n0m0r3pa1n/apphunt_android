@@ -10,7 +10,7 @@ import com.apphunt.app.utils.ui.NavUtils;
 public abstract class BaseHistoryRow implements HistoryRowComponent {
     protected final AppCompatActivity activity;
     protected final HistoryEvent event;
-    private boolean isSeen;
+    private boolean isUnseen = false;
 
     public BaseHistoryRow(AppCompatActivity activity, HistoryEvent event) {
         this.activity = activity;
@@ -23,8 +23,8 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
     }
 
     @Override
-    public void setIsUnseen(boolean isSeen) {
-        this.isSeen = isSeen;
+    public void setIsUnseen(boolean isUnseen) {
+        this.isUnseen = isUnseen;
     }
 
     @Override
@@ -48,7 +48,12 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
     }
 
     @Override
+    public String getDate() {
+        return event.getDate();
+    }
+
+    @Override
     public boolean isUnseen() {
-        return true;
+        return isUnseen;
     }
 }

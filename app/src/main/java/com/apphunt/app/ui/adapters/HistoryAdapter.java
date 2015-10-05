@@ -32,6 +32,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.context = context;
     }
 
+    public HistoryAdapter(Context context, HistoryRowComponent row) {
+        rows = new ArrayList<>();
+        rows.add(row);
+        this.context = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -91,11 +97,19 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return rows.size();
+        return rows == null ? 0 : rows.size();
+    }
+
+    public boolean isEmpty() {
+        return getItemCount() == 0;
     }
 
     public List<HistoryRowComponent> getRows() {
         return rows;
+    }
+
+    public HistoryRowComponent getRow(int position) {
+        return rows != null && rows.size()  > position ? rows.get(position) : null;
     }
 
     public void markUnseenEvents(List<String> eventIds) {
@@ -128,6 +142,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void addRow(HistoryRowComponent rowComponent) {
         rows.add(1, rowComponent);
+        notifyDataSetChanged();
+    }
+
+    public void markEventsAsSeen() {
+        for(HistoryRowComponent row : rows) {
+            row.setIsUnseen(false);
+        }
         notifyDataSetChanged();
     }
 

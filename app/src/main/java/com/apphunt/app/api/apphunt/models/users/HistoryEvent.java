@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 public class HistoryEvent {
     @SerializedName("_id")
     private String id;
+    private String date;
     private HistoryEventType type;
     private String text;
     private User user;
@@ -30,5 +31,13 @@ public class HistoryEvent {
 
     public String getId() {
         return id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
