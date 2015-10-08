@@ -36,7 +36,9 @@ import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -62,7 +64,9 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     private int historyRequestsCount = 0;
     private boolean isFirstRequest = true;
     private int previousItemsCount;
-    private String fromDate;
+
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
+    private String fromDate = dateFormat.format(Calendar.getInstance().getTime());
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,9 +129,15 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
                 HistoryRowComponent row = HistoryRowBuilder.build(activity, fromDate, event);
                 row.setIsUnseen(true);
                 if (adapter == null) {
-                    adapter = new HistoryAdapter(activity, row);
+                    List<HistoryRowComponent> rows = new ArrayList<HistoryRowComponent>();
+                    rows.add(new HeaderHistoryRow(fromDate));
+                    rows.add(row);
+                    adapter = new HistoryAdapter(activity, rows);
                     historyEventsList.setAdapter(adapter);
                 } else {
+                    if(!adapter.getRow(0).getDate().equals(fromDate)) {
+                        adapter.addRow(new HeaderHistoryRow(fromDate));
+                    }
                     adapter.addRow(row);
                 }
             }

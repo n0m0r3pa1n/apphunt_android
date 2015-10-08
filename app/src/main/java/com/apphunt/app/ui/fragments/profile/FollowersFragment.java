@@ -14,7 +14,7 @@ import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import butterknife.ButterKnife;
 
 /**
- * * Created by Seishin <atanas@naughtyspirit.co>
+ * * Created by Boklik <atanas@naughtyspirit.co>
  * * on 10/2/15.
  * *
  * * NaughtySpirit 2015
