@@ -50,8 +50,8 @@ import com.apphunt.app.api.apphunt.requests.tags.GetCollectionsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetItemsByTagsRequest;
 import com.apphunt.app.api.apphunt.requests.tags.GetTagsSuggestionRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
-import com.apphunt.app.api.apphunt.requests.users.GetUserFollowersRequest;
-import com.apphunt.app.api.apphunt.requests.users.GetUserFollowingsRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetFollowersRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetFollowingsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUserRequest;
@@ -433,13 +433,22 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getFollowers(String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserFollowersRequest(userId, page, pageSize, listener));
+    public void getFollowers(String profileId, String userId, int page, int pageSize) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFollowersRequest(profileId, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFollowersRequest(profileId, userId, page, pageSize, listener));
+        }
     }
 
     @Override
-    public void getFollowings(String userId, int page, int pageSize) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserFollowingsRequest(userId, page, pageSize, listener));
+    public void getFollowings(String profileId, String userId, int page, int pageSize) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFollowingsRequest(profileId, page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetFollowingsRequest(profileId, userId, page, pageSize, listener));
+        }
+
     }
 
     @Override

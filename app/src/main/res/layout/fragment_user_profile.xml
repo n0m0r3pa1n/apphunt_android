@@ -84,6 +84,7 @@
                     <com.apphunt.app.ui.views.widgets.FollowButton
                         android:id="@+id/follow"
                         android:layout_width="120dp"
+                        android:elevation="0dp"
                         android:layout_height="35dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="15dp"

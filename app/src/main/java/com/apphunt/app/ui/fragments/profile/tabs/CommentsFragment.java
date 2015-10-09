@@ -1,13 +1,9 @@
 package com.apphunt.app.ui.fragments.profile.tabs;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +17,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserCommentsApiEvent;
+import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
 import com.apphunt.app.ui.adapters.profile.ProfileCommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -33,11 +30,10 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class CommentsFragment extends BaseFragment {
 
-    public static final String CREATOR_ID = "CREATOR_ID";
     private AppCompatActivity activity;
     private ProfileCommentsAdapter adapter;
 
-    private String creatorId;
+    private String profileId;
     private String userId;
     private int currentPage = 0;
 
@@ -50,10 +46,10 @@ public class CommentsFragment extends BaseFragment {
     @InjectView(R.id.vs_no_comments)
     ViewStub vsNoComments;
 
-    public static CommentsFragment newInstance(String creatorId) {
+    public static CommentsFragment newInstance(String profileId) {
 
         Bundle args = new Bundle();
-        args.putString(CREATOR_ID, creatorId);
+        args.putString(Constants.KEY_USER_PROFILE, profileId);
         CommentsFragment fragment = new CommentsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -64,7 +60,7 @@ public class CommentsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_comments, container, false);
         ButterKnife.inject(this, view);
-        creatorId = getArguments().getString(CREATOR_ID);
+        profileId = getArguments().getString(Constants.KEY_USER_PROFILE);
         if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
             userId = LoginProviderFactory.get(activity).getUser().getId();
         }
@@ -113,33 +109,7 @@ public class CommentsFragment extends BaseFragment {
 
     private void getComments() {
         currentPage++;
-        ApiClient.getClient(activity).getUserComments(creatorId, userId, new Pagination(currentPage, Constants.COMMENTS_PAGE_SIZE));
+        ApiClient.getClient(activity).getUserComments(profileId, userId, new Pagination(currentPage, Constants.COMMENTS_PAGE_SIZE));
     }
 
-    public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
-        private Drawable mDivider;
-
-        public SimpleDividerItemDecoration(Context context) {
-            mDivider = context.getResources().getDrawable(R.drawable.line_divider);
-        }
-
-        @Override
-        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int left = parent.getPaddingLeft();
-            int right = parent.getWidth() - parent.getPaddingRight();
-
-            int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View child = parent.getChildAt(i);
-
-                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-                int top = child.getBottom() + params.bottomMargin;
-                int bottom = top + mDivider.getIntrinsicHeight();
-
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
-            }
-        }
-    }
 }

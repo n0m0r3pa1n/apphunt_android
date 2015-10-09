@@ -45,13 +45,12 @@ import butterknife.InjectView;
  */
 public class MyCollectionsFragment extends BaseFragment implements OnItemClickListener {
     public static final String TAG = MyCollectionsFragment.class.getSimpleName();
-    private static final String CREATOR_ID = "CREATOR_ID";
 
     private AppCompatActivity activity;
     private View view;
 
     private String appId;
-    private String creatorId;
+    private String profileId;
     private String userId;
     private int currentPage = 0;
     private List<AppsCollection> collections;
@@ -65,9 +64,9 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @InjectView(R.id.vs_no_collection)
     ViewStub vsNoCollection;
 
-    public static MyCollectionsFragment newInstance(String creatorId) {
+    public static MyCollectionsFragment newInstance(String profileId) {
         Bundle bundle = new Bundle();
-        bundle.putString(CREATOR_ID, creatorId);
+        bundle.putString(Constants.KEY_USER_PROFILE, profileId);
         MyCollectionsFragment fragment = new MyCollectionsFragment();
         fragment.setArguments(bundle);
 
@@ -89,8 +88,8 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void initUI() {
         ButterKnife.inject(this, view);
-        if(getArguments() != null && getArguments().containsKey(CREATOR_ID)) {
-            creatorId = getArguments().getString(CREATOR_ID);
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_USER_PROFILE)) {
+            profileId = getArguments().getString(Constants.KEY_USER_PROFILE);
         }
 
         getCollections();
@@ -105,11 +104,11 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     private void getCollections() {
         currentPage++;
-        if(TextUtils.isEmpty(creatorId)) {
+        if(TextUtils.isEmpty(profileId)) {
             vsNoCollection.setVisibility(View.VISIBLE);
             return;
         }
-        ApiClient.getClient(activity).getUserCollections(creatorId, userId,
+        ApiClient.getClient(activity).getUserCollections(profileId, userId,
                 currentPage, Constants.PAGE_SIZE);
     }
 

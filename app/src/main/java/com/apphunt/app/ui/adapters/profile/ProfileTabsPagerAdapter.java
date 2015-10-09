@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.FavouriteCollectionsFragment;
 import com.apphunt.app.ui.fragments.collections.tabs.MyCollectionsFragment;
+import com.apphunt.app.ui.fragments.profile.FollowersFragment;
+import com.apphunt.app.ui.fragments.profile.FollowingsFragment;
 import com.apphunt.app.ui.fragments.profile.tabs.AppsFragment;
 import com.apphunt.app.ui.fragments.profile.tabs.CommentsFragment;
 import com.apphunt.app.ui.fragments.profile.tabs.FavouriteAppsFragment;
@@ -33,6 +35,12 @@ public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
             case 4:
                 fragment = CommentsFragment.newInstance(userId);
                 break;
+            case 5:
+                fragment = FollowersFragment.newInstance(userId);
+                break;
+            case 6:
+                fragment = FollowingsFragment.newInstance(userId);
+                break;
         }
 
         return fragment;
@@ -40,7 +48,7 @@ public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 7;
     }
 
     @Override
@@ -56,7 +64,10 @@ public class ProfileTabsPagerAdapter extends FragmentStatePagerAdapter {
                 return "Favourite Collections";
             case 4:
                 return "Comments";
-
+            case 5:
+                return "Followers";
+            case 6:
+                return "Following";
             default:
                 return "Item";
         }

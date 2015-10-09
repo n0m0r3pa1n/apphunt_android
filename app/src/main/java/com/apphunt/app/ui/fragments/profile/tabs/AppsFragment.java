@@ -13,6 +13,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.Pagination;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserAppsApiEvent;
 import com.apphunt.app.ui.adapters.SearchAppsAdapter;
@@ -26,7 +27,7 @@ import butterknife.InjectView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class AppsFragment extends BaseFragment {
-    public static final String CREATOR_ID = "CREATOR_ID";
+
     @InjectView(R.id.items)
     ScrollRecyclerView items;
 
@@ -40,11 +41,11 @@ public class AppsFragment extends BaseFragment {
     private AppCompatActivity activity;
     private SearchAppsAdapter adapter;
     private String userId;
-    private String creatorId;
+    private String profileId;
 
-    public static AppsFragment newInstance(String creatorId) {
+    public static AppsFragment newInstance(String profileId) {
         Bundle bundle = new Bundle();
-        bundle.putString(CREATOR_ID, creatorId);
+        bundle.putString(Constants.KEY_USER_PROFILE, profileId);
         AppsFragment fragment = new AppsFragment();
         fragment.setArguments(bundle);
 
@@ -56,7 +57,7 @@ public class AppsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
-        creatorId = getArguments().getString(CREATOR_ID);
+        profileId = getArguments().getString(Constants.KEY_USER_PROFILE);
         if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
             userId = LoginProviderFactory.get(activity).getUser().getId();
         }
@@ -103,6 +104,6 @@ public class AppsFragment extends BaseFragment {
 
     private void getApps() {
         currentPage++;
-        ApiClient.getClient(activity).getUserApps(creatorId, userId, new Pagination(currentPage, 5));
+        ApiClient.getClient(activity).getUserApps(profileId, userId, new Pagination(currentPage, 5));
     }
 }

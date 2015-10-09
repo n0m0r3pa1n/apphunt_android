@@ -7,13 +7,19 @@ package com.apphunt.app.event_bus.events.api.users;
  * * NaughtySpirit 2015
  */
 public class UserUnfollowApiEvent {
+    private String userId;
     private boolean isSuccess;
 
-    public UserUnfollowApiEvent(boolean isSuccess) {
+    public UserUnfollowApiEvent(String userId, boolean isSuccess) {
+        this.userId = userId;
         this.isSuccess = isSuccess;
     }
 
     public boolean isSuccess() {
         return isSuccess;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

@@ -1,17 +1,29 @@
 package com.apphunt.app.ui.fragments.profile;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.users.GetFollowersApiEvent;
+import com.apphunt.app.ui.adapters.FollowersAdapter;
+import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * * Created by Boklik <atanas@naughtyspirit.co>
@@ -19,9 +31,27 @@ import butterknife.ButterKnife;
  * *
  * * NaughtySpirit 2015
  */
-public class FollowersFragment extends BackStackFragment {
+public class FollowersFragment extends BaseFragment {
+
+    private String profileId, userId;
+    private int currentPage = 0;
 
     private AppCompatActivity activity;
+    private FollowersAdapter adapter;
+
+    @InjectView(R.id.followers)
+    ScrollRecyclerView scrollRecyclerView;
+
+    @InjectView(R.id.vs_no_followers)
+    ViewStub vsNoFollowers;
+
+    public static FollowersFragment newInstance(String profileId) {
+        Bundle args = new Bundle();
+        args.putString(Constants.KEY_USER_PROFILE, profileId);
+        FollowersFragment fragment = new FollowersFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +63,19 @@ public class FollowersFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_followers, container, false);
         ButterKnife.inject(this, view);
-
-        initUI();
-
+        profileId = getArguments().getString(Constants.KEY_USER_PROFILE);
+        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
+            userId = LoginProviderFactory.get(activity).getUser().getId();
+        }
+        getFollowers();
+        scrollRecyclerView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(activity));
+        scrollRecyclerView.showBottomLoader();
+        scrollRecyclerView.setOnEndReachedListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                getFollowers();
+            }
+        });
         return view;
     }
 
@@ -49,13 +89,36 @@ public class FollowersFragment extends BackStackFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onFollowersReceived(GetFollowersApiEvent event) {
+        scrollRecyclerView.hideBottomLoader();
+        if(event == null || event.getFollowers() == null || event.getFollowers().getFollowers() == null || event.getFollowers().getFollowers().size() == 0) {
+            vsNoFollowers.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        if(adapter == null) {
+            adapter = new FollowersAdapter(activity, event.getFollowers().getFollowers());
+            scrollRecyclerView.setAdapter(adapter,  event.getFollowers().getTotalCount());
+        } else {
+            adapter.addItems(event.getFollowers().getFollowers());
+        }
+    }
+
+    private void getFollowers() {
+        currentPage++;
+        ApiClient.getClient(activity).getFollowers(profileId, userId, currentPage, Constants.PAGE_SIZE);
     }
 }

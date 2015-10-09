@@ -7,6 +7,7 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
+//    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
     public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
 //    public static final String MAIN_URL = "7eebac65.ngrok.io";
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
@@ -21,6 +22,7 @@ public class Constants {
     public static final String KEY_USER_COVER_PICTURE = "profile_cover_picture";
     public static final String KEY_USER_TEXT_COLOR = "text_color";
 
+    public static final String KEY_USER_PROFILE = "user_profile";
     public static final String KEY_NOTIFICATION_ID = "notification_id";
     public static final String KEY_NOTIFICATION_APP_ID = "appId";
 

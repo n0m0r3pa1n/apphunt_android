@@ -36,7 +36,6 @@ import butterknife.InjectView;
  */
 public class FavouriteCollectionsFragment extends BaseFragment {
     public static final String TAG = FavouriteCollectionsFragment.class.getSimpleName();
-    private static final String CREATOR_ID = "CREATOR_ID";
     public static final String FAVOURITED_BY = "FAVOURITED_BY";
 
     private CollectionsAdapter adapter;
@@ -56,9 +55,9 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         return R.string.title_favourite_collection;
     }
 
-    public static FavouriteCollectionsFragment newInstance(String creatorId) {
+    public static FavouriteCollectionsFragment newInstance(String profileId) {
         Bundle bundle = new Bundle();
-        bundle.putString(CREATOR_ID, creatorId);
+        bundle.putString(Constants.KEY_USER_PROFILE, profileId);
         FavouriteCollectionsFragment fragment = new FavouriteCollectionsFragment();
         fragment.setArguments(bundle);
 
@@ -72,7 +71,7 @@ public class FavouriteCollectionsFragment extends BaseFragment {
         view  = inflater.inflate(R.layout.fragment_all_collections, container, false);
         ButterKnife.inject(this, view);
 
-        favouriteBy = getArguments().getString(CREATOR_ID);
+        favouriteBy = getArguments().getString(Constants.KEY_USER_PROFILE);
         getFavouriteCollections();
 
         allCollections.setOnEndReachedListener(new OnEndReachedListener() {

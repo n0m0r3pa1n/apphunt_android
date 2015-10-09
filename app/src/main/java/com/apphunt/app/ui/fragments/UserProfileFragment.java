@@ -1,6 +1,6 @@
 package com.apphunt.app.ui.fragments;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
-import com.apphunt.app.api.apphunt.clients.rest.AppHuntApiClient;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
@@ -41,7 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileFragment extends BackStackFragment {
     public static final String TAG = UserProfileFragment.class.getSimpleName();
-    public static final String USER_ID = "CREATOR_ID";
+    public static final String USER_ID = "PROFILE_ID";
     public static final String NAME = "NAME";
 
     private AppCompatActivity activity;
@@ -81,6 +80,8 @@ public class UserProfileFragment extends BackStackFragment {
     private int collectionsCount;
     private int commentsCount;
     private int favouriteAppsCount;
+    private int followersCount;
+    private int followingCount;
 
     private int favouriteCollectionsCount;
     private int selectedTabPosition = 0;
@@ -161,6 +162,10 @@ public class UserProfileFragment extends BackStackFragment {
                 return getResources().getQuantityString(R.plurals.collections, favouriteCollectionsCount, favouriteCollectionsCount);
             case 4:
                 return getResources().getQuantityString(R.plurals.comments, commentsCount, commentsCount);
+            case 5:
+                return getResources().getQuantityString(R.plurals.followers, followersCount, followersCount);
+            case 6:
+                return getResources().getQuantityString(R.plurals.following, followingCount, followingCount);
             default:
                 return "";
         }
@@ -178,6 +183,10 @@ public class UserProfileFragment extends BackStackFragment {
                 return favouriteCollectionsCount;
             case 4:
                 return commentsCount;
+            case 5:
+                return followersCount;
+            case 6:
+                return followingCount;
             default:
                 return 0;
         }
@@ -201,9 +210,9 @@ public class UserProfileFragment extends BackStackFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -250,14 +259,14 @@ public class UserProfileFragment extends BackStackFragment {
         commentsCount = userProfile.getComments();
         favouriteAppsCount = userProfile.getFavouriteApps();
         favouriteCollectionsCount = userProfile.getFavouriteCollections();
+        followingCount = userProfile.getFollowingCount();
+        followersCount = userProfile.getFollowersCount();
 
         follow.init(activity, event.getUserProfile());
 
         scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 
         updateAbSubtitle(selectedTabPosition);
-
-        ApiClient.getClient(activity).getFollowers(userProfile.getId(), 1, 10);
     }
 
     private void initTabs() {

@@ -110,6 +110,9 @@ public class FollowButton extends AHButton {
 
     @Subscribe
     public void onFollowResponse(UserFollowApiEvent event) {
+        if(!event.getUserId().equals(user.getId())) {
+            return;
+        }
         Log.e(TAG, "onFollowResponse: " + event.isSuccess());
         if (event.isSuccess()) {
             unfollow();
@@ -120,8 +123,11 @@ public class FollowButton extends AHButton {
     }
 
     @Subscribe
-    public void onUnfollowRespnse(UserUnfollowApiEvent event) {
-        Log.e(TAG, "onUnfollowRespnse: " + event.isSuccess());
+    public void onUnfollowResponse(UserUnfollowApiEvent event) {
+        if(!event.getUserId().equals(user.getId())) {
+            return;
+        }
+        Log.e(TAG, "onUnfollowResponse: " + event.isSuccess());
         if (event.isSuccess()) {
             follow();
             user.setIsFollowing(false);

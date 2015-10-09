@@ -9,20 +9,29 @@ import java.util.ArrayList;
  * * NaughtySpirit 2015
  */
 public class FollowingsList {
-    private ArrayList<User> followings = new ArrayList<>();
+    private ArrayList<User> following = new ArrayList<>();
+    private int page, pageSize, totalCount;
 
-    public ArrayList<User> getFollowings() {
-        return followings;
+    public ArrayList<User> getFollowing() {
+        return following;
     }
 
-    public void setFollowings(ArrayList<User> followings) {
-        this.followings = followings;
+    public int getPage() {
+        return page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
     }
 
     @Override
     public String toString() {
         return "FollowingsList{" +
-                "followings=" + followings +
+                "following=" + following +
                 '}';
     }
 }

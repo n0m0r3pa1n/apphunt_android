@@ -21,4 +21,14 @@
         <item quantity="one">1 comment</item>
         <item quantity="other">%d comments</item>
     </plurals>
+    <plurals
+        name="followers">
+        <item quantity="one">1 follower</item>
+        <item quantity="other">%d followers</item>
+    </plurals>
+    <plurals
+        name="following">
+        <item quantity="one">1 following</item>
+        <item quantity="other">%d following</item>
+    </plurals>
 </resources>

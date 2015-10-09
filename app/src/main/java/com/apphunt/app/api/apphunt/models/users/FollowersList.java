@@ -10,13 +10,22 @@ import java.util.ArrayList;
  */
 public class FollowersList {
     private ArrayList<User> followers = new ArrayList<>();
+    private int page, pageSize, totalCount;
 
     public ArrayList<User> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(ArrayList<User> followers) {
-        this.followers = followers;
+    public int getPage() {
+        return page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
     }
 
     @Override

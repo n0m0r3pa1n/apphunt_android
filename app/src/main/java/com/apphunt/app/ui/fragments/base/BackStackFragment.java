@@ -30,6 +30,7 @@ public class BackStackFragment extends BaseFragment {
         try {
             BusProvider.getInstance().unregister(this);
         } catch(Exception e) {
+            e.printStackTrace();
             Crashlytics.logException(e);
         }
     }

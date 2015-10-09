@@ -114,7 +114,7 @@ public interface AppHuntApi {
 
     void unfollowUser(String userId, String followingId);
 
-    void getFollowers(String userId, int page, int pageSize);
+    void getFollowers(String profileId, String userId, int page, int pageSize);
 
-    void getFollowings(String userId, int page, int pageSize);
+    void getFollowings(String profileId, String userId, int page, int pageSize);
 }
