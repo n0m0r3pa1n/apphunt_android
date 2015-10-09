@@ -21,6 +21,8 @@ import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 
+import java.util.Random;
+
 public class NavUtils {
 
     private static NavUtils instance;
@@ -101,9 +103,10 @@ public class NavUtils {
 
     public void presentUserProfileFragment(String userId, String name) {
         UserProfileFragment fragment = UserProfileFragment.newInstance(userId, name);
+        int i = new Random().nextInt();
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment, Constants.TAG_USER_PROFILE_FRAGMENT)
-                .addToBackStack(Constants.TAG_USER_PROFILE_FRAGMENT)
+                .add(R.id.container, fragment, Constants.TAG_USER_PROFILE_FRAGMENT + i)
+                .addToBackStack(Constants.TAG_USER_PROFILE_FRAGMENT + i)
                 .commit();
     }
 

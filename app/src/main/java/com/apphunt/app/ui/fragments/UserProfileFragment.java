@@ -234,6 +234,10 @@ public class UserProfileFragment extends BackStackFragment {
         updateAbSubtitle(selectedTabPosition);
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
     @Subscribe
     public void onUserProfileReceived(GetUserProfileApiEvent event) {
         UserProfile userProfile = event.getUserProfile();
