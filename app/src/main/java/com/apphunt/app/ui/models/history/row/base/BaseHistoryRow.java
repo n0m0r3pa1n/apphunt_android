@@ -18,11 +18,6 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
     }
 
     @Override
-    public boolean isFollowRow() {
-        return false;
-    }
-
-    @Override
     public String getId() {
         return event.getId();
     }
@@ -60,5 +55,10 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
     @Override
     public boolean isUnseen() {
         return isUnseen;
+    }
+
+    @Override
+    public boolean isFollowRow() {
+        return event.getUser().isFollowing();
     }
 }
