@@ -16,6 +16,8 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
+import com.apphunt.app.utils.LoginUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -72,6 +74,11 @@ public class FollowButton extends AHButton {
     private OnClickListener customOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
+                LoginUtils.showLoginFragment(activity, false, R.string.login_info_vote);
+                return;
+            }
+
             String followingId = LoginProviderFactory.get(activity).getUser().getId();
             if (user.isFollowing()) {
                 ApiClient.getClient(activity).unfollowUser(followingId, user.getId());
