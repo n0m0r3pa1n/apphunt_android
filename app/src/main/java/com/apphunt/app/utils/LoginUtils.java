@@ -2,6 +2,7 @@ package com.apphunt.app.utils;
 
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.apphunt.app.R;
@@ -23,7 +24,7 @@ public class LoginUtils {
         loginFragment.setCanBeSkipped(canBeSkipped);
         loginFragment.setMessage(TextUtils.isEmpty(message) ? ctx.getString(R.string.login_info_text) : message);
 
-        ((ActionBarActivity) ctx).getSupportFragmentManager().beginTransaction()
+        ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)

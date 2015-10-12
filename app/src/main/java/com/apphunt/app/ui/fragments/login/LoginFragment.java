@@ -63,6 +63,7 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -151,7 +152,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                     user.setEmail(email);
                                     user.setName(json.getString("name"));
                                     user.setUsername(email.split("@")[0]);
-                                    Log.e(TAG, user.toString());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -208,10 +208,25 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
-                        FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
-                        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                                false, null, null, null, null);
-                        startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
+                        TwitterAuthClient authClient = new TwitterAuthClient();
+                        authClient.requestEmail(Twitter.getSessionManager().getActiveSession(), new Callback<String>() {
+                            @Override
+                            public void success(Result<String> result) {
+                                user.setEmail(result.data);
+                                LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
+                                ApiClient.getClient(getActivity()).createUser(user);
+                                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
+
+                                FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
+                            }
+
+                            @Override
+                            public void failure(TwitterException e) {
+                                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                                        false, null, null, null, null);
+                                startActivityForResult(intent, Constants.REQUEST_ACCOUNT_EMAIL);
+                            }
+                        });
                     }
 
                     @Override
@@ -443,8 +458,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed: " + connectionResult.toString());
-
         try {
             connectionResult.startResolutionForResult(activity, Constants.GPLUS_SIGN_IN);
         } catch (IntentSender.SendIntentException e) {

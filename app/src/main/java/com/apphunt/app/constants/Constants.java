@@ -122,10 +122,10 @@ public class Constants {
 
     // GCM
     public static final String GCM_SENDER_ID = "437946264894";
-    public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
-    public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
-//    public static final String TWITTER_CONSUMER_KEY = "2GwWIq8PXArLO1YKieGNsAKQa";
-//    public static final String TWITTER_CONSUMER_SECRET = "GG81rZvwLnFdxzSdtASsQMDaWZVr7bzzqRKBCWgnWCmpQqx5VK";
+//    public static final String TWITTER_CONSUMER_KEY = "ZQzGutRJY47XcrFB6XuCqdwAj";
+//    public static final String TWITTER_CONSUMER_SECRET = "Fgt2TcaTJw9ceBC1uKZwG1vlqgz8s90sbSNkA635GEIdXygTbh";
+    public static final String TWITTER_CONSUMER_KEY = "PLMXpFYLb7DxrpKFQQssnSYDI";
+    public static final String TWITTER_CONSUMER_SECRET = "Ws9Z1ysjAwKjANHEZJncY92ayclpUmnZTUU1C5VNPkqim9fR8d";
 
 
     public static final int TRENDING_APPS = 1;
