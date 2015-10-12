@@ -3,6 +3,7 @@ package com.apphunt.app.ui.models.history.row;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
+import com.apphunt.app.utils.StringUtils;
 
 public class HeaderHistoryRow implements HistoryRowComponent {
     private final String date;
@@ -53,7 +54,7 @@ public class HeaderHistoryRow implements HistoryRowComponent {
 
     @Override
     public String getText() {
-        return date;
+        return StringUtils.getDateAsTitleString(date);
     }
 
     public String getDate() {
