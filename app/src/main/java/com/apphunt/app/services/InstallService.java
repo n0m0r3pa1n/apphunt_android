@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -56,7 +57,8 @@ public class InstallService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         SharedPreferencesHelper.init(this);
-        realm = Realm.getInstance(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
+        realm = Realm.getInstance(realmConfiguration);
         if (!SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, true)) {
             return START_FLAG_RETRY;
         }
