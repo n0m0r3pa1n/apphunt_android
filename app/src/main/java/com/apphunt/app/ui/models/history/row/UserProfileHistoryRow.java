@@ -13,6 +13,11 @@ public class UserProfileHistoryRow extends BaseHistoryRow {
     }
 
     @Override
+    public boolean isFollowRow() {
+        return true;
+    }
+
+    @Override
     public void openEvent() {
         NavUtils.getInstance(activity).presentUserProfileFragment(event.getUser().getId(), event.getUser().getName());
     }

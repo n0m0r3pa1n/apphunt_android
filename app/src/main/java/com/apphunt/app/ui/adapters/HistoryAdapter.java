@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,12 +30,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public HistoryAdapter(Context context, List<HistoryRowComponent> rows) {
         this.rows = rows;
-        this.context = context;
-    }
-
-    public HistoryAdapter(Context context, HistoryRowComponent row) {
-        rows = new ArrayList<>();
-        rows.add(row);
         this.context = context;
     }
 
@@ -87,6 +82,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(row.isUnseen()) {
                 viewHolder.container.setBackgroundColor(Color.parseColor("#00FF00"));
+            }
+
+            if(row.isFollowRow()) {
+                viewHolder.followerIcon.setVisibility(View.VISIBLE);
             }
         } else if(getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             HeaderHistoryRow row = (HeaderHistoryRow) rows.get(position);
@@ -165,6 +164,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @InjectView(R.id.event_text)
         TextView eventText;
+
+        @InjectView(R.id.follower_icon)
+        FrameLayout followerIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);

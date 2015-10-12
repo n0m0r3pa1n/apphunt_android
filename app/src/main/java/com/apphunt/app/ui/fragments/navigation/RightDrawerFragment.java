@@ -165,7 +165,9 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Subscribe
     public void onUserLogout(LogoutEvent logoutEvent) {
-        adapter.reset();
+        if(adapter != null) {
+            adapter.reset();
+        }
         noHistoryView.setVisibility(View.VISIBLE);
         HistoryConnectionManager.getInstance().removeRefreshListener(this);
     }

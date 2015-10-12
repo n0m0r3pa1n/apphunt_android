@@ -32,6 +32,11 @@ public class HeaderHistoryRow implements HistoryRowComponent {
     }
 
     @Override
+    public boolean isFollowRow() {
+        return false;
+    }
+
+    @Override
     public void setIsUnseen(boolean isUnseen) {
 
     }

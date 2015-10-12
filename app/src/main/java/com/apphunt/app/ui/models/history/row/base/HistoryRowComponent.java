@@ -14,5 +14,6 @@ public interface HistoryRowComponent {
     User getUser();
 
     boolean isUnseen();
+    boolean isFollowRow();
     void setIsUnseen(boolean isUnseen);
 }
