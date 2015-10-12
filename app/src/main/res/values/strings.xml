@@ -198,4 +198,5 @@
     <string name="unfollow">Unfollow</string>
     <string name="action_find_friends">find_friends</string>
     <string name="title_user_followers">Followers</string>
+    <string name="title_user_followings">Followings</string>
 </resources>

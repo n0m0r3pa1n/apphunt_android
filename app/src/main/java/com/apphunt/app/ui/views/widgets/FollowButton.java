@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,7 +19,6 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -91,13 +92,21 @@ public class FollowButton extends AHButton {
     private void follow() {
         this.setBackgroundResource(R.drawable.btn_follow);
         this.setText(R.string.follow);
-        this.setTextColor(Color.WHITE);
+        this.setTextColor(getResources().getColor(R.color.bg_primary));
+
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_plus, null);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        this.setCompoundDrawables(drawable, null, null, null);
     }
 
     private void unfollow() {
         this.setBackgroundResource(R.drawable.btn_unfollow);
         this.setText(R.string.unfollow);
-        this.setTextColor(getResources().getColor(R.color.bg_primary));
+        this.setTextColor(Color.WHITE);
+
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_check, null);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        this.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     @Override
@@ -120,7 +129,6 @@ public class FollowButton extends AHButton {
         if(!event.getUserId().equals(user.getId())) {
             return;
         }
-        Log.e(TAG, "onFollowResponse: " + event.isSuccess());
         if (event.isSuccess()) {
             unfollow();
             user.setIsFollowing(true);
@@ -134,7 +142,6 @@ public class FollowButton extends AHButton {
         if(!event.getUserId().equals(user.getId())) {
             return;
         }
-        Log.e(TAG, "onUnfollowResponse: " + event.isSuccess());
         if (event.isSuccess()) {
             follow();
             user.setIsFollowing(false);

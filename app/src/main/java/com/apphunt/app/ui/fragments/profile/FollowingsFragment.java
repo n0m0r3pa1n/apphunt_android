@@ -13,11 +13,10 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetFollowingsApiEvent;
 import com.apphunt.app.ui.adapters.FollowersAdapter;
 import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
 import com.squareup.otto.Subscribe;
@@ -31,7 +30,7 @@ import butterknife.InjectView;
  * *
  * * NaughtySpirit 2015
  */
-public class FollowingsFragment extends BaseFragment {
+public class FollowingsFragment extends BackStackFragment {
 
     private AppCompatActivity activity;
     private FollowersAdapter adapter;
@@ -68,6 +67,13 @@ public class FollowingsFragment extends BaseFragment {
             userId = LoginProviderFactory.get(activity).getUser().getId();
         }
         getFollowings();
+
+        initUI();
+
+        return view;
+    }
+
+    private void initUI() {
         scrollRecyclerView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(activity));
         scrollRecyclerView.showBottomLoader();
         scrollRecyclerView.setOnEndReachedListener(new OnEndReachedListener() {
@@ -76,21 +82,22 @@ public class FollowingsFragment extends BaseFragment {
                 getFollowings();
             }
         });
+    }
 
-        return view;
+    @Override
+    public int getTitle() {
+        return R.string.title_user_followings;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Subscribe

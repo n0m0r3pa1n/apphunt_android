@@ -13,11 +13,10 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetFollowersApiEvent;
 import com.apphunt.app.ui.adapters.FollowersAdapter;
 import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
 import com.squareup.otto.Subscribe;
@@ -26,12 +25,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * * Created by Boklik <atanas@naughtyspirit.co>
+ * * Created by Seishin <atanas@naughtyspirit.co>
  * * on 10/2/15.
  * *
  * * NaughtySpirit 2015
  */
-public class FollowersFragment extends BaseFragment {
+public class FollowersFragment extends BackStackFragment {
 
     private String profileId, userId;
     private int currentPage = 0;
@@ -68,6 +67,13 @@ public class FollowersFragment extends BaseFragment {
             userId = LoginProviderFactory.get(activity).getUser().getId();
         }
         getFollowers();
+
+        initUI();
+
+        return view;
+    }
+
+    private void initUI() {
         scrollRecyclerView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(activity));
         scrollRecyclerView.showBottomLoader();
         scrollRecyclerView.setOnEndReachedListener(new OnEndReachedListener() {
@@ -76,11 +82,6 @@ public class FollowersFragment extends BaseFragment {
                 getFollowers();
             }
         });
-        return view;
-    }
-
-    private void initUI() {
-
     }
 
     @Override
@@ -92,13 +93,11 @@ public class FollowersFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
-        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        BusProvider.getInstance().unregister(this);
     }
 
     @Subscribe

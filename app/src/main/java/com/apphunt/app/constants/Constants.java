@@ -84,6 +84,8 @@ public class Constants {
     public static final String TAG_FIND_FRIENDS_FRAGMENT = "fragment_find_friends";
     public static final String TAG_FIND_TWITTER_FRIENDS = "fragment_find_twitter_friends";
     public static final String TAG_FIND_FACEBOOK_FRIENDS = "fragment_find_facebook_friends";
+    public static final String TAG_FOLLOWINGS_FRAGMENT = "fragment_followings_fragment";
+    public static final String TAG_FOLLOWERS_FRAGMENT = "fragment_followers_fragment";
 
     // RequestCodes
     public static final int REQUEST_NETWORK_SETTINGS = 3;

@@ -14,15 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.profile.FollowersFragment;
+import com.apphunt.app.ui.fragments.profile.FollowingsFragment;
 import com.apphunt.app.ui.views.widgets.AHTextView;
 import com.apphunt.app.ui.views.widgets.FollowButton;
 import com.apphunt.app.utils.StringUtils;
@@ -36,6 +40,7 @@ import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileFragment extends BackStackFragment {
@@ -76,12 +81,16 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.profile_tabs)
     ViewPager profileTabsPager;
 
+    @InjectView(R.id.followers_count)
+    TextView followersCount;
+
+    @InjectView(R.id.followings_count)
+    TextView followingCount;
+
     private int appsCount;
     private int collectionsCount;
     private int commentsCount;
     private int favouriteAppsCount;
-    private int followersCount;
-    private int followingCount;
 
     private int favouriteCollectionsCount;
     private int selectedTabPosition = 0;
@@ -140,6 +149,38 @@ public class UserProfileFragment extends BackStackFragment {
         return view;
     }
 
+    @OnClick(R.id.followings_count)
+    public void onFollowingsCountClick() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, FollowingsFragment.newInstance(userId), Constants.TAG_FOLLOWINGS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FOLLOWINGS_FRAGMENT)
+                .commit();
+    }
+
+    @OnClick(R.id.label_followings)
+    public void onFollowingsLabelClick() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, FollowingsFragment.newInstance(userId), Constants.TAG_FOLLOWINGS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FOLLOWINGS_FRAGMENT)
+                .commit();
+    }
+
+    @OnClick(R.id.followers_count)
+    public void onFollowersCountClick() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, FollowersFragment.newInstance(userId), Constants.TAG_FOLLOWERS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FOLLOWERS_FRAGMENT)
+                .commit();
+    }
+
+    @OnClick(R.id.label_followers)
+    public void onFollowersLabelClick() {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, FollowersFragment.newInstance(userId), Constants.TAG_FOLLOWERS_FRAGMENT)
+                .addToBackStack(Constants.TAG_FOLLOWERS_FRAGMENT)
+                .commit();
+    }
+
     private void updateAbSubtitle(int position) {
         if (position == -1) {
             ActionBarUtils.getInstance().setSubtitle("");
@@ -162,10 +203,6 @@ public class UserProfileFragment extends BackStackFragment {
                 return getResources().getQuantityString(R.plurals.collections, favouriteCollectionsCount, favouriteCollectionsCount);
             case 4:
                 return getResources().getQuantityString(R.plurals.comments, commentsCount, commentsCount);
-            case 5:
-                return getResources().getQuantityString(R.plurals.followers, followersCount, followersCount);
-            case 6:
-                return getResources().getQuantityString(R.plurals.following, followingCount, followingCount);
             default:
                 return "";
         }
@@ -183,10 +220,6 @@ public class UserProfileFragment extends BackStackFragment {
                 return favouriteCollectionsCount;
             case 4:
                 return commentsCount;
-            case 5:
-                return followersCount;
-            case 6:
-                return followingCount;
             default:
                 return 0;
         }
@@ -263,8 +296,8 @@ public class UserProfileFragment extends BackStackFragment {
         commentsCount = userProfile.getComments();
         favouriteAppsCount = userProfile.getFavouriteApps();
         favouriteCollectionsCount = userProfile.getFavouriteCollections();
-        followingCount = userProfile.getFollowingCount();
-        followersCount = userProfile.getFollowersCount();
+        followingCount.setText(String.valueOf(userProfile.getFollowingCount()));
+        followersCount.setText(String.valueOf(userProfile.getFollowersCount()));
 
         follow.init(activity, event.getUserProfile());
 
