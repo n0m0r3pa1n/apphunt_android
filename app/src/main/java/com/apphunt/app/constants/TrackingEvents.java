@@ -97,4 +97,17 @@ public interface TrackingEvents {
     String UserViewedWelcomeScreen = "user.viewed.welcome";
 
     String UserSkippedFriendsSuggestions = "user.skipped.friends_suggetsions";
+
+    String UserFollowedSomeone = "user.followed.someone";
+    String UserUnfollowedSomeone = "user.unfollowed.someone";
+    String UserViewedFollowers = "user.viewed.followers";
+    String UserViewedFollowing = "user.viewed.following";
+    String UserOpenedHistory = "user.opened.history";
+    String UserOpenedUserProfileFromHistory = "user.opened.user.profile.from.history";
+    String UserOpenedHistoryEvent = "user.opened.history.event";
+    String UserReceivedRefreshHistoryEvent = "user.received.refresh.history.event";
+    String UserScrolledHistoryEvents = "user.scrolled.history.events";
+
+    String UserOpenedRandomApp = "user.opened.random.app";
+
 }

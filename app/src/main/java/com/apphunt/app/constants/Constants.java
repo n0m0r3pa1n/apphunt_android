@@ -8,8 +8,8 @@ public class Constants {
 
     //TODO: use production url before release
 //    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-//    public static final String MAIN_URL = "7eebac65.ngrok.io";
+    public static final String MAIN_URL = "apphunt.herokuapp.com";
+//    public static final String MAIN_URL = "10.0.3.2:8080";
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
 

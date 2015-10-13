@@ -69,8 +69,8 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
             if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     if (isEndOfList) {
-                        FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
                         ApiService.getInstance(activity).loadHistoryForPreviousDate();
+                        FlurryAgent.logEvent(TrackingEvents.UserScrolledHistoryEvents);
                     }
                 }
             }
@@ -131,6 +131,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Override
     public void onRefresh(final HistoryEvent event) {
+        FlurryAgent.logEvent(TrackingEvents.UserReceivedRefreshHistoryEvent);
         if (isDrawerClosed()) {
             BusProvider.getInstance().post(new UnseenHistoryEvent(1));
         }

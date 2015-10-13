@@ -13,11 +13,14 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
+import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -67,8 +70,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .into(viewHolder.icon);
 
             viewHolder.followerIconContainer.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedUserProfileFromHistory);
                     row.openUserProfile();
                 }
             });
@@ -76,6 +81,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedHistoryEvent, new HashMap<String, String>(){{
+                        put("type", row.getType().name());
+                    }});
                     row.openEvent();
                 }
             });

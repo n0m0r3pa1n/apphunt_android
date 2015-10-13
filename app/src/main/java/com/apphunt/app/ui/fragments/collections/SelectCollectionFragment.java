@@ -109,6 +109,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     public void onDetach() {
         super.onDetach();
         BusProvider.getInstance().unregister(this);
+        selectCollectionAdapter = null;
     }
 
     private void getMyAvailableCollections() {

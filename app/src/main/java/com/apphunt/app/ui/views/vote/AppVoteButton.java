@@ -14,12 +14,14 @@ import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -150,10 +152,12 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void downVote() {
+        FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp);
         ApiClient.getClient(getContext()).downVote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     protected void vote() {
+        FlurryAgent.logEvent(TrackingEvents.UserVotedApp);
         ApiClient.getClient(getContext()).vote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 

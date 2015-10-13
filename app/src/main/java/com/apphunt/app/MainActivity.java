@@ -327,11 +327,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             }
 
             MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.action_history_container).setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     if (rightDrawerFragment.isDrawerOpen()) {
                         rightDrawerFragment.closeDrawer();
                     } else {
+                        FlurryAgent.logEvent(TrackingEvents.UserOpenedHistory);
                         rightDrawerFragment.openDrawer();
                     }
                 }
@@ -344,6 +346,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 public boolean onMenuItemClick(MenuItem item) {
                     LoginProvider loginProvider = LoginProviderFactory.get(MainActivity.this);
                     String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp);
                     ApiClient.getClient(MainActivity.this).getRandomApp(userId);
                     return true;
                 }

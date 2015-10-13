@@ -15,10 +15,12 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
 import com.apphunt.app.utils.LoginUtils;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -82,8 +84,10 @@ public class FollowButton extends AHButton {
 
             String followingId = LoginProviderFactory.get(activity).getUser().getId();
             if (user.isFollowing()) {
+                FlurryAgent.logEvent(TrackingEvents.UserUnfollowedSomeone);
                 ApiClient.getClient(activity).unfollowUser(followingId, user.getId());
             } else {
+                FlurryAgent.logEvent(TrackingEvents.UserFollowedSomeone);
                 ApiClient.getClient(activity).followUser(followingId, user.getId());
             }
         }
