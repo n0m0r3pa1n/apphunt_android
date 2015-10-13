@@ -17,11 +17,13 @@ import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.CreateCollectionApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.GetMyAvailableCollectionsApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.UpdateCollectionApiEvent;
 import com.apphunt.app.ui.adapters.SelectCollectionAdapter;
-import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
@@ -33,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SelectCollectionFragment extends BackStackFragment implements OnItemClickListener {
+public class SelectCollectionFragment extends BaseFragment implements OnItemClickListener {
     public static final String TAG = SelectCollectionFragment.class.getSimpleName();
 
     private static final String APP_KEY = "App";
@@ -82,6 +84,33 @@ public class SelectCollectionFragment extends BackStackFragment implements OnIte
         return view;
     }
 
+
+
+    @Override
+    public void onClick(View view, int position) {
+        if(app != null) {
+            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
+            AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
+            appsCollection.getApps().add(app);
+            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(),
+                    appsCollection);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+        BusProvider.getInstance().register(this);
+        NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        BusProvider.getInstance().unregister(this);
+    }
+
     private void getMyAvailableCollections() {
         currentPage++;
         if(app == null || !LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
@@ -94,6 +123,11 @@ public class SelectCollectionFragment extends BackStackFragment implements OnIte
         ApiClient.getClient(getActivity())
                 .getMyAvailableCollections(LoginProviderFactory.get(getActivity()).getUser().getId(), app.getId(), currentPage,
                         Constants.PAGE_SIZE);
+    }
+
+    @OnClick(R.id.add_collection)
+    public void openAddCollectionFragment() {
+        NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
     }
 
     @Subscribe
@@ -113,29 +147,6 @@ public class SelectCollectionFragment extends BackStackFragment implements OnIte
         } else {
             vsNoCollection.setVisibility(View.GONE);
         }
-    }
-
-
-    @OnClick(R.id.add_collection)
-    public void openAddCollectionFragment() {
-        NavUtils.getInstance((AppCompatActivity) getActivity()).presentCreateCollectionFragment();
-    }
-
-    @Override
-    public void onClick(View view, int position) {
-        if(app != null) {
-            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
-            AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
-            appsCollection.getApps().add(app);
-            ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(),
-                    appsCollection);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
     }
 
     @Subscribe
