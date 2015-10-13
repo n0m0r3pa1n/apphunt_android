@@ -8,15 +8,14 @@
     <com.apphunt.app.ui.views.containers.ScrollRecyclerView
         android:id="@+id/followers"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <ViewStub
         android:id="@+id/vs_no_followers"
         android:inflatedId="@+id/vs_no_followers"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:layout="@layout/layout_no_followers"
         android:visibility="gone"/>
-
 </RelativeLayout>

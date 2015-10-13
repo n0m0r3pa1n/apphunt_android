@@ -15,7 +15,6 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.users.GetFollowingsApiEvent;
 import com.apphunt.app.ui.adapters.FollowersAdapter;
-import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
@@ -74,7 +73,6 @@ public class FollowingsFragment extends BackStackFragment {
     }
 
     private void initUI() {
-        scrollRecyclerView.getRecyclerView().addItemDecoration(new SimpleDividerItemDecoration(activity));
         scrollRecyclerView.showBottomLoader();
         scrollRecyclerView.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
