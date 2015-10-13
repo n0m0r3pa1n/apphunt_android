@@ -38,7 +38,7 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.apphunt.app.constants.Constants.CollectionStatus;
-import static com.apphunt.app.constants.Constants.MIN_COLLECTION_APPS_SIZE;
+import static com.apphunt.app.constants.Constants.MIN_COLLECTION_APPS_COUNT;
 
 public class CollectionView extends RelativeLayout {
     private boolean areButtonsEnabled;
@@ -184,7 +184,7 @@ public class CollectionView extends RelativeLayout {
         this.areButtonsEnabled = areButtonsEnabled;
 
         if(collection.getStatus() == CollectionStatus.DRAFT) {
-            int appsLeftCount = MIN_COLLECTION_APPS_SIZE - collection.getApps().size();
+            int appsLeftCount = MIN_COLLECTION_APPS_COUNT - collection.getApps().size();
             String text = "You need " + getResources().getQuantityString(R.plurals.appsLeft, appsLeftCount, appsLeftCount);
             appsLeft.setText(text);
             setVisibilityWhenDraft();

@@ -143,7 +143,8 @@ public class Constants {
     public static final int MIN_TOTAL_APPS_COUNT = 5;
     public static final int PAGE_SIZE = 5;
     public static final int COMMENTS_PAGE_SIZE = 10;
-    public static final int MIN_COLLECTION_APPS_SIZE = 4;
+    public static final int MIN_COLLECTION_APPS_COUNT = 4;
+    public static final int MIN_HISTORY_EVENTS_COUNT = 10;
     public static final int THIRTY_MINS = 30 * 60 * 1000;
 
     public enum ItemType {

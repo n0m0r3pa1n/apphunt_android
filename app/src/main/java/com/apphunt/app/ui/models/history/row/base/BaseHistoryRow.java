@@ -49,7 +49,7 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
 
     @Override
     public String getDate() {
-        return event.getDate();
+        return event.getCreatedAt();
     }
 
     @Override

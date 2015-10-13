@@ -139,8 +139,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void addRow(HistoryRowComponent rowComponent) {
-        rows.add(1, rowComponent);
+    public void addRow(int position, HistoryRowComponent rowComponent) {
+        rows.add(position, rowComponent);
         notifyDataSetChanged();
     }
 

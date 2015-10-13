@@ -46,8 +46,7 @@ public class TrendingAppsFragment extends BaseFragment {
     public static final String TAG = TrendingAppsFragment.class.getSimpleName();
 
     private boolean isEndOfList = false;
-    private boolean loading = true;
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;

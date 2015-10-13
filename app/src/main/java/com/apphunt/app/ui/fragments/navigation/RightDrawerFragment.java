@@ -6,41 +6,38 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.clients.sockets.HistoryConnectionManager;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetUserHistoryApiEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.ui.adapters.HistoryAdapter;
-import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
-import com.apphunt.app.ui.interfaces.OnEndReachedListener;
-import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
+import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -63,18 +60,40 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     private List<HistoryRowComponent> previousRows;
 
     private int historyRequestsCount = 0;
-    private boolean isFirstRequest = true;
-    private int previousItemsCount;
+    private boolean isFirstRequest = true, isEndOfList = false;;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    if (isEndOfList) {
+                        FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
+                        ApiService.getInstance(activity).loadHistoryForPreviousDate();
+                    }
+                }
+            }
+        }
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d");
-    private String fromDate = dateFormat.format(Calendar.getInstance().getTime());
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            visibleItemCount = layoutManager.getChildCount();
+            totalItemCount = layoutManager.getItemCount();
+            pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+            isEndOfList = (pastVisiblesItems + visibleItemCount) == totalItemCount;
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BusProvider.getInstance().register(this);
         if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            ApiClient.getClient(activity).getUserHistory(LoginProviderFactory.get(activity).getUser().getId(), new Date());
+
+            ApiService.getInstance(activity).loadHistoryForToday();
             HistoryConnectionManager.getInstance().addRefreshListener(this);
             HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
         }
@@ -87,18 +106,10 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         ButterKnife.inject(this, view);
 
         layoutManager = new LinearLayoutManager(getActivity());
-        historyEventsList.addItemDecoration(new SimpleDividerItemDecoration(activity));
+        historyEventsList.setItemAnimator(new DefaultItemAnimator());
         historyEventsList.setLayoutManager(layoutManager);
-        historyEventsList.addOnScrollListener(new EndlessRecyclerScrollListener(new OnEndReachedListener() {
-            @Override
-            public void onEndReached() {
-                if (isFirstRequest) {
-                    isFirstRequest = false;
-                    return;
-                }
-                ApiService.getInstance(activity).loadHistoryForPreviousDate();
-            }
-        }, layoutManager));
+        historyEventsList.setHasFixedSize(false);
+        historyEventsList.addOnScrollListener(onScrollListener);
 
         return view;
     }
@@ -128,19 +139,19 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
             public void run() {
                 noHistoryView.setVisibility(View.GONE);
                 historyRequestsCount = 0;
-                HistoryRowComponent row = HistoryRowBuilder.build(activity, fromDate, event);
+                HistoryRowComponent row = HistoryRowBuilder.build(activity, event);
                 row.setIsUnseen(true);
                 if (adapter == null) {
                     List<HistoryRowComponent> rows = new ArrayList<HistoryRowComponent>();
-                    rows.add(new HeaderHistoryRow(fromDate));
+                    rows.add(new HeaderHistoryRow(event.getCreatedAt()));
                     rows.add(row);
                     adapter = new HistoryAdapter(activity, rows);
                     historyEventsList.setAdapter(adapter);
                 } else {
-                    if(!adapter.getRow(0).getDate().equals(fromDate)) {
-                        adapter.addRow(new HeaderHistoryRow(fromDate));
+                    if(adapter.getRow(0).getDate().equals(event.getCreatedAt()) == false) {
+                        adapter.addRow(0, new HeaderHistoryRow(event.getCreatedAt()));
                     }
-                    adapter.addRow(row);
+                    adapter.addRow(1, row);
                 }
             }
         });
@@ -182,23 +193,24 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         }
 
         if (event.getEventsList().getEvents() == null || event.getEventsList().getEvents().size() == 0) {
-            historyRequestsCount++;
-            ApiService.getInstance(activity).loadHistoryForPreviousDate();
+            loadMoreHistory();
             return;
         }
 
         List<HistoryRowComponent> rows = new ArrayList<>();
         List<HistoryEvent> events = event.getEventsList().getEvents();
-        fromDate = event.getEventsList().getFromDate();
 
         rows.add(new HeaderHistoryRow(event.getEventsList().getFromDate()));
         for (HistoryEvent e : events) {
-            rows.add(HistoryRowBuilder.build(activity, fromDate, e));
+            rows.add(HistoryRowBuilder.build(activity, e));
         }
 
         if (adapter == null) {
             adapter = new HistoryAdapter(activity, rows);
             historyEventsList.setAdapter(adapter);
+            if(adapter.getItemCount() < Constants.MIN_HISTORY_EVENTS_COUNT) {
+                loadMoreHistory();
+            }
 
             String lastSeenEventDate = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_DATE);
             String lastSeenEventId = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_ID);
@@ -210,8 +222,11 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         }
 
         noHistoryView.setVisibility(View.GONE);
+    }
 
-        Log.d(TAG, "onUserHistory " + event.getEventsList().getEvents().size());
+    private void loadMoreHistory() {
+        historyRequestsCount++;
+        ApiService.getInstance(activity).loadHistoryForPreviousDate();
     }
 
     public void setup(DrawerLayout drawerLayout) {

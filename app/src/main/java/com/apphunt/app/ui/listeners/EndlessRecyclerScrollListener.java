@@ -2,7 +2,6 @@ package com.apphunt.app.ui.listeners;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.AbsListView;
 
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 
