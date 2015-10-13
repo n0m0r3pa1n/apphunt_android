@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         final User user = users.get(position);
         holder.followerName.setText(user.getName());
+        holder.followerUsername.setText(!TextUtils.isEmpty(user.getUsername()) ? "@" + user.getUsername() : "");
         Picasso.with(context).load(user.getProfilePicture()).into(holder.followerAvatar);
         holder.followButton.init((Activity) context, user);
         holder.container.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +67,9 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.follower_container)
         RelativeLayout container;
+
+        @InjectView(R.id.follower_username)
+        AHTextView followerUsername;
 
         @InjectView(R.id.follower_name)
         AHTextView followerName;
