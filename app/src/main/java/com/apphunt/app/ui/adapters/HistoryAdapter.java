@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,12 +30,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public HistoryAdapter(Context context, List<HistoryRowComponent> rows) {
         this.rows = rows;
-        this.context = context;
-    }
-
-    public HistoryAdapter(Context context, HistoryRowComponent row) {
-        rows = new ArrayList<>();
-        rows.add(row);
         this.context = context;
     }
 
@@ -71,7 +66,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .load(row.getIconResId())
                     .into(viewHolder.icon);
 
-            viewHolder.icon.setOnClickListener(new View.OnClickListener() {
+            viewHolder.followerIconContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     row.openUserProfile();
@@ -86,7 +81,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
             if(row.isUnseen()) {
-                viewHolder.container.setBackgroundColor(Color.parseColor("#00FF00"));
+                viewHolder.container.setBackgroundColor(Color.parseColor("#3223A3EB"));
+            }
+
+            if(row.isFollowRow()) {
+                viewHolder.followerIcon.setVisibility(View.VISIBLE);
             }
         } else if(getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             HeaderHistoryRow row = (HeaderHistoryRow) rows.get(position);
@@ -165,6 +164,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @InjectView(R.id.event_text)
         TextView eventText;
+
+        @InjectView(R.id.icons_container)
+        FrameLayout followerIconContainer;
+
+        @InjectView(R.id.follower_icon)
+        FrameLayout followerIcon;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -56,4 +56,9 @@ public abstract class BaseHistoryRow implements HistoryRowComponent {
     public boolean isUnseen() {
         return isUnseen;
     }
+
+    @Override
+    public boolean isFollowRow() {
+        return event.getUser().isFollowing();
+    }
 }

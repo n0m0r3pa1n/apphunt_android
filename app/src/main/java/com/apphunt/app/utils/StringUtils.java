@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,5 +70,23 @@ public class StringUtils {
             return true;
         else
             return false;
+    }
+
+    public static String getDateAsTitleString(String dateStr) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+
+        if(formatter.format(today).equals(dateStr)) {
+            return "Today";
+        }
+
+        calendar.add(Calendar.DATE, -1);
+        today = calendar.getTime();
+        if(formatter.format(today).equals(dateStr)) {
+            return "Yesterday";
+        }
+
+        return dateStr;
     }
 }

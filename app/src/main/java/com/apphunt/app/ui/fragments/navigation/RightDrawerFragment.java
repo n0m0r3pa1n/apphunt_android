@@ -28,6 +28,7 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.ui.adapters.HistoryAdapter;
+import com.apphunt.app.ui.adapters.dividers.SimpleDividerItemDecoration;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
@@ -86,6 +87,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         ButterKnife.inject(this, view);
 
         layoutManager = new LinearLayoutManager(getActivity());
+        historyEventsList.addItemDecoration(new SimpleDividerItemDecoration(activity));
         historyEventsList.setLayoutManager(layoutManager);
         historyEventsList.addOnScrollListener(new EndlessRecyclerScrollListener(new OnEndReachedListener() {
             @Override
@@ -165,7 +167,9 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Subscribe
     public void onUserLogout(LogoutEvent logoutEvent) {
-        adapter.reset();
+        if(adapter != null) {
+            adapter.reset();
+        }
         noHistoryView.setVisibility(View.VISIBLE);
         HistoryConnectionManager.getInstance().removeRefreshListener(this);
     }

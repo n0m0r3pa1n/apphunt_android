@@ -207,6 +207,9 @@ public class TrendingAppsFragment extends BaseFragment {
     public void onAppsLoaded(LoadAppsApiEvent event) {
         LoadersUtils.hideBottomLoader(activity);
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
+        if(trendingAppsAdapter.getItemCount() < Constants.MIN_TOTAL_APPS_COUNT) {
+            ApiService.getInstance(activity).loadAppsForPreviousDate();
+        }
     }
 
     @Subscribe
