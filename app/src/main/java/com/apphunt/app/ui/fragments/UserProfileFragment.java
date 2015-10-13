@@ -1,12 +1,13 @@
 package com.apphunt.app.ui.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -23,6 +23,8 @@ import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
+import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
+import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
 import com.apphunt.app.ui.adapters.profile.ProfileTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.profile.FollowersFragment;
@@ -95,6 +97,7 @@ public class UserProfileFragment extends BackStackFragment {
     private int favouriteCollectionsCount;
     private int selectedTabPosition = 0;
     private String userId;
+    private Calendar calendar = Calendar.getInstance();
 
     public static UserProfileFragment newInstance(String userId, String name) {
         Bundle bundle = new Bundle();
@@ -142,10 +145,9 @@ public class UserProfileFragment extends BackStackFragment {
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
-        ApiClient.getClient(activity).getUserProfile(userId, calendar.getTime(), new Date());
+//        ApiClient.getClient(activity).getUserProfile(userId, calendar.getTime(), new Date());
         return view;
     }
 
@@ -243,9 +245,9 @@ public class UserProfileFragment extends BackStackFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.activity = (AppCompatActivity) context;
     }
 
     @Override
@@ -265,6 +267,8 @@ public class UserProfileFragment extends BackStackFragment {
     public void registerForEvents() {
         super.registerForEvents();
         updateAbSubtitle(selectedTabPosition);
+
+        ApiClient.getClient(activity).getUserProfile(userId, calendar.getTime(), new Date());
     }
 
     public String getUserId() {
@@ -304,6 +308,22 @@ public class UserProfileFragment extends BackStackFragment {
         scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
 
         updateAbSubtitle(selectedTabPosition);
+    }
+
+    @Subscribe
+    public void onFollowSuccess(UserFollowApiEvent event) {
+        if (event.isSuccess() && event.getUserId().equals(LoginProviderFactory.get(activity).getUser().getId())) {
+            followersCount.setText(String.valueOf(Integer.valueOf(followersCount.getText().toString()) + 1));
+        }
+    }
+
+    @Subscribe
+    public void onUnfollowSuccess(UserUnfollowApiEvent event) {
+        if (event.isSuccess() && event.getUserId().equals(LoginProviderFactory.get(activity).getUser().getId())) {
+            followingCount.setText(String.valueOf(Integer.valueOf(followingCount.getText().toString()) - 1));
+        } else {
+            followersCount.setText(String.valueOf(Integer.valueOf(followersCount.getText().toString()) - 1));
+        }
     }
 
     private void initTabs() {
