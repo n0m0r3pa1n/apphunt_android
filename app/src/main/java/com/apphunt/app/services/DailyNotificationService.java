@@ -31,6 +31,10 @@ public class DailyNotificationService extends IntentService {
     
     @Override
     protected void onHandleIntent(Intent intent) {
+        if(SharedPreferencesHelper.getBooleanPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, true) == false) {
+            return;
+        }
+
         if (!ConnectivityUtils.isNetworkAvailable(this)) {
             displayNotification(getNotificationFromSharedPrefs());
         } else {
