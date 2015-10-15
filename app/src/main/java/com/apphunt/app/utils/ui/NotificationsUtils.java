@@ -15,7 +15,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.notifications.Notification;
+import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.services.DailyNotificationService;
 import com.apphunt.app.ui.fragments.notification.NotificationFragment;
@@ -24,6 +26,9 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.Calendar;
+
+import kr.nectarine.android.fruitygcm.FruityGcmClient;
+import kr.nectarine.android.fruitygcm.interfaces.FruityGcmListener;
 
 public class NotificationsUtils {
 
@@ -155,32 +160,31 @@ public class NotificationsUtils {
     public static void updateNotificationIdIfNeeded(final Activity activity) {
         final String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
-//        if (userDoesNotHaveNotificationId(userId, notificationId)) {
-//            try {
-//                FruityGcmClient.start(activity, Constants.GCM_SENDER_ID, new FruityGcmListener() {
-//
-//                    @Override
-//                    public void onPlayServiceNotAvailable(boolean b) {
-//                    }
-//
-//                    @Override
-//                    public void onDeliverRegistrationId(final String regId, boolean b) {
-//                        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);
-//                        User user = new User();
-//                        user.setId(userId);
-//                        user.setNotificationId(regId);
-//                        ApiClient.getClient(activity).updateUser(user);
-//
-//                    }
-//
-//                    @Override
-//                    public void onRegisterFailed() {
-//                    }
-//                });
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        if (userDoesNotHaveNotificationId(userId, notificationId)) {
+            try {
+                FruityGcmClient.start(activity, Constants.GCM_SENDER_ID, new FruityGcmListener() {
+
+                    @Override
+                    public void onPlayServiceNotAvailable(boolean b) {
+                    }
+
+                    @Override
+                    public void onDeliverRegistrationId(final String regId, boolean b) {
+                        SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_ID, regId);
+                        User user = new User();
+                        user.setId(userId);
+                        user.setNotificationId(regId);
+                        ApiClient.getClient(activity).updateUser(user);
+                    }
+
+                    @Override
+                    public void onRegisterFailed() {
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected static boolean userDoesNotHaveNotificationId(String userId, String notificationId) {
