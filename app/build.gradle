@@ -78,4 +78,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile 'com.wefika:flowlayout:0.4.0'
     compile 'io.branch.sdk.android:library:+'
+    compile files('libs/uxcam-2.1.1.jar')
 }

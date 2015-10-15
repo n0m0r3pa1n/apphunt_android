@@ -69,6 +69,7 @@ import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+import com.uxcam.UXCam;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +100,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        UXCam.startWithKey("b399c43e0d568a6");
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
