@@ -90,10 +90,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(row.isUnseen()) {
                 viewHolder.container.setBackgroundColor(Color.parseColor("#3223A3EB"));
+            } else {
+                viewHolder.container.setBackgroundColor(context.getResources().getColor(R.color.bg_secondary));
             }
 
             if(row.isFollowRow()) {
                 viewHolder.followerIcon.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.followerIcon.setVisibility(View.INVISIBLE);
             }
         } else if(getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             HeaderHistoryRow row = (HeaderHistoryRow) rows.get(position);

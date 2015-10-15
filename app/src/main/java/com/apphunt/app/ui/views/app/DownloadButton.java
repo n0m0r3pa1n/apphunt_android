@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class DownloadButton extends LinearLayout {
     private TextView textView;
@@ -85,7 +86,8 @@ public class DownloadButton extends LinearLayout {
     }
 
     private void updateOrCreateClickedAppObject() {
-        Realm realm = Realm.getInstance(getContext());
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getContext()).deleteRealmIfMigrationNeeded().build();
+        Realm realm = Realm.getInstance(realmConfiguration);
         ClickedApp clickedApp = realm.where(ClickedApp.class).equalTo("packageName", appPackage).findFirst();
         realm.beginTransaction();
 
