@@ -144,10 +144,10 @@ public class NavUtils {
 
     public void presentAppDetailsFragment(String appId) {
         AppDetailsFragment detailsFragment = getAppDetailsFragment(appId);
-
+        int i = new Random().nextInt();
         activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
+                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT + i)
+                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT + i)
                 .commitAllowingStateLoss();
     }
 

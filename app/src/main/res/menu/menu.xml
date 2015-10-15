@@ -12,23 +12,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
-        android:id="@+id/action_random"
-        android:icon="@drawable/ic_random"
-        android:title="@string/action_random"
-        android:showAsAction="collapseActionView|ifRoom"
-        app:showAsAction="collapseActionView|ifRoom"
-        />
-
-    <item
-        android:id="@+id/action_history"
-        android:title="@string/action_history"
-        android:actionLayout="@layout/action_history"
-        app:actionLayout="@layout/action_history"
-        app:showAsAction="always"
-        android:showAsAction="always"
-        />
-
-    <item
         android:id="@+id/action_skip"
         android:title="@string/action_skip"
         android:showAsAction="always|withText"
@@ -50,6 +33,23 @@
         android:showAsAction="always"
         app:showAsAction="always"
         android:visible="false" />
+
+    <item
+        android:id="@+id/action_random"
+        android:icon="@drawable/ic_random"
+        android:title="@string/action_random"
+        android:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="collapseActionView|ifRoom"
+        />
+
+    <item
+        android:id="@+id/action_history"
+        android:title="@string/action_history"
+        android:actionLayout="@layout/action_history"
+        app:actionLayout="@layout/action_history"
+        app:showAsAction="always"
+        android:showAsAction="always"
+        />
 
     <item
         android:id="@+id/action_sort"

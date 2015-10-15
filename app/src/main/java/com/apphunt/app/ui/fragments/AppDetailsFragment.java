@@ -27,11 +27,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
 import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -237,6 +239,17 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem favouriteAppAction = menu.findItem(R.id.action_favourite_app);
         if(activity.getSupportFragmentManager().findFragmentById(R.id.container) instanceof AppDetailsFragment) {
+            menu.findItem(R.id.action_random).setVisible(true);
+            menu.findItem(R.id.action_random).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    LoginProvider loginProvider = LoginProviderFactory.get(activity);
+                    String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp);
+                    ApiClient.getClient(activity).getRandomApp(userId);
+                    return true;
+                }
+            });
             favouriteAppAction.setVisible(true);
         } else {
             favouriteAppAction.setVisible(false);
