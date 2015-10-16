@@ -66,10 +66,10 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.appsee.Appsee;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
-import com.uxcam.UXCam;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        UXCam.startWithKey("b399c43e0d568a6");
+        Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
