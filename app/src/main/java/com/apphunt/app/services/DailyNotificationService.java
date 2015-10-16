@@ -77,6 +77,10 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void displayNotification(Notification notification) {
+        if (notification == null) {
+            FlurryAgent.logEvent(TrackingEvents.AppNullNotification);
+            return;
+        }
         notification.setType(NotificationType.DAILY);
         NotificationsUtils.displayNotification(this, MainActivity.class, notification);
         Map<String, String> params = new HashMap<>();

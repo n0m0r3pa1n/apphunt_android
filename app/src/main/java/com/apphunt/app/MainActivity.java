@@ -435,12 +435,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
-                fragment.setPreviousTitle(toolbar.getTitle().toString());
+                fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
                 addToBackStack = true;
                 break;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
-                fragment.setPreviousTitle(toolbar.getTitle().toString());
+                fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
                 addToBackStack = true;
                 break;
             case Constants.HELP_ADD_APP:

@@ -73,16 +73,20 @@ public class HistoryConnectionManager {
     }
 
     public void emitAddUser(String userId) {
+        connectIfNotConnected();
+        socket.emit("add user", userId);
+    }
+
+    private void connectIfNotConnected() {
         if(!socket.connected()) {
             socket.on("refresh", onRefresh);
             socket.on("unseen events", onUnseenEvents);
             socket.connect();
         }
-
-        socket.emit("add user", userId);
     }
 
     public void emitLastSeenId(String userId, String eventId, String date) {
+        connectIfNotConnected();
         socket.emit("last seen event", userId, eventId, date);
     }
 

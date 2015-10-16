@@ -1,6 +1,5 @@
 package com.apphunt.app.api.apphunt.clients.rest;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -66,7 +65,6 @@ import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
@@ -206,10 +204,10 @@ public class AppHuntApiClient implements AppHuntApi {
 
     @Override
     public void getTopAppsCollection(String criteria, String userId) {
-        if (LoginProviderFactory.get((Activity) context).isUserLoggedIn()) {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, userId, listener));
-        } else {
+        if (TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetTopAppsRequest(criteria, userId, listener));
         }
     }
 
@@ -350,15 +348,14 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
-    public void getUserProfile(String userId, Date fromDate, Date toDate) {
+    public void getUserProfile(String profileId, String currentUserId, Date fromDate, Date toDate) {
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String fromStr = dayFormat.format(fromDate);
         String toStr = dayFormat.format(toDate);
-        if (LoginProviderFactory.get((Activity) context).isUserLoggedIn()) {
-            String currentUserId = LoginProviderFactory.get((Activity) context).getUser().getId();
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, currentUserId, fromStr, toStr, listener));
+        if (TextUtils.isEmpty(currentUserId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(profileId, fromStr, toStr, listener));
         } else {
-            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(userId, fromStr, toStr, listener));
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetUserProfileRequest(profileId, currentUserId, fromStr, toStr, listener));
         }
     }
 

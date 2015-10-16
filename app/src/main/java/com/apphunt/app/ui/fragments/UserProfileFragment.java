@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -268,7 +267,7 @@ public class UserProfileFragment extends BackStackFragment {
         super.registerForEvents();
         updateAbSubtitle(selectedTabPosition);
 
-        ApiClient.getClient(activity).getUserProfile(userId, calendar.getTime(), new Date());
+        ApiClient.getClient(activity).getUserProfile(userId, LoginProviderFactory.get(activity).getUser().getId(), calendar.getTime(), new Date());
     }
 
     public String getUserId() {

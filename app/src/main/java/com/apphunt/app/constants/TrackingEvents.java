@@ -18,6 +18,7 @@ public interface TrackingEvents {
     String UserRequestedMoreApps = "user.requested.more.apps";
     String UserStartedAppFromNotification = "user.started.app.from.notification";
     String AppShowedNotification = "app.showed.notification";
+    String AppNullNotification = "app.null.notification";
     String UserSentComment = "user.sent.comment";
     String UserSentReplyComment = "user.sent.reply.comment";
     String UserVotedComment = "user.voted.comment";

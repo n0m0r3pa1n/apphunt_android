@@ -90,7 +90,7 @@ public interface AppHuntApi {
 
     void getCollectionsByTags(String tags, int page, int pageSize, String userId);
 
-    void getUserProfile(String userId, Date from, Date to);
+    void getUserProfile(String profileId, String currentUserId, Date from, Date to);
 
     void getUserComments(String creatorId, String userId, Pagination pagination);
 

@@ -22,7 +22,9 @@ public class PostAppVoteRequest extends BasePostRequest<AppVote> {
 
     @Override
     public void deliverResponse(AppVote response) {
-        response.setAppId(appId);
+        if(response != null) {
+            response.setAppId(appId);
+        }
         BusProvider.getInstance().post(new AppVoteApiEvent(response, true));
     }
 }
