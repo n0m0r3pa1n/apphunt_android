@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.listeners;
 
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -14,9 +15,10 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
 
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
+    final Handler handler = new Handler();
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         visibleItemCount = recyclerView.getChildCount();
@@ -31,9 +33,8 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
         }
         if (!loading && (totalItemCount - visibleItemCount)
                 <= (firstVisibleItem + visibleThreshold)) {
-            listener.onEndReached();
-
-            loading = true;
+                    listener.onEndReached();
+                    loading = true;
         }
     }
 
@@ -44,6 +45,10 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
 
     public void setOnEndReachedListener(OnEndReachedListener listener) {
         this.listener = listener;
+    }
+
+    public void reset() {
+        previousTotal = 0;
     }
 
 }

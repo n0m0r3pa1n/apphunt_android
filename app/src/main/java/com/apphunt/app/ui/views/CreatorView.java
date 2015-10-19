@@ -82,10 +82,11 @@ public class CreatorView extends LinearLayout {
         Picasso.with(getContext())
                 .load(pictureUrl)
                 .into(creator);
-        FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
+
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
                 NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
             }
         });
@@ -96,10 +97,11 @@ public class CreatorView extends LinearLayout {
         Picasso.with(getContext())
                 .load(pictureUrl)
                 .into(creator);
-        FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
+
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
                 NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
             }
         });

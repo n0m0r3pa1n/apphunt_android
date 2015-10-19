@@ -8,11 +8,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 
 import com.apphunt.app.MainActivity;
@@ -30,7 +28,8 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
-import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -44,9 +43,6 @@ import butterknife.OnClick;
 
 public class TrendingAppsFragment extends BaseFragment {
     public static final String TAG = TrendingAppsFragment.class.getSimpleName();
-
-    private boolean isEndOfList = false;
-    private int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private MainActivity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
@@ -64,40 +60,27 @@ public class TrendingAppsFragment extends BaseFragment {
     Button btnReload;
     private LinearLayoutManager layoutManager;
 
-    private OnScrollListener onScrollListener = new OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    if (isEndOfList) {
-                        LoadersUtils.showBottomLoader(activity,
-                                SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
-                        FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
-                        ApiService.getInstance(activity).loadAppsForPreviousDate();
-                    }
-                }
-            }
-        }
+    private boolean shouldChangeDate;
 
+    private OnEndReachedListener onEndReachedListener = new OnEndReachedListener() {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            visibleItemCount = layoutManager.getChildCount();
-            totalItemCount = layoutManager.getItemCount();
-            pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-            isEndOfList = (pastVisiblesItems + visibleItemCount) == totalItemCount;
+        public void onEndReached() {
+            LoadersUtils.showBottomLoader(activity,
+                    SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
+            FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
+            loadApps();
         }
     };
 
-    public TrendingAppsFragment() {
-        setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
+
+    private void loadApps() {
+        ApiService.getInstance(activity).loadApps(shouldChangeDate);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private EndlessRecyclerScrollListener endlessRecyclerScrollListener;
+
+    public TrendingAppsFragment() {
+        setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
     }
 
     @Nullable
@@ -106,7 +89,7 @@ public class TrendingAppsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_trending_apps, container, false);
         ButterKnife.inject(this, view);
         initUi();
-        ApiService.getInstance(activity).loadAppsForToday();
+        ApiService.getInstance(activity).reloadApps();
 
         return view;
     }
@@ -120,15 +103,18 @@ public class TrendingAppsFragment extends BaseFragment {
 
         trendingAppsAdapter = new TrendingAppsAdapter(activity, rvTrendingApps);
         rvTrendingApps.setAdapter(trendingAppsAdapter);
-        rvTrendingApps.addOnScrollListener(onScrollListener);
+        endlessRecyclerScrollListener = new EndlessRecyclerScrollListener(onEndReachedListener, layoutManager);
+        rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 activity.getSupportActionBar().collapseActionView();
                 trendingAppsAdapter.resetAdapter();
-                ApiService.getInstance(activity).loadAppsForToday();
+                endlessRecyclerScrollListener.reset();
+                ApiService.getInstance(activity).reloadApps();
                 swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -144,7 +130,8 @@ public class TrendingAppsFragment extends BaseFragment {
         swipeRefreshLayout.setVisibility(View.VISIBLE);
         btnReload.setVisibility(View.GONE);
         trendingAppsAdapter.resetAdapter();
-        ApiService.getInstance(activity).loadAppsForToday();
+
+        ApiService.getInstance(activity).reloadApps();
         btnAddApp.setVisibility(View.VISIBLE);
         rvTrendingApps.setVisibility(View.VISIBLE);
     }
@@ -193,21 +180,25 @@ public class TrendingAppsFragment extends BaseFragment {
     @Subscribe
     public void onUserLogin(LoginEvent event) {
         trendingAppsAdapter.resetAdapter();
-        ApiService.getInstance(activity).loadAppsForToday();
+        ApiService.getInstance(activity).loadApps(shouldChangeDate);
     }
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
         trendingAppsAdapter.resetAdapter();
-        ApiService.getInstance(activity).loadAppsForToday();
+        ApiService.getInstance(activity).loadApps(shouldChangeDate);
     }
 
     @Subscribe
     public void onAppsLoaded(LoadAppsApiEvent event) {
         LoadersUtils.hideBottomLoader(activity);
+        shouldChangeDate = !event.getAppsList().haveMoreApps();
+
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
         if(trendingAppsAdapter.getItemCount() < Constants.MIN_TOTAL_APPS_COUNT) {
-            ApiService.getInstance(activity).loadAppsForPreviousDate();
+            ApiService.getInstance(activity).loadApps(shouldChangeDate);
+        } else {
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -219,15 +210,15 @@ public class TrendingAppsFragment extends BaseFragment {
     @Subscribe
     public void onClearSearch(ClearSearchEvent event) {
         trendingAppsAdapter.clearSearch();
-        rvTrendingApps.addOnScrollListener(onScrollListener);
+        rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
     }
 
     @Subscribe
     public void onSearchStatusChanged(SearchStatusEvent event) {
         if(event.isSearching()) {
-            rvTrendingApps.removeOnScrollListener(onScrollListener);
+            rvTrendingApps.removeOnScrollListener(endlessRecyclerScrollListener);
         } else {
-            rvTrendingApps.addOnScrollListener(onScrollListener);
+            rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
         }
     }
 

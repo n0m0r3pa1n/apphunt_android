@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
@@ -27,12 +26,10 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
-import com.apphunt.app.ui.listview_items.MoreAppsItem;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.LoginUtils;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -53,19 +50,15 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final String TAG = TrendingAppsAdapter.class.getName();
 
     private Context ctx;
-    private MoreAppsItem moreAppsItem;
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Item> backup = new ArrayList<>();
 
     private Calendar today = Calendar.getInstance();
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d", Locale.ENGLISH);
 
-    private boolean isMoreItemsPressed = false;
-
     private int allAppsSize = 0;
     private int previousAppsSize = 0;
-    private int moreAppsItemPosition = 0;
-    private int selectedAppPosition = -1;
+    private String lastLoadedDate = "";
 
     private RecyclerView recyclerView;
 
@@ -75,15 +68,15 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void notifyAdapter(AppsList appsList) {
-        if(isMoreItemsPressed) {
+        if(appsList.getDate().equals(lastLoadedDate)) {
             displayMoreApps(appsList);
-            return;
+        } else {
+            displayAppsForDay(appsList);
         }
-
-        displayAppsForPreviousDay(appsList);
+        lastLoadedDate = appsList.getDate();
     }
 
-    private void displayAppsForPreviousDay(AppsList appsList) {
+    private void displayAppsForDay(AppsList appsList) {
         if(appsList == null) {
             return;
         }
@@ -103,54 +96,21 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             items.add(new AppItem(app));
         }
 
-        if (appsList.haveMoreApps())
-            items.add(new MoreAppsItem(1, 5, appsList.getDate()));
-
         notifyDataSetChanged();
         LoadersUtils.hideCenterLoader((Activity) ctx);
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
-
-        if (selectedAppPosition > -1) {
-            recyclerView.smoothScrollToPosition(selectedAppPosition);
-        } else {
-            scrollToFirstAppForNextDay();
-        }
-    }
-
-    private void scrollToFirstAppForNextDay() {
-        if(allAppsSize != 0) {
-            previousAppsSize = allAppsSize + 1;
-        }
-        allAppsSize = items.size();
-        recyclerView.smoothScrollToPosition(previousAppsSize);
     }
 
     private void displayMoreApps(AppsList appsList) {
-        if (!appsList.haveMoreApps()) {
-            items.remove(moreAppsItem);
-        } else {
-            moreAppsItem.setPage(moreAppsItem.getNextPage());
-        }
-
         ArrayList<AppItem> newItems = new ArrayList<>();
 
         for (App app : appsList.getApps()) {
             newItems.add(new AppItem(app));
         }
 
-        items.addAll(moreAppsItemPosition, newItems);
+        items.addAll(newItems);
 
         notifyDataSetChanged();
-        recyclerView.smoothScrollToPosition(moreAppsItemPosition + newItems.size());
-        isMoreItemsPressed = false;
-    }
-
-    private void loadMoreApps(int position) {
-        moreAppsItem = (MoreAppsItem) getItem(position);
-        moreAppsItemPosition = position;
-        isMoreItemsPressed = true;
-        ApiService.getInstance(ctx).loadMoreApps(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
-                moreAppsItem.getDate(), Constants.PLATFORM, moreAppsItem.getNextPage(), moreAppsItem.getItems());
     }
 
     public void showSearchResult(List<App> apps) {
@@ -198,9 +158,6 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == Constants.ItemType.SEPARATOR.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_list_header, parent, false);
             viewHolderItem = new ViewHolderSeparator(view);
-        } else if (viewType == Constants.ItemType.MORE_APPS.getValue()) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_more_apps, parent, false);
-            viewHolderItem = new ViewHolderMoreApps(view);
         }
 
         return viewHolderItem;
@@ -255,16 +212,6 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             ViewHolderSeparator viewHolderSeparator = (ViewHolderSeparator) holder;
             viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
-        } else if (getItemViewType(position) == Constants.ItemType.MORE_APPS.getValue()) {
-            ViewHolderMoreApps viewHolderMoreApps = (ViewHolderMoreApps) holder;
-            viewHolderMoreApps.moreApps.setOnClickListener(null);
-            viewHolderMoreApps.moreApps.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserRequestedMoreApps);
-                    loadMoreApps(position);
-                }
-            });
         }
     }
 
