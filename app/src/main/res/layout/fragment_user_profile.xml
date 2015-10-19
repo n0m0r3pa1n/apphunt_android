@@ -121,10 +121,11 @@
                             <com.apphunt.app.ui.views.widgets.AHTextView
                                 android:id="@+id/label_followings"
                                 app:typefacePath="fonts/OpenSans-Regular.ttf"
-                                android:textSize="@dimen/list_item_category"
+                                android:textSize="@dimen/profile_follower_text"
                                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                                 android:layout_width="70dp"
                                 android:gravity="center"
+                                android:singleLine="true"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/followings_count"
                                 android:text="Followings"
@@ -133,7 +134,8 @@
                             <com.apphunt.app.ui.views.widgets.AHTextView
                                 android:id="@+id/label_followers"
                                 app:typefacePath="fonts/OpenSans-Regular.ttf"
-                                android:textSize="@dimen/list_item_category"
+                                android:textSize="@dimen/profile_follower_text"
+                                android:singleLine="true"
                                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                                 android:layout_width="70dp"
                                 android:gravity="center"

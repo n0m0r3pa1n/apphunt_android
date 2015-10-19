@@ -59,8 +59,6 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-    private static boolean isFirstLaunch = true;
-
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
@@ -300,10 +298,6 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
     }
 
     public static void setDrawerIndicatorEnabled(boolean isEnabled) {
-        if (isFirstLaunch) {
-            isFirstLaunch = false;
-            return;
-        }
         ValueAnimator anim;
         if (isEnabled) {
             anim = ValueAnimator.ofFloat(0, 1);

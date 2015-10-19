@@ -117,12 +117,12 @@
                 <com.apphunt.app.ui.views.widgets.AHTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
+                    android:gravity="top"
                     android:text="Rating"
                     android:textSize="11sp"
-                    app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+                    app:typefacePath="fonts/OpenSans-Regular.ttf"
+                    android:layout_below="@+id/rating"
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
 
             <ImageView

@@ -100,7 +100,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
+        if (!BuildConfig.DEBUG){
+            Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
+        }
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;

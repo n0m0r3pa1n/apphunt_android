@@ -24,6 +24,8 @@ import com.apphunt.app.ui.fragments.notification.NotificationFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.Calendar;
 
@@ -162,6 +164,11 @@ public class NotificationsUtils {
         String notificationId = SharedPreferencesHelper.getStringPreference(Constants.KEY_NOTIFICATION_ID);
         if (userDoesNotHaveNotificationId(userId, notificationId)) {
             try {
+                int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+                if (status != ConnectionResult.SUCCESS) {
+                    showErrorDialog(status, activity);
+                    return;
+                }
                 FruityGcmClient.start(activity, Constants.GCM_SENDER_ID, new FruityGcmListener() {
 
                     @Override
@@ -185,6 +192,11 @@ public class NotificationsUtils {
                 e.printStackTrace();
             }
         }
+    }
+    static final int REQUEST_CODE_RECOVER_PLAY_SERVICES = 1001;
+    private static void showErrorDialog(int code, Activity activity) {
+        GooglePlayServicesUtil.getErrorDialog(code, activity,
+                REQUEST_CODE_RECOVER_PLAY_SERVICES).show();
     }
 
     protected static boolean userDoesNotHaveNotificationId(String userId, String notificationId) {

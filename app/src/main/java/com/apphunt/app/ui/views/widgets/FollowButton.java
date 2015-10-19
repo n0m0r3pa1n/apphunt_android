@@ -2,7 +2,6 @@ package com.apphunt.app.ui.views.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
@@ -77,6 +76,9 @@ public class FollowButton extends AHButton {
     private OnClickListener customOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            if(user == null) {
+                return;
+            }
             if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
                 LoginUtils.showLoginFragment(activity, false, R.string.login_info_vote);
                 return;
@@ -111,21 +113,6 @@ public class FollowButton extends AHButton {
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_check, null);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         this.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (user == null) {
-            return;
-        }
-
-        if (user.isFollowing()) {
-            unfollow();
-        } else {
-            follow();
-        }
     }
 
     @Subscribe

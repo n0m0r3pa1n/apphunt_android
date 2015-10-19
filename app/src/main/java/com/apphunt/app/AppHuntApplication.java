@@ -40,7 +40,6 @@ public class AppHuntApplication extends BranchApp {
         TwitterAuthConfig authConfig =
                 new TwitterAuthConfig(Constants.TWITTER_CONSUMER_KEY,
                         Constants.TWITTER_CONSUMER_SECRET);
-        // TODO: Add before deployment: new Crashlytics()
         CrashlyticsCore core = new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build();
         Fabric.with(this, new Twitter(authConfig), new Crashlytics.Builder().core(core).build());
 
