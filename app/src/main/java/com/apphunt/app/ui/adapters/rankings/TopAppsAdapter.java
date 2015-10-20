@@ -1,24 +1,21 @@
 package com.apphunt.app.ui.adapters.rankings;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.views.app.DownloadButton;
+import com.apphunt.app.utils.StringUtils;
+import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
@@ -56,35 +53,20 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         String name = StringUtils.htmlDecodeString(app.getName());
         holder.name.setMaxLines(2);
         holder.name.setText(name);
+        holder.description.setText(app.getDescription());
         holder.position.setText(appPosition + "");
-        holder.createdByName.setText("by " + app.getCreatedBy().getName());
+        holder.category.setText(app.getCategories().get(0));
         Picasso.with(context).load(app.getIcon().replace("w300", "w512")).into(holder.icon);
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.detailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FlurryAgent.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
-                AppDetailsFragment detailsFragment = new AppDetailsFragment();
-                String title = context.getString(R.string.title_top_apps);
-
-                try {
-                    title = ((ActionBarActivity) context).getSupportActionBar().getTitle().toString();
-                } catch (NullPointerException e) {
-                    Log.e(TAG, e.getLocalizedMessage());
-                }
-
-                detailsFragment.setPreviousTitle(title);
-
-                Bundle extras = new Bundle();
-                extras.putString(Constants.KEY_APP_ID, app.getId());
-                detailsFragment.setArguments(extras);
-
-                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                        .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                        .commit();
+                NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
             }
         });
+
+        holder.installBtn.setAppPackage(app.getPackageName());
     }
 
     @Override
@@ -102,8 +84,11 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         @InjectView(R.id.app_name)
         public TextView name;
 
-        @InjectView(R.id.created_by)
-        public TextView createdByName;
+        @InjectView(R.id.description)
+        public TextView description;
+
+        @InjectView(R.id.category)
+        public TextView category;
 
         @InjectView(R.id.position)
         public TextView position;
@@ -111,8 +96,11 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         @InjectView(R.id.icon)
         public ImageView icon;
 
-        @InjectView(R.id.card_view)
-        public RelativeLayout cardView;
+        @InjectView(R.id.install_btn)
+        public DownloadButton installBtn;
+
+        @InjectView(R.id.details_btn)
+        public Button detailsBtn;
 
         public ViewHolder(View view) {
             super(view);

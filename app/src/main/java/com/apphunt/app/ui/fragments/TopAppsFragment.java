@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,13 +15,13 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionApiEvent;
 import com.apphunt.app.ui.adapters.rankings.TopAppsAdapter;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.StringUtils;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -40,7 +40,7 @@ public class TopAppsFragment extends BaseFragment {
     private static final String TAG = TopAppsFragment.class.getSimpleName();
     private Activity activity;
     private View view;
-    private StaggeredGridLayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     private String title;
 
     @InjectView(R.id.collection_apps_list)
@@ -63,8 +63,7 @@ public class TopAppsFragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_top_apps, container, false);
         ButterKnife.inject(this, view);
 
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        layoutManager = new LinearLayoutManager(getActivity());
         collectionAppsList.setItemAnimator(new DefaultItemAnimator());
         collectionAppsList.setLayoutManager(layoutManager);
         collectionAppsList.setHasFixedSize(true);

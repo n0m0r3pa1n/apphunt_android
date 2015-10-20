@@ -22,7 +22,7 @@
     <dimen name="list_header_height">48dp</dimen>
     <dimen name="list_header_text">18sp</dimen>
 
-    <dimen name="list_item_height">130dp</dimen>
+    <dimen name="list_item_height">210dp</dimen>
     <dimen name="list_item_icon_margin_left">7dp</dimen>
     <dimen name="list_item_icon_margin_right">15dp</dimen>
     <dimen name="list_item_icon_size">75dp</dimen>
@@ -172,4 +172,6 @@
     <dimen name="profile_banner_height">150dp</dimen>
     <dimen name="profile_picture_margin">25dp</dimen>
     <dimen name="profile_follower_text">14sp</dimen>
+
+    <dimen name="top_apps_buttons_text">14sp</dimen>
 </resources>

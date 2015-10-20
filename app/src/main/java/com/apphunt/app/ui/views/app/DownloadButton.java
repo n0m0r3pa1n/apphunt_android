@@ -3,9 +3,12 @@ package com.apphunt.app.ui.views.app;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -31,21 +34,21 @@ public class DownloadButton extends LinearLayout {
     public DownloadButton(Context context) {
         super(context);
         if (!isInEditMode()) {
-            init(context);
+            init(context, null);
         }
     }
 
     public DownloadButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
-            init(context);
+            init(context, attrs);
         }
     }
 
     public DownloadButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (!isInEditMode()) {
-            init(context);
+            init(context, attrs);
         }
     }
 
@@ -53,13 +56,24 @@ public class DownloadButton extends LinearLayout {
     public DownloadButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         if (!isInEditMode()) {
-            init(context);
+            init(context, attrs);
         }
     }
 
-    private void init(final Context context) {
+    private void init(final Context context, AttributeSet attrs) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
+
+        TypedArray array = getContext().getTheme().obtainStyledAttributes(attrs,
+                R.styleable.DownloadButton, 0, 0);
+
+        ColorStateList backgroundColor = array.getColorStateList(R.styleable.DownloadButton_backgroundColor);
+        ColorStateList textColor = array.getColorStateList(R.styleable.DownloadButton_textColor);
+        int textSize = array.getDimensionPixelSize(R.styleable.DownloadButton_buttonTextSize, 1);
+
+        textView.setBackgroundColor(backgroundColor.getDefaultColor());
+        textView.setTextColor(textColor);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
 
         textView.setOnClickListener(new OnClickListener() {
             @Override

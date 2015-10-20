@@ -10,6 +10,11 @@
     <declare-styleable name="CollectionView">
         <attr name="buttonsEnabled" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="DownloadButton">
+        <attr name="backgroundColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="buttonTextSize" format="dimension" />
+    </declare-styleable>
     <declare-styleable name="CreatorView">
         <attr name="pictureWidth" format="float" />
         <attr name="pictureHeight" format="float" />

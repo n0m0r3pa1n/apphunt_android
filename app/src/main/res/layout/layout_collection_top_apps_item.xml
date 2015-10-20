@@ -1,69 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
-    android:layout_margin="@dimen/collection_app_margin"
-    android:layout_width="@dimen/collection_app_width"
-    android:layout_height="@dimen/collection_app_width">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
 
-    <FrameLayout
-        android:layout_width="match_parent"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@android:color/white">
+        android:layout_gravity="center_horizontal"
+        cardview:cardCornerRadius="4dp"
+        cardview:cardUseCompatPadding="true">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/collection_app_icon_padding"
-            android:paddingRight="@dimen/collection_app_icon_padding"
-            android:contentDescription="Application icon"
-            android:scaleType="fitCenter"/>
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            android:id="@+id/position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_vertical_trapeze"
+            android:layout_gravity="top|right"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            cardview:typefacePath="fonts/OpenSans-Regular.ttf"
+            android:textSize="@dimen/list_item_vote_text" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:background="#CC818181">
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
 
-            <com.apphunt.app.ui.views.widgets.AHTextView
-                android:id="@+id/position"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:textSize="24sp"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:background="@color/bg_primary"
-                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
-
-            <com.apphunt.app.ui.views.widgets.AHTextView
-                android:id="@+id/app_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@id/position"
-                android:paddingLeft="5dp"
-                android:paddingTop="3dp"
-                android:textSize="15sp"
-                android:textColor="@android:color/white"
-                android:singleLine="true"
-                app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+                android:orientation="vertical"
+                android:id="@+id/app_details_container">
 
-            <com.apphunt.app.ui.views.widgets.AHTextView
-                android:id="@+id/created_by"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="@dimen/list_item_icon_size"
+                        android:layout_height="@dimen/list_item_icon_size"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginRight="@dimen/list_item_icon_margin_right" />
+
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/app_name"
+                        android:layout_marginRight="20dp"
+                        android:layout_toRightOf="@id/icon"
+                        android:maxLines="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/list_item_name" />
+
+                    <com.apphunt.app.ui.views.widgets.AHTextView
+                        android:id="@+id/category"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/app_name"
+                        android:layout_toRightOf="@id/icon"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <com.apphunt.app.ui.views.widgets.AHTextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:maxLines="3"
+                    android:textSize="@dimen/list_item_desc" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_above="@+id/actions_container"
+                android:background="@color/list_item_divider"
+                android:elevation="0dp" />
+
+            <LinearLayout
+                android:id="@+id/actions_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/position"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="12sp"
-                android:textColor="@android:color/white"
-                android:singleLine="true"
-                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+                android:orientation="horizontal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <com.apphunt.app.ui.views.app.DownloadButton
+                    android:id="@+id/install_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/details_box_desc_ic_download_size"
+                    cardview:backgroundColor="@android:color/transparent"
+                    cardview:textColor="@color/save_app_text"
+                    android:layout_gravity="center"
+                    cardview:buttonTextSize="@dimen/top_apps_buttons_text"
+                    android:gravity="center"/>
+
+                <com.apphunt.app.ui.views.widgets.AHButton
+                    android:id="@+id/details_btn"
+                    android:padding="2dp"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="@dimen/top_apps_buttons_text"
+                    cardview:typefacePath="fonts/OpenSans-Regular.ttf"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:text="@string/details"
+                    android:textColor="@color/save_app_text" />
+            </LinearLayout>
         </RelativeLayout>
-    </FrameLayout>
-</RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

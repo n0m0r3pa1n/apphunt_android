@@ -75,7 +75,10 @@
             android:layout_height="@dimen/details_box_desc_ic_download_size"
             android:layout_alignParentRight="true"
             android:layout_below="@id/box_details"
+            app:buttonTextSize="@dimen/details_download_text_size"
             android:layout_marginRight="@dimen/details_box_name_creator_name_margin"
+            app:backgroundColor="@color/bg_primary"
+            app:textColor="@android:color/white"
             android:gravity="center"/>
 
         <View
