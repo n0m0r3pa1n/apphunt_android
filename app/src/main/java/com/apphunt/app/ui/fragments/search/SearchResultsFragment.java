@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
@@ -71,6 +72,18 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @InjectView(R.id.no_results)
     RelativeLayout noResultsLayout;
+
+    @InjectView(R.id.more_apps)
+    TextView moreApps;
+
+    @InjectView(R.id.more_collections)
+    TextView moreCollections;
+
+    @InjectView(R.id.apps_header)
+    TextView appsHeader;
+
+    @InjectView(R.id.collections_header)
+    TextView collectionsHeader;
 
     private CollectionsAdapter collectionsAdapter;
     private TrendingAppsAdapter trendingAppsAdapter;
@@ -168,7 +181,12 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @OnClick(R.id.more_apps)
     public void moreApps() {
-        ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
+        FlurryAgent.logEvent(TrackingEvents.UserClickedMoreApps);
+        displayMoreApps();
+    }
+
+    private void displayMoreApps() {
+                ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, SearchAppsFragment.newInstance(query), Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .commit();
@@ -176,6 +194,11 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @OnClick(R.id.more_collections)
     public void moreCollections() {
+        FlurryAgent.logEvent(TrackingEvents.UserClickedMoreCollections);
+        displayMoreCollections();
+    }
+
+    private void displayMoreCollections() {
         ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, SearchCollectionsFragment.newInstance(query), Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
@@ -198,6 +221,7 @@ public class SearchResultsFragment extends BackStackFragment {
             trendingAppsAdapter = new TrendingAppsAdapter(activity, apps);
             apps.setAdapter(trendingAppsAdapter);
             trendingAppsAdapter.showSearchResult(event.getApps().getApps());
+            appsHeader.setText(getResources().getQuantityString(R.plurals.apps, totalCount, totalCount));
         }
         setSearchResults(totalCount, collectionsCount);
     }
@@ -209,7 +233,7 @@ public class SearchResultsFragment extends BackStackFragment {
         }
 
         loader.setVisibility(View.GONE);
-        
+
         int totalCount = event.getCollections().getTotalCount();
         if(totalCount <= 0) {
             collectionsContainer.setVisibility(View.GONE);
@@ -217,6 +241,7 @@ public class SearchResultsFragment extends BackStackFragment {
             collectionsContainer.setVisibility(View.VISIBLE);
             collectionsAdapter = new CollectionsAdapter(activity ,event.getCollections().getCollections());
             collections.setAdapter(collectionsAdapter);
+            collectionsHeader.setText(getResources().getQuantityString(R.plurals.collections, totalCount, totalCount));
         }
         setSearchResults(appsCount, totalCount);
     }
@@ -226,8 +251,17 @@ public class SearchResultsFragment extends BackStackFragment {
         this.collectionsCount = collections;
         if(isResultFromQueriesEmpty()) {
             noResultsLayout.setVisibility(View.VISIBLE);
+            return;
         } else {
             noResultsLayout.setVisibility(View.GONE);
+        }
+
+        if(collectionsCount == 1) {
+            moreCollections.setVisibility(View.INVISIBLE);
+        }
+
+        if(appsCount <= 2) {
+            moreApps.setVisibility(View.INVISIBLE);
         }
     }
 

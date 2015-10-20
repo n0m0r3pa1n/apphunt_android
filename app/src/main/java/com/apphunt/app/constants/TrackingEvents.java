@@ -15,7 +15,8 @@ public interface TrackingEvents {
     String UserSharedAppHuntWithoutFacebook = "user.shared.app.hunt.without.facebook";
     String UserDisabledSound = "user.disabled.sound";
     String UserScrolledDownAppList = "user.scrolled.down.app.list";
-    String UserRequestedMoreApps = "user.requested.more.apps";
+    String UserClickedMoreApps = "user.clicked.more.apps";
+    String UserClickedMoreCollections = "user.clicked.more.collections";
     String UserStartedAppFromNotification = "user.started.app.from.notification";
     String AppShowedNotification = "app.showed.notification";
     String AppNullNotification = "app.null.notification";
