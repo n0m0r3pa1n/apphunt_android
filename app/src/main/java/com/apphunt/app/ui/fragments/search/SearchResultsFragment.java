@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -84,6 +85,12 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @InjectView(R.id.collections_header)
     TextView collectionsHeader;
+
+    @InjectView(R.id.vs_no_collections)
+    ViewStub noCollectionsView;
+
+    @InjectView(R.id.vs_no_apps)
+    ViewStub noAppsView;
 
     private CollectionsAdapter collectionsAdapter;
     private TrendingAppsAdapter trendingAppsAdapter;
@@ -215,14 +222,14 @@ public class SearchResultsFragment extends BackStackFragment {
 
         int totalCount = event.getApps().getTotalCount();
         if(totalCount <= 0) {
-            appsContainer.setVisibility(View.GONE);
+            noAppsView.setVisibility(View.VISIBLE);
         } else {
-            appsContainer.setVisibility(View.VISIBLE);
+            noAppsView.setVisibility(View.GONE);
             trendingAppsAdapter = new TrendingAppsAdapter(activity, apps);
             apps.setAdapter(trendingAppsAdapter);
             trendingAppsAdapter.showSearchResult(event.getApps().getApps());
-            appsHeader.setText(getResources().getQuantityString(R.plurals.apps, totalCount, totalCount));
         }
+        appsHeader.setText(getResources().getQuantityString(R.plurals.apps, totalCount, totalCount));
         setSearchResults(totalCount, collectionsCount);
     }
 
@@ -236,13 +243,14 @@ public class SearchResultsFragment extends BackStackFragment {
 
         int totalCount = event.getCollections().getTotalCount();
         if(totalCount <= 0) {
-            collectionsContainer.setVisibility(View.GONE);
+            noCollectionsView.setVisibility(View.VISIBLE);
         } else {
-            collectionsContainer.setVisibility(View.VISIBLE);
+            noCollectionsView.setVisibility(View.GONE);
             collectionsAdapter = new CollectionsAdapter(activity ,event.getCollections().getCollections());
             collections.setAdapter(collectionsAdapter);
-            collectionsHeader.setText(getResources().getQuantityString(R.plurals.collections, totalCount, totalCount));
         }
+
+        collectionsHeader.setText(getResources().getQuantityString(R.plurals.collections, totalCount, totalCount));
         setSearchResults(appsCount, totalCount);
     }
 
@@ -251,21 +259,33 @@ public class SearchResultsFragment extends BackStackFragment {
         this.collectionsCount = collections;
         if(isResultFromQueriesEmpty()) {
             noResultsLayout.setVisibility(View.VISIBLE);
+            collectionsContainer.setVisibility(View.INVISIBLE);
+            appsContainer.setVisibility(View.INVISIBLE);
             return;
         } else {
+            collectionsContainer.setVisibility(View.VISIBLE);
+            appsContainer.setVisibility(View.VISIBLE);
             noResultsLayout.setVisibility(View.GONE);
         }
 
-        if(collectionsCount == 1) {
+        setupMoreButtons();
+    }
+
+    private void setupMoreButtons() {
+        if(collectionsCount <= 1) {
             moreCollections.setVisibility(View.INVISIBLE);
+        } else {
+            moreCollections.setVisibility(View.VISIBLE);
         }
 
         if(appsCount <= 2) {
             moreApps.setVisibility(View.INVISIBLE);
+        } else {
+            moreApps.setVisibility(View.VISIBLE);
         }
     }
 
     private boolean isResultFromQueriesEmpty() {
-        return appsCount != -1 && collectionsCount != -1 && appsCount == 0 && collectionsCount == 0;
+        return appsCount == 0 && collectionsCount == 0;
     }
 }

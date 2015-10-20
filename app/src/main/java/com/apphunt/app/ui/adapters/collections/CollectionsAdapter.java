@@ -104,6 +104,7 @@ public class CollectionsAdapter extends BaseAdapter {
         viewHolder.createdBy.setText(appsCollection.getCreatedBy().getName());
         viewHolder.voteButton.setCollection(appsCollection);
         viewHolder.favouriteButton.setCollection(appsCollection);
+        viewHolder.favouriteButton.setActivity((AppCompatActivity) context);
         if(appsCollection.isOwnedByCurrentUser((Activity) parent.getContext())) {
             viewHolder.favouriteButton.setVisibility(View.GONE);
         }

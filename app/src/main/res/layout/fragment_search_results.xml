@@ -47,8 +47,7 @@
         android:id="@+id/collections_container"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/collections_header"
@@ -64,6 +63,7 @@
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/more_collections"
             android:elevation="2dp"
+            android:visibility="invisible"
             android:textAllCaps="true"
             android:layout_width="60dp"
             android:layout_height="30dp"
@@ -77,6 +77,16 @@
             android:gravity="center"
             app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
+        <ViewStub
+            android:id="@+id/vs_no_collections"
+            android:inflatedId="@+id/vs_no_collections"
+            android:layout_below="@+id/collections_header"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout="@layout/layout_no_collection"
+            android:visibility="gone"/>
+
         <ListView
             android:id="@+id/collections"
             android:layout_width="match_parent"
@@ -89,8 +99,7 @@
         android:elevation="2dp"
         android:layout_below="@+id/collections_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/apps_header"
@@ -105,6 +114,7 @@
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/more_apps"
+            android:visibility="invisible"
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
@@ -118,6 +128,16 @@
             android:textColor="@android:color/white"
             android:gravity="center"
             app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <ViewStub
+            android:id="@+id/vs_no_apps"
+            android:inflatedId="@+id/vs_no_apps"
+            android:layout_below="@+id/apps_header"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout="@layout/layout_no_apps"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
