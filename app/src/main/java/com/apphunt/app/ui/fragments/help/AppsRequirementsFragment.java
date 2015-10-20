@@ -24,6 +24,12 @@ public class AppsRequirementsFragment extends BaseFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public int getTitle() {
         return R.string.apps_requirements;
     }

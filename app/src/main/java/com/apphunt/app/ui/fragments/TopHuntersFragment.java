@@ -49,6 +49,7 @@ public class TopHuntersFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(1));
     }
 

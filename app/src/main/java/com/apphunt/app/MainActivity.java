@@ -316,7 +316,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-        if (backstackEntryCount == 0 && getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null) {
+        boolean isTrendingAppsScreenVisible = getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null;
+        if (backstackEntryCount == 0 &&
+                isTrendingAppsScreenVisible) {
             menu.findItem(R.id.action_search).setVisible(true);
             menu.findItem(R.id.action_random).setVisible(true);
             menuItemHistory = menu.findItem(R.id.action_history);

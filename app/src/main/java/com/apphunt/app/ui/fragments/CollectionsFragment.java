@@ -43,6 +43,12 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
     private  String creatorId;
     private Activity activity;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -22,6 +22,12 @@ public class TopHuntersFragment extends BaseFragment {
         FlurryAgent.logEvent(TrackingEvents.UserViewedHelpTopHuntersPoints);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
