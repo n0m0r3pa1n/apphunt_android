@@ -30,6 +30,7 @@ import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultE
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.layout.CustomLayoutManager;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -56,8 +57,11 @@ public class SearchResultsFragment extends BackStackFragment {
     private AppCompatActivity activity;
     private String query;
 
-    @InjectView(R.id.loading)
-    CircularProgressBar loader;
+    @InjectView(R.id.apps_loader)
+    CircularProgressBar appsLoader;
+
+    @InjectView(R.id.collections_loader)
+    CircularProgressBar collectionsLoader;
 
     @InjectView(R.id.apps)
     RecyclerView apps;
@@ -123,10 +127,11 @@ public class SearchResultsFragment extends BackStackFragment {
         ButterKnife.inject(this, view);
 
         apps.setItemAnimator(new DefaultItemAnimator());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+        CustomLayoutManager layoutManager = new CustomLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         apps.setLayoutManager(layoutManager);
         apps.setHasFixedSize(true);
 
+        showLoaders();
         ApiClient.getClient(activity).getAppsByTags(query, 1, APPS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
         ApiClient.getClient(activity).getCollectionsByTags(query, 1, COLLECTIONS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
 
@@ -136,8 +141,6 @@ public class SearchResultsFragment extends BackStackFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loader.progressiveStop();
-        loader.setVisibility(View.GONE);
     }
 
     @Override
@@ -162,6 +165,7 @@ public class SearchResultsFragment extends BackStackFragment {
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
 
                 query = s;
+                showLoaders();
                 ApiClient.getClient(activity).getAppsByTags(query, 1, APPS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
                 ApiClient.getClient(activity).getCollectionsByTags(query, 1, COLLECTIONS_COUNT, LoginProviderFactory.get(activity).getUser().getId());
 
@@ -174,6 +178,11 @@ public class SearchResultsFragment extends BackStackFragment {
                 return false;
             }
         });
+    }
+
+    private void showLoaders() {
+        collectionsLoader.setVisibility(View.VISIBLE);
+        appsLoader.setVisibility(View.VISIBLE);
     }
 
     private boolean isSearchShowing() {
@@ -218,7 +227,7 @@ public class SearchResultsFragment extends BackStackFragment {
             return;
         }
 
-        loader.setVisibility(View.GONE);
+        appsLoader.setVisibility(View.GONE);
 
         int totalCount = event.getApps().getTotalCount();
         if(totalCount <= 0) {
@@ -239,7 +248,7 @@ public class SearchResultsFragment extends BackStackFragment {
             return;
         }
 
-        loader.setVisibility(View.GONE);
+        collectionsLoader.setVisibility(View.GONE);
 
         int totalCount = event.getCollections().getTotalCount();
         if(totalCount <= 0) {
@@ -288,4 +297,5 @@ public class SearchResultsFragment extends BackStackFragment {
     private boolean isResultFromQueriesEmpty() {
         return appsCount == 0 && collectionsCount == 0;
     }
+
 }

@@ -5,19 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_secondary"
-    android:orientation="vertical"
     android:clickable="true">
-
-    <fr.castorflex.android.circularprogressbar.CircularProgressBar
-        android:id="@+id/loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        style="@style/CircularThemeProgressBar"/>
 
     <RelativeLayout
         android:id="@+id/no_results"
+        android:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -45,9 +37,11 @@
 
     <RelativeLayout
         android:id="@+id/collections_container"
-        android:layout_alignParentTop="true"
+        android:elevation="2dp"
+        android:layout_below="@+id/apps_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/collections_header"
@@ -59,6 +53,15 @@
             android:gravity="center_vertical"
             android:text="Collections"
             app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <fr.castorflex.android.circularprogressbar.CircularProgressBar
+            android:id="@+id/collections_loader"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/collections_header"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true"
+            style="@style/CircularThemeProgressBar"/>
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/more_collections"
@@ -97,7 +100,7 @@
     <RelativeLayout
         android:id="@+id/apps_container"
         android:elevation="2dp"
-        android:layout_below="@+id/collections_container"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -111,6 +114,15 @@
             android:gravity="center_vertical"
             android:text="Apps"
             app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+        <fr.castorflex.android.circularprogressbar.CircularProgressBar
+            android:id="@+id/apps_loader"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/apps_header"
+            android:indeterminate="true"
+            style="@style/CircularThemeProgressBar"/>
 
         <com.apphunt.app.ui.views.widgets.AHTextView
             android:id="@+id/more_apps"
@@ -147,5 +159,6 @@
             android:layoutAnimation="@anim/list_view_entry"
             android:id="@+id/apps"
             android:layout_below="@+id/apps_header"/>
+
     </RelativeLayout>
 </RelativeLayout>
