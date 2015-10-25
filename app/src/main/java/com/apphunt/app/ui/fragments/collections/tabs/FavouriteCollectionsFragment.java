@@ -147,15 +147,12 @@ public class FavouriteCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onFavouriteCollectionReceived(GetFavouriteCollectionsApiEvent event) {
-        allCollections.hideBottomLoader();
-
         if (adapter == null) {
             adapter = new CollectionsAdapter(getActivity(), event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();
             adapter.addAllCollections(event.getAppsCollection().getCollections());
-            allCollections.smoothScrollToPosition(currentSize);
         }
 
         if (event.getAppsCollection().getCollections().size() == 0) {

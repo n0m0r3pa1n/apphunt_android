@@ -141,7 +141,6 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
                }
            }
 
-           LoadersUtils.hideCenterLoader(activity);
            if(userAppsAdapter == null) {
                userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
                Handler delayHandler = new Handler();

@@ -10,21 +10,13 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
-import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.SoundsUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pl.droidsonroids.gif.GifImageView;
-
-import static com.apphunt.app.ui.listeners.EndlessScrollListener.*;
 
 /**
  * Created by nmp on 15-6-30.
@@ -80,7 +72,6 @@ public class ScrollListView extends LinearLayout {
                     return;
                 }
 
-                showBottomLoader();
                 listener.onEndReached();
             }
         }));
@@ -110,26 +101,6 @@ public class ScrollListView extends LinearLayout {
 
     public void setOnEndReachedListener(OnEndReachedListener listener) {
         this.listener = listener;
-    }
-
-    public void showBottomLoader() {
-        RelativeLayout bottomLoaderLayout = (RelativeLayout) view.findViewById(R.id.more_loader_layout);
-        GifImageView bottomLoader = (GifImageView) view.findViewById(R.id.more_loader);
-        boolean soundEnabled = SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED);
-        if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
-            if (soundEnabled)
-                SoundsUtils.playSound(getContext(), R.raw.notification_1);
-
-            bottomLoader.setBackgroundResource(R.drawable.loader_white);
-            bottomLoaderLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void hideBottomLoader() {
-        RelativeLayout bottomLoaderLayout = (RelativeLayout) view.findViewById(R.id.more_loader_layout);
-        if (bottomLoaderLayout != null && bottomLoaderLayout.getVisibility() == View.VISIBLE) {
-            bottomLoaderLayout.setVisibility(View.GONE);
-        }
     }
 
     protected LayoutInflater getLayoutInflater() {

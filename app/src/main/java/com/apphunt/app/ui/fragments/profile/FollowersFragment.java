@@ -76,7 +76,6 @@ public class FollowersFragment extends BackStackFragment {
     }
 
     private void initUI() {
-        scrollRecyclerView.showBottomLoader();
         scrollRecyclerView.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
@@ -103,7 +102,6 @@ public class FollowersFragment extends BackStackFragment {
 
     @Subscribe
     public void onFollowersReceived(GetFollowersApiEvent event) {
-        scrollRecyclerView.hideBottomLoader();
         if(event == null || event.getFollowers() == null || event.getFollowers().getFollowers() == null || event.getFollowers().getFollowers().size() == 0) {
             vsNoFollowers.setVisibility(View.VISIBLE);
             return;

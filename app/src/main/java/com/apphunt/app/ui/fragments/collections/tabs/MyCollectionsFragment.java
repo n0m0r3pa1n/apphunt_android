@@ -138,7 +138,6 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
 
     @Subscribe
     public void onMyCollectionsReceive(GetMyCollectionsApiEvent event) {
-        collectionsList.hideBottomLoader();
         collections = event.getAppsCollection().getCollections();
 
         if(selectCollectionAdapter == null) {

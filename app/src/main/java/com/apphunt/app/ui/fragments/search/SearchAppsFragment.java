@@ -82,7 +82,6 @@ public class SearchAppsFragment extends BackStackFragment {
     @Subscribe
     public void onAppsSearchResultsEvent(AppsSearchResultEvent event) {
         loader.setVisibility(View.GONE);
-        items.hideBottomLoader();
 
         if(adapter == null) {
             adapter = new SearchAppsAdapter(getActivity(), event.getApps().getApps());

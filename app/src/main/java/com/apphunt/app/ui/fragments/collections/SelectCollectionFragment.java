@@ -133,8 +133,6 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Subscribe
     public void onMyCollectionsReceive(GetMyAvailableCollectionsApiEvent event) {
-        myCollections.hideBottomLoader();
-
         if(selectCollectionAdapter == null) {
             selectCollectionAdapter = new SelectCollectionAdapter(getActivity(), event.getAppsCollection().getCollections());
             selectCollectionAdapter.setOnItemClickListener(this);

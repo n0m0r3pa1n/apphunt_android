@@ -88,7 +88,6 @@ public class AppsFragment extends BaseFragment {
     @Subscribe
     public void onUserApps(GetUserAppsApiEvent event) {
         loader.setVisibility(View.GONE);
-        items.hideBottomLoader();
         if(event.getApps() == null || event.getApps().getTotalCount() == 0) {
             vsNoApps.setVisibility(View.VISIBLE);
             return;

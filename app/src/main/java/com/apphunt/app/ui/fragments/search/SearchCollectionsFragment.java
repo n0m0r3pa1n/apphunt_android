@@ -87,7 +87,6 @@ public class SearchCollectionsFragment extends BackStackFragment implements OnIt
     @Subscribe
     public void onCollectionsSearchResultsEvent(CollectionsSearchResultEvent event) {
         loader.setVisibility(View.GONE);
-        items.hideBottomLoader();
         if(adapter == null) {
             adapter = new SelectCollectionAdapter(getActivity(), event.getCollections().getCollections());
             adapter.setOnItemClickListener(this);

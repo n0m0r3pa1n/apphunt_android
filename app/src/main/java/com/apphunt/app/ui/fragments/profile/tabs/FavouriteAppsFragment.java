@@ -96,7 +96,6 @@ public class FavouriteAppsFragment extends BaseFragment {
     @Subscribe
     public void onUserApps(GetFavouriteAppsApiEvent event) {
         loader.setVisibility(View.GONE);
-        items.hideBottomLoader();
         AppsList appsList = event.getAppsList();
         if(appsList == null || appsList.getTotalCount() == 0) {
             vsNoApps.setVisibility(View.VISIBLE);

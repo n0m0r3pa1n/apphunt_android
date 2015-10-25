@@ -131,14 +131,12 @@ public class AllCollectionsFragment extends BaseFragment {
 
     @Subscribe
     public void onCollectionsReceived(GetAllCollectionsApiEvent event) {
-        allCollections.hideBottomLoader();
         if(adapter == null) {
             adapter = new CollectionsAdapter(getActivity(), event.getAppsCollection().getCollections());
             allCollections.setAdapter(adapter, event.getAppsCollection().getTotalCount());
         } else {
             int currentSize = adapter.getCount();
             adapter.addAllCollections(event.getAppsCollection().getCollections());
-            allCollections.smoothScrollToPosition(currentSize);
         }
     }
 

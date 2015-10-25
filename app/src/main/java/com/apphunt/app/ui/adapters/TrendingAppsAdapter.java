@@ -31,7 +31,6 @@ import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
@@ -97,7 +96,6 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         notifyDataSetChanged();
-        LoadersUtils.hideCenterLoader((Activity) ctx);
         ((MainActivity) ctx).findViewById(R.id.reload).setVisibility(View.GONE);
     }
 

@@ -29,7 +29,6 @@
             android:id="@+id/trending_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/more_loader_layout"
             android:paddingTop="7dp"
             android:divider="@android:color/transparent"
             android:dividerHeight="@dimen/list_divider_height"
@@ -53,19 +52,4 @@
         app:pressedTranslationZ="12dp"
         app:elevation="4dp"/>
 
-    <RelativeLayout
-        android:id="@+id/more_loader_layout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bg_primary"
-        android:visibility="gone">
-
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/more_loader"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:background="@android:color/transparent"/>
-    </RelativeLayout>
 </RelativeLayout>

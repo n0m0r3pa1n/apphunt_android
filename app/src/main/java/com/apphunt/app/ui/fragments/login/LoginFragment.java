@@ -215,7 +215,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                                 user.setEmail(result.data);
                                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                                 ApiClient.getClient(getActivity()).createUser(user);
-                                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
 
                                 FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
                             }
@@ -313,7 +312,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
     public void onTwitterLoginBtnClick() {
         if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
             isTwitterLogin = true;
-            LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
             NavUtils.getInstance(activity).setOnBackBlocked(true);
         }
     }
@@ -325,7 +323,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
     @OnClick(R.id.fb_login_button)
     public void onFacebookLoginBtnClick() {
-        LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
         NavUtils.getInstance(activity).setOnBackBlocked(true);
         isFacebookLogin = true;
     }
@@ -389,7 +386,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                 user.setEmail(email);
                 LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
                 ApiClient.getClient(getActivity()).createUser(user);
-                LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
 
                 FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
             } else {
@@ -445,7 +441,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
             LoginProviderFactory.setLoginProvider(activity, new GooglePlusLoginProvider(activity));
             ApiClient.getClient(getActivity()).createUser(user);
-            LoadersUtils.showBottomLoader(activity, R.drawable.loader_white, false);
 
             FlurryAgent.logEvent(TrackingEvents.UserGooglePlusLogin);
         }

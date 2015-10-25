@@ -10,18 +10,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
-import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.apphunt.app.utils.SoundsUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by nmp on 15-7-13.
@@ -82,26 +77,6 @@ public class ScrollRecyclerView extends LinearLayout {
 
     public void setOnEndReachedListener(final OnEndReachedListener listener) {
         this.listener = listener;
-    }
-
-    public void showBottomLoader() {
-        RelativeLayout bottomLoaderLayout = (RelativeLayout) view.findViewById(R.id.more_loader_layout);
-        GifImageView bottomLoader = (GifImageView) view.findViewById(R.id.more_loader);
-        boolean soundEnabled = SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED);
-        if (bottomLoaderLayout.getVisibility() != View.VISIBLE) {
-            if (soundEnabled)
-                SoundsUtils.playSound(getContext(), R.raw.notification_1);
-
-            bottomLoader.setBackgroundResource(R.drawable.loader_white);
-            bottomLoaderLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void hideBottomLoader() {
-        RelativeLayout bottomLoaderLayout = (RelativeLayout) view.findViewById(R.id.more_loader_layout);
-        if (bottomLoaderLayout != null && bottomLoaderLayout.getVisibility() == View.VISIBLE) {
-            bottomLoaderLayout.setVisibility(View.GONE);
-        }
     }
 
     public void setAdapter(RecyclerView.Adapter adapter, int totalItemsCount) {

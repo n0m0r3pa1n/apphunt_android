@@ -218,7 +218,6 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
 
     @Subscribe
     public void onAppCommentsLoaded(LoadAppCommentsApiEvent event) {
-        commentsList.hideBottomLoader();
         Comments comments = event.getComments();
         if(comments == null || comments.getComments() == null) {
             return;

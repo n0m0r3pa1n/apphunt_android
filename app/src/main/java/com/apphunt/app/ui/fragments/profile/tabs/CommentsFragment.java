@@ -91,7 +91,6 @@ public class CommentsFragment extends BaseFragment {
     @Subscribe
     public void onUserComments(GetUserCommentsApiEvent event) {
         loader.setVisibility(View.GONE);
-        items.hideBottomLoader();
 
         ProfileComments comments = event.getComments();
         if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
