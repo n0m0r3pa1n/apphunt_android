@@ -27,7 +27,6 @@ import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;

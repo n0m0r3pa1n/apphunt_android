@@ -25,7 +25,6 @@ import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
