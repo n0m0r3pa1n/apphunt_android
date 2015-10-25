@@ -26,6 +26,8 @@ public class HistoryConnectionManager {
     private List<OnRefreshListener> listeners = new ArrayList<>();
 
     private Socket socket;
+    private boolean isConnecting = false;
+
     {
         try {
             socket = IO.socket(Constants.BASE_SOCKET_URL);
@@ -77,8 +79,10 @@ public class HistoryConnectionManager {
         socket.emit("add user", userId);
     }
 
+
     private void connectIfNotConnected() {
-        if(!socket.connected()) {
+        if(!socket.connected() && !isConnecting) {
+            isConnecting = true;
             socket.on("refresh", onRefresh);
             socket.on("unseen events", onUnseenEvents);
             socket.connect();
@@ -91,12 +95,14 @@ public class HistoryConnectionManager {
     }
 
     public void addRefreshListener(OnRefreshListener listener) {
+        connectIfNotConnected();
         listeners.add(listener);
     }
 
     public void removeRefreshListener(OnRefreshListener listener) {
         listeners.remove(listener);
         if(listeners.size() == 0 && socket.connected()) {
+            isConnecting = false;
             socket.disconnect();
             socket.off("refresh", onRefresh);
             socket.off("unseen events", onUnseenEvents);
