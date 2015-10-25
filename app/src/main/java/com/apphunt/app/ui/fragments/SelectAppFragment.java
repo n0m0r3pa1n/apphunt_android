@@ -14,6 +14,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
@@ -50,6 +52,12 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
 
     @InjectView(R.id.gv_apps_list)
     GridView gridView;
+
+    @InjectView(R.id.info)
+    TextView info;
+
+    @InjectView(R.id.no_apps)
+    ImageView noAppsView;
 
     private View view;
     private InstalledAppsAdapter userAppsAdapter;
@@ -141,6 +149,14 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
            }
 
            if(userAppsAdapter == null) {
+               if(event.getPackages().getAvailablePackages() == null ||
+                       event.getPackages().getAvailablePackages().size() == 0) {
+                   loader.progressiveStop();
+                   info.setText("There are no apps you can share with AppHunt at the moment!");
+                   noAppsView.setVisibility(View.VISIBLE);
+                   return;
+               }
+
                userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
                Handler delayHandler = new Handler();
                delayHandler.postDelayed(new Runnable() {

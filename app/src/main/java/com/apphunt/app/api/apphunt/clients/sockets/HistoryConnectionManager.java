@@ -5,6 +5,7 @@ import android.util.Log;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
+import com.crashlytics.android.Crashlytics;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -33,6 +34,7 @@ public class HistoryConnectionManager {
             socket = IO.socket(Constants.BASE_SOCKET_URL);
         } catch (URISyntaxException e) {
             Log.d(TAG, "instance initializer " + e);
+            Crashlytics.logException(e);
             e.printStackTrace();
         }
     }
@@ -45,6 +47,7 @@ public class HistoryConnectionManager {
                 HistoryEvent event = GsonInstance.fromJson(data.getString("event"), HistoryEvent.class);
                 notifyListenersForRefresh(event);
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
         }
@@ -59,6 +62,7 @@ public class HistoryConnectionManager {
                 List<String> eventIds = GsonInstance.fromJson(data.getString("events"), listOfString);
                 notifyListenersForUnseenEvents(eventIds);
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
         }
@@ -81,7 +85,7 @@ public class HistoryConnectionManager {
 
 
     private void connectIfNotConnected() {
-        if(!socket.connected() && !isConnecting) {
+        if(socket != null && !socket.connected() && !isConnecting) {
             isConnecting = true;
             socket.on("refresh", onRefresh);
             socket.on("unseen events", onUnseenEvents);
