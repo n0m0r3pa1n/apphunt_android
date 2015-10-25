@@ -65,7 +65,6 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.appsee.Appsee;
@@ -661,7 +660,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         NotificationsUtils.updateNotificationIdIfNeeded(this);
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(this);
     }
 
     @Subscribe

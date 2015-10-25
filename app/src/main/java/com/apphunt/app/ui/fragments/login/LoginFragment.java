@@ -403,7 +403,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
     @Subscribe
     public void onUserCreated(UserCreatedApiEvent event) {
-        LoadersUtils.hideBottomLoader(activity);
         LoginProviderFactory.get(activity).login(event.getUser());
     }
 
@@ -413,7 +412,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
         }
         Toast.makeText(activity, R.string.login_canceled_text, Toast.LENGTH_LONG).show();
         NavUtils.getInstance(activity).setOnBackBlocked(false);
-        LoadersUtils.hideBottomLoader(activity);
     }
 
 

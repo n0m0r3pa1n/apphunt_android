@@ -32,7 +32,6 @@ import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apphunt.app.utils.ui.LoadersUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -188,7 +187,6 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppsLoaded(LoadAppsApiEvent event) {
-        LoadersUtils.hideBottomLoader(activity);
         shouldChangeDate = !event.getAppsList().haveMoreApps();
 
         trendingAppsAdapter.notifyAdapter(event.getAppsList());

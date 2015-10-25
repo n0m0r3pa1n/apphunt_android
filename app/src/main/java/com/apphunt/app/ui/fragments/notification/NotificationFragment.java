@@ -136,7 +136,6 @@ public class NotificationFragment extends BaseFragment {
         }
 
         activity.getSupportFragmentManager().popBackStack();
-        LoadersUtils.hideCenterLoader(activity);
     }
 
     @OnClick(R.id.open_settings)
@@ -165,8 +164,6 @@ public class NotificationFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        LoadersUtils.hideCenterLoader(activity);
-
         if (showShadow) {
             ActionBarUtils.getInstance().showActionBarShadow();
         } else {
