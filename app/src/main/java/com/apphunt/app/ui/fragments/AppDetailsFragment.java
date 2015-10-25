@@ -439,7 +439,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         }
 
         if(!LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(activity, false, R.string.login_info_add_to_collection);
+            LoginUtils.showLoginFragment(false, R.string.login_info_add_to_collection);
             return;
         }
 

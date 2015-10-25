@@ -80,7 +80,7 @@ public class FollowButton extends AHButton {
                 return;
             }
             if (!LoginProviderFactory.get(activity).isUserLoggedIn()) {
-                LoginUtils.showLoginFragment(activity, false, R.string.login_info_vote);
+                LoginUtils.showLoginFragment(false, R.string.login_info_vote);
                 return;
             }
 

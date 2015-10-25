@@ -147,7 +147,7 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     @OnClick(R.id.send_comment)
     public void sendComment() {
         if (!userHasPermissions()) {
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_comment);
+            LoginUtils.showLoginFragment(false, R.string.login_info_comment);
             return;
         }
 

@@ -180,7 +180,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
         if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
             NavUtils.getInstance((AppCompatActivity) activity).presentCreateCollectionFragment();
         } else {
-            LoginUtils.showLoginFragment(activity, false, R.string.login_info_create_collection);
+            LoginUtils.showLoginFragment(false, R.string.login_info_create_collection);
         }
 
         SoundsUtils.performHapticFeedback(view);

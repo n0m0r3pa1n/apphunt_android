@@ -129,7 +129,7 @@ public class AppVoteButton extends LinearLayout {
     @OnClick(R.id.vote)
     public void vote(View view) {
         if(!LoginProviderFactory.get((Activity)getContext()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(getContext(), false, R.string.login_info_vote);
+            LoginUtils.showLoginFragment(false, R.string.login_info_vote);
             return;
         }
 

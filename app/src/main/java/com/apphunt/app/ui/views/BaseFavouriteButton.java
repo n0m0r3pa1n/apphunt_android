@@ -78,7 +78,7 @@ public abstract class BaseFavouriteButton extends LinearLayout {
     @OnClick(R.id.favourite_button)
     public void onFavouriteButtonClicked() {
         if(TextUtils.isEmpty(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID))) {
-            LoginUtils.showLoginFragment(activity, false, R.string.login_info_fav_collection);
+            LoginUtils.showLoginFragment(false, R.string.login_info_fav_collection);
             favouriteButton.setChecked(false);
             return;
         }

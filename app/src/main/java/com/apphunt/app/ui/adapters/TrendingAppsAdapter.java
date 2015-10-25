@@ -189,7 +189,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
                         NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
                     } else {
-                        LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
+                        LoginUtils.showLoginFragment(false, R.string.login_info_add_to_collection);
                     }
                 }
             });

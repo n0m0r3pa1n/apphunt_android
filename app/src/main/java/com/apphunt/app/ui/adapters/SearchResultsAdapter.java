@@ -125,7 +125,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
                         NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
                     } else {
-                        LoginUtils.showLoginFragment(ctx, false, R.string.login_info_add_to_collection);
+                        LoginUtils.showLoginFragment(false, R.string.login_info_add_to_collection);
                     }
                 }
             });

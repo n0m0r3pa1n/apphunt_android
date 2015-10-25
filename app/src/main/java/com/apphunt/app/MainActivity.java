@@ -34,6 +34,7 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
+import com.apphunt.app.event_bus.events.ui.DisplayLoginFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
@@ -53,6 +54,7 @@ import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
+import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.fragments.navigation.RightDrawerFragment;
@@ -492,7 +494,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.SHOW_INVITE && resultCode == Constants.SHOW_LOGIN) {
-            LoginUtils.showLoginFragment(this, false);
+            LoginUtils.showLoginFragment(false);
             return;
         }
 
@@ -686,5 +688,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
         }
+    }
+
+    @Subscribe
+    public void displayLoginFragment(DisplayLoginFragmentEvent event) {
+        LoginFragment loginFragment = new LoginFragment();
+        loginFragment.setCanBeSkipped(event.canBeSkipped());
+        String message = event.getMessage();
+        if(TextUtils.isEmpty(message) && event.getMessageResId() != 0) {
+            message = getString(event.getMessageResId());
+        }
+        loginFragment.setMessage(TextUtils.isEmpty(message) ? getString(R.string.login_info_text) : message);
+
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
+                .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
+                .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
+                .commit();
     }
 }

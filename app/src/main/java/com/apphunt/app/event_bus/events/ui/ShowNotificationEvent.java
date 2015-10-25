@@ -6,9 +6,14 @@ package com.apphunt.app.event_bus.events.ui;
  */
 public class ShowNotificationEvent {
     private String message;
-
+    private boolean showRating = true;
     public ShowNotificationEvent(String message) {
         this.message = message;
+    }
+
+    public ShowNotificationEvent(String message, boolean showRating) {
+        this.message = message;
+        this.showRating = showRating;
     }
 
     public String getMessage() {
@@ -17,5 +22,9 @@ public class ShowNotificationEvent {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean shouldShowRating() {
+        return showRating;
     }
 }

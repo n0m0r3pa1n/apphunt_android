@@ -157,10 +157,10 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         int currPercent = random.nextInt(100) + 1;
         if(currPercent <= Constants.USER_SKIP_LOGIN_PERCENTAGE) {
             FlurryAgent.logEvent(TrackingEvents.AppShowedSkippableLogin);
-            LoginUtils.showLoginFragment(getActivity(), true, R.string.login_info_save);
+            LoginUtils.showLoginFragment(true, R.string.login_info_save);
         } else {
             FlurryAgent.logEvent(TrackingEvents.AppShowedRegularLogin);
-            LoginUtils.showLoginFragment(getActivity(), false, R.string.login_info_save);
+            LoginUtils.showLoginFragment(false, R.string.login_info_save);
         }
     }
 
@@ -240,7 +240,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         if (statusCode == StatusCode.SUCCESS.getCode()) {
             FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
             BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
-            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully)));
+            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false));
         } else {
             try {
                 activity.getSupportFragmentManager().popBackStack();
