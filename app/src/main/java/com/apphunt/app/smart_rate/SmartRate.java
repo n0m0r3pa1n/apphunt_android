@@ -65,8 +65,12 @@ public class SmartRate {
     }
 
     public static void show(String showLocation) {
-        if (appRun == rateDialogVariable.appRun && showLocation.equals(rateDialogVariable.showLocation)) {
+        boolean isShown = instance.preferences.getBoolean(SmartRateConstants.SMART_RATE_IS_SHOWN, false);
+        if (!isShown && appRun >= rateDialogVariable.appRun && showLocation.equals(rateDialogVariable.showLocation)) {
             instance.showLoveFragment();
+            SharedPreferences.Editor editor = instance.preferences.edit();
+            editor.putBoolean(SmartRateConstants.SMART_RATE_IS_SHOWN, true);
+            editor.apply();
         }
     }
 
@@ -157,7 +161,7 @@ public class SmartRate {
     public static void onError() {
         if (rateDialogVariable.isUndefined()) {
             Random random = new Random();
-            rateDialogVariable.appRun = random.nextInt(8) + 3;
+            rateDialogVariable.appRun = random.nextInt(3) + 2;
             rateDialogVariable.showLocation = Constants.SMART_RATE_LOCATION_APP_SAVED;
             instance.saveRateDialogVariable();
         }

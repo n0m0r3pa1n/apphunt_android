@@ -1,3 +1,2 @@
 1. Change url to production server
-2. Add new Crashlytics() to Application class
-3. Change build gradle version and versionCode
+2. Change build gradle version and versionCode
