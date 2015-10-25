@@ -10,6 +10,7 @@ import com.apphunt.app.ui.interfaces.OnEndReachedListener;
  * Created by nmp on 15-7-13.
  */
 public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener {
+    public static final int MIN_DELAY_BETWEEN_REQUESTS = 300;
     private final LinearLayoutManager layoutManager;
     private OnEndReachedListener listener;
 
@@ -17,7 +18,6 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
-
     final Handler handler = new Handler();
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -33,8 +33,13 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
         }
         if (!loading && (totalItemCount - visibleItemCount)
                 <= (firstVisibleItem + visibleThreshold)) {
+            loading = true;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     listener.onEndReached();
-                    loading = true;
+                }
+            }, MIN_DELAY_BETWEEN_REQUESTS);
         }
     }
 

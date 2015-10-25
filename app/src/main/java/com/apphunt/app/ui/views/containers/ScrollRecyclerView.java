@@ -115,8 +115,6 @@ public class ScrollRecyclerView extends LinearLayout {
                 if (ScrollRecyclerView.this.adapter.getItemCount() >= ScrollRecyclerView.this.totalItemsCount) {
                     return;
                 }
-
-                showBottomLoader();
                 ScrollRecyclerView.this.listener.onEndReached();
             }
         }, layoutManager));

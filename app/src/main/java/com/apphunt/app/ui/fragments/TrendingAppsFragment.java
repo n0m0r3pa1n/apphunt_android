@@ -30,7 +30,6 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.LoadersUtils;
@@ -65,8 +64,6 @@ public class TrendingAppsFragment extends BaseFragment {
     private OnEndReachedListener onEndReachedListener = new OnEndReachedListener() {
         @Override
         public void onEndReached() {
-            LoadersUtils.showBottomLoader(activity,
-                    SharedPreferencesHelper.getBooleanPreference(Constants.IS_SOUNDS_ENABLED));
             FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
             loadApps();
         }
