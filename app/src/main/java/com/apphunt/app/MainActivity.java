@@ -671,7 +671,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Subscribe
     @SuppressWarnings("unused")
     public void showNotificationFragment(ShowNotificationEvent event) {
-        NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true);
+        NotificationsUtils.showNotificationFragment(this, event.getMessage(), false, true, event.shouldPopBackStack());
     }
 
     @Subscribe

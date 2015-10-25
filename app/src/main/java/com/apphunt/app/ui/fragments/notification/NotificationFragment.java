@@ -1,11 +1,9 @@
 package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
@@ -19,11 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
-import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
-import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 
 import butterknife.ButterKnife;
@@ -58,6 +55,7 @@ public class NotificationFragment extends BaseFragment {
     private boolean showRating;
     private boolean showShadow;
     private boolean showContinue;
+    private boolean shouldPopBackStack;
 
     private OnActionNeeded actionListener;
 
@@ -71,6 +69,7 @@ public class NotificationFragment extends BaseFragment {
         showRating = getArguments().getBoolean(Constants.KEY_SHOW_RATING);
         showShadow = getArguments().getBoolean(Constants.KEY_SHOW_SHADOW);
         showContinue = getArguments().getBoolean(Constants.KEY_SHOW_CONTINUE);
+        shouldPopBackStack = getArguments().getBoolean(Constants.KEY_POP_BACKSTACK, true);
     }
 
     @Override
@@ -130,7 +129,9 @@ public class NotificationFragment extends BaseFragment {
     @OnClick(R.id.dismiss)
     public void onDismissClick() {
         if (showRating) {
-            activity.getSupportFragmentManager().popBackStack();
+            if(shouldPopBackStack) {
+                activity.getSupportFragmentManager().popBackStack();
+            }
             SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
         }
 

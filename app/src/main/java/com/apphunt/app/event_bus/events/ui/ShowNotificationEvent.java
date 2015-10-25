@@ -6,14 +6,16 @@ package com.apphunt.app.event_bus.events.ui;
  */
 public class ShowNotificationEvent {
     private String message;
+    private boolean popBackStack = true;
     private boolean showRating = true;
     public ShowNotificationEvent(String message) {
         this.message = message;
     }
 
-    public ShowNotificationEvent(String message, boolean showRating) {
+    public ShowNotificationEvent(String message, boolean showRating, boolean popBackStack) {
         this.message = message;
         this.showRating = showRating;
+        this.popBackStack = popBackStack;
     }
 
     public String getMessage() {
@@ -26,5 +28,9 @@ public class ShowNotificationEvent {
 
     public boolean shouldShowRating() {
         return showRating;
+    }
+
+    public boolean shouldPopBackStack() {
+        return popBackStack;
     }
 }

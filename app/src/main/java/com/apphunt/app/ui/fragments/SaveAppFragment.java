@@ -34,6 +34,7 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.AppSavedApiEvent;
 import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
+import com.apphunt.app.event_bus.events.ui.AppSubmittedEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
@@ -240,7 +241,8 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         if (statusCode == StatusCode.SUCCESS.getCode()) {
             FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
             BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
-            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false));
+            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false, false));
+            BusProvider.getInstance().post(new AppSubmittedEvent(data.packageName));
         } else {
             try {
                 activity.getSupportFragmentManager().popBackStack();

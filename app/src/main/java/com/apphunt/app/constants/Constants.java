@@ -10,7 +10,7 @@ public class Constants {
 //    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
 //    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
-    public static final String MAIN_URL = "0ddf2180.ngrok.io";
+    public static final String MAIN_URL = "5fd56df6.ngrok.io";
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
 
@@ -45,6 +45,7 @@ public class Constants {
     public static final String KEY_COLLECTION = "collection";
     public static final String KEY_SHOW_SHADOW = "show_shadow";
     public static final String KEY_SHOW_CONTINUE = "show_continue";
+    public static final String KEY_POP_BACKSTACK = "pop_backstack";
     public static final String KEY_LAST_SEEN_EVENT_ID = "last_seen_event_id";
     public static final String KEY_LAST_SEEN_EVENT_DATE = "last_seen_event_date";
 

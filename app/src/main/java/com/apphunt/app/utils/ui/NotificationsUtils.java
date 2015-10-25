@@ -79,15 +79,20 @@ public class NotificationsUtils {
     }
 
     public static void showNotificationFragmentWithContinueAction(ActionBarActivity activity, String message, OnActionNeeded actionListener) {
-        showNotificationFragment(activity, message, false, true, false, true, actionListener);
+        showNotificationFragment(activity, message, false, true, false, true, true, actionListener);
     }
 
     public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
-        showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, null);
+        showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, true, null);
+    }
+
+    public static void showNotificationFragment(ActionBarActivity activity, String message,
+                                                boolean showSettingsAction, boolean showRating, boolean popBackStack) {
+        showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, popBackStack, null);
     }
 
     private static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showContinueAction,
-                                                 boolean showRating, boolean showShadow, OnActionNeeded actionListener) {
+                                                 boolean showRating, boolean showShadow, boolean popBackStack, OnActionNeeded actionListener) {
         try {
             Bundle extras = new Bundle();
             extras.putString(Constants.KEY_NOTIFICATION, message);
@@ -95,6 +100,7 @@ public class NotificationsUtils {
             extras.putBoolean(Constants.KEY_SHOW_CONTINUE, showContinueAction);
             extras.putBoolean(Constants.KEY_SHOW_RATING, showRating);
             extras.putBoolean(Constants.KEY_SHOW_SHADOW, showShadow);
+            extras.putBoolean(Constants.KEY_POP_BACKSTACK, popBackStack);
             NotificationFragment notificationFragment = new NotificationFragment();
             notificationFragment.setArguments(extras);
             notificationFragment.setActionListener(actionListener);

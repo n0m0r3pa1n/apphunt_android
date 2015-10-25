@@ -22,9 +22,11 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.Packages;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
+import com.apphunt.app.event_bus.events.ui.AppSubmittedEvent;
 import com.apphunt.app.ui.adapters.InstalledAppsAdapter;
-import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.utils.PackagesUtils;
@@ -40,7 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class SelectAppFragment extends BackStackFragment implements AdapterView.OnItemClickListener {
+public class SelectAppFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = SelectAppFragment.class.getName();
     private static final int PAGE_SIZE = 10;
@@ -115,14 +117,15 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = (ActionBarActivity) activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         ActionBarUtils.getInstance().showActionBarShadow();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -133,6 +136,19 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         NavUtils.getInstance(activity).startSaveAppFragment(userAppsAdapter.getItem(position));
+    }
+
+    @Subscribe
+    public void onAppSubmitted(AppSubmittedEvent event) {
+        userAppsAdapter.removeApp(event.getPackageName());
+        if(userAppsAdapter.getCount() == 0) {
+            displayEmptyAppsView();
+        }
+    }
+
+    private void displayEmptyAppsView() {
+        info.setText("There are no apps you can share with AppHunt at the moment!");
+        noAppsView.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
@@ -152,8 +168,7 @@ public class SelectAppFragment extends BackStackFragment implements AdapterView.
                if(event.getPackages().getAvailablePackages() == null ||
                        event.getPackages().getAvailablePackages().size() == 0) {
                    loader.progressiveStop();
-                   info.setText("There are no apps you can share with AppHunt at the moment!");
-                   noAppsView.setVisibility(View.VISIBLE);
+                   displayEmptyAppsView();
                    return;
                }
 

@@ -75,6 +75,21 @@ public class InstalledAppsAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public void removeApp(String packageName) {
+        int positionToRemove = -1;
+        for (int i = 0; i < appsList.size(); i++) {
+            if(appsList.get(i).packageName.equals(packageName)) {
+                positionToRemove = i;
+                break;
+            }
+        }
+
+        if(positionToRemove != -1) {
+            appsList.remove(positionToRemove);
+            notifyDataSetChanged();
+        }
+    }
+
     static class ViewHolder {
         @InjectView(R.id.app_icon)
         ImageView icon;
