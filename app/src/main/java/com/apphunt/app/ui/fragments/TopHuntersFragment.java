@@ -12,16 +12,18 @@ import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionApiEvent;
 import com.apphunt.app.ui.adapters.rankings.TopHuntersAdapter;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.StringUtils;
-import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+
+import java.util.Calendar;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,7 +52,9 @@ public class TopHuntersFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(1));
+
+        int previousMonth = Calendar.getInstance().get(Calendar.MONTH) - 1;
+        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(previousMonth));
     }
 
     @Nullable

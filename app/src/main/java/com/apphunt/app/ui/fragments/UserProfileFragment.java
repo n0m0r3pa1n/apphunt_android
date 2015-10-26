@@ -304,7 +304,8 @@ public class UserProfileFragment extends BackStackFragment {
 
         follow.init(activity, event.getUserProfile());
 
-        scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(0) + ")");
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(currentMonth) + ")");
 
         updateAbSubtitle(selectedTabPosition);
     }

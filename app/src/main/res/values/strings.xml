@@ -131,7 +131,7 @@
     <string name="action_notifications">Notifications</string>
     <string name="action_random">Random</string>
     <string name="action_history">History</string>
-    <string name="action_skip">Skip</string>
+    <string name="action_skip">Date</string>
     <string name="share_text"><![CDATA[<p>Join the hunt for cool new apps, every day!</p>]]></string>
     <string name="no_results_found">Nothing was found...</string>
     <string name="no_friends_found">No friends found...</string>
@@ -199,4 +199,8 @@
     <string name="action_find_friends">find_friends</string>
     <string name="title_user_followers">Followers</string>
     <string name="title_user_followings">Followings</string>
+
+    <string name="alert_dialog_title">Select Month and Year</string>
+    <string name="positive_button_text">Select</string>
+    <string name="negative_button_text">Cancel</string>
 </resources>
