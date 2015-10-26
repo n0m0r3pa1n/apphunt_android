@@ -69,6 +69,7 @@ public class TopAppsFragment extends BaseFragment {
     private DialogInterface.OnClickListener datePickedListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
+            FlurryAgent.logEvent(TrackingEvents.UserViewedPreviousTopAppsRanking);
             if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
                 ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth),
                         LoginProviderFactory.get(getActivity()).getUser().getId());

@@ -318,6 +318,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         inflater.inflate(R.menu.menu, menu);
 
         boolean isTrendingAppsScreenVisible = getSupportFragmentManager().findFragmentByTag(Constants.TAG_APPS_LIST_FRAGMENT) != null;
+        boolean isTopHuntersScreenVisible = getSupportFragmentManager().findFragmentByTag(Constants.TAG_TOP_HUNTERS_FRAGMENT) != null;
         boolean isTopAppsVisible = getSupportFragmentManager().findFragmentByTag(Constants.TAG_TOP_APPS_FRAGMENT) != null;
         if (backstackEntryCount == 0 &&
                 isTrendingAppsScreenVisible) {
@@ -369,7 +370,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             menu.findItem(R.id.action_sort).setVisible(false);
         }
 
-        if(backStackCount == 0 && isTopAppsVisible) {
+        if(backStackCount == 0 && (isTopAppsVisible || isTopHuntersScreenVisible)) {
             menu.findItem(R.id.action_date_picker).setVisible(true);
         } else {
             menu.findItem(R.id.action_date_picker).setVisible(false);
