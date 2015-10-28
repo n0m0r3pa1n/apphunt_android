@@ -106,14 +106,18 @@ public class TrendingAppsFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 activity.getSupportActionBar().collapseActionView();
-                trendingAppsAdapter.resetAdapter();
-                endlessRecyclerScrollListener.reset();
-                ApiService.getInstance(activity).reloadApps();
+                reloadApps();
                 swipeRefreshLayout.setRefreshing(false);
                 swipeRefreshLayout.setVisibility(View.INVISIBLE);
             }
         });
 
+    }
+
+    private void reloadApps() {
+        trendingAppsAdapter.resetAdapter();
+        endlessRecyclerScrollListener.reset();
+        ApiService.getInstance(activity).reloadApps();
     }
 
     @Override
@@ -122,7 +126,7 @@ public class TrendingAppsFragment extends BaseFragment {
     }
 
     @OnClick(R.id.reload)
-    public void reloadApps() {
+    public void onReloadApps() {
         swipeRefreshLayout.setVisibility(View.VISIBLE);
         btnReload.setVisibility(View.GONE);
         trendingAppsAdapter.resetAdapter();
@@ -175,14 +179,12 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onUserLogin(LoginEvent event) {
-        trendingAppsAdapter.resetAdapter();
-        ApiService.getInstance(activity).loadApps(shouldChangeDate);
+        reloadApps();
     }
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
-        trendingAppsAdapter.resetAdapter();
-        ApiService.getInstance(activity).loadApps(shouldChangeDate);
+        reloadApps();
     }
 
     @Subscribe
