@@ -111,5 +111,6 @@ public interface TrackingEvents {
     String UserScrolledHistoryEvents = "user.scrolled.history.events";
 
     String UserOpenedRandomApp = "user.opened.random.app";
-
+    String UserViewedPreviousTopAppsRanking = "user.viewed.previous.top.apps.ranking";
+    String UserViewedPreviousTopHuntersRanking = "user.viewed.previous.top.hunters.ranking";;
 }

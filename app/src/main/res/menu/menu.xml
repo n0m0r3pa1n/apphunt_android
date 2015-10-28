@@ -12,6 +12,15 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
+        android:id="@+id/action_date_picker"
+        android:title="@string/action_skip"
+        android:icon="@drawable/ic_calendar"
+        android:showAsAction="always|withText"
+
+        app:showAsAction="always|withText"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/action_skip"
         android:title="@string/action_skip"
         android:showAsAction="always|withText"

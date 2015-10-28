@@ -36,18 +36,18 @@ public class StringUtils {
         return dayFormat.format(calendar.getTime());
     }
 
-    public static String getMonthStringFromCalendar(int minusMonths) {
+    public static String getMonthStringFromCalendar(int month) {
         SimpleDateFormat dayFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -minusMonths);
+        calendar.set(Calendar.MONTH, month);
 
         return dayFormat.format(calendar.getTime());
     }
 
-    public static String getYearStringFromCalendar(int minusYears) {
+    public static String getYearStringFromCalendar(int year) {
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -minusYears);
+        calendar.set(Calendar.YEAR, year);
 
         return dayFormat.format(calendar.getTime());
     }
