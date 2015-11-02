@@ -28,7 +28,7 @@ public abstract class BasePutRequest<T> extends BaseGsonRequest<T> {
 
     protected String getRequestBody(Object object) {
         return GsonInstance.toJson(object);
-    };
+    }
 
     @Override
     public byte[] getBody() {

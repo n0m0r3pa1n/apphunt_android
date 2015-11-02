@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,6 +30,7 @@ import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.apptentive.android.sdk.Apptentive;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -49,7 +49,7 @@ public class CreateCollectionFragment extends BackStackFragment implements Choos
 
     private static final String TAG = CreateCollectionFragment.class.getSimpleName();
 
-    private Activity activity;
+    private AppCompatActivity activity;
     private View view;
     private AutoCompleteTextView tagView;
     private String bannerUrl;
@@ -110,7 +110,7 @@ public class CreateCollectionFragment extends BackStackFragment implements Choos
     public void onChooseBannerClick() {
         ChooseCollectionBannerFragment fragment = new ChooseCollectionBannerFragment();
         fragment.setOnBannerChosenListener(this);
-        ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
                 .add(R.id.container, fragment, Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
                 .addToBackStack(Constants.TAG_CHOOSE_COLLECTION_BANNER_FRAGMENT)
@@ -151,8 +151,9 @@ public class CreateCollectionFragment extends BackStackFragment implements Choos
 
     @Subscribe
     public void onCollectionCreateSuccess(CreateCollectionApiEvent event) {
-        ((FragmentActivity) activity).getSupportFragmentManager().popBackStack();
-        NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.notification_delete_confirmation), false, false);
+        activity.getSupportFragmentManager().popBackStack();
+        NotificationsUtils.showNotificationFragment(activity, getString(R.string.notification_delete_confirmation), false, false);
+        Apptentive.engage(activity, "user.created.collection");
     }
 
     @Subscribe
@@ -170,7 +171,7 @@ public class CreateCollectionFragment extends BackStackFragment implements Choos
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = activity;
+        this.activity = (AppCompatActivity) activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 

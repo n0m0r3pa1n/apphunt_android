@@ -709,10 +709,7 @@ public final class HexEngine<G> {
             if (this.scaledPoints[2].intersectsRectangle(this.scaledPoints[3], rect, cellX, cellY)) {
               return true;
             }
-            if (this.scaledPoints[3].intersectsRectangle(this.scaledPoints[4], rect, cellX, cellY)) {
-              return true;
-            }
-            return false;
+            return this.scaledPoints[3].intersectsRectangle(this.scaledPoints[4], rect, cellX, cellY);
           }
         }
         break;

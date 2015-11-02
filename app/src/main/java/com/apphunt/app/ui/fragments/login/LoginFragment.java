@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +89,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
     @InjectView(R.id.fb_login_button)
     CustomFacebookButton fbLoginBtn;
 
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
     private User user;
 
     private boolean canBeSkipped = false;
@@ -227,14 +227,14 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                     }
 
                     @Override
-                    public void failure (TwitterException e){
+                    public void failure(TwitterException e) {
                         onLoginFailed();
                     }
                 });
             }
 
             @Override
-            public void failure (TwitterException e){
+            public void failure(TwitterException e) {
                 onLoginFailed();
             }
         });
@@ -337,7 +337,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

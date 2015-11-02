@@ -35,7 +35,7 @@ public enum HistoryEventType {
 
     private final String text;
 
-    private HistoryEventType(final String text) {
+    HistoryEventType(final String text) {
         this.text = text;
     }
 

@@ -115,8 +115,7 @@
         <service
             android:name=".services.InstallService"
             android:exported="false" />
-
-        <service android:name="com.uxcam.service.HttpPostService"/>
+        <service android:name="com.uxcam.service.HttpPostService" />
         <service android:name="com.appsee.AppseeBackgroundUploader" />
 
         <meta-data
@@ -134,6 +133,16 @@
         <meta-data
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_fmbIrix5OmtJjOisFRLjDaolFxidkEN0" />
+
+        <!-- The following is required -->
+        <!-- Include your App's API key from Apptentive at "Settings -> API & Development" -->
+        <meta-data
+            android:name="apptentive_api_key"
+            android:value="52eaa2102b2facd802864e0bd041f2a8e82c879e1ae2a0b4df66e5a9dec6fe05" />
+
+        <activity
+            android:name="com.apptentive.android.sdk.ViewActivity"
+            android:theme="@style/ApptentiveTheme" />
     </application>
 
 </manifest>

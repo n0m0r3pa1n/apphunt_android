@@ -3,7 +3,6 @@ package com.apphunt.app.ui.fragments.invites;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -143,7 +142,7 @@ public class ProviderInviteFragment extends BaseFragment {
                             params.put("invites", String.valueOf(successfulInvites));
                             FlurryAgent.logEvent(TrackingEvents.UserSentTwitterInvite, params);
                             activity.getSupportFragmentManager().popBackStack();
-                            NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, String.format(getString(R.string.msg_successful_invites), successfulInvites), false, false);
+                            NotificationsUtils.showNotificationFragment(activity, String.format(getString(R.string.msg_successful_invites), successfulInvites), false, false);
                         }
                     }
 
@@ -151,7 +150,7 @@ public class ProviderInviteFragment extends BaseFragment {
                     public void failure(TwitterException e) {
                         if (isLastInvite) {
                             activity.getSupportFragmentManager().popBackStack();
-                            NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, String.format(getString(R.string.msg_failure_invites), successfulInvites), false, false);
+                            NotificationsUtils.showNotificationFragment(activity, String.format(getString(R.string.msg_failure_invites), successfulInvites), false, false);
                         }
                     }
                 });

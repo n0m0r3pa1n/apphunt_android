@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -83,7 +82,7 @@ public class ViewCollectionFragment extends BackStackFragment {
 
     private AppsCollection appsCollection;
     private CollectionAppsAdapter collectionAppsAdapter;
-    private Activity activity;
+    private AppCompatActivity activity;
     private String title = "";
 
     public ViewCollectionFragment() {
@@ -151,7 +150,7 @@ public class ViewCollectionFragment extends BackStackFragment {
             @Override
             public void onClick(View view, int position) {
                 FlurryAgent.logEvent(TrackingEvents.UserViewedCollectionApp);
-                NavUtils.getInstance((AppCompatActivity) activity).presentAppDetailsFragment(appsCollection.getApps().get(position).getId());
+                NavUtils.getInstance(activity).presentAppDetailsFragment(appsCollection.getApps().get(position).getId());
             }
         });
 
@@ -183,7 +182,7 @@ public class ViewCollectionFragment extends BackStackFragment {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
                 FlurryAgent.logEvent(TrackingEvents.UserDeleteCollection);
-                NotificationsUtils.showNotificationFragmentWithContinueAction((ActionBarActivity) activity, "Are you sure you want to delete this collection?", new OnActionNeeded() {
+                NotificationsUtils.showNotificationFragmentWithContinueAction(activity, "Are you sure you want to delete this collection?", new OnActionNeeded() {
                     @Override
                     public void onContinueAction() {
                         ApiClient.getClient(activity).deleteCollection(appsCollection.getId());
@@ -267,7 +266,7 @@ public class ViewCollectionFragment extends BackStackFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

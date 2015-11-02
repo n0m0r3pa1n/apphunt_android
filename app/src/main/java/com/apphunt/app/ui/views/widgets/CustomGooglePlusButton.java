@@ -18,7 +18,7 @@ import com.apphunt.app.R;
  */
 public class CustomGooglePlusButton extends AHButton {
     public CustomGooglePlusButton(Context context) {
-        this(context, (AttributeSet) null);
+        this(context, null);
     }
 
     public CustomGooglePlusButton(Context context, AttributeSet attrs) {

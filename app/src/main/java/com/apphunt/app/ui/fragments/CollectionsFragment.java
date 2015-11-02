@@ -68,7 +68,7 @@ public class CollectionsFragment extends BaseFragment implements ViewPager.OnPag
             public void onTabSelected(TabLayout.Tab tab) {
                 int tag = (Integer) tab.getTag();
                 setTabSelectedIcon(tab);
-                pager.setCurrentItem((Integer) tag);
+                pager.setCurrentItem(tag);
                 resetTabIcon(previousSelectedTab);
                 previousSelectedTab = tab;
             }

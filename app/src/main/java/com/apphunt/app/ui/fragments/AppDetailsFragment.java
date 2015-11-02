@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -113,7 +114,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     TextView rating;
 
     @InjectView(R.id.comments_action)
-    TextView commentsAction;
+    Button commentsAction;
 
     @InjectView(R.id.box_details)
     RelativeLayout boxDetails;
@@ -402,11 +403,12 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     private void populateComments() {
         if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
             loadingComments.setVisibility(View.GONE);
-            commentsAction.setText("WRITE A COMMENT :)");
+            commentsAction.setText("Add a comment (" + comments.getTotalCount() + ")");
             return;
         } else {
             loadingComments.setVisibility(View.GONE);
             commentsList.setVisibility(View.VISIBLE);
+            commentsAction.setText("Add a comment (" + comments.getTotalCount() + ")");
         }
 
         CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null);
@@ -444,7 +446,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         }
 
         if(baseApp != null) {
-            NavUtils.getInstance((AppCompatActivity) activity).presentSelectCollectionFragment(baseApp);
+            NavUtils.getInstance(activity).presentSelectCollectionFragment(baseApp);
             FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
         }
     }

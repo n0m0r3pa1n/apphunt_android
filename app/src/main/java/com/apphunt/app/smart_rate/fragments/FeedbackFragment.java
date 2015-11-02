@@ -82,7 +82,6 @@ public class FeedbackFragment extends BaseRateFragment implements OnClickListene
             return enterAnim;
         } else {
             Animation outAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_out);
-            ;
 
             smartRateLayout.startAnimation(AnimationUtils.loadAnimation(activity,
                     R.anim.slide_out_top));

@@ -3,7 +3,6 @@ package com.apphunt.app.utils.ui;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import com.apphunt.app.R;
@@ -119,9 +118,9 @@ public class NavUtils {
 
     public void setOnBackBlocked(boolean isBlocked) {
         if (isBlocked) {
-            ActionBarUtils.getInstance().hideActionBar((ActionBarActivity) activity);
+            ActionBarUtils.getInstance().hideActionBar(activity);
         } else {
-            ActionBarUtils.getInstance().showActionBar((ActionBarActivity) activity);
+            ActionBarUtils.getInstance().showActionBar(activity);
         }
         this.isBlocked = isBlocked;
     }

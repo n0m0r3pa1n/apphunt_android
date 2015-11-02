@@ -7,16 +7,15 @@
         android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"
         android:showAsAction="collapseActionView|always"
-        app:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="collapseActionView|always"
         android:actionViewClass="android.support.v7.widget.SearchView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item
         android:id="@+id/action_date_picker"
-        android:title="@string/action_skip"
+        android:title="@string/action_date"
         android:icon="@drawable/ic_calendar"
         android:showAsAction="always|withText"
-
         app:showAsAction="always|withText"
         android:visible="false"/>
 
@@ -56,8 +55,8 @@
         android:title="@string/action_history"
         android:actionLayout="@layout/action_history"
         app:actionLayout="@layout/action_history"
-        app:showAsAction="always"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:showAsAction="ifRoom"
         />
 
     <item

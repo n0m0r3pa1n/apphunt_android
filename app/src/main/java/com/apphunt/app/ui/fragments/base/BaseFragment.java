@@ -11,7 +11,7 @@ public class BaseFragment extends Fragment {
     private String fragmentTag;
     public String getStringTitle() {
         return "";
-    };
+    }
 
     public int getTitle() {
         return title;

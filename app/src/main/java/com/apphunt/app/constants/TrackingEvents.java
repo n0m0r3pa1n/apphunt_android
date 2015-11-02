@@ -112,5 +112,5 @@ public interface TrackingEvents {
 
     String UserOpenedRandomApp = "user.opened.random.app";
     String UserViewedPreviousTopAppsRanking = "user.viewed.previous.top.apps.ranking";
-    String UserViewedPreviousTopHuntersRanking = "user.viewed.previous.top.hunters.ranking";;
+    String UserViewedPreviousTopHuntersRanking = "user.viewed.previous.top.hunters.ranking";
 }

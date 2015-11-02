@@ -31,7 +31,7 @@ public enum NotificationType {
     /**
      * @param text
      */
-    private NotificationType(final String text) {
+    NotificationType(final String text) {
         this.text = text;
     }
 

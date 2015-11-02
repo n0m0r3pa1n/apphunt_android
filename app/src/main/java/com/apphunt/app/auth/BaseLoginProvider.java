@@ -3,7 +3,6 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
@@ -99,7 +98,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void hideLoginFragment(Context ctx) {
-        FragmentManager fragmentManager = ((ActionBarActivity) ctx).getSupportFragmentManager();
+        FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
         LoginFragment loginFragment = (LoginFragment) fragmentManager.findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
 
         if (loginFragment != null) {

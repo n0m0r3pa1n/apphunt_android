@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -133,7 +132,7 @@ public class EmailInviteFragment extends BaseFragment {
                 @Override
                 public void run() {
                     activity.getSupportFragmentManager().popBackStack();
-                    NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.msg_successful_invite), false, false);
+                    NotificationsUtils.showNotificationFragment(activity, getString(R.string.msg_successful_invite), false, false);
                 }
             }, 100);
         }

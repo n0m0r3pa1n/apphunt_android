@@ -202,7 +202,7 @@ public class SearchResultsFragment extends BackStackFragment {
     }
 
     private void displayMoreApps() {
-                ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
+                activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, SearchAppsFragment.newInstance(query), Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_APPS_FRAGMENT)
                 .commit();
@@ -215,7 +215,7 @@ public class SearchResultsFragment extends BackStackFragment {
     }
 
     private void displayMoreCollections() {
-        ((AppCompatActivity)activity).getSupportFragmentManager().beginTransaction()
+        activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, SearchCollectionsFragment.newInstance(query), Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .addToBackStack(Constants.TAG_SEARCH_COLLECTIONS_FRAGMENT)
                 .commit();

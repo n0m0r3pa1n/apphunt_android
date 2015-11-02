@@ -2,27 +2,18 @@ package com.apphunt.app.ui.fragments.notification;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
-import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.PackagesUtils;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -32,7 +23,7 @@ public class UpdateRequiredFragment extends DialogFragment {
 
     private static final String TAG = NotificationFragment.class.getName();
 
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
 
     public static UpdateRequiredFragment newInstance() {
         return new UpdateRequiredFragment();
@@ -56,7 +47,7 @@ public class UpdateRequiredFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @OnClick(R.id.update)

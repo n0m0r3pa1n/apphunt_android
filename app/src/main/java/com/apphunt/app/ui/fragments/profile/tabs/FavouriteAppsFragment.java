@@ -104,7 +104,7 @@ public class FavouriteAppsFragment extends BaseFragment {
 
         ArrayList<App> apps = appsList.getApps();
         if(adapter == null) {
-            adapter = new SearchAppsAdapter(getActivity(), apps);
+            adapter = new SearchAppsAdapter(getActivity(), apps, userId);
             items.setAdapter(adapter, appsList.getTotalCount());
         } else {
             adapter.addApps(apps);

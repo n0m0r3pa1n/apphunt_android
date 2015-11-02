@@ -13,7 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -68,6 +68,7 @@ import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.appsee.Appsee;
+import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -80,10 +81,9 @@ import java.util.Map;
 
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
-import it.appspice.android.AppSpice;
 import it.appspice.android.api.errors.AppSpiceError;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
+public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private NavigationDrawerFragment navigationDrawerFragment;
@@ -117,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         initNotifications();
         InstallService.setupService(this);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
+//        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
 
     private void initUI() {
@@ -280,7 +280,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             } else {
                 setHasInternet(false);
                 if (fragment == null) {
-                    NotificationsUtils.showNotificationFragment(((ActionBarActivity) context), getString(R.string.notification_no_internet), true, false);
+                    NotificationsUtils.showNotificationFragment(MainActivity.this, getString(R.string.notification_no_internet), true, false);
                 }
             }
         }
@@ -521,7 +521,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onResume();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
-        AppSpice.onResume(this);
+//        AppSpice.onResume(this);
     }
 
     private void displaySaveAppFragment() {
@@ -543,7 +543,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-        AppSpice.onPause(this);
+//        AppSpice.onPause(this);
     }
 
     @Override
@@ -574,7 +574,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     protected void onStart() {
         super.onStart();
-        AppSpice.onStart(this);
+//        AppSpice.onStart(this);
+        Apptentive.onStart(this);
 
         Branch branch = Branch.getInstance();
         branch.initSession(new Branch.BranchReferralInitListener() {
@@ -612,7 +613,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         } catch (IllegalArgumentException e) {
             Crashlytics.logException(e);
         }
-        AppSpice.onStop(this);
+//        AppSpice.onStop(this);
+        Apptentive.onStop(this);
     }
 
     @Subscribe
@@ -624,7 +626,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @SuppressWarnings("unused")
     public void userVotedForAppEvent(AppVoteEvent event) {
         if (event.isVote()) {
-            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
+//            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
+            Apptentive.engage(this, "user.voted");
         }
     }
 
@@ -653,7 +656,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         });
 
     }
-
 
     @Subscribe
     @SuppressWarnings("unused")
