@@ -18,6 +18,8 @@ import java.util.Date;
 public interface AppHuntApi {
     void createUser(User user);
 
+    void createAnonymousUser(User user);
+
     void updateUser(User user);
 
     void getApps(String userId, String date, int page,

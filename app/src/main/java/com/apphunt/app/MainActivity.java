@@ -32,6 +32,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
+import com.apphunt.app.event_bus.events.api.users.AnonymousUserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DisplayLoginFragmentEvent;
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e(TAG, LoginProviderFactory.get(this).getName());
+
         if (!BuildConfig.DEBUG){
             Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
         }
@@ -713,5 +716,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
                 .commit();
+    }
+
+    @Subscribe
+    public void onAnonymousUserCreated(AnonymousUserCreatedApiEvent event) {
+        Log.e(TAG, event.getUser().toString());
+        LoginProviderFactory.get(this).login(event.getUser());
     }
 }

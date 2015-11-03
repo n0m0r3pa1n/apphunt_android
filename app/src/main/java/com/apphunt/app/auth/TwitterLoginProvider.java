@@ -1,14 +1,10 @@
 package com.apphunt.app.auth;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.models.Friend;
-import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.StringUtils;
-import com.google.android.gms.common.AccountPicker;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -16,7 +12,6 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -25,8 +20,8 @@ import java.util.List;
 public class TwitterLoginProvider extends BaseLoginProvider {
     public static final String PROVIDER_NAME = "twitter";
 
-    public TwitterLoginProvider(Activity activity) {
-        super(activity);
+    public TwitterLoginProvider(Context context) {
+        super(context);
     }
 
     @Override

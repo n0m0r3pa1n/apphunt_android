@@ -1,5 +1,7 @@
 package com.apphunt.app.auth;
 
+import android.app.Activity;
+
 import com.apphunt.app.api.apphunt.models.users.User;
 
 /**

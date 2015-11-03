@@ -15,6 +15,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
+import com.apphunt.app.auth.AnonymousLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -103,6 +104,10 @@ public class CommentsAdapter extends BaseAdapter {
             commentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (comment.getUser().getLoginType().equals(AnonymousLoginProvider.PROVIDER_NAME)) {
+                        return;
+                    }
+
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromComment);
                     NavUtils.getInstance((AppCompatActivity) ctx)
                             .presentUserProfileFragment(comment.getUser().getId(), comment.getUser().getName());
@@ -133,6 +138,10 @@ public class CommentsAdapter extends BaseAdapter {
             subCommentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (comment.getUser().getLoginType().equals(AnonymousLoginProvider.PROVIDER_NAME)) {
+                        return;
+                    }
+
                     FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromComment);
                     NavUtils.getInstance((AppCompatActivity) ctx)
                             .presentUserProfileFragment(comment.getUser().getId(), comment.getUser().getName());

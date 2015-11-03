@@ -3,6 +3,7 @@ package com.apphunt.app;
 import android.text.TextUtils;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -29,6 +30,7 @@ public class AppHuntApplication extends BranchApp {
         SharedPreferencesHelper.init(this);
         initNetworking();
         initAnalytics();
+        LoginProviderFactory.onCreate(getApplicationContext());
     }
 
     private void initAnalytics() {

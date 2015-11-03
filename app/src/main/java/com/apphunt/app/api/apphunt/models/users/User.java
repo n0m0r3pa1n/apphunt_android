@@ -9,6 +9,7 @@ public class User implements Serializable{
 
     @SerializedName("_id")
     private String id;
+    private String advertisingId;
     private String name;
     private String email;
     private String profilePicture;
@@ -100,10 +101,19 @@ public class User implements Serializable{
         this.notificationId = notificationId;
     }
 
+    public String getAdvertisingId() {
+        return advertisingId;
+    }
+
+    public void setAdvertisingId(String advertisingId) {
+        this.advertisingId = advertisingId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
+                ", advertisingId='" + advertisingId + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", profilePicture='" + profilePicture + '\'' +

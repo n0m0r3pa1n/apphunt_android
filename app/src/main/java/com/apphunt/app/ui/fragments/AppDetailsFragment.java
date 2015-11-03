@@ -364,7 +364,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
                             continue;
                         }
 
-                        icons.add(Picasso.with(getActivity()).load(user.getProfilePicture())
+                        icons.add(Picasso.with(getActivity()).load(user.getProfilePicture()).placeholder(R.drawable.avatar_placeholder)
                                 .tag(TAG_LOAD_VOTERS_REQ).get());
                     } catch (Exception e) {
                         Crashlytics.logException(e);
