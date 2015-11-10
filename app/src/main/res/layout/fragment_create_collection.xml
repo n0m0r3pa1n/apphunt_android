@@ -23,6 +23,7 @@
             android:ems="10"
             android:textSize="15sp"
             android:hint="New collection name"
+            android:inputType="textMultiLine|textCapSentences"
             app:typefacePath="fonts/OpenSans-Light.ttf"/>
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 
@@ -82,6 +83,7 @@
             android:textSize="15sp"
             android:maxLength="100"
             android:hint="Write a description"
+            android:inputType="textMultiLine|textCapSentences"
             app:typefacePath="fonts/OpenSans-Light.ttf"/>
     </com.apphunt.app.ui.views.widgets.CustomTextInputLayout>
 

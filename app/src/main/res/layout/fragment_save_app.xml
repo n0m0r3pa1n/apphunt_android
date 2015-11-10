@@ -60,7 +60,7 @@
                 android:textSize="@dimen/save_box_desc_text"
                 android:textColor="@color/desc_text"
                 android:textColorHint="@color/desc_hint"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textCapSentences"
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
 
             <com.apphunt.app.ui.views.widgets.TagGroup
