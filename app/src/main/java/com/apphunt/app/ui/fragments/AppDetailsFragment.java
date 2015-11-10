@@ -363,8 +363,11 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
                             continue;
                         }
 
-                        icons.add(Picasso.with(getActivity()).load(user.getProfilePicture())
-                                .tag(TAG_LOAD_VOTERS_REQ).get());
+                        Bitmap image = Picasso.with(getActivity()).load(user.getProfilePicture())
+                                .tag(TAG_LOAD_VOTERS_REQ).get();
+                        if(image != null) {
+                            icons.add(image);
+                        }
                     } catch (Exception e) {
                         Crashlytics.logException(e);
                         e.printStackTrace();
