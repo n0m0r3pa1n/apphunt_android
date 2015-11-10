@@ -75,4 +75,9 @@ public class ApiService {
                 SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), 1,
                 Constants.COMMENTS_PAGE_SIZE, true);
     }
+
+    public static void resetCalendars() {
+        calendar = Calendar.getInstance();
+        historyCalendar = Calendar.getInstance();
+    }
 }

@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -614,6 +615,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 //        AppSpice.onStop(this);
         Apptentive.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ApiService.resetCalendars();
     }
 
     @Subscribe
