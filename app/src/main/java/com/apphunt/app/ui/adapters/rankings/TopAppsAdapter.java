@@ -2,6 +2,7 @@ package com.apphunt.app.ui.adapters.rankings;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,12 +62,22 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         holder.detailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
-                NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
+                openAppDetailsFragment(app);
             }
         });
 
         holder.installBtn.setAppPackage(app.getPackageName());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAppDetailsFragment(app);
+            }
+        });
+    }
+
+    private void openAppDetailsFragment(BaseApp app) {
+        FlurryAgent.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
+        NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
     }
 
     @Override
@@ -81,6 +92,9 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.card_view)
+        CardView cardView;
+
         @InjectView(R.id.app_name)
         public TextView name;
 
