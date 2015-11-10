@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,17 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private final List<App> apps;
     private final Context ctx;
+    private String userId;
 
     public SearchAppsAdapter(Context ctx, List<App> apps) {
         this.apps = apps;
         this.ctx = ctx;
+    }
+
+    public SearchAppsAdapter(Context ctx, List<App> apps, String userId) {
+        this.apps = apps;
+        this.ctx = ctx;
+        this.userId = userId;
     }
 
     @Override
@@ -52,7 +60,11 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         User createdBy = app.getCreatedBy();
-        viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
+        if (!TextUtils.isEmpty(userId) && userId.equals(createdBy.getId())) {
+            viewHolderItem.creatorView.setVisibility(View.GONE);
+        } else {
+            viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
+        }
         viewHolderItem.vote.setBaseApp((App) app);
 
         viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {

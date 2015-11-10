@@ -1,6 +1,6 @@
 package com.apphunt.app.auth;
 
-import android.app.Activity;
+import android.content.Context;
 
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -18,10 +18,9 @@ public class GooglePlusLoginProvider extends BaseLoginProvider {
 
     private GoogleApiClient googleApiClient;
 
-    public GooglePlusLoginProvider(Activity activity) {
-        super(activity);
-
-        googleApiClient = new GoogleApiClient.Builder(activity)
+    public GooglePlusLoginProvider(Context context) {
+        super(context);
+        googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();

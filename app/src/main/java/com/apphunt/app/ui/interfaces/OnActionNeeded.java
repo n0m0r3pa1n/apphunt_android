@@ -7,5 +7,5 @@ package com.apphunt.app.ui.interfaces;
  * * NaughtySpirit 2015
  */
 public interface OnActionNeeded {
-    public void onContinueAction();
+    void onContinueAction();
 }

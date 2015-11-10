@@ -1,12 +1,12 @@
 package com.apphunt.app.ui.fragments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +64,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     private View view;
     private InstalledAppsAdapter userAppsAdapter;
     private List<ApplicationInfo> data;
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,9 +115,9 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (ActionBarActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.activity = (AppCompatActivity) context;
         BusProvider.getInstance().register(this);
     }
 

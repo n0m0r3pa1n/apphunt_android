@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.view.KeyEvent;
@@ -117,7 +116,7 @@ public class SMSInviteFragment extends BaseFragment {
                             DeepLinkingUtils.getInstance(activity).generateShortUrl(params)), null, null);
 
             activity.getSupportFragmentManager().popBackStack();
-            NotificationsUtils.showNotificationFragment((ActionBarActivity) activity, getString(R.string.msg_successful_invite), false, false);
+            NotificationsUtils.showNotificationFragment(activity, getString(R.string.msg_successful_invite), false, false);
             FlurryAgent.logEvent(TrackingEvents.UserSentSMSInvite);
         }
     }

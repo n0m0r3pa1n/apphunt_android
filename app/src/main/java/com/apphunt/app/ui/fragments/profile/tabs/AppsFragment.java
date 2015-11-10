@@ -94,7 +94,7 @@ public class AppsFragment extends BaseFragment {
         }
 
         if(adapter == null) {
-            adapter = new SearchAppsAdapter(getActivity(), event.getApps().getApps());
+            adapter = new SearchAppsAdapter(getActivity(), event.getApps().getApps(), userId);
             items.setAdapter(adapter, event.getApps().getTotalCount());
         } else {
             adapter.addApps(event.getApps().getApps());

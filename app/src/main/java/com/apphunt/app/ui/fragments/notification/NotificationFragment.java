@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,7 @@ public class NotificationFragment extends BaseFragment {
     private String notification;
     private boolean showSettingsBtn = false;
 
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
     private boolean showRating;
     private boolean showShadow;
     private boolean showContinue;
@@ -158,7 +158,7 @@ public class NotificationFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

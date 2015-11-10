@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.views.vote;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,13 +11,11 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -128,11 +125,6 @@ public class AppVoteButton extends LinearLayout {
 
     @OnClick(R.id.vote)
     public void vote(View view) {
-        if(!LoginProviderFactory.get((Activity)getContext()).isUserLoggedIn()) {
-            LoginUtils.showLoginFragment(false, R.string.login_info_vote);
-            return;
-        }
-
         if(!shouldBeAbleToVote())
             return;
 

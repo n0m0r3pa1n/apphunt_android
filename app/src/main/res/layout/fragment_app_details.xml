@@ -224,15 +224,19 @@
                 android:orientation="vertical"
                 android:visibility="gone"/>
 
-            <com.apphunt.app.ui.views.widgets.AHTextView
+            <com.apphunt.app.ui.views.widgets.AHButton
                 android:id="@+id/comments_action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal"
-                android:text="ALL COMMENTS"
-                android:textSize="14sp"
-                android:textColor="@color/bg_primary"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:text="Add a comment (0)"
+                android:gravity="center"
+                android:background="@drawable/btn_unfollow"
+                android:elevation="0dp"
                 app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </LinearLayout>
     </RelativeLayout>

@@ -14,11 +14,7 @@ public class ConnectivityUtils {
         NetworkInfo activeNetworkInfo = connectivityManager
                 .getActiveNetworkInfo();
 
-        if (activeNetworkInfo != null && (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE)
-                && activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return activeNetworkInfo != null && (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE)
+                && activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED;
     }
 }

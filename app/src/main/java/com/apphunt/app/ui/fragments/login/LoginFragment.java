@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.GooglePlusLoginProvider;
+import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.constants.Constants;
@@ -89,7 +91,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
     @InjectView(R.id.fb_login_button)
     CustomFacebookButton fbLoginBtn;
 
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
     private User user;
 
     private boolean canBeSkipped = false;
@@ -211,7 +213,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                             @Override
                             public void success(Result<String> result) {
                                 user.setEmail(result.data);
-                                LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
+                                LoginProviderFactory.setLoginProvider(TwitterLoginProvider.class.getCanonicalName());
                                 ApiClient.getClient(getActivity()).createUser(user);
 
                                 FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
@@ -227,14 +229,14 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                     }
 
                     @Override
-                    public void failure (TwitterException e){
+                    public void failure(TwitterException e) {
                         onLoginFailed();
                     }
                 });
             }
 
             @Override
-            public void failure (TwitterException e){
+            public void failure(TwitterException e) {
                 onLoginFailed();
             }
         });
@@ -297,7 +299,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
                         user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-                        LoginProviderFactory.setLoginProvider(activity, new FacebookLoginProvider(activity));
+                        LoginProviderFactory.setLoginProvider(FacebookLoginProvider.class.getCanonicalName());
 
                         ApiClient.getClient(getActivity()).createUser(user);
                         FlurryAgent.logEvent(TrackingEvents.UserFacebookLogin);
@@ -337,7 +339,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -382,7 +384,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             if (resultCode == Activity.RESULT_OK) {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 user.setEmail(email);
-                LoginProviderFactory.setLoginProvider(activity, new TwitterLoginProvider(activity));
+                LoginProviderFactory.setLoginProvider(TwitterLoginProvider.class.getCanonicalName());
                 ApiClient.getClient(getActivity()).createUser(user);
 
                 FlurryAgent.logEvent(TrackingEvents.UserTwitterLogin);
@@ -401,6 +403,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
     @Subscribe
     public void onUserCreated(UserCreatedApiEvent event) {
+        Log.e(TAG, LoginProviderFactory.get(activity).getName());
         LoginProviderFactory.get(activity).login(event.getUser());
     }
 
@@ -435,7 +438,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
             user.setLoginType(GooglePlusLoginProvider.PROVIDER_NAME);
 
-            LoginProviderFactory.setLoginProvider(activity, new GooglePlusLoginProvider(activity));
+            LoginProviderFactory.setLoginProvider(GooglePlusLoginProvider.class.getCanonicalName());
             ApiClient.getClient(getActivity()).createUser(user);
 
             FlurryAgent.logEvent(TrackingEvents.UserGooglePlusLogin);

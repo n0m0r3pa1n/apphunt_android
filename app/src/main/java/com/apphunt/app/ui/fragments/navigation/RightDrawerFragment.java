@@ -60,7 +60,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     private List<HistoryRowComponent> previousRows;
 
     private int historyRequestsCount = 0;
-    private boolean isFirstRequest = true, isEndOfList = false;;
+    private boolean isFirstRequest = true, isEndOfList = false;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,7 @@ public class SettingsFragment extends BaseFragment {
     private static final String TAG = SettingsFragment.class.getName();
 
     private View view;
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
 
     @InjectView(R.id.settings)
     RelativeLayout container;
@@ -148,7 +148,7 @@ public class SettingsFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

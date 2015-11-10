@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +44,7 @@ import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
+import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -63,7 +64,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
     private View view;
 
     private ApplicationInfo data;
-    private ActionBarActivity activity;
+    private AppCompatActivity activity;
     private AutoCompleteTextView tagView;
 
     @InjectView(R.id.container)
@@ -201,7 +202,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.activity = (ActionBarActivity) activity;
+        this.activity = (AppCompatActivity) activity;
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         ActionBarUtils.getInstance().hideActionBarShadow();
@@ -243,6 +244,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
             BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
             BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false, false));
             BusProvider.getInstance().post(new AppSubmittedEvent(data.packageName));
+            Apptentive.engage(activity, "user.added.app");
         } else {
             try {
                 activity.getSupportFragmentManager().popBackStack();

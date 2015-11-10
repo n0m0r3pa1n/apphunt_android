@@ -32,6 +32,7 @@ import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
+import com.apptentive.android.sdk.Apptentive;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -140,6 +141,7 @@ public class TrendingAppsFragment extends BaseFragment {
     public void addApp() {
         startSelectAppFragment();
         SoundsUtils.performHapticFeedback(btnAddApp);
+        Apptentive.engage(activity, "user.clicked.add.app");
     }
 
     private void startSelectAppFragment() {

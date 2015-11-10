@@ -3,7 +3,6 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
@@ -28,21 +27,23 @@ import java.util.ArrayList;
  */
 public abstract class BaseLoginProvider implements LoginProvider {
 
-    private final Activity activity;
+    protected Context context;
 
     public interface OnFriendsResultListener {
         void onFriendsReceived(ArrayList<Friend> friends);
     }
 
-    public BaseLoginProvider(Activity activity) {
-        this.activity = activity;
+    public BaseLoginProvider(Context context) {
+        this.context = context;
     }
 
     @Override
     public void logout() {
         removeSharedPreferences();
         BusProvider.getInstance().post(new LogoutEvent());
-        hideLoginFragment(activity);
+        hideLoginFragment(context);
+
+        LoginProviderFactory.reset();
     }
 
     @Override
@@ -99,7 +100,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void hideLoginFragment(Context ctx) {
-        FragmentManager fragmentManager = ((ActionBarActivity) ctx).getSupportFragmentManager();
+        FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
         LoginFragment loginFragment = (LoginFragment) fragmentManager.findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
 
         if (loginFragment != null) {
@@ -108,8 +109,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void presentInvitesScreen() {
-        ((AppCompatActivity) activity).getSupportFragmentManager().popBackStack();
-        ((AppCompatActivity) activity).getSupportFragmentManager().beginTransaction()
+        ((AppCompatActivity) context).getSupportFragmentManager().popBackStack();
+        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
                 .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
                 .commit();
@@ -120,6 +121,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     protected Activity getActivity() {
-        return activity;
+        return (Activity) context;
     }
 }

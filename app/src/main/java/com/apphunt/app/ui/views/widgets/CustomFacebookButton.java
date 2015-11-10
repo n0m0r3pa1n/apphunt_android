@@ -61,7 +61,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
     private LoginManager loginManager;
 
     public CustomFacebookButton(Context context) {
-        super(context, (AttributeSet)null, 0, 0, "fb_login_button_create", DEFAULT_REQUEST_CODE);
+        super(context, null, 0, 0, "fb_login_button_create", DEFAULT_REQUEST_CODE);
         this.toolTipStyle = ToolTipPopup.Style.BLUE;
         this.toolTipDisplayTime = 6000L;
 
@@ -330,7 +330,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
                     Profile profile = Profile.getCurrentProfile();
                     String message;
                     if(profile != null && profile.getName() != null) {
-                        message = String.format(CustomFacebookButton.this.getResources().getString(com.facebook.R.string.com_facebook_loginview_logged_in_as), new Object[]{profile.getName()});
+                        message = String.format(CustomFacebookButton.this.getResources().getString(com.facebook.R.string.com_facebook_loginview_logged_in_as), profile.getName());
                     } else {
                         message = CustomFacebookButton.this.getResources().getString(com.facebook.R.string.com_facebook_loginview_logged_in_using_facebook);
                     }
@@ -340,7 +340,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
                         public void onClick(DialogInterface dialog, int which) {
                             CustomFacebookButton.this.getLoginManager().logOut();
                         }
-                    }).setNegativeButton(parameters, (android.content.DialogInterface.OnClickListener)null);
+                    }).setNegativeButton(parameters, null);
                     builder.create().show();
                 } else {
                     CustomFacebookButton.this.getLoginManager().logOut();
@@ -365,7 +365,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
             AppEventsLogger logger2 = AppEventsLogger.newLogger(CustomFacebookButton.this.getContext());
             Bundle parameters1 = new Bundle();
             parameters1.putInt("logging_in", accessToken != null?0:1);
-            logger2.logSdkEvent(CustomFacebookButton.this.loginLogoutEventName, (Double)null, parameters1);
+            logger2.logSdkEvent(CustomFacebookButton.this.loginLogoutEventName, null, parameters1);
             CustomFacebookButton.this.callExternalOnClickListener(v);
         }
     }
@@ -429,7 +429,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
         }
     }
 
-    public static enum ToolTipMode {
+    public enum ToolTipMode {
         AUTOMATIC("automatic", 0),
         DISPLAY_ALWAYS("display_always", 1),
         NEVER_DISPLAY("never_display", 2);
@@ -452,7 +452,7 @@ public class CustomFacebookButton extends FacebookButtonBase {
             return null;
         }
 
-        private ToolTipMode(String stringValue, int value) {
+        ToolTipMode(String stringValue, int value) {
             this.stringValue = stringValue;
             this.intValue = value;
         }

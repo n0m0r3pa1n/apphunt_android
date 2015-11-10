@@ -20,17 +20,14 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
-import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -104,10 +101,8 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
         });
 
 
-        if (userHasPermissions()) {
-            labelComment.setVisibility(View.GONE);
-            commentBox.setVisibility(View.VISIBLE);
-        }
+        labelComment.setVisibility(View.GONE);
+        commentBox.setVisibility(View.VISIBLE);
 
         return view;
     }
@@ -142,15 +137,8 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
         commentBox.setSelection(replyName.length());
     }
 
-
-
     @OnClick(R.id.send_comment)
     public void sendComment() {
-        if (!userHasPermissions()) {
-            LoginUtils.showLoginFragment(false, R.string.login_info_comment);
-            return;
-        }
-
         NewComment comment = new NewComment();
         if (commentBox.getText().length() > 0) {
             if (replyToComment != null) {
@@ -186,10 +174,6 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
 
     }
 
-    private boolean userHasPermissions() {
-        return LoginProviderFactory.get(getActivity()).isUserLoggedIn();
-    }
-
     private void closeKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -204,16 +188,6 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     @Subscribe
     public void refreshAppComments(ReloadCommentsEvent event) {
         ApiService.getInstance(getActivity()).reloadAppComments(appId);
-    }
-
-    @Subscribe
-    public void onUserLogin(LoginEvent event) {
-        if (userHasPermissions()) {
-            labelComment.setVisibility(View.GONE);
-            commentBox.setVisibility(View.VISIBLE);
-            commentsAdapter = null;
-            loadData();
-        }
     }
 
     @Subscribe

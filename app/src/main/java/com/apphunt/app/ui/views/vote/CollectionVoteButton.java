@@ -1,5 +1,6 @@
 package com.apphunt.app.ui.views.vote;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
@@ -8,10 +9,11 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.api.apphunt.models.votes.CollectionVote;
-import com.apphunt.app.event_bus.events.api.votes.CollectionVoteApiEvent;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.event_bus.events.api.votes.CollectionVoteApiEvent;
+import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apptentive.android.sdk.Apptentive;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
@@ -62,6 +64,7 @@ public class CollectionVoteButton extends AppVoteButton {
         FlurryAgent.logEvent(TrackingEvents.UserVotedCollection);
         ApiClient.getClient(getContext()).voteCollection(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 collection.getId());
+        Apptentive.engage((Activity) getContext(), "user.collection.vote");
     }
 
     @Override

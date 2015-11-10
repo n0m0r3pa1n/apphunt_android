@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -78,20 +78,20 @@ public class NotificationsUtils {
         SharedPreferencesHelper.setPreference(Constants.SETTING_NOTIFICATIONS_ENABLED, false);
     }
 
-    public static void showNotificationFragmentWithContinueAction(ActionBarActivity activity, String message, OnActionNeeded actionListener) {
+    public static void showNotificationFragmentWithContinueAction(AppCompatActivity activity, String message, OnActionNeeded actionListener) {
         showNotificationFragment(activity, message, false, true, false, true, true, actionListener);
     }
 
-    public static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showRating) {
+    public static void showNotificationFragment(AppCompatActivity activity, String message, boolean showSettingsAction, boolean showRating) {
         showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, true, null);
     }
 
-    public static void showNotificationFragment(ActionBarActivity activity, String message,
+    public static void showNotificationFragment(AppCompatActivity activity, String message,
                                                 boolean showSettingsAction, boolean showRating, boolean popBackStack) {
         showNotificationFragment(activity, message, showSettingsAction, false, showRating, true, popBackStack, null);
     }
 
-    private static void showNotificationFragment(ActionBarActivity activity, String message, boolean showSettingsAction, boolean showContinueAction,
+    private static void showNotificationFragment(AppCompatActivity activity, String message, boolean showSettingsAction, boolean showContinueAction,
                                                  boolean showRating, boolean showShadow, boolean popBackStack, OnActionNeeded actionListener) {
         try {
             Bundle extras = new Bundle();
