@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
@@ -68,7 +69,6 @@ import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.appsee.Appsee;
 import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -103,9 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!BuildConfig.DEBUG){
-            Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
-        }
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
@@ -618,6 +615,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 //        AppSpice.onStop(this);
         Apptentive.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ApiService.resetCalendars();
     }
 
     @Subscribe

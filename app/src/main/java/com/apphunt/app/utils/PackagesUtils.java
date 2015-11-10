@@ -26,6 +26,12 @@ public class PackagesUtils {
         return instance;
     }
 
+    public void resetInstalledPackages() {
+        if(installedPackages != null && !installedPackages.isEmpty()) {
+            installedPackages.clear();
+        }
+    }
+
     public List<ApplicationInfo> getInstalledPackages(PackageManager packageManager) {
         try {
             if(installedPackages.size() > 0) {

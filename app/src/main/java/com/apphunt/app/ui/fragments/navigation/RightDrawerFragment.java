@@ -13,7 +13,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
@@ -29,10 +28,11 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.ui.adapters.HistoryAdapter;
+import com.apphunt.app.ui.interfaces.OnEndReachedListener;
+import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
-import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
@@ -57,42 +57,14 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
     private AppCompatActivity activity;
     private LinearLayoutManager layoutManager;
     private HistoryAdapter adapter;
-    private List<HistoryRowComponent> previousRows;
 
     private int historyRequestsCount = 0;
-    private boolean isFirstRequest = true, isEndOfList = false;
-    private int pastVisiblesItems, visibleItemCount, totalItemCount;
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (ConnectivityUtils.isNetworkAvailable(getActivity())) {
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    if (isEndOfList) {
-                        ApiService.getInstance(activity).loadHistoryForPreviousDate();
-                        FlurryAgent.logEvent(TrackingEvents.UserScrolledHistoryEvents);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            visibleItemCount = layoutManager.getChildCount();
-            totalItemCount = layoutManager.getItemCount();
-            pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-            isEndOfList = (pastVisiblesItems + visibleItemCount) == totalItemCount;
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BusProvider.getInstance().register(this);
         if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
-
             ApiService.getInstance(activity).loadHistoryForToday();
             HistoryConnectionManager.getInstance().addRefreshListener(this);
             HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
@@ -109,7 +81,13 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         historyEventsList.setItemAnimator(new DefaultItemAnimator());
         historyEventsList.setLayoutManager(layoutManager);
         historyEventsList.setHasFixedSize(false);
-        historyEventsList.addOnScrollListener(onScrollListener);
+        historyEventsList.addOnScrollListener(new EndlessRecyclerScrollListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                ApiService.getInstance(activity).loadHistoryForPreviousDate();
+                FlurryAgent.logEvent(TrackingEvents.UserScrolledHistoryEvents);
+            }
+        }, layoutManager));
 
         return view;
     }
