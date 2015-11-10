@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.db.models.InstalledApp;
+import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
 import java.util.Date;
@@ -20,6 +20,8 @@ public class InstallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferencesHelper.init(context);
+        PackagesUtils.getInstance().resetInstalledPackages();
+
         Uri uri = intent.getData();
         String[] str = uri.toString().split(":");
         String packageInstalled = str[str.length-1];
