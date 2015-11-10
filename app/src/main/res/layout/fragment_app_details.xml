@@ -54,7 +54,6 @@
                 android:textSize="@dimen/details_box_desc_app_name_text"
                 app:typefacePath="fonts/OpenSans-Bold.ttf"/>
 
-
             <com.apphunt.app.ui.views.CreatorView
                 android:id="@+id/box_name"
                 android:layout_width="match_parent"
@@ -67,6 +66,33 @@
                 app:pictureHeight="@dimen/details_avatar_creator"
                 app:pictureWidth="@dimen/details_avatar_creator"
                 app:textSize="@integer/details_box_name_creator_name_text"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/paid_info_container"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/box_details"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/paid_icon"
+                android:layout_width="33dp"
+                android:layout_height="28dp"
+                android:background="@drawable/ic_paid"/>
+
+            <com.apphunt.app.ui.views.widgets.AHTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/paid_icon"
+                android:layout_marginLeft="8dp"
+                android:text="@string/paid"
+                android:textSize="16sp"
+                android:textColor="#B4000000"
+                android:gravity="center"
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
         </RelativeLayout>
 
         <com.apphunt.app.ui.views.app.DownloadButton

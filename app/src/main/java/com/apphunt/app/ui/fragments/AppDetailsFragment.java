@@ -137,6 +137,9 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     @InjectView(R.id.loading_comments)
     CircularProgressBar loadingComments;
 
+    @InjectView(R.id.paid_info_container)
+    RelativeLayout paidInfoContainer;
+
     FavouriteAppButton favouriteAppButton;
 
     public static final int MIN_HEX_IMAGES_SIZE = 15;
@@ -300,6 +303,9 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
             gallery.setImages(baseApp.getScreenshots());
         }
 
+        if (!baseApp.isFree()) {
+            paidInfoContainer.setVisibility(View.VISIBLE);
+        }
 
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
 

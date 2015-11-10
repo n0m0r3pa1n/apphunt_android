@@ -28,11 +28,11 @@ public class BaseApp implements Serializable {
     private String url;
     private boolean hasVoted;
     private boolean isFavourite;
+    private boolean isFree;
     private User createdBy;
     private int commentsCount;
     private ArrayList<String> categories = new ArrayList<>();
     private ArrayList<String> screenshots = new ArrayList<>();
-
 
     public int getPosition() {
         return position;
@@ -166,21 +166,34 @@ public class BaseApp implements Serializable {
         this.isFavourite = isFavourite;
     }
 
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setIsFree(boolean isFree) {
+        this.isFree = isFree;
+    }
+
     @Override
     public String toString() {
         return "BaseApp{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", icon='" + icon + '\'' +
-                ", position=" + position +
-                ", packageName='" + packageName + '\'' +
-                ", votesCount=" + votesCount +
-                ", shortUrl='" + shortUrl + '\'' +
-                ", url='" + url + '\'' +
-                ", hasUserVoted=" + hasVoted +
-                ", createdBy=" + createdBy +
+                "screenshots=" + screenshots +
+                ", categories=" + categories +
                 ", commentsCount=" + commentsCount +
+                ", createdBy=" + createdBy +
+                ", isFree=" + isFree +
+                ", isFavourite=" + isFavourite +
+                ", hasVoted=" + hasVoted +
+                ", url='" + url + '\'' +
+                ", shortUrl='" + shortUrl + '\'' +
+                ", rating=" + rating +
+                ", votesCount=" + votesCount +
+                ", packageName='" + packageName + '\'' +
+                ", position=" + position +
+                ", icon='" + icon + '\'' +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }
