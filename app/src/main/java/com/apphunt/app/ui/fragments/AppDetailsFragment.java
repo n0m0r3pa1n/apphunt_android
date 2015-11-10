@@ -411,7 +411,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
             commentsAction.setText("Add a comment (" + comments.getTotalCount() + ")");
         }
 
-        CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null);
+        CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null, null);
         int size = comments.getComments().size() < MAX_DISPLAYED_COMMENTS ? comments.getComments().size() : MAX_DISPLAYED_COMMENTS;
         for (int i = 0; i < size; i++) {
             View view = commentsAdapter.getView(i, null, commentsList);

@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e(TAG, LoginProviderFactory.get(this).getName());
 
         if (!BuildConfig.DEBUG){
             Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
@@ -308,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onNewIntent(intent);
         showStartFragments(intent);
         this.setIntent(intent);
+        Log.e(TAG, intent.getType() + " " + intent.getAction() + " " + intent.getDataString());
     }
 
     private boolean isStartedFromShareIntent(Intent intent) {

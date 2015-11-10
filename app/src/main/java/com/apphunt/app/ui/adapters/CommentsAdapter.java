@@ -3,10 +3,13 @@ package com.apphunt.app.ui.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,11 +22,14 @@ import com.apphunt.app.auth.AnonymousLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.ui.ReplyToCommentEvent;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.comments.CommentItem;
 import com.apphunt.app.ui.listview_items.comments.SubCommentItem;
 import com.apphunt.app.ui.views.vote.CommentVoteButton;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
@@ -38,6 +44,7 @@ public class CommentsAdapter extends BaseAdapter {
     public static final String TAG = CommentsAdapter.class.getSimpleName();
 
     private ListView listView;
+    private EditText commentBox;
     private String userId;
 
     private Context ctx;
@@ -48,9 +55,10 @@ public class CommentsAdapter extends BaseAdapter {
     private int page;
     private int totalPages;
 
-    public CommentsAdapter(Context ctx, Comments comments, ListView listView) {
+    public CommentsAdapter(Context ctx, Comments comments, ListView listView, EditText commentBox) {
         this.ctx = ctx;
         this.listView = listView;
+        this.commentBox = commentBox;
 
         addItems(comments);
         totalPages = comments.getTotalPages();
@@ -92,15 +100,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             commentViewHolder.name.setText(comment.getUser().getUsername());
             commentViewHolder.comment.setText(comment.getText());
-
-            if (comment.getUser().getId().equals(userId)) {
-                commentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
-            } else {
-                commentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
-            }
-
             commentViewHolder.vote.setComment(comment);
-
             commentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -114,7 +114,14 @@ public class CommentsAdapter extends BaseAdapter {
                 }
             });
 
+            commentViewHolder.reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectAndPutReplyName(comment);
+                }
+            });
 
+            commentViewHolder.timestamp.setText(StringUtils.getTimeDifferenceString(comment.getCreatedAt()));
         } else if (getItemViewType(position) == 1 && subCommentViewHolder != null) {
             final Comment comment = ((SubCommentItem) getItem(position)).getData();
 
@@ -125,16 +132,7 @@ public class CommentsAdapter extends BaseAdapter {
 
             subCommentViewHolder.name.setText(comment.getUser().getUsername());
             subCommentViewHolder.comment.setText(comment.getText());
-
-
-            if (comment.getUser().getId().equals(userId)) {
-                subCommentViewHolder.layout.setBackgroundResource(R.color.bg_own_comment);
-            } else {
-                subCommentViewHolder.layout.setBackgroundResource(android.R.color.transparent);
-            }
-
             subCommentViewHolder.vote.setComment(comment);
-
             subCommentViewHolder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,9 +145,32 @@ public class CommentsAdapter extends BaseAdapter {
                             .presentUserProfileFragment(comment.getUser().getId(), comment.getUser().getName());
                 }
             });
+
+            subCommentViewHolder.reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectAndPutReplyName(comment);
+                }
+            });
+
+            subCommentViewHolder.timestamp.setText(StringUtils.getTimeDifferenceString(comment.getCreatedAt()));
         }
 
         return view;
+    }
+
+    private void selectAndPutReplyName(Comment comment) {
+        BusProvider.getInstance().post(new ReplyToCommentEvent(comment));
+
+        if (commentBox == null) {
+            return;
+        }
+
+        String replyName = String.format(ctx.getResources().getString(R.string.reply_to), comment.getUser().getUsername()) + " ";
+
+        commentBox.getText().clear();
+        commentBox.setText(replyName);
+        commentBox.setSelection(replyName.length());
     }
 
     @Override
@@ -227,11 +248,20 @@ public class CommentsAdapter extends BaseAdapter {
         @InjectView(R.id.name)
         TextView name;
 
+        @InjectView(R.id.timestamp)
+        TextView timestamp;
+
         @InjectView(R.id.score_text)
         TextView comment;
 
         @InjectView(R.id.vote_btn)
         CommentVoteButton vote;
+
+        @InjectView(R.id.reply)
+        Button reply;
+
+        @InjectView(R.id.divider)
+        View divider;
 
         public CommentViewHolder(View view) {
             ButterKnife.inject(this, view);

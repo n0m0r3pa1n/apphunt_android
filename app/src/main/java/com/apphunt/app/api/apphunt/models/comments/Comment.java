@@ -17,6 +17,7 @@ public class Comment {
     private int votesCount;
     private String text;
     private boolean hasVoted;
+    private String createdAt;
 
     public String getId() {
         return id;
@@ -100,5 +101,29 @@ public class Comment {
 
     public void setHasVoted(boolean hasVoted) {
         this.hasVoted = hasVoted;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", userId='" + userId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", parent='" + parent + '\'' +
+                ", children=" + children +
+                ", votesCount=" + votesCount +
+                ", text='" + text + '\'' +
+                ", hasVoted=" + hasVoted +
+                ", createdAt='" + createdAt + '\'' +
+                '}';
     }
 }

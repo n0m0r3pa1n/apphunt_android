@@ -1,13 +1,16 @@
 package com.apphunt.app.utils;
 
 import android.text.Html;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +18,8 @@ import java.util.regex.Pattern;
  * Created by nmp on 15-5-28.
  */
 public class StringUtils {
+    private static final String TAG = StringUtils.class.getSimpleName();
+
     public static String decodeString(String str) {
         try {
             return URLDecoder.decode(str, "UTF-8");
@@ -70,7 +75,7 @@ public class StringUtils {
     }
 
     public static String getDateAsTitleString(String dateStr) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
 
@@ -85,5 +90,41 @@ public class StringUtils {
         }
 
         return dateStr;
+    }
+
+    public static String getTimeDifferenceString(String dateStr) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+        SimpleDateFormat returnDate = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Calendar eventDate = Calendar.getInstance();
+        long diff = 0;
+
+        try {
+            eventDate.setTime(formatter.parse(dateStr));
+            diff = Calendar.getInstance().getTimeInMillis() - eventDate.getTimeInMillis();
+        } catch (ParseException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        int years = Math.abs(eventDate.get(Calendar.YEAR) - Calendar.getInstance().get(Calendar.YEAR));
+        int months = Math.abs(years * 12 + eventDate.get(Calendar.MONTH) - Calendar.getInstance().get(Calendar.MONTH));
+        int days = (int) diff / (24 * 60 * 60 * 1000);
+        int hours = (int) diff / (60 * 60 * 1000) % 24;
+        int min = (int) diff / (60 * 1000) % 60;
+        int sec = (int) diff / 1000 % 60;
+
+        if (months > 0) {
+            return returnDate.format(eventDate.getTime());
+        } else if (days > 0) {
+            return days + "d";
+        } else if (hours > 0) {
+            return hours + "h";
+        } else if (min > 0) {
+            return min + "m";
+        } else if (sec > 0) {
+            return sec + "s";
+        } else {
+            return "0s";
+        }
     }
 }

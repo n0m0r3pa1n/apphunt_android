@@ -1,15 +1,17 @@
 package com.apphunt.app.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,10 +22,12 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.comments.Comments;
 import com.apphunt.app.api.apphunt.models.comments.NewComment;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.apps.LoadAppCommentsApiEvent;
 import com.apphunt.app.event_bus.events.ui.ReloadCommentsEvent;
+import com.apphunt.app.event_bus.events.ui.ReplyToCommentEvent;
 import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -31,20 +35,23 @@ import com.apphunt.app.ui.views.containers.ScrollListView;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
  * Created by nmp on 15-7-28.
  */
-public class CommentsFragment extends BackStackFragment implements AdapterView.OnItemClickListener {
+public class CommentsFragment extends BackStackFragment {
     private static final String KEY_APP_ID = "APP_ID";
 
     private String appId;
 
+    private AppCompatActivity activity;
     private OnCommentEnteredListener listener;
     private CommentsAdapter commentsAdapter;
     private Comment replyToComment;
@@ -52,23 +59,20 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     @InjectView(R.id.box_comments)
     RelativeLayout boxComments;
 
-    @InjectView(R.id.header_comments)
-    TextView headerComments;
-
     @InjectView(R.id.comments_count)
     ScrollListView commentsList;
-
-    @InjectView(R.id.label_comment)
-    TextView labelComment;
 
     @InjectView(R.id.label_no_comments)
     TextView labelNoComment;
 
+    @InjectView(R.id.avatar)
+    CircleImageView avatar;
+
     @InjectView(R.id.comment_entry)
     EditText commentBox;
 
-    @InjectView(R.id.send_comment)
-    TextView send;
+    @InjectView(R.id.send)
+    Button send;
 
     @InjectView(R.id.loading)
     CircularProgressBar loading;
@@ -91,7 +95,6 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
         View view = inflater.inflate(R.layout.fragment_comments, container, false);
         ButterKnife.inject(this, view);
 
-        commentsList.setOnItemClickListener(this);
         commentsList.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
@@ -100,9 +103,10 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
             }
         });
 
-
-        labelComment.setVisibility(View.GONE);
-        commentBox.setVisibility(View.VISIBLE);
+        Picasso.with(activity)
+                .load(LoginProviderFactory.get(activity).getUser().getProfilePicture())
+                .placeholder(R.drawable.avatar_placeholder)
+                .into(avatar);
 
         return view;
     }
@@ -122,22 +126,18 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         hideSoftKeyboard();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        replyToComment = commentsAdapter.getComment(position);
-        String replyName = String.format(getResources().getString(R.string.reply_to), replyToComment.getUser().getUsername()) + " ";
-
-        commentBox.getText().clear();
-        commentBox.setText(replyName);
-        commentBox.setSelection(replyName.length());
-    }
-
-    @OnClick(R.id.send_comment)
+    @OnClick(R.id.send)
     public void sendComment() {
         NewComment comment = new NewComment();
         if (commentBox.getText().length() > 0) {
@@ -202,15 +202,20 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
             return;
         }
 
-        headerComments.setText(comments.getTotalCount() + " comments");
         loading.setVisibility(View.GONE);
         commentsList.setVisibility(View.VISIBLE);
         if(commentsAdapter == null || event.shouldReload()) {
-            commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), commentsList.getListView());
+            commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), commentsList.getListView(), commentBox);
             commentsList.setAdapter(commentsAdapter, event.getComments().getTotalCount());
         } else {
             commentsAdapter.addItems(comments);
         }
+    }
+
+    @Subscribe
+    public void onReplyCommentSelected(ReplyToCommentEvent event) {
+        this.replyToComment = event.getComment();
+        showKeyboard();
     }
 
     public void setOnCommentEnteredListener(OnCommentEnteredListener listener) {
@@ -219,5 +224,11 @@ public class CommentsFragment extends BackStackFragment implements AdapterView.O
 
     interface OnCommentEnteredListener {
         void onCommentEntered(NewComment comment);
+    }
+
+    private void showKeyboard() {
+        commentBox.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(commentBox, 0);
     }
 }

@@ -8,34 +8,12 @@
     android:background="@color/bg_secondary"
     android:clickable="true">
 
-    <com.apphunt.app.ui.views.widgets.AHTextView
-        android:id="@+id/header_comments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/header_comments_padding_left"
-        android:paddingRight="@dimen/header_comments_padding_left"
-        android:paddingTop="@dimen/header_comments_padding_top"
-        android:paddingBottom="@dimen/header_comments_padding_top"
-        android:text="0 comments"
-        android:textStyle="bold"
-        android:textColor="@color/text_headers"
-        android:textAllCaps="true"
-        app:typefacePath="fonts/OpenSans-Bold.ttf"/>
-
-    <ImageView
-        android:id="@+id/comments_arrow"
-        android:layout_width="@dimen/comments_arrow_width"
-        android:layout_height="@dimen/comments_arrow_height"
-        android:layout_below="@+id/header_comments"
-        android:background="@drawable/comments_arrow"
-        android:layout_marginLeft="@dimen/comments_arrow_margin_left"/>
-
     <com.apphunt.app.ui.views.containers.ScrollListView
         android:id="@+id/comments_count"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/divider"
         android:layout_below="@+id/comments_arrow"
+        android:layout_above="@+id/comment_box"
         android:background="@color/bg_secondary"
         android:descendantFocusability="afterDescendants"
         android:visibility="gone"
@@ -61,62 +39,49 @@
         android:elevation="0dp"
         app:typefacePath="fonts/OpenSans-Regular.ttf"/>
 
-    <View
-        android:id="@+id/divider"
+    <RelativeLayout
+        android:id="@+id/comment_box"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider"
-        android:layout_above="@+id/comment_entry"/>
+        android:layout_height="55dp"
+        android:background="@color/bg_primary"
+        android:layout_alignParentBottom="true">
 
-    <com.apphunt.app.ui.views.widgets.AHEditText
-        android:id="@+id/comment_entry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/comment_entry_min_height"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/comment_entry_padding_left"
-        android:paddingRight="@dimen/comment_entry_padding_right"
-        android:paddingTop="@dimen/comment_entry_padding_top"
-        android:paddingBottom="@dimen/comment_entry_padding_top"
-        android:background="@color/bg_secondary"
-        android:singleLine="false"
-        android:textSize="@dimen/comment_entry_text"
-        android:hint="@string/comment_entry_hint"
-        android:textColorHint="@color/comment_entry_hint"
-        android:gravity="top"
-        android:visibility="invisible"
-        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="12dp"/>
 
-    <com.apphunt.app.ui.views.widgets.AHTextView
-        android:id="@+id/label_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/comment_entry_min_height"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/comment_entry_padding_left"
-        android:paddingRight="@dimen/comment_entry_padding_right"
-        android:paddingTop="@dimen/comment_entry_padding_top"
-        android:paddingBottom="@dimen/comment_entry_padding_top"
-        android:background="@color/bg_secondary"
-        android:singleLine="false"
-        android:textSize="@dimen/comment_entry_text"
-        android:hint="@string/comment_entry_hint"
-        android:textColorHint="@color/comment_entry_hint"
-        android:gravity="top"
-        app:typefacePath="fonts/OpenSans-Regular.ttf"/>
-
-    <com.apphunt.app.ui.views.widgets.AHTextView
-        android:id="@+id/send_comment"
-        android:layout_width="@dimen/send_comment_width"
-        android:layout_height="@dimen/send_comment_height"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@color/bg_secondary"
-        android:text="@string/send"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:textColor="@color/bg_primary"
-        android:gravity="center"
-        app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+        <com.apphunt.app.ui.views.widgets.AHEditText
+            android:id="@+id/comment_entry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_toLeftOf="@+id/send"
+            android:paddingLeft="@dimen/comment_entry_padding"
+            android:paddingRight="@dimen/comment_entry_padding"
+            android:background="@drawable/shape_comment_entry"
+            android:singleLine="false"
+            android:textSize="@dimen/comment_entry_text"
+            android:hint="@string/comment_entry_hint"
+            android:textColorHint="@color/comment_entry_hint"
+            android:scrollbars="vertical"
+            android:elevation="0dp"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+        
+        <Button
+            android:id="@+id/send"
+            android:layout_width="@dimen/send_comment_width"
+            android:layout_height="@dimen/send_comment_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_send" />
+    </RelativeLayout>
 </RelativeLayout>
 
