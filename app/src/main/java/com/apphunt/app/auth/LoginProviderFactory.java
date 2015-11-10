@@ -1,6 +1,7 @@
 package com.apphunt.app.auth;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.apphunt.app.constants.Constants;
@@ -35,8 +36,11 @@ public class LoginProviderFactory {
     }
 
     public static void onCreate(Context context) {
+        String loginProviderName = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
         LoginProviderFactory.context = context;
-        createAnonymousProvider();
+        if(TextUtils.isEmpty(loginProviderName) || loginProviderName.equals(AnonymousLoginProvider.PROVIDER_NAME)) {
+            createAnonymousProvider();
+        }
     }
 
     public static void reset() {
