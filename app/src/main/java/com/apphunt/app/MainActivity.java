@@ -68,7 +68,6 @@ import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.appsee.Appsee;
 import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
 import com.flurry.android.FlurryAgent;
@@ -104,9 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setContentView(R.layout.activity_main);
         Log.e(TAG, LoginProviderFactory.get(this).getName());
 
-        if (!BuildConfig.DEBUG){
-            Appsee.start("cdf17a0d30394cd28c6b250e686902c3");
-        }
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
