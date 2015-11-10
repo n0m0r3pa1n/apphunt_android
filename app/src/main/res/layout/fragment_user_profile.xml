@@ -76,6 +76,7 @@
                     android:elevation="0dp"/>
 
                 <LinearLayout
+                    android:id="@+id/info_container"
                     android:elevation="2dp"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     android:layout_width="match_parent"
@@ -127,8 +128,9 @@
                             app:layout_scrollFlags="scroll|exitUntilCollapsed"
                             android:text="0"
                             android:gravity="center"
-                            android:layout_width="70dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:textColor="#8A000000" />
 
                         <com.apphunt.app.ui.views.widgets.AHTextView
@@ -136,10 +138,10 @@
                             app:typefacePath="fonts/OpenSans-Regular.ttf"
                             android:textSize="@dimen/profile_user_info_label"
                             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                            android:layout_width="70dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:gravity="center"
                             android:singleLine="true"
-                            android:layout_height="wrap_content"
                             android:text="Followings"
                             android:textColor="#8A000000"/>
                     </LinearLayout>
@@ -158,7 +160,7 @@
                             app:layout_scrollFlags="scroll|exitUntilCollapsed"
                             android:text="0"
                             android:gravity="center"
-                            android:layout_width="70dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#8A000000"/>
 
@@ -168,7 +170,7 @@
                             android:textSize="@dimen/profile_user_info_label"
                             android:singleLine="true"
                             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                            android:layout_width="70dp"
+                            android:layout_width="match_parent"
                             android:gravity="center"
                             android:layout_height="wrap_content"
                             android:text="Followers"

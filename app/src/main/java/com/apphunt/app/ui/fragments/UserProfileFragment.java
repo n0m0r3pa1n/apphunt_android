@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
@@ -84,6 +85,21 @@ public class UserProfileFragment extends BackStackFragment {
 
     @InjectView(R.id.followings_count)
     TextView followingCount;
+
+    @InjectView(R.id.score_container)
+    LinearLayout scoreContainer;
+
+    @InjectView(R.id.followings_container)
+    LinearLayout followingsContainer;
+
+    @InjectView(R.id.followers_container)
+    LinearLayout followersContainer;
+
+    @InjectView(R.id.follow_button_container)
+    LinearLayout followBtnContainer;
+
+    @InjectView(R.id.info_container)
+    LinearLayout infoContainer;
 
     private int appsCount;
     private int collectionsCount;
@@ -302,6 +318,18 @@ public class UserProfileFragment extends BackStackFragment {
 
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
         scoreText.setText(String.format(getString(R.string.points_month), StringUtils.getMonthStringFromCalendar(currentMonth, true)));
+
+        if (LoginProviderFactory.get(activity).getUser().getId().equals(getUserId())) {
+            followBtnContainer.setVisibility(View.GONE);
+            infoContainer.setWeightSum(3.0f);
+
+            LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) followingsContainer.getLayoutParams();
+            param.weight = 1.0f;
+
+            scoreContainer.setLayoutParams(param);
+            followersContainer.setLayoutParams(param);
+            followingsContainer.setLayoutParams(param);
+        }
 
         updateAbSubtitle(selectedTabPosition);
     }
