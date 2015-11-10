@@ -169,7 +169,8 @@
     <dimen name="header_profile_height">170dp</dimen>
     <dimen name="profile_banner_height">150dp</dimen>
     <dimen name="profile_picture_margin">25dp</dimen>
-    <dimen name="profile_follower_text">14sp</dimen>
+    <dimen name="profile_user_info_text">17sp</dimen>
+    <dimen name="profile_user_info_label">12sp</dimen>
 
     <dimen name="top_apps_buttons_text">14sp</dimen>
 </resources>

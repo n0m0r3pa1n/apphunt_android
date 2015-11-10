@@ -58,9 +58,6 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.score)
     AHTextView score;
 
-    @InjectView(R.id.username)
-    AHTextView username;
-
     @InjectView(R.id.name)
     AHTextView name;
 
@@ -70,11 +67,11 @@ public class UserProfileFragment extends BackStackFragment {
     @InjectView(R.id.banner)
     ImageView banner;
 
+    @InjectView(R.id.score_text)
+    TextView scoreText;
+
     @InjectView(R.id.follow)
     FollowButton follow;
-
-    @InjectView(R.id.score_month)
-    TextView scoreMonth;
 
     @InjectView(R.id.tabs)
     TabLayout tabLayout;
@@ -291,7 +288,6 @@ public class UserProfileFragment extends BackStackFragment {
         }
 
         score.setText("" + userProfile.getScore());
-        username.setText(userProfile.getUsername());
         name.setText(userProfile.getName());
 
         appsCount = userProfile.getApps();
@@ -305,7 +301,7 @@ public class UserProfileFragment extends BackStackFragment {
         follow.init(activity, event.getUserProfile());
 
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-        scoreMonth.setText("(" + StringUtils.getMonthStringFromCalendar(currentMonth) + ")");
+        scoreText.setText(String.format(getString(R.string.points_month), StringUtils.getMonthStringFromCalendar(currentMonth, true)));
 
         updateAbSubtitle(selectedTabPosition);
     }

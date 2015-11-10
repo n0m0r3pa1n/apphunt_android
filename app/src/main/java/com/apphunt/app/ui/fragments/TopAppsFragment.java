@@ -71,10 +71,10 @@ public class TopAppsFragment extends BaseFragment {
         public void onClick(DialogInterface dialog, int which) {
             FlurryAgent.logEvent(TrackingEvents.UserViewedPreviousTopAppsRanking);
             if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
-                ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth),
+                ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false),
                         LoginProviderFactory.get(getActivity()).getUser().getId());
             } else {
-                ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth) +
+                ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false) +
                                 "%20" + StringUtils.getYearStringFromCalendar(selectedYear)
                         ,
                         LoginProviderFactory.get(getActivity()).getUser().getId());
@@ -107,7 +107,7 @@ public class TopAppsFragment extends BaseFragment {
         collectionAppsList.setHasFixedSize(true);
 
         int previousMonth = Calendar.getInstance().get(Calendar.MONTH) - 1;
-        ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(previousMonth),
+        ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(previousMonth, false),
                 LoginProviderFactory.get(getActivity()).getUser().getId());
 
         return view;
@@ -148,7 +148,7 @@ public class TopAppsFragment extends BaseFragment {
             collectionAppsList.setVisibility(View.INVISIBLE);
             noAppsViewStub.setVisibility(View.VISIBLE);
             ((TextView)noAppsViewStub.findViewById(R.id.score_text)).setText("There is no ranking available for " +
-                StringUtils.getMonthStringFromCalendar(selectedMonth) + " " + selectedYear);
+                StringUtils.getMonthStringFromCalendar(selectedMonth, false) + " " + selectedYear);
          return;
         } else {
             collectionAppsList.setVisibility(View.VISIBLE);

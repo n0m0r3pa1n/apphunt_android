@@ -60,9 +60,9 @@ public class TopHuntersFragment extends BaseFragment {
         public void onClick(DialogInterface dialog, int which) {
             FlurryAgent.logEvent(TrackingEvents.UserViewedPreviousTopHuntersRanking);
             if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
-                ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth));
+                ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false));
             } else {
-                ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth) +
+                ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false) +
                         "%20" + StringUtils.getYearStringFromCalendar(selectedYear));
             }
         }
@@ -87,7 +87,7 @@ public class TopHuntersFragment extends BaseFragment {
         selectedYear = calendar.get(Calendar.YEAR);
 
         int previousMonth = Calendar.getInstance().get(Calendar.MONTH) - 1;
-        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(previousMonth));
+        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(previousMonth, false));
     }
 
     @Override
@@ -148,7 +148,7 @@ public class TopHuntersFragment extends BaseFragment {
             collectionHuntersList.setVisibility(View.INVISIBLE);
             noHuntersViewStub.setVisibility(View.VISIBLE);
             ((TextView)noHuntersViewStub.findViewById(R.id.score_text)).setText("There is no ranking available for " +
-                    StringUtils.getMonthStringFromCalendar(selectedMonth) + " " + selectedYear);
+                    StringUtils.getMonthStringFromCalendar(selectedMonth, false) + " " + selectedYear);
             return;
         } else {
             collectionHuntersList.setVisibility(View.VISIBLE);

@@ -100,19 +100,19 @@ public class FollowButton extends AHButton {
         this.setText(R.string.follow);
         this.setTextColor(getResources().getColor(R.color.bg_primary));
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_plus, null);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        this.setCompoundDrawables(drawable, null, null, null);
+//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_plus, null);
+//        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+//        this.setCompoundDrawables(drawable, null, null, null);
     }
 
     private void unfollow() {
         this.setBackgroundResource(R.drawable.btn_unfollow);
         this.setText(R.string.unfollow);
         this.setTextColor(Color.WHITE);
-
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_check, null);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        this.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+//
+//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_check, null);
+//        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+//        this.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     @Subscribe

@@ -204,4 +204,7 @@
     <string name="positive_button_text">Select</string>
     <string name="negative_button_text">Cancel</string>
     <string name="action_date">DATE</string>
+
+    <string name="points_month">Points (%s)</string>
+    <string name="points">Points</string>
 </resources>

@@ -41,8 +41,13 @@ public class StringUtils {
         return dayFormat.format(calendar.getTime());
     }
 
-    public static String getMonthStringFromCalendar(int month) {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+    public static String getMonthStringFromCalendar(int month, boolean withShortName) {
+        SimpleDateFormat dayFormat;
+        if (withShortName) {
+            dayFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
+        } else {
+            dayFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, month);
 
