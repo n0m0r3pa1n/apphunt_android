@@ -406,12 +406,12 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     private void populateComments() {
         if(comments == null || comments.getComments() == null || comments.getComments().size() == 0) {
             loadingComments.setVisibility(View.GONE);
-            commentsAction.setText("Add a comment (" + comments.getTotalCount() + ")");
+            commentsAction.setText("Write a comment");
             return;
         } else {
             loadingComments.setVisibility(View.GONE);
             commentsList.setVisibility(View.VISIBLE);
-            commentsAction.setText("Add a comment (" + comments.getTotalCount() + ")");
+            commentsAction.setText("Show all comments (" + comments.getTotalCount() + ")");
         }
 
         CommentsAdapter commentsAdapter = new CommentsAdapter(activity, comments, null, null);

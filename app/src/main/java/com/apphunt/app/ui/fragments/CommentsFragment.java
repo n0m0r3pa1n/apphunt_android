@@ -3,6 +3,7 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -199,6 +200,14 @@ public class CommentsFragment extends BackStackFragment {
 
         if(comments.getComments().size() == 0) {
             loading.setVisibility(View.GONE);
+
+            new Handler().postAtTime(new Runnable() {
+                @Override
+                public void run() {
+                    showKeyboard();
+                }
+            }, 800);
+
             return;
         }
 

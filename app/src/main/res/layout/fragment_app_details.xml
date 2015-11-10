@@ -233,7 +233,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="15sp"
                 android:textColor="@android:color/white"
-                android:text="Add a comment (0)"
+                android:text="Write a comment"
                 android:gravity="center"
                 android:background="@drawable/btn_unfollow"
                 android:elevation="0dp"
