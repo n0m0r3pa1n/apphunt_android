@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+    public static final String TAG = SearchAppsAdapter.class.getSimpleName();
 
     private final List<App> apps;
     private final Context ctx;
@@ -66,6 +67,7 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
         }
         viewHolderItem.vote.setBaseApp((App) app);
+        viewHolderItem.vote.setTrackingScreen(SearchAppsAdapter.TAG);
 
         viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -27,9 +27,11 @@ import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -68,7 +70,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FlurryAgent.logEvent(TrackingEvents.UserViewedSelectCollection);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSelectCollection);
         View view = inflater.inflate(R.layout.fragment_select_collection, container, false);
         ButterKnife.inject(this, view);
 
@@ -89,9 +91,12 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
     @Override
     public void onClick(View view, int position) {
         if(app != null) {
-            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
-            AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
+            final AppsCollection appsCollection = selectCollectionAdapter.getCollection(position);
             appsCollection.getApps().add(app);
+            FlurryWrapper.logEvent(TrackingEvents.UserAddedAppToCollection, new HashMap<String, String>() {{
+                put("collectionId", appsCollection.getId());
+                put("appId", app.getId());
+            }});
             ApiClient.getClient(getActivity()).updateCollection(LoginProviderFactory.get(getActivity()).getUser().getId(),
                     appsCollection);
         }
@@ -157,7 +162,7 @@ public class SelectCollectionFragment extends BaseFragment implements OnItemClic
 
     @Subscribe
     public void onCollectionCreated(CreateCollectionApiEvent event) {
-        FlurryAgent.logEvent(TrackingEvents.UserCreatedCollectionFromSelectCollection);
+        FlurryWrapper.logEvent(TrackingEvents.UserCreatedCollectionFromSelectCollection);
         currentPage = 0;
         selectCollectionAdapter = null;
         myCollections.resetAdapter();

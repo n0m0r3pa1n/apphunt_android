@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
@@ -86,7 +86,7 @@ public class CreatorView extends LinearLayout {
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
                 NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
             }
         });
@@ -101,7 +101,7 @@ public class CreatorView extends LinearLayout {
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
                 NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
             }
         });

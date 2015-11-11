@@ -64,6 +64,7 @@ import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -71,7 +72,6 @@ import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FlurryWrapper.logEvent(TrackingEvents.UserOpenedApp);
 
         try {
             versionCode = getPackageManager()
@@ -248,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void sendNotificationStatsToFlurry(String notificationType) {
         Map<String, String> params = new HashMap<>();
         params.put("type", notificationType);
-        FlurryAgent.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
+        FlurryWrapper.logEvent(TrackingEvents.UserStartedAppFromNotification, params);
     }
 
     private void initDeepLinking() {
@@ -341,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     if (rightDrawerFragment.isDrawerOpen()) {
                         rightDrawerFragment.closeDrawer();
                     } else {
-                        FlurryAgent.logEvent(TrackingEvents.UserOpenedHistory);
+                        FlurryWrapper.logEvent(TrackingEvents.UserOpenedHistory);
                         rightDrawerFragment.openDrawer();
                     }
                 }
@@ -354,7 +355,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 public boolean onMenuItemClick(MenuItem item) {
                     LoginProvider loginProvider = LoginProviderFactory.get(MainActivity.this);
                     String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp);
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedRandomApp, new HashMap<String, String>(){{
+                        put("screen", TAG);
+                    }});
                     ApiClient.getClient(MainActivity.this).getRandomApp(userId);
                     return true;
                 }
@@ -527,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private void displaySaveAppFragment() {
         String appPackage = getIntent().getStringExtra(Constants.EXTRA_APP_PACKAGE);
         if(!TextUtils.isEmpty(appPackage)) {
-            FlurryAgent.logEvent(TrackingEvents.UserViewedSaveAppFragmentFromNotification);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedSaveAppFragmentFromNotification);
             ApplicationInfo data = PackagesUtils.getApplicationInfo(getPackageManager(), appPackage);
             NavUtils.getInstance(this).presentSaveAppFragment(this, data);
         }
@@ -563,11 +566,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 
         if (getSupportFragmentManager().getBackStackEntryCount() == 0 && !consumedBack) {
+            FlurryWrapper.logEvent(TrackingEvents.UserReturnedToTrendingApps);
             onNavigationDrawerItemSelected(Constants.TRENDING_APPS);
             consumedBack = true;
             return;
         }
 
+        FlurryWrapper.logEvent(TrackingEvents.UserPressedBackButton);
         super.onBackPressed();
     }
 
@@ -697,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 
         if(versionCode < event.getVersion().getVersionCode()) {
-            FlurryAgent.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
             UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");

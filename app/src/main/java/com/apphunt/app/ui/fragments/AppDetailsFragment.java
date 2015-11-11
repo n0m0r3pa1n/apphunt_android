@@ -249,7 +249,9 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
                 public boolean onMenuItemClick(MenuItem item) {
                     LoginProvider loginProvider = LoginProviderFactory.get(activity);
                     String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp);
+                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp, new HashMap<String, String>(){{
+                        put("screen", TAG);
+                    }});
                     ApiClient.getClient(activity).getRandomApp(userId);
                     return true;
                 }
@@ -439,7 +441,6 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     void share() {
         if(baseApp != null) {
             shareWithLocalApps();
-            FlurryAgent.logEvent(TrackingEvents.UserSharedAppHuntWithoutFacebook);
         }
     }
 

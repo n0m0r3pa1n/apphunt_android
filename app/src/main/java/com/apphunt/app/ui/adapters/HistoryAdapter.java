@@ -16,7 +16,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 @Override
                 public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedUserProfileFromHistory);
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedUserProfileFromHistory);
                     row.openUserProfile();
                 }
             });
@@ -81,7 +81,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedHistoryEvent, new HashMap<String, String>(){{
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedHistoryEvent, new HashMap<String, String>(){{
                         put("type", row.getType().name());
                     }});
                     row.openEvent();

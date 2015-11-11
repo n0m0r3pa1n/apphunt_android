@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.apphunt.app.constants.Constants;
-
 public class SharedPreferencesHelper {
 
     private static SharedPreferences sharedPreferences;
@@ -78,6 +76,10 @@ public class SharedPreferencesHelper {
         return sharedPreferences.getString(key, null);
     }
 
+    public static String getStringPreference(String key, String defaultValue) {
+        return sharedPreferences.getString(key, defaultValue);
+    }
+
     /**
      * Extracting an Int value from the SharedPreferences Manager.
      *
@@ -97,7 +99,6 @@ public class SharedPreferencesHelper {
      * @param defaultValue default return value
      */
     public static int getIntPreference(String key, int defaultValue) {
-
         return sharedPreferences.getInt(key, defaultValue);
     }
 

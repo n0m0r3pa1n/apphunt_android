@@ -52,9 +52,9 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
     @Override
     public User getUser() {
         User user = new User();
-        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-        user.setName(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_NAME));
-        user.setAdvertisingId(SharedPreferencesHelper.getStringPreference(Constants.KEY_ADVERTISING_ID));
+        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID, ""));
+        user.setName(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_NAME, ""));
+        user.setAdvertisingId(SharedPreferencesHelper.getStringPreference(Constants.KEY_ADVERTISING_ID, ""));
         user.setLoginType(Constants.KEY_LOGIN_PROVIDER);
 
         return user;

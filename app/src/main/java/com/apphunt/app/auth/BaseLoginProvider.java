@@ -16,8 +16,8 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     }
 
     private void onUserCreated(User user) {
-        FlurryAgent.logEvent(TrackingEvents.UserLoggedIn);
+        FlurryWrapper.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(user);
 //        hideLoginFragment(activity);
         presentInvitesScreen();

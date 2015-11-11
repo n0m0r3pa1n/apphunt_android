@@ -24,15 +24,16 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
 import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -122,7 +123,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
         recyclerView.smoothScrollToPosition(0);
         if (apps.isEmpty()) {
-            FlurryAgent.logEvent(TrackingEvents.UserFoundNoResults);
+            FlurryWrapper.logEvent(TrackingEvents.UserFoundNoResults);
             Toast.makeText(ctx, R.string.no_results_found, Toast.LENGTH_LONG).show();
         }
     }
@@ -180,6 +181,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
 
             viewHolderItem.vote.setBaseApp((App) app);
+            viewHolderItem.vote.setTrackingScreen(TrendingAppsFragment.TAG);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override

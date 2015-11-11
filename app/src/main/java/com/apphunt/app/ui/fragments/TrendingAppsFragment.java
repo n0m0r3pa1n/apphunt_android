@@ -30,10 +30,10 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apptentive.android.sdk.Apptentive;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -64,7 +64,7 @@ public class TrendingAppsFragment extends BaseFragment {
     private OnEndReachedListener onEndReachedListener = new OnEndReachedListener() {
         @Override
         public void onEndReached() {
-            FlurryAgent.logEvent(TrackingEvents.UserScrolledDownAppList);
+            FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownAppList);
             loadApps();
         }
     };
@@ -78,6 +78,7 @@ public class TrendingAppsFragment extends BaseFragment {
 
     public TrendingAppsFragment() {
         setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedTrendingApps);
     }
 
     @Nullable
@@ -106,6 +107,7 @@ public class TrendingAppsFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                FlurryWrapper.logEvent(TrackingEvents.UserRefreshedTrendingApps);
                 activity.getSupportActionBar().collapseActionView();
                 reloadApps();
                 swipeRefreshLayout.setRefreshing(false);

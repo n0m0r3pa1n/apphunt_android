@@ -22,9 +22,9 @@ import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.models.drawer.DrawerItem;
 import com.apphunt.app.ui.models.drawer.DrawerLabel;
 import com.apphunt.app.ui.models.drawer.DrawerMenu;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -131,7 +131,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            FlurryAgent.logEvent(TrackingEvents.UserOpenedOwnProfileFromDrawer);
+                            FlurryWrapper.logEvent(TrackingEvents.UserOpenedOwnProfileFromDrawer);
                             NavUtils.getInstance((AppCompatActivity) ctx).presentUserProfileFragment(
                                     user.getId(), user.getName()
                             );
@@ -146,7 +146,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         @Override
                         public void onClick(View view) {
                             LoginProviderFactory.get((Activity) ctx).logout();
-                            FlurryAgent.logEvent(TrackingEvents.UserLoggedOut);
+                            FlurryWrapper.logEvent(TrackingEvents.UserLoggedOut);
                         }
                     });
                 } else {
@@ -156,6 +156,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     headerViewHolder.loginButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            FlurryWrapper.logEvent(TrackingEvents.UserClickedLoginButton);
                             LoginUtils.showLoginFragment(false);
                         }
                     });

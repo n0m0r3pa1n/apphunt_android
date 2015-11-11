@@ -29,10 +29,10 @@ import com.apphunt.app.ui.adapters.InstalledAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FlurryAgent.logEvent(TrackingEvents.UserViewedSelectApp);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSelectApp);
         setFragmentTag(Constants.TAG_SELECT_APP_FRAGMENT);
     }
 

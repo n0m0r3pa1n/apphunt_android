@@ -16,10 +16,12 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.votes.AppVoteApiEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -32,11 +34,12 @@ public class AppVoteButton extends LinearLayout {
 
     @InjectView(R.id.vote)
     TextView voteButton;
+    private String screen = "";
 
     public AppVoteButton(Context context) {
         super(context);
         if (!isInEditMode()) {
-            init();
+            init(null);
         }
     }
 
@@ -44,21 +47,21 @@ public class AppVoteButton extends LinearLayout {
         super(context);
         this.baseApp = baseApp;
         if (!isInEditMode()) {
-            init();
+            init(null);
         }
     }
 
     public AppVoteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
-            init();
+            init(attrs);
         }
     }
 
     public AppVoteButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (!isInEditMode()) {
-            init();
+            init(attrs);
         }
     }
 
@@ -92,7 +95,7 @@ public class AppVoteButton extends LinearLayout {
         return inflater;
     }
 
-    protected void init() {
+    protected void init(AttributeSet attrs) {
         View view = getLayoutInflater().inflate(R.layout.view_vote_button, this, true);
         ButterKnife.inject(this, view);
         if(!shouldBeAbleToVote()) {
@@ -135,6 +138,10 @@ public class AppVoteButton extends LinearLayout {
         }
     }
 
+    public void setTrackingScreen(String screen) {
+        this.screen = screen;
+    }
+
     protected boolean shouldBeAbleToVote() {
         return baseApp != null;
     }
@@ -144,12 +151,16 @@ public class AppVoteButton extends LinearLayout {
     }
 
     protected void downVote() {
-        FlurryAgent.logEvent(TrackingEvents.UserDownVotedApp);
+        FlurryWrapper.logEvent(TrackingEvents.UserDownVotedApp, new HashMap<String, String>(){{
+            put("screen", screen);
+        }});
         ApiClient.getClient(getContext()).downVote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     protected void vote() {
-        FlurryAgent.logEvent(TrackingEvents.UserVotedApp);
+        FlurryWrapper.logEvent(TrackingEvents.UserVotedApp, new HashMap<String, String>(){{
+            put("screen", screen);
+        }});
         ApiClient.getClient(getContext()).vote(baseApp.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 

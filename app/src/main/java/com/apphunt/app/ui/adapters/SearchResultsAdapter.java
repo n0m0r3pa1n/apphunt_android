@@ -118,6 +118,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
             viewHolderItem.vote.setBaseApp((App) app);
+            viewHolderItem.vote.setTrackingScreen(SearchResultsAdapter.TAG);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override
