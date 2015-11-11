@@ -22,11 +22,13 @@ import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.auth.FacebookLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants.LoginProviders;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomFacebookButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -100,6 +103,7 @@ public class FacebookFriends extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedFacebookSuggestions);
 
         if (LoginProviderFactory.get(activity) != null) {
             this.isLoginProvider = LoginProviderFactory.get(activity).getName().equals(FacebookLoginProvider.PROVIDER_NAME);
@@ -208,7 +212,10 @@ public class FacebookFriends extends BaseFragment {
         FollowingsIdsList followingsIdsList = new FollowingsIdsList();
 
         for (int i = 0; i < adapter.getSelectedFriends().size(); i++) {
-            followingsIdsList.addId(adapter.getSelectedFriends().get(i).getId());
+            final String followingId = adapter.getSelectedFriends().get(i).getId();
+            followingsIdsList.addId(followingId);
+            FlurryWrapper.logEvent(TrackingEvents.UserFollowedSomeone, new HashMap<String, String>() {{
+                put("followingId", followingId); }});
         }
 
         followUsers(followingsIdsList);

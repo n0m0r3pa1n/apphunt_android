@@ -24,11 +24,13 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.Constants.LoginProviders;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.GetFilterUsersApiEvent;
 import com.apphunt.app.ui.adapters.friends.FriendsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.CustomTwitterLoginButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
@@ -36,6 +38,8 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -94,6 +98,7 @@ public class TwitterFriends extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedTwitterSuggestions);
 
         if (LoginProviderFactory.get(activity) != null) {
             this.isLoginProvider = LoginProviderFactory.get(activity).getName().equals(TwitterLoginProvider.PROVIDER_NAME);
@@ -184,7 +189,11 @@ public class TwitterFriends extends BaseFragment {
         FollowingsIdsList followingsIdsList = new FollowingsIdsList();
 
         for (int i = 0; i < adapter.getSelectedFriends().size(); i++) {
-            followingsIdsList.addId(adapter.getSelectedFriends().get(i).getId());
+            final String followingId = adapter.getSelectedFriends().get(i).getId();
+            followingsIdsList.addId(followingId);
+            FlurryWrapper.logEvent(TrackingEvents.UserFollowedSomeone, new HashMap<String, String>() {{
+                put("followingId", followingId);
+            }});
         }
 
         followUsers(followingsIdsList);

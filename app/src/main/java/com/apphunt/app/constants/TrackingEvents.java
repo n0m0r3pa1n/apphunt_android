@@ -48,7 +48,7 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserViewedFollowing = "user.viewed.following";
     String UserViewedProfileSection = "user.viewed.profile.section";
     String UserViewedFindFriends = "user.viewed.find.fragments";
-    String UserSkippedFriendsSuggestions = "user.skipped.friends_suggetsions";
+    String UserSkippedFriendsSuggestions = "user.skipped.friends.suggestions";
     String UserViewedInvites = "user.viewed.invites";
     String UserClickedFollowFriendButton = "user.clicked.follow.friend.button";
     String UserFailedToSendTwitterInvite = "user.failed.to.send.twitter.invite";
@@ -83,7 +83,8 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
 
     String UserViewedLogin = "user.viewed.login";
 
-
+    String UserViewedFacebookSuggestions = "user.viewed.suggestions.facebook";
+    String UserViewedTwitterSuggestions = "user.viewed.suggestions.twitter";
     String UserViewedAddAppToAppHuntNotification = "user.viewed.add.app.to.apphunt.notification";
     String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
 
