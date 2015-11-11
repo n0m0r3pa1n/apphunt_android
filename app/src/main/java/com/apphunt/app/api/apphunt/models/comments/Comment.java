@@ -35,24 +35,8 @@ public class Comment {
         this.user = user;
     }
 
-    public String getParentId() {
-        return parent;
-    }
-
-    public void setParentId(String parent) {
-        this.parent = parent;
-    }
-
     public ArrayList<Comment> getChildren() {
         return children;
-    }
-
-    public void setChildren(ArrayList<Comment> children) {
-        this.children = children;
-    }
-
-    public void setChild(Comment comment) {
-        this.children.add(comment);
     }
 
     public int getVotesCount() {
@@ -105,10 +89,6 @@ public class Comment {
 
     public String getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
     }
 
     @Override

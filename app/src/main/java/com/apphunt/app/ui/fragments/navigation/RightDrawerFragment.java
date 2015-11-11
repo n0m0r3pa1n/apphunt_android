@@ -33,8 +33,8 @@ import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
 import com.apphunt.app.ui.models.history.HistoryRowBuilder;
 import com.apphunt.app.ui.models.history.row.HeaderHistoryRow;
 import com.apphunt.app.ui.models.history.row.base.HistoryRowComponent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
             @Override
             public void onEndReached() {
                 ApiService.getInstance(activity).loadHistoryForPreviousDate();
-                FlurryAgent.logEvent(TrackingEvents.UserScrolledHistoryEvents);
+                FlurryWrapper.logEvent(TrackingEvents.UserScrolledHistoryEvents);
             }
         }, layoutManager));
 
@@ -109,7 +109,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Override
     public void onRefresh(final HistoryEvent event) {
-        FlurryAgent.logEvent(TrackingEvents.UserReceivedRefreshHistoryEvent);
+        FlurryWrapper.logEvent(TrackingEvents.UserReceivedRefreshHistoryEvent);
         if (isDrawerClosed()) {
             BusProvider.getInstance().post(new UnseenHistoryEvent(1));
         }

@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.constants.TrackingEvents;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 
 import butterknife.ButterKnife;
 
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 public class TopHuntersFragment extends BaseFragment {
     public TopHuntersFragment() {
         setTitle(R.string.top_hunters_points);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedHelpTopHuntersPoints);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedHelpTopHuntersPoints);
     }
 
     @Override

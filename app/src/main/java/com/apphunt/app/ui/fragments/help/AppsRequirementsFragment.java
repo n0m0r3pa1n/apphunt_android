@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.apphunt.app.R;
-import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.constants.TrackingEvents;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 
 import butterknife.ButterKnife;
 
@@ -20,7 +20,7 @@ public class AppsRequirementsFragment extends BaseFragment {
 
     public AppsRequirementsFragment() {
         setTitle(R.string.apps_requirements);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedHelpAppsRequirements);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedHelpAppsRequirements);
     }
 
     @Override

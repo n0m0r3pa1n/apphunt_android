@@ -41,12 +41,12 @@ import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apptentive.android.sdk.Apptentive;
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
         params.put("appPackage", data.packageName);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedAddApp, params);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSaveApp, params);
 
         setFragmentTag(Constants.TAG_SAVE_APP_FRAGMENT);
     }
@@ -158,10 +158,10 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         Random random = new Random();
         int currPercent = random.nextInt(100) + 1;
         if(currPercent <= Constants.USER_SKIP_LOGIN_PERCENTAGE) {
-            FlurryAgent.logEvent(TrackingEvents.AppShowedSkippableLogin);
+            FlurryWrapper.logEvent(TrackingEvents.AppShowedSkippableLogin);
             LoginUtils.showLoginFragment(true, R.string.login_info_save);
         } else {
-            FlurryAgent.logEvent(TrackingEvents.AppShowedRegularLogin);
+            FlurryWrapper.logEvent(TrackingEvents.AppShowedRegularLogin);
             LoginUtils.showLoginFragment(false, R.string.login_info_save);
         }
     }
@@ -224,7 +224,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
 
     @Subscribe
     public void onLoginSkipped(LoginSkippedEvent event) {
-        FlurryAgent.logEvent(TrackingEvents.UserSkippedLoginWhenAddApp);
+        FlurryWrapper.logEvent(TrackingEvents.UserSkippedLoginWhenAddApp);
         saveApp(saveButton, Constants.APPHUNT_ADMIN_USER_ID);
     }
 
@@ -240,7 +240,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
             return;
         }
         if (statusCode == StatusCode.SUCCESS.getCode()) {
-            FlurryAgent.logEvent(TrackingEvents.UserAddedApp);
+            FlurryWrapper.logEvent(TrackingEvents.UserAddedApp);
             BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
             BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false, false));
             BusProvider.getInstance().post(new AppSubmittedEvent(data.packageName));
@@ -258,7 +258,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
             } catch (Exception e) {
                 Crashlytics.logException(e);
             }
-            FlurryAgent.logEvent(TrackingEvents.UserAddedUnknownApp);
+            FlurryWrapper.logEvent(TrackingEvents.UserAddedUnknownApp);
         }
     }
 

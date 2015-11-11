@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.smart_rate.SmartRate;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -132,7 +131,6 @@ public class NotificationFragment extends BaseFragment {
             if(shouldPopBackStack) {
                 activity.getSupportFragmentManager().popBackStack();
             }
-            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_SAVED);
         }
 
         activity.getSupportFragmentManager().popBackStack();

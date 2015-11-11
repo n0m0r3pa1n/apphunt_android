@@ -23,10 +23,10 @@ import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.InstalledApp;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.PackagesUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -144,7 +144,7 @@ public class InstallService extends Service {
                 return;
             }
 
-            FlurryAgent.logEvent(TrackingEvents.UserViewedAddAppToAppHuntNotification);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedAddAppToAppHuntNotification);
             updateNotificationDisplayed(app);
 
             ApplicationInfo applicationInfo = PackagesUtils.getApplicationInfo(getPackageManager(), app.getPackageName());

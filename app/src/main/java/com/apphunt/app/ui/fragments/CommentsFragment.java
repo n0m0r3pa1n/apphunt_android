@@ -33,8 +33,8 @@ import com.apphunt.app.ui.adapters.CommentsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollListView;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -83,7 +83,7 @@ public class CommentsFragment extends BackStackFragment {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_APP_ID, appId);
         fragment.setArguments(bundle);
-
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedComments);
         return fragment;
     }
 
@@ -99,7 +99,7 @@ public class CommentsFragment extends BackStackFragment {
         commentsList.setOnEndReachedListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
-                FlurryAgent.logEvent(TrackingEvents.UserScrolledDownCommentList);
+                FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownCommentList);
                 commentsAdapter.loadMore(appId, SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
             }
         });
@@ -148,14 +148,14 @@ public class CommentsFragment extends BackStackFragment {
 
                 if (commentBox.getText().length() > replyToNameLength &&
                         replyToName.toLowerCase().equals(commentBox.getText().toString().substring(0, replyToNameLength).toLowerCase())) {
-                    if (replyToComment.getParentId() == null) {
+                    if (replyToComment.getParent() == null) {
                         comment.setParentId(replyToComment.getId());
                     } else {
-                        comment.setParentId(replyToComment.getParentId());
+                        comment.setParentId(replyToComment.getParent());
                     }
-                    FlurryAgent.logEvent(TrackingEvents.UserSentReplyComment);
+                    FlurryWrapper.logEvent(TrackingEvents.UserSentReplyComment);
                 } else {
-                    FlurryAgent.logEvent(TrackingEvents.UserSentComment);
+                    FlurryWrapper.logEvent(TrackingEvents.UserSentComment);
                 }
             } else {
                 commentBox.setHint(R.string.comment_entry_hint);

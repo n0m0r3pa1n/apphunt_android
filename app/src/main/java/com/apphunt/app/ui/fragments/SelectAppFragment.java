@@ -98,6 +98,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         gridView.setOnScrollListener(new EndlessScrollListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
+                FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownSelectAppsList);
                 filterApps();
             }
         }));

@@ -27,8 +27,8 @@ import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedE
 import com.apphunt.app.event_bus.events.ui.collections.EditCollectionEvent;
 import com.apphunt.app.ui.fragments.collections.ChooseCollectionBannerFragment;
 import com.apphunt.app.ui.views.vote.CollectionVoteButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -201,7 +201,7 @@ public class CollectionView extends RelativeLayout {
         createdByAvatar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent(TrackingEvents.UserOpenedProfileFromCollection);
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedProfileFromCollection);
                 User user = appsCollection.getCreatedBy();
                 NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(user.getId(), user.getName());
             }

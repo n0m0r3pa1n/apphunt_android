@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.apphunt.app.R;
+import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.PackagesUtils;
 
 import butterknife.ButterKnife;
@@ -52,6 +54,7 @@ public class UpdateRequiredFragment extends DialogFragment {
 
     @OnClick(R.id.update)
     public void update() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedUpdateAppHunt);
         PackagesUtils.openInMarket(activity, "com.apphunt.app");
     }
 }

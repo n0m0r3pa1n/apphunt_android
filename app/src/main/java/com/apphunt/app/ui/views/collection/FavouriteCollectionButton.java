@@ -2,7 +2,6 @@ package com.apphunt.app.ui.views.collection;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ToggleButton;
 
@@ -14,9 +13,11 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionApiEvent;
 import com.apphunt.app.ui.views.BaseFavouriteButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
+
+import java.util.HashMap;
 
 import butterknife.InjectView;
 
@@ -70,7 +71,9 @@ public class FavouriteCollectionButton extends BaseFavouriteButton {
     @Override
     protected void favourite() {
         collection.setIsFavourite(true);
-        FlurryAgent.logEvent(TrackingEvents.UserFavouritedCollection);
+        FlurryWrapper.logEvent(TrackingEvents.UserFavouritedCollection, new HashMap<String, String>(){{
+            put("collectionId", collection.getId());
+        }});
         ApiClient.getClient(getContext()).favouriteCollection(collection,
                 SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
@@ -78,8 +81,9 @@ public class FavouriteCollectionButton extends BaseFavouriteButton {
     @Override
     protected void unfavourite() {
         collection.setIsFavourite(false);
-        FlurryAgent.logEvent(TrackingEvents.UserUnfavouritedCollection);
-        Log.d(TAG, "unfavourite " + collection.getId());
+        FlurryWrapper.logEvent(TrackingEvents.UserUnfavouritedCollection, new HashMap<String, String>(){{
+            put("collectionId", collection.getId());
+        }});
         ApiClient.getClient(getContext()).unfavouriteCollection(collection.getId(),
                 SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }

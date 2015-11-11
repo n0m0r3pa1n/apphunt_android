@@ -28,8 +28,8 @@ import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FlurryAgent.logEvent(TrackingEvents.UserViewedMyCollections);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedMyCollections);
         view = inflater.inflate(R.layout.fragment_my_collections, container, false);
         if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
             userId = LoginProviderFactory.get(activity).getUser().getId();

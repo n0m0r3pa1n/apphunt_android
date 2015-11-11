@@ -22,6 +22,7 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.UserProfile;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.users.GetUserProfileApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
@@ -31,6 +32,7 @@ import com.apphunt.app.ui.fragments.profile.FollowersFragment;
 import com.apphunt.app.ui.fragments.profile.FollowingsFragment;
 import com.apphunt.app.ui.views.widgets.AHTextView;
 import com.apphunt.app.ui.views.widgets.FollowButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
@@ -39,6 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -111,12 +114,15 @@ public class UserProfileFragment extends BackStackFragment {
     private String userId;
     private Calendar calendar = Calendar.getInstance();
 
-    public static UserProfileFragment newInstance(String userId, String name) {
+    public static UserProfileFragment newInstance(final String userId, String name) {
         Bundle bundle = new Bundle();
         bundle.putString(USER_ID, userId);
         bundle.putString(NAME, name);
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         userProfileFragment.setArguments(bundle);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedUserProfile, new HashMap<String, String>(){{
+            put("profileId", userId);
+        }});
         return userProfileFragment;
     }
 
@@ -146,9 +152,12 @@ public class UserProfileFragment extends BackStackFragment {
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 selectedTabPosition = position;
                 updateAbSubtitle(selectedTabPosition);
+                FlurryWrapper.logEvent(TrackingEvents.UserViewedProfileSection, new HashMap<String, String>() {{
+                    put("screen", pagerAdapter.getPageTitle(position).toString());
+                }});
             }
 
             @Override

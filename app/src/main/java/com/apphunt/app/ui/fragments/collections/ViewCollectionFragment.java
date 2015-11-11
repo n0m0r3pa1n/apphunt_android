@@ -36,14 +36,15 @@ import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnActionNeeded;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
 import com.apphunt.app.ui.views.collection.CollectionView;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -113,7 +114,6 @@ public class ViewCollectionFragment extends BackStackFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FlurryAgent.logEvent(TrackingEvents.UserViewedCollection);
         View view = inflater.inflate(R.layout.fragment_view_collection, container, false);
         ButterKnife.inject(this, view);
 
@@ -126,10 +126,16 @@ public class ViewCollectionFragment extends BackStackFragment {
 
         appsCollection = (AppsCollection) getArguments().getSerializable(APPS_COLLECTION_KEY);
         if(appsCollection == null) {
-            String collectionId = getArguments().getString(APPS_COLLECTION_ID);
+            final String collectionId = getArguments().getString(APPS_COLLECTION_ID);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedCollection, new HashMap<String, String>(){{
+                put("collectionId", collectionId);
+            }});
             String userId = LoginProviderFactory.get(activity).isUserLoggedIn() ? LoginProviderFactory.get(activity).getUser().getId() : null;
             ApiClient.getClient(activity).getAppCollection(collectionId, userId);
         } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedCollection, new HashMap<String, String>(){{
+                put("collectionId", appsCollection.getId());
+            }});
             setupAppsCollection();
         }
 
@@ -149,7 +155,7 @@ public class ViewCollectionFragment extends BackStackFragment {
         collectionAppsAdapter.setListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                FlurryAgent.logEvent(TrackingEvents.UserViewedCollectionApp);
+                FlurryWrapper.logEvent(TrackingEvents.UserViewedCollectionApp);
                 NavUtils.getInstance(activity).presentAppDetailsFragment(appsCollection.getApps().get(position).getId());
             }
         });
@@ -181,7 +187,7 @@ public class ViewCollectionFragment extends BackStackFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_collection:
-                FlurryAgent.logEvent(TrackingEvents.UserDeleteCollection);
+                FlurryWrapper.logEvent(TrackingEvents.UserDeleteCollection);
                 NotificationsUtils.showNotificationFragmentWithContinueAction(activity, "Are you sure you want to delete this collection?", new OnActionNeeded() {
                     @Override
                     public void onContinueAction() {
@@ -207,13 +213,13 @@ public class ViewCollectionFragment extends BackStackFragment {
 
             if(TextUtils.isEmpty(desc)) {
                 editDescription.setError("Description can not be empty!");
-                FlurryAgent.logEvent(TrackingEvents.UserTriedToCreateCollectionWithEmptyDesc);
+                FlurryWrapper.logEvent(TrackingEvents.UserTriedToCreateCollectionWithEmptyDesc);
                 return;
             } else {
                 editDescription.setError(null);
             }
 
-            FlurryAgent.logEvent(TrackingEvents.UserEditDescription);
+            FlurryWrapper.logEvent(TrackingEvents.UserEditCollection);
             editDescription.setVisibility(View.GONE);
             editBanner.setVisibility(View.GONE);
             description.setVisibility(View.VISIBLE);
@@ -274,7 +280,7 @@ public class ViewCollectionFragment extends BackStackFragment {
         super.onDetach();
         hideSoftKeyboard();
         if(isSave) {
-            FlurryAgent.logEvent(TrackingEvents.UserDidntSaveCollection);
+            FlurryWrapper.logEvent(TrackingEvents.UserDidntSaveCollection);
             BusProvider.getInstance().post(new UpdateCollectionApiEvent(appsCollection, false));
         }
     }

@@ -18,11 +18,11 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,7 +52,7 @@ public class SettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBarUtils.getInstance().hideActionBarShadow();
-        FlurryAgent.logEvent(TrackingEvents.UserViewedSettings);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSettings);
 
         setFragmentTag(Constants.TAG_SETTINGS_FRAGMENT);
     }
@@ -92,7 +92,7 @@ public class SettingsFragment extends BaseFragment {
     @OnCheckedChanged(R.id.toggle_install_notifications)
     public void onInstallNotifStateChange(boolean isChecked) {
         if (!isChecked) {
-            FlurryAgent.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
+            FlurryWrapper.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
         }
         SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
         InstallService.setupService(activity);
@@ -101,7 +101,9 @@ public class SettingsFragment extends BaseFragment {
     @OnCheckedChanged(R.id.toggle_sounds)
     public void onSoundsStateChange(boolean isChecked) {
         if (!isChecked) {
-            FlurryAgent.logEvent(TrackingEvents.UserDisabledSound);
+            FlurryWrapper.logEvent(TrackingEvents.UserDisabledSound);
+        } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserEnabledSound);
         }
         SharedPreferencesHelper.setPreference(Constants.IS_SOUNDS_ENABLED, isChecked);
     }

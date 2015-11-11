@@ -14,10 +14,11 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.views.app.DownloadButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
         });
 
         holder.installBtn.setAppPackage(app.getPackageName());
+        holder.installBtn.setTrackingScreen(TopAppsFragment.TAG);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +78,7 @@ public class TopAppsAdapter extends RecyclerView.Adapter<TopAppsAdapter.ViewHold
     }
 
     private void openAppDetailsFragment(BaseApp app) {
-        FlurryAgent.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
+        FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
         NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
     }
 

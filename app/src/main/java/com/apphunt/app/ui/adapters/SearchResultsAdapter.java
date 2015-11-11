@@ -30,6 +30,7 @@ import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
+import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.CollectionItem;
 import com.apphunt.app.ui.listview_items.Item;
@@ -118,7 +119,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
             viewHolderItem.vote.setBaseApp((App) app);
-            viewHolderItem.vote.setTrackingScreen(SearchResultsAdapter.TAG);
+            viewHolderItem.vote.setTrackingScreen(SearchResultsFragment.TAG);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
                 @Override

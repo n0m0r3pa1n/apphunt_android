@@ -25,9 +25,9 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 
@@ -58,7 +58,7 @@ public class EmailInviteFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedEmailInvitation);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedEmailInvitation);
     }
 
     @Nullable
@@ -113,7 +113,7 @@ public class EmailInviteFragment extends BaseFragment {
             closeKeyboard(this.email);
             startActivityForResult(Intent.createChooser(email, "Send via..."), EMAIL_REQUEST_CODE);
 
-            FlurryAgent.logEvent(TrackingEvents.UserSentEmailInvite);
+            FlurryWrapper.logEvent(TrackingEvents.UserSentEmailInvite);
         }
     }
 

@@ -19,7 +19,7 @@ import com.apphunt.app.ui.adapters.FollowersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.views.containers.ScrollRecyclerView;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -56,7 +56,7 @@ public class FollowersFragment extends BackStackFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedFollowers);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedFollowers);
     }
 
     @Nullable

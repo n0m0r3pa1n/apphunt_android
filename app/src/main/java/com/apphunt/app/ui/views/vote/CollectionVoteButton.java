@@ -12,9 +12,9 @@ import com.apphunt.app.api.apphunt.models.votes.CollectionVote;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.votes.CollectionVoteApiEvent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apptentive.android.sdk.Apptentive;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -61,7 +61,7 @@ public class CollectionVoteButton extends AppVoteButton {
 
     @Override
     protected void vote() {
-        FlurryAgent.logEvent(TrackingEvents.UserVotedCollection);
+        FlurryWrapper.logEvent(TrackingEvents.UserVotedCollection);
         ApiClient.getClient(getContext()).voteCollection(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 collection.getId());
         Apptentive.engage((Activity) getContext(), "user.collection.vote");
@@ -69,7 +69,7 @@ public class CollectionVoteButton extends AppVoteButton {
 
     @Override
     protected void downVote() {
-        FlurryAgent.logEvent(TrackingEvents.UserDownVotedCollection);
+        FlurryWrapper.logEvent(TrackingEvents.UserDownVotedCollection);
         ApiClient.getClient(getContext()).downVoteCollection(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 collection.getId());
     }

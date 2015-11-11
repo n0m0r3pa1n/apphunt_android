@@ -22,9 +22,9 @@ import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class SuggestFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedSuggestion);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSuggestion);
         ActionBarUtils.getInstance().hideActionBarShadow();
 
         setFragmentTag(Constants.TAG_SUGGEST_FRAGMENT);
@@ -112,7 +112,7 @@ public class SuggestFragment extends BaseFragment {
         } else {
             Map<String, String> params = new HashMap<>();
             params.put("suggestion", messageText.toString());
-            FlurryAgent.logEvent(TrackingEvents.UserMadeSuggestion, params);
+            FlurryWrapper.logEvent(TrackingEvents.UserMadeSuggestion, params);
             Toast.makeText(activity, R.string.feedback_send, Toast.LENGTH_LONG).show();
 
             activity.getSupportFragmentManager().popBackStack();

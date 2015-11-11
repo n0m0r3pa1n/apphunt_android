@@ -27,12 +27,13 @@ import com.apphunt.app.event_bus.events.api.collections.GetTopAppsCollectionApiE
 import com.apphunt.app.ui.adapters.rankings.TopAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.MonthYearPicker;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,7 +46,7 @@ import butterknife.InjectView;
  */
 public class TopAppsFragment extends BaseFragment {
 
-    private static final String TAG = TopAppsFragment.class.getSimpleName();
+    public static final String TAG = TopAppsFragment.class.getSimpleName();
 
     private Activity activity;
     private View view;
@@ -69,7 +70,9 @@ public class TopAppsFragment extends BaseFragment {
     private DialogInterface.OnClickListener datePickedListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            FlurryAgent.logEvent(TrackingEvents.UserViewedPreviousTopAppsRanking);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedPreviousTopAppsRanking, new HashMap<String, String>(){{
+                put("month", Integer.toString(selectedMonth));
+            }});
             if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
                 ApiClient.getClient(activity).getTopAppsCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false),
                         LoginProviderFactory.get(getActivity()).getUser().getId());
@@ -84,7 +87,7 @@ public class TopAppsFragment extends BaseFragment {
 
     public TopAppsFragment() {
         setFragmentTag(Constants.TAG_TOP_APPS_FRAGMENT);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedTopApps);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedTopApps);
     }
 
     @Override

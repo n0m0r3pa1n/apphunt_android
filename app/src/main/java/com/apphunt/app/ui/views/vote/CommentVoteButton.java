@@ -1,17 +1,18 @@
 package com.apphunt.app.ui.views.vote;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.comments.Comment;
 import com.apphunt.app.api.apphunt.models.votes.CommentVote;
-import com.apphunt.app.event_bus.events.api.votes.CommentVoteApiEvent;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.constants.TrackingEvents;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.event_bus.events.api.votes.CommentVoteApiEvent;
+import com.apphunt.app.utils.FlurryWrapper;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
 
@@ -48,13 +49,21 @@ public class CommentVoteButton extends AppVoteButton {
 
     @Override
     protected void downVote() {
-        FlurryAgent.logEvent(TrackingEvents.UserDownVotedReplyComment);
+        if(TextUtils.isEmpty(comment.getParent())) {
+            FlurryWrapper.logEvent(TrackingEvents.UserDownVotedComment);
+        } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserDownVotedReplyComment);
+        }
         ApiClient.getClient(getContext()).downVoteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID), comment.getId());
     }
 
     @Override
     protected void vote() {
-        FlurryAgent.logEvent(TrackingEvents.UserVotedReplyComment);
+        if(TextUtils.isEmpty(comment.getParent())) {
+            FlurryWrapper.logEvent(TrackingEvents.UserVotedComment);
+        } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserVotedReplyComment);
+        }
         ApiClient.getClient(getContext()).voteComment(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID),
                 comment.getId());
     }

@@ -3,8 +3,6 @@ package com.apphunt.app.ui.views.widgets;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,8 +16,8 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.users.UserFollowApiEvent;
 import com.apphunt.app.event_bus.events.api.users.UserUnfollowApiEvent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -86,10 +84,10 @@ public class FollowButton extends AHButton {
 
             String followingId = LoginProviderFactory.get(activity).getUser().getId();
             if (user.isFollowing()) {
-                FlurryAgent.logEvent(TrackingEvents.UserUnfollowedSomeone);
+                FlurryWrapper.logEvent(TrackingEvents.UserUnfollowedSomeone);
                 ApiClient.getClient(activity).unfollowUser(followingId, user.getId());
             } else {
-                FlurryAgent.logEvent(TrackingEvents.UserFollowedSomeone);
+                FlurryWrapper.logEvent(TrackingEvents.UserFollowedSomeone);
                 ApiClient.getClient(activity).followUser(followingId, user.getId());
             }
         }

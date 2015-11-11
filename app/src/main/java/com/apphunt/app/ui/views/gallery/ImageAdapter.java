@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.apphunt.app.R;
@@ -14,12 +13,9 @@ import com.apphunt.app.constants.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
-import fr.castorflex.android.circularprogressbar.CircularProgressDrawable;
 
 /**
  * Created by nmp on 15-7-21.

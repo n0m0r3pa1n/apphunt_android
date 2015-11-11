@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.ClickedApp;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.PackagesUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +31,8 @@ public class DownloadButton extends LinearLayout {
     private TextView textView;
 
     private String appPackage;
+    private String screen;
+
     public DownloadButton(Context context) {
         super(context);
         if (!isInEditMode()) {
@@ -60,6 +62,10 @@ public class DownloadButton extends LinearLayout {
         }
     }
 
+    public void setTrackingScreen(String screen) {
+        this.screen = screen;
+    }
+
     private void init(final Context context, AttributeSet attrs) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
@@ -84,13 +90,14 @@ public class DownloadButton extends LinearLayout {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("appPackage", appPackage);
+                params.put("screen", screen);
 
                 if (PackagesUtils.isPackageInstalled(appPackage, getContext())) {
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
                     Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackage);
                     getContext().startActivity(intent);
                 } else {
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
                     PackagesUtils.openInMarket(getContext(), appPackage);
 
                     updateOrCreateClickedAppObject();

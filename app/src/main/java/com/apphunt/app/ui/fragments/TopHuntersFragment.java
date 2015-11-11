@@ -26,12 +26,13 @@ import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionA
 import com.apphunt.app.ui.adapters.rankings.TopHuntersAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.MonthYearPicker;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -58,7 +59,9 @@ public class TopHuntersFragment extends BaseFragment {
     private DialogInterface.OnClickListener datePickedListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            FlurryAgent.logEvent(TrackingEvents.UserViewedPreviousTopHuntersRanking);
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedPreviousTopHuntersRanking, new HashMap<String, String>(){{
+                put("month", Integer.toString(selectedMonth));
+            }});
             if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
                 ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false));
             } else {
@@ -76,7 +79,7 @@ public class TopHuntersFragment extends BaseFragment {
 
     public TopHuntersFragment() {
         setFragmentTag(Constants.TAG_TOP_HUNTERS_FRAGMENT);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedTopHunters);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedTopHunters);
     }
 
     @Override

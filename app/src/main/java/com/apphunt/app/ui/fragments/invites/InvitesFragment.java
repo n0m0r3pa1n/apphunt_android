@@ -19,8 +19,8 @@ import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.invite.InviteOptionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NavUtils;
-import com.flurry.android.FlurryAgent;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,6 +45,7 @@ public class InvitesFragment extends BackStackFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedInvites);
         View view = inflater.inflate(R.layout.fragment_invite, container, false);
         ButterKnife.inject(this, view);
 
@@ -82,7 +83,7 @@ public class InvitesFragment extends BackStackFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_skip) {
-            FlurryAgent.logEvent(TrackingEvents.UserSkippedInvitation);
+            FlurryWrapper.logEvent(TrackingEvents.UserSkippedInvitation);
 
             activity.getSupportFragmentManager().popBackStack();
             NavUtils.getInstance(activity).presentFindFriendsFragment();

@@ -31,10 +31,10 @@ public class AppVoteButton extends LinearLayout {
     public static final String TAG = AppVoteButton.class.getSimpleName();
     private App baseApp;
     private LayoutInflater inflater;
+    private String screen = "";
 
     @InjectView(R.id.vote)
     TextView voteButton;
-    private String screen = "";
 
     public AppVoteButton(Context context) {
         super(context);

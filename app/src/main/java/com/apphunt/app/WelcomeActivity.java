@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class WelcomeActivity extends Activity {
         Map<String, String> params = new HashMap<>();
         params.put(Constants.KEY_SENDER_ID, senderIdStr);
         params.put(Constants.KEY_RECEIVER_NAME, receiverNameStr);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedWelcomeScreen, params);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedWelcomeScreen, params);
 
         initUI();
     }

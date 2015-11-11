@@ -21,8 +21,8 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.invite.FriendsInviteAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -65,7 +65,7 @@ public class ProviderInviteFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedTwitterInvitation);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedTwitterInvitation);
 
         LoginProviderFactory.get(activity).loadFriends(new BaseLoginProvider.OnFriendsResultListener() {
             @Override
@@ -103,7 +103,6 @@ public class ProviderInviteFragment extends BaseFragment {
         if (adapter == null) {
             return;
         }
-
         for (int i = 0; i < adapter.getSelectedFriends().size(); i++) {
             if (i == adapter.getSelectedFriends().size() - 1) {
                 sendInvite(adapter.getSelectedFriends().get(i), true);
@@ -132,7 +131,8 @@ public class ProviderInviteFragment extends BaseFragment {
 
         AppHuntTwitterApiClient twitterApiClient = new AppHuntTwitterApiClient(Twitter.getSessionManager().getActiveSession());
         twitterApiClient.getFriendsService().sendDirectMessage(friend.getId(),
-                "Hey, " + friend.getName() + "! Check out AppHunt cool app: " + DeepLinkingUtils.getInstance(activity).generateShortUrl(params), new Callback<Response>() {
+                "Hey, " + friend.getName() + "! Check out AppHunt cool app: " + DeepLinkingUtils.getInstance(activity).generateShortUrl(params),
+                new Callback<Response>() {
                     @Override
                     public void success(Result<Response> result) {
                         successfulInvites += 1;
@@ -140,7 +140,7 @@ public class ProviderInviteFragment extends BaseFragment {
                         if (isLastInvite) {
                             Map<String, String> params = new HashMap<>();
                             params.put("invites", String.valueOf(successfulInvites));
-                            FlurryAgent.logEvent(TrackingEvents.UserSentTwitterInvite, params);
+                            FlurryWrapper.logEvent(TrackingEvents.UserSentTwitterInvite, params);
                             activity.getSupportFragmentManager().popBackStack();
                             NotificationsUtils.showNotificationFragment(activity, String.format(getString(R.string.msg_successful_invites), successfulInvites), false, false);
                         }
@@ -148,6 +148,7 @@ public class ProviderInviteFragment extends BaseFragment {
 
                     @Override
                     public void failure(TwitterException e) {
+                        FlurryWrapper.logEvent(TrackingEvents.UserFailedToSendTwitterInvite);
                         if (isLastInvite) {
                             activity.getSupportFragmentManager().popBackStack();
                             NotificationsUtils.showNotificationFragment(activity, String.format(getString(R.string.msg_failure_invites), successfulInvites), false, false);

@@ -51,13 +51,13 @@ import com.apphunt.app.ui.views.app.FavouriteAppButton;
 import com.apphunt.app.ui.views.gallery.GalleryView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.ui.views.widgets.JHexedPhotoView;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.wefika.flowlayout.FlowLayout;
@@ -156,7 +156,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         itemPosition = getArguments().getInt(Constants.KEY_ITEM_POSITION);
         Map<String, String> params = new HashMap<>();
         params.put("appId", appId);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedAppDetails, params);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedAppDetails, params);
 
         setFragmentTag(Constants.TAG_APP_DETAILS_FRAGMENT);
         setHasOptionsMenu(true);
@@ -249,7 +249,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
                 public boolean onMenuItemClick(MenuItem item) {
                     LoginProvider loginProvider = LoginProviderFactory.get(activity);
                     String userId = loginProvider.isUserLoggedIn() ? loginProvider.getUser().getId() : "";
-                    FlurryAgent.logEvent(TrackingEvents.UserOpenedRandomApp, new HashMap<String, String>(){{
+                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedRandomApp, new HashMap<String, String>() {{
                         put("screen", TAG);
                     }});
                     ApiClient.getClient(activity).getRandomApp(userId);
@@ -297,8 +297,16 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         appName.setText(baseApp.getName());
         appDescription.setText(baseApp.getDescription());
         rating.setText(String.format("%.1f", baseApp.getRating()));
+        rating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlurryWrapper.logEvent(TrackingEvents.UserClickedRating);
+            }
+        });
 
         downloadBtn.setAppPackage(baseApp.getPackageName());
+        downloadBtn.setTrackingScreen(AppDetailsFragment.TAG);
+
         if(baseApp.getScreenshots() == null || baseApp.getScreenshots().size() == 0) {
             gallery.setVisibility(View.GONE);
         } else {
@@ -324,7 +332,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FlurryAgent.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>() {{
+                    FlurryWrapper.logEvent(TrackingEvents.UserSearchedWithTagFromAppDetails, new HashMap<String, String>() {{
                         put("Tag", tag);
                     }});
                     activity.getSupportFragmentManager()
@@ -457,7 +465,6 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
 
         if(baseApp != null) {
             NavUtils.getInstance(activity).presentSelectCollectionFragment(baseApp);
-            FlurryAgent.logEvent(TrackingEvents.UserAddedAppToCollection);
         }
     }
 
@@ -466,6 +473,7 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         if(baseApp == null) {
             return;
         }
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedWriteCommentButton);
         CommentsFragment commentsFragment = CommentsFragment.newInstance(baseApp.getId());
         commentsFragment.setOnCommentEnteredListener(this);
         activity.getSupportFragmentManager().beginTransaction()
@@ -484,7 +492,8 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
         activity.startActivity(Intent.createChooser(sharingIntent, "Share using"));
         Map<String, String> params = new HashMap<>();
         params.put("appId", baseApp.getId());
-        FlurryAgent.logEvent(TrackingEvents.UserSharedApp, params);
+        params.put("appPackage", baseApp.getPackageName());
+        FlurryWrapper.logEvent(TrackingEvents.UserSharedApp, params);
     }
 
     @Override

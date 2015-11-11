@@ -21,7 +21,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.friends.FriendsSuggestionsOptAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,6 +49,7 @@ public class FindFriendsFragment extends BackStackFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedFindFriends);
         View view = inflater.inflate(R.layout.fragment_find_friends, container, false);
         ButterKnife.inject(this, view);
 
@@ -105,7 +106,7 @@ public class FindFriendsFragment extends BackStackFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_skip) {
-            FlurryAgent.logEvent(TrackingEvents.UserSkippedFriendsSuggestions);
+            FlurryWrapper.logEvent(TrackingEvents.UserSkippedFriendsSuggestions);
             activity.getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);

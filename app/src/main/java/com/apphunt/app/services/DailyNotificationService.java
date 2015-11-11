@@ -12,9 +12,9 @@ import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.ConnectivityUtils;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,9 +45,9 @@ public class DailyNotificationService extends IntentService {
     private void getNotificationFromServer() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
-            FlurryAgent.setUserId(userId);
+            FlurryWrapper.setUserId(userId);
         }
-        FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+        FlurryWrapper.init(this, Constants.FLURRY_API_KEY);
         ApiClient.getClient(this).getNotification("DailyReminder", new Response.Listener<Notification>() {
             @Override
             public void onResponse(Notification response) {
@@ -78,13 +78,13 @@ public class DailyNotificationService extends IntentService {
 
     private void displayNotification(Notification notification) {
         if (notification == null) {
-            FlurryAgent.logEvent(TrackingEvents.AppNullNotification);
+            FlurryWrapper.logEvent(TrackingEvents.AppNullNotification);
             return;
         }
         notification.setType(NotificationType.DAILY);
         NotificationsUtils.displayNotification(this, MainActivity.class, notification);
         Map<String, String> params = new HashMap<>();
         params.put("type", notification.getType().toString());
-        FlurryAgent.logEvent(TrackingEvents.AppShowedNotification, params);
+        FlurryWrapper.logEvent(TrackingEvents.AppShowedNotification, params);
     }
 }

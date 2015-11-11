@@ -45,8 +45,6 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.InstallService;
-import com.apphunt.app.smart_rate.SmartRate;
-import com.apphunt.app.smart_rate.variables.RateDialogVariable;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
@@ -82,7 +80,6 @@ import java.util.Map;
 
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
-import it.appspice.android.api.errors.AppSpiceError;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
 
@@ -524,7 +521,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onResume();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
-//        AppSpice.onResume(this);
     }
 
     private void displaySaveAppFragment() {
@@ -546,7 +542,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
-//        AppSpice.onPause(this);
     }
 
     @Override
@@ -579,7 +574,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Override
     protected void onStart() {
         super.onStart();
-//        AppSpice.onStart(this);
         Apptentive.onStart(this);
 
         Branch branch = Branch.getInstance();
@@ -618,7 +612,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         } catch (IllegalArgumentException e) {
             Crashlytics.logException(e);
         }
-//        AppSpice.onStop(this);
         Apptentive.onStop(this);
     }
 
@@ -637,15 +630,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @SuppressWarnings("unused")
     public void userVotedForAppEvent(AppVoteEvent event) {
         if (event.isVote()) {
-//            SmartRate.show(Constants.SMART_RATE_LOCATION_APP_VOTED);
             Apptentive.engage(this, "user.voted");
         }
-    }
-
-    @Subscribe
-    @SuppressWarnings("unused")
-    public void onRateDialogVariableReady(RateDialogVariable rateDialogVariable) {
-        SmartRate.setRateDialogVariable(rateDialogVariable);
     }
 
     private int eventCount = 0;
@@ -666,12 +652,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
         });
 
-    }
-
-    @Subscribe
-    @SuppressWarnings("unused")
-    public void onAppSpiceError(AppSpiceError error) {
-        SmartRate.onError();
     }
 
     @Subscribe
@@ -728,7 +708,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     @Subscribe
     public void onAnonymousUserCreated(AnonymousUserCreatedApiEvent event) {
-        Log.e(TAG, event.getUser().toString());
         LoginProviderFactory.get(this).login(event.getUser());
     }
 }

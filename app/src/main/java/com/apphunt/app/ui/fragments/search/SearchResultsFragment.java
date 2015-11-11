@@ -31,7 +31,7 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.layout.CustomLayoutManager;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
@@ -159,7 +159,7 @@ public class SearchResultsFragment extends BackStackFragment {
             public boolean onQueryTextSubmit(String s) {
                 Map<String, String> params = new HashMap<>();
                 params.put("query", s);
-                FlurryAgent.logEvent(TrackingEvents.UserSearchedForApp, params);
+                FlurryWrapper.logEvent(TrackingEvents.UserSearchedForApp, params);
 
                 if (trendingAppsAdapter != null) trendingAppsAdapter.resetAdapter();
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
@@ -197,7 +197,7 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @OnClick(R.id.more_apps)
     public void moreApps() {
-        FlurryAgent.logEvent(TrackingEvents.UserClickedMoreApps);
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedMoreApps);
         displayMoreApps();
     }
 
@@ -210,7 +210,7 @@ public class SearchResultsFragment extends BackStackFragment {
 
     @OnClick(R.id.more_collections)
     public void moreCollections() {
-        FlurryAgent.logEvent(TrackingEvents.UserClickedMoreCollections);
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedMoreCollections);
         displayMoreCollections();
     }
 

@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.interfaces.OnItemClickListener;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,6 +59,7 @@ public class CollectionAppsAdapter extends RecyclerView.Adapter<CollectionAppsAd
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryWrapper.logEvent(TrackingEvents.UserDeletedAppFromCollection);
                 apps.remove(position);
                 notifyDataSetChanged();
             }

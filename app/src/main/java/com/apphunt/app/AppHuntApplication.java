@@ -5,12 +5,12 @@ import android.text.TextUtils;
 import com.apphunt.app.api.apphunt.VolleyInstance;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.GsonInstance;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
-import com.flurry.android.FlurryAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -36,7 +36,7 @@ public class AppHuntApplication extends BranchApp {
     private void initAnalytics() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
-            FlurryAgent.setUserId(userId);
+            FlurryWrapper.setUserId(userId);
         }
 
         TwitterAuthConfig authConfig =
@@ -48,9 +48,9 @@ public class AppHuntApplication extends BranchApp {
         FacebookSdk.sdkInitialize(getApplicationContext(), Constants.FACEBOOK_SIGN_IN);
 
         if (BuildConfig.DEBUG) {
-            FlurryAgent.init(this, Constants.FLURRY_DEBUG_API_KEY);
+            FlurryWrapper.init(this, Constants.FLURRY_DEBUG_API_KEY);
         } else {
-            FlurryAgent.init(this, Constants.FLURRY_API_KEY);
+            FlurryWrapper.init(this, Constants.FLURRY_API_KEY);
         }
     }
 

@@ -25,8 +25,8 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.utils.DeepLinkingUtils;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
-import com.flurry.android.FlurryAgent;
 
 import java.util.ArrayList;
 
@@ -56,7 +56,7 @@ public class SMSInviteFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlurryAgent.logEvent(TrackingEvents.UserViewedSMSInvitation);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedSMSInvitation);
     }
 
     @Nullable
@@ -117,7 +117,7 @@ public class SMSInviteFragment extends BaseFragment {
 
             activity.getSupportFragmentManager().popBackStack();
             NotificationsUtils.showNotificationFragment(activity, getString(R.string.msg_successful_invite), false, false);
-            FlurryAgent.logEvent(TrackingEvents.UserSentSMSInvite);
+            FlurryWrapper.logEvent(TrackingEvents.UserSentSMSInvite);
         }
     }
 

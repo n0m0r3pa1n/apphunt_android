@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.auth.models.Friend;
+import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,6 +64,7 @@ public class FriendsInviteAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.invite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                FlurryWrapper.logEvent(TrackingEvents.UserClickedFollowFriendButton);
                 int pos = Integer.valueOf(compoundButton.getTag().toString());
                 positionsArray.set(pos, b);
             }

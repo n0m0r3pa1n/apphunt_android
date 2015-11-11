@@ -12,10 +12,10 @@ import com.apphunt.app.api.apphunt.models.notifications.Notification;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.crashlytics.android.Crashlytics;
-import com.flurry.android.FlurryAgent;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * Created by Naughty Spirit <hi@naughtyspirit.co>
@@ -74,7 +75,7 @@ public class GcmMessageReceiver extends BroadcastReceiver {
                     NotificationsUtils.displayNotification(context, MainActivity.class, bundle, notification, largeIcon);
                     Map<String, String> params = new HashMap<>();
                     params.put("type", notification.getType().toString());
-                    FlurryAgent.logEvent(TrackingEvents.AppShowedNotification, params);
+                    FlurryWrapper.logEvent(TrackingEvents.AppShowedNotification, params);
                 }
             }.start();
         }

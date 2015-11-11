@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
-import com.flurry.android.FlurryAgent;
+import com.apphunt.app.utils.FlurryWrapper;
 
 import kr.nectarine.android.fruitygcm.receiver.FruityRegistrationIdUpdateReceiver;
 
@@ -25,8 +25,8 @@ public class GcmRegistrationUpdateReceiver extends FruityRegistrationIdUpdateRec
 
     @Override
     public void onRegistrationIdRenewed(String regId) {
-        FlurryAgent.init(context, Constants.FLURRY_API_KEY);
-        FlurryAgent.logEvent(TrackingEvents.UserReceivedRegistrationIdRenewal);
+        FlurryWrapper.init(context, Constants.FLURRY_API_KEY);
+        FlurryWrapper.logEvent(TrackingEvents.UserReceivedRegistrationIdRenewal);
     }
 
     @Override

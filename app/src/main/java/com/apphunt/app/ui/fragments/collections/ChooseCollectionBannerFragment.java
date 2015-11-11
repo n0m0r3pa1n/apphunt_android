@@ -20,8 +20,8 @@ import com.apphunt.app.event_bus.events.api.collections.GetBannersApiEvent;
 import com.apphunt.app.event_bus.events.ui.collections.CollectionBannerSelectedEvent;
 import com.apphunt.app.ui.adapters.collections.CollectionBannersAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.flurry.android.FlurryAgent;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
@@ -54,7 +54,7 @@ public class ChooseCollectionBannerFragment extends BackStackFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FlurryAgent.logEvent(TrackingEvents.UserViewedChooseCollectionsBannerFragment);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedChooseCollectionsBannerFragment);
         view = inflater.inflate(R.layout.fragment_choose_collection_banner, container, false);
         initUI();
         ApiClient.getClient(getActivity()).getBanners();
@@ -83,7 +83,7 @@ public class ChooseCollectionBannerFragment extends BackStackFragment {
 
     @OnItemClick(R.id.banners_list)
     public void onBannersListItemSelected(int position) {
-        FlurryAgent.logEvent(TrackingEvents.UserSelectedCollectionBanner);
+        FlurryWrapper.logEvent(TrackingEvents.UserSelectedCollectionBanner);
         BusProvider.getInstance().post(new CollectionBannerSelectedEvent(list.getBanners().get(position)));
         if(this.listener != null) {
             this.listener.onBannerChosen(list.getBanners().get(position));
