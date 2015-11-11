@@ -95,6 +95,8 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserViewedEmailInvitation = "user.viewed.invitation.email";
     String UserViewedSMSInvitation = "user.viewed.invitation.sms";
     String UserViewedFavouriteApp = "user.viewed.favourite.app";
+    String UserViewedFacebookSuggestions = "user.viewed.suggestions.facebook";
+    String UserViewedTwitterSuggestions = "user.viewed.suggestions.twitter";
     String UserViewedFollowers = "user.viewed.followers";
     String UserViewedFollowing = "user.viewed.following";
     String UserViewedWelcomeScreen = "user.viewed.welcome";
@@ -118,11 +120,8 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserSentTwitterInvite = "user.sent.invites.twitter";
     String UserSentEmailInvite = "user.sent.invite.email";
     String UserSentSMSInvite = "user.sent.invite.sms";
-    String UserSkippedFriendsSuggestions = "user.skipped.friends_suggetsions";
+    String UserSkippedFriendsSuggestions = "user.skipped.friends_suggestions";
 
     String UserFollowedSomeone = "user.followed.someone";
     String UserUnfollowedSomeone = "user.unfollowed.someone";
-
-
-
 }
