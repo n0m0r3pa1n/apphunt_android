@@ -7,11 +7,11 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
-//    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "apphunt.herokuapp.com";
+    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
+//    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
+//    public static final String MAIN_URL = "eac5319e.ngrok.io";
 
-//  public static final String MAIN_URL = "4b96d9d0.ngrok.io";
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
 
@@ -32,7 +32,7 @@ public class Constants {
     public static final String KEY_NOTIFICATION = "notification";
     public static final String KEY_SHOW_SETTINGS = "show_settings";
     public static final String KEY_SHOW_RATING = "show_rating";
-    public static final String KEY_LOGIN_PROVIDER = "login_provider";
+    public static final String KEY_LOGIN_TYPE = "login_provider";
     public static final String KEY_LOGIN_PROVIDER_CLASS = "login_provider_class";
     public static final String KEY_ADVERTISING_ID = "advertising_id";
     public static final String KEY_NOTIFICATION_TYPE = "started_from_notification";

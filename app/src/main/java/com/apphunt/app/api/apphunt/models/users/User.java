@@ -1,5 +1,7 @@
 package com.apphunt.app.api.apphunt.models.users;
 
+import com.apphunt.app.constants.Constants;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,6 +15,7 @@ public class User implements Serializable{
     private String name;
     private String email;
     private String profilePicture;
+
     private String loginType;
     private String locale;
     private String username;
@@ -102,11 +105,13 @@ public class User implements Serializable{
     }
 
     public String getAdvertisingId() {
+        this.advertisingId = SharedPreferencesHelper.getStringPreference(Constants.KEY_ADVERTISING_ID, null);
         return advertisingId;
     }
 
     public void setAdvertisingId(String advertisingId) {
         this.advertisingId = advertisingId;
+        SharedPreferencesHelper.setPreference(Constants.KEY_ADVERTISING_ID, advertisingId);
     }
 
     @Override

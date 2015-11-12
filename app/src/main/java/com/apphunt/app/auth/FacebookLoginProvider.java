@@ -2,6 +2,7 @@ package com.apphunt.app.auth;
 
 import android.content.Context;
 
+import com.apphunt.app.api.apphunt.models.users.LoginType;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -11,7 +12,7 @@ import com.facebook.login.LoginManager;
  */
 public class FacebookLoginProvider extends BaseLoginProvider implements LoginProvider{
     private static final String TAG = FacebookLoginProvider.class.getSimpleName();
-    public static final String PROVIDER_NAME = "facebook";
+    public static final String PROVIDER_NAME = FacebookLoginProvider.class.getCanonicalName();
 
     private OnFriendsResultListener listener;
 
@@ -33,8 +34,14 @@ public class FacebookLoginProvider extends BaseLoginProvider implements LoginPro
         super.logout();
     }
 
+
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getLoginType() {
+        return LoginType.Facebook.toString();
     }
 }

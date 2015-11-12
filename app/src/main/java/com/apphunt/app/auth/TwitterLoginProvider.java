@@ -2,6 +2,7 @@ package com.apphunt.app.auth;
 
 import android.content.Context;
 
+import com.apphunt.app.api.apphunt.models.users.LoginType;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.api.twitter.models.Friends;
 import com.apphunt.app.auth.models.Friend;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * on 3/6/15.
  */
 public class TwitterLoginProvider extends BaseLoginProvider {
-    public static final String PROVIDER_NAME = "twitter";
+    public static final String PROVIDER_NAME = TwitterLoginProvider.class.getCanonicalName();
 
     public TwitterLoginProvider(Context context) {
         super(context);
@@ -72,5 +73,10 @@ public class TwitterLoginProvider extends BaseLoginProvider {
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getLoginType() {
+        return LoginType.Twitter.toString();
     }
 }

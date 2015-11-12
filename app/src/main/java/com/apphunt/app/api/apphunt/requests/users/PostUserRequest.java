@@ -3,12 +3,14 @@ package com.apphunt.app.api.apphunt.requests.users;
 import com.android.volley.Response;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.base.BasePostRequest;
-import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 
 public class PostUserRequest extends BasePostRequest<User>{
-    public PostUserRequest(Object body, Response.ErrorListener listener) {
+
+    private final Response.Listener<User> responseListener;
+
+    public PostUserRequest(Object body, Response.Listener<User> responseListener, Response.ErrorListener listener) {
         super(BASE_URL + "/users", body, listener);
+        this.responseListener = responseListener;
     }
 
     @Override
@@ -18,6 +20,8 @@ public class PostUserRequest extends BasePostRequest<User>{
 
     @Override
     public void deliverResponse(User response) {
-        BusProvider.getInstance().post(new UserCreatedApiEvent(response));
+        if(responseListener != null) {
+            responseListener.onResponse(response);
+        }
     }
 }

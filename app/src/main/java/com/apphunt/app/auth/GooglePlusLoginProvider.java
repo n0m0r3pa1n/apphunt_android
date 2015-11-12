@@ -2,6 +2,7 @@ package com.apphunt.app.auth;
 
 import android.content.Context;
 
+import com.apphunt.app.api.apphunt.models.users.LoginType;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
@@ -14,7 +15,7 @@ import com.google.android.gms.plus.Plus;
  * * NaughtySpirit 2015
  */
 public class GooglePlusLoginProvider extends BaseLoginProvider {
-    public static final String PROVIDER_NAME = "google-plus";
+    public static final String PROVIDER_NAME = GooglePlusLoginProvider.class.getCanonicalName();
 
     private GoogleApiClient googleApiClient;
 
@@ -39,5 +40,10 @@ public class GooglePlusLoginProvider extends BaseLoginProvider {
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getLoginType() {
+        return LoginType.GooglePlus.toString();
     }
 }

@@ -1,7 +1,5 @@
 package com.apphunt.app.auth;
 
-import android.app.Activity;
-
 import com.apphunt.app.api.apphunt.models.users.User;
 
 /**
@@ -14,5 +12,6 @@ public interface LoginProvider {
     User getUser();
     boolean isUserLoggedIn();
     String getName();
+    String getLoginType();
     void loadFriends(BaseLoginProvider.OnFriendsResultListener listener);
 }

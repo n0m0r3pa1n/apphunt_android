@@ -13,43 +13,28 @@ import java.lang.reflect.Constructor;
  * Created by Naughty Spirit <hi@naughtyspirit.co>
  * on 2/13/15.
  */
-public class LoginProviderFactory {
+public abstract class LoginProviderFactory {
     private static final String TAG = LoginProviderFactory.class.getSimpleName();
 
     private static LoginProvider loginProvider;
-    private static Context context;
+
+    public static void setLoginProvider(LoginProvider provider) {
+        loginProvider = provider;
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER_CLASS, provider.getName());
+    }
 
     public static LoginProvider get(Context context) {
-        try {
-            Class<?> clss = Class.forName(SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER_CLASS));
-            Constructor<?> constr = clss.getConstructor(Context.class);
-            loginProvider = (BaseLoginProvider) constr.newInstance(context);
-        } catch (Exception e) {
-            Log.e(TAG, "Cannot create this login provider.");
+        String loginProviderName = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER_CLASS, null);
+        if(loginProvider == null && !TextUtils.isEmpty(loginProviderName)) {
+            try {
+                Class<?> clss = Class.forName(loginProviderName);
+                Constructor<?> constr = clss.getConstructor(Context.class);
+                loginProvider = (BaseLoginProvider) constr.newInstance(context);
+            } catch (Exception e) {
+                Log.e(TAG, "Cannot create this login provider.");
+            }
         }
 
         return loginProvider;
-    }
-
-    public static void setLoginProvider(String provider) {
-        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER_CLASS, provider);
-    }
-
-    public static void onCreate(Context context) {
-        String loginProviderName = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
-        LoginProviderFactory.context = context;
-        if(TextUtils.isEmpty(loginProviderName) || loginProviderName.equals(AnonymousLoginProvider.PROVIDER_NAME)) {
-            createAnonymousProvider();
-        }
-    }
-
-    public static void reset() {
-        createAnonymousProvider();
-    }
-
-    private static void createAnonymousProvider() {
-        loginProvider = new AnonymousLoginProvider(context);
-        ((AnonymousLoginProvider) loginProvider).createAnonymousUser();
-        setLoginProvider(AnonymousLoginProvider.class.getCanonicalName());
     }
 }

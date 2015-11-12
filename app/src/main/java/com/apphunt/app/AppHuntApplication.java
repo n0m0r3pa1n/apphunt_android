@@ -3,6 +3,7 @@ package com.apphunt.app;
 import android.text.TextUtils;
 
 import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.auth.AnonymousLoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.FlurryWrapper;
@@ -29,8 +30,14 @@ public class AppHuntApplication extends BranchApp {
 
         SharedPreferencesHelper.init(this);
         initNetworking();
+        initLogin();
         initAnalytics();
-        LoginProviderFactory.onCreate(getApplicationContext());
+    }
+
+    private void initLogin() {
+        if(LoginProviderFactory.get(this) == null) {
+            LoginProviderFactory.setLoginProvider(new AnonymousLoginProvider(this));
+        }
     }
 
     private void initAnalytics() {

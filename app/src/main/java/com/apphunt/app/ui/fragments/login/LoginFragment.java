@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.twitter.AppHuntTwitterApiClient;
 import com.apphunt.app.auth.FacebookLoginProvider;
@@ -29,7 +27,6 @@ import com.apphunt.app.auth.TwitterLoginProvider;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.users.UserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
@@ -56,7 +53,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.squareup.otto.Subscribe;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -203,7 +199,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
 
                         String profileImageUrl = twitterUser.profileImageUrl.replace("_normal", "");
                         user.setProfilePicture(profileImageUrl);
-                        user.setLoginType(TwitterLoginProvider.PROVIDER_NAME);
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
                         user.setCoverPicture(twitterUser.profileBannerUrl != null ? twitterUser.profileBannerUrl : twitterUser.profileBackgroundImageUrl);
 
@@ -212,8 +207,8 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                             @Override
                             public void success(Result<String> result) {
                                 user.setEmail(result.data);
-                                LoginProviderFactory.setLoginProvider(TwitterLoginProvider.class.getCanonicalName());
-                                ApiClient.getClient(getActivity()).createUser(user);
+                                LoginProviderFactory.setLoginProvider(new TwitterLoginProvider(activity));
+                                LoginProviderFactory.get(activity).login(user);
 
                                 FlurryWrapper.logEvent(TrackingEvents.UserTwitterLogin);
                             }
@@ -295,12 +290,10 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                             user.setCoverPicture(coverUrl);
                         }
 
-
-                        user.setLoginType(FacebookLoginProvider.PROVIDER_NAME);
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-                        LoginProviderFactory.setLoginProvider(FacebookLoginProvider.class.getCanonicalName());
+                        LoginProviderFactory.setLoginProvider(new FacebookLoginProvider(activity));
+                        LoginProviderFactory.get(activity).login(user);
 
-                        ApiClient.getClient(getActivity()).createUser(user);
                         FlurryWrapper.logEvent(TrackingEvents.UserFacebookLogin);
                     }
                 }
@@ -383,9 +376,8 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             if (resultCode == Activity.RESULT_OK) {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 user.setEmail(email);
-                LoginProviderFactory.setLoginProvider(TwitterLoginProvider.class.getCanonicalName());
-                ApiClient.getClient(getActivity()).createUser(user);
-
+                LoginProviderFactory.setLoginProvider(new TwitterLoginProvider(activity));
+                LoginProviderFactory.get(activity).login(user);
                 FlurryWrapper.logEvent(TrackingEvents.UserTwitterLogin);
             } else {
                 onLoginFailed();
@@ -400,11 +392,11 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
         isTwitterLogin = false;
     }
 
-    @Subscribe
-    public void onUserCreated(UserCreatedApiEvent event) {
-        Log.e(TAG, LoginProviderFactory.get(activity).getName());
-        LoginProviderFactory.get(activity).login(event.getUser());
-    }
+//    @Subscribe
+//    public void onUserCreated(UserCreatedApiEvent event) {
+//        Log.e(TAG, LoginProviderFactory.get(activity).getName());
+//        LoginProviderFactory.get(activity).login(event.getUser());
+//    }
 
     private void onLoginFailed() {
         if (!isAdded()) {
@@ -435,10 +427,9 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             user.setName(currentPerson.getName().getGivenName() + " " + currentPerson.getName().getFamilyName());
             user.setUsername(currentPerson.hasNickname() ? currentPerson.getNickname() : currentPerson.getDisplayName());
             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
-            user.setLoginType(GooglePlusLoginProvider.PROVIDER_NAME);
 
-            LoginProviderFactory.setLoginProvider(GooglePlusLoginProvider.class.getCanonicalName());
-            ApiClient.getClient(getActivity()).createUser(user);
+            LoginProviderFactory.setLoginProvider(new GooglePlusLoginProvider(activity));
+            LoginProviderFactory.get(activity).login(user);
 
             FlurryWrapper.logEvent(TrackingEvents.UserGooglePlusLogin);
         }

@@ -25,7 +25,6 @@ import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
-import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
@@ -120,6 +119,7 @@ public class TrendingAppsFragment extends BaseFragment {
     private void reloadApps() {
         trendingAppsAdapter.resetAdapter();
         endlessRecyclerScrollListener.reset();
+        ApiService.resetCalendars();
         ApiService.getInstance(activity).reloadApps();
     }
 
@@ -132,9 +132,7 @@ public class TrendingAppsFragment extends BaseFragment {
     public void onReloadApps() {
         swipeRefreshLayout.setVisibility(View.VISIBLE);
         btnReload.setVisibility(View.GONE);
-        trendingAppsAdapter.resetAdapter();
-
-        ApiService.getInstance(activity).reloadApps();
+        reloadApps();
         btnAddApp.setVisibility(View.VISIBLE);
         rvTrendingApps.setVisibility(View.VISIBLE);
     }
@@ -183,11 +181,6 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onUserLogin(LoginEvent event) {
-        reloadApps();
-    }
-
-    @Subscribe
-    public void onUserLogout(LogoutEvent event) {
         reloadApps();
     }
 

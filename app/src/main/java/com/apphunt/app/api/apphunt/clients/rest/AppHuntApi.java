@@ -16,9 +16,7 @@ import com.apphunt.app.constants.Constants.LoginProviders;
 import java.util.Date;
 
 public interface AppHuntApi {
-    void createUser(User user);
-
-    void createAnonymousUser(User user);
+    void createUser(User user, Response.Listener<User> listener);
 
     void updateUser(User user);
 

@@ -92,7 +92,6 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
     private RelativeLayout.LayoutParams params;
 
     private App baseApp;
-    private User user;
 
     //region InjectViews
     @InjectView(R.id.icon)
@@ -267,9 +266,6 @@ public class AppDetailsFragment extends BackStackFragment implements CommentsFra
 
     @Subscribe
     public void onVotersReceived(AppVoteEvent event) {
-        user = new User();
-        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
-        user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
         voteBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 

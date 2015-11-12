@@ -1,8 +1,9 @@
 package com.apphunt.app.auth;
 
 import android.content.Context;
+import android.text.TextUtils;
 
-import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.models.users.LoginType;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GoogleUtils;
@@ -17,10 +18,13 @@ import com.apphunt.app.utils.SharedPreferencesHelper;
 public class AnonymousLoginProvider extends BaseLoginProvider {
     private static final String TAG = AnonymousLoginProvider.class.getSimpleName();
 
-    public static final String PROVIDER_NAME = "anonymous";
+    public static final String PROVIDER_NAME = AnonymousLoginProvider.class.getCanonicalName();
 
     public AnonymousLoginProvider(Context context) {
         super(context);
+        if(TextUtils.isEmpty(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID))) {
+            createAnonymousUser();
+        }
     }
 
     public void createAnonymousUser() {
@@ -28,36 +32,24 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
         anonymousUser.setName("Anonymous");
         anonymousUser.setUsername("Anonymous");
         anonymousUser.setProfilePicture("http://i.imgur.com/wYdyc9s.png");
-        anonymousUser.setLoginType(PROVIDER_NAME);
 
-        GoogleUtils.obtainAdvertisingId(context, new GoogleUtils.OnResultListener() {
-            @Override
-            public void onResultReady(String advertisingId) {
-                anonymousUser.setAdvertisingId(advertisingId);
-                ApiClient.getClient(context).createAnonymousUser(anonymousUser);
-            }
-        });
-    }
 
-    @Override
-    public void login(User user) {
-        saveSharedPreferences(user);
+        if(TextUtils.isEmpty(anonymousUser.getAdvertisingId())) {
+            GoogleUtils.obtainAdvertisingId(context, new GoogleUtils.OnResultListener() {
+                @Override
+                public void onResultReady(String advertisingId) {
+                    anonymousUser.setAdvertisingId(advertisingId);
+                    AnonymousLoginProvider.super.login(anonymousUser);
+                }
+            });
+        } else {
+            AnonymousLoginProvider.super.login(anonymousUser);
+        }
     }
 
     @Override
     public void logout() {
         removeSharedPreferences();
-    }
-
-    @Override
-    public User getUser() {
-        User user = new User();
-        user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID, ""));
-        user.setName(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_NAME, ""));
-        user.setAdvertisingId(SharedPreferencesHelper.getStringPreference(Constants.KEY_ADVERTISING_ID, ""));
-        user.setLoginType(Constants.KEY_LOGIN_PROVIDER);
-
-        return user;
     }
 
     @Override
@@ -71,22 +63,7 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
     }
 
     @Override
-    public void loadFriends(BaseLoginProvider.OnFriendsResultListener listener) {
-    }
-
-    protected void saveSharedPreferences(User user) {
-        SharedPreferencesHelper.setPreference(Constants.KEY_USER_ID, user.getId());
-        SharedPreferencesHelper.setPreference(Constants.KEY_USER_NAME, user.getName());
-        SharedPreferencesHelper.setPreference(Constants.KEY_ADVERTISING_ID, user.getAdvertisingId());
-        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, user.getLoginType());
-        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER_CLASS, AnonymousLoginProvider.class.getCanonicalName());
-    }
-
-    protected void removeSharedPreferences() {
-        SharedPreferencesHelper.removePreference(Constants.KEY_USER_ID);
-        SharedPreferencesHelper.removePreference(Constants.KEY_USER_NAME);
-        SharedPreferencesHelper.removePreference(Constants.KEY_ADVERTISING_ID);
-        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
-        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
+    public String getLoginType() {
+        return LoginType.Anonymous.toString();
     }
 }

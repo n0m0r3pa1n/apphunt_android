@@ -53,7 +53,6 @@ import com.apphunt.app.api.apphunt.requests.users.GetFollowersRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFollowingsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
-import com.apphunt.app.api.apphunt.requests.users.PostAnonymousUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostUnfollowUserRequest;
@@ -97,13 +96,8 @@ public class AppHuntApiClient implements AppHuntApi {
     };
 
     @Override
-    public void createUser(User user) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new PostUserRequest(user, listener));
-    }
-
-    @Override
-    public void createAnonymousUser(User user) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new PostAnonymousUserRequest(user, listener));
+    public void createUser(User user, Response.Listener<User> responseListener) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostUserRequest(user, responseListener, listener));
     }
 
     @Override

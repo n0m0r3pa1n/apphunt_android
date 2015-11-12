@@ -27,13 +27,14 @@ import android.widget.TextView;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.clients.rest.ApiService;
 import com.apphunt.app.api.apphunt.models.notifications.NotificationType;
+import com.apphunt.app.api.apphunt.models.users.LoginType;
+import com.apphunt.app.auth.AnonymousLoginProvider;
 import com.apphunt.app.auth.LoginProvider;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
-import com.apphunt.app.event_bus.events.api.users.AnonymousUserCreatedApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DisplayLoginFragmentEvent;
@@ -42,6 +43,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.InstallService;
@@ -54,6 +56,7 @@ import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
+import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
@@ -641,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             @Override
             public void run() {
                 TextView textView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
-                if(event.getCount() == 0) {
+                if (event.getCount() == 0) {
                     eventCount = 0;
                     textView.setVisibility(View.INVISIBLE);
                 } else {
@@ -661,6 +664,22 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         NotificationsUtils.updateNotificationIdIfNeeded(this);
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
+        if(!event.getUser().getLoginType().equals(LoginType.Anonymous.toString())) {
+            presentInvitesScreen();
+        }
+    }
+
+    private void presentInvitesScreen() {
+        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
+                .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
+                .commit();
+    }
+
+    @Subscribe
+    public void onUserLogout(LogoutEvent event) {
+        LoginProviderFactory.setLoginProvider(new AnonymousLoginProvider(this));
     }
 
     @Subscribe
@@ -704,10 +723,5 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
                 .commit();
-    }
-
-    @Subscribe
-    public void onAnonymousUserCreated(AnonymousUserCreatedApiEvent event) {
-        LoginProviderFactory.get(this).login(event.getUser());
     }
 }

@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
-import com.apphunt.app.R;
+import com.android.volley.Response;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.models.Friend;
 import com.apphunt.app.constants.Constants;
@@ -14,7 +15,6 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
-import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
@@ -42,20 +42,25 @@ public abstract class BaseLoginProvider implements LoginProvider {
         removeSharedPreferences();
         BusProvider.getInstance().post(new LogoutEvent());
         hideLoginFragment(context);
-
-        LoginProviderFactory.reset();
     }
 
     @Override
     public void login(User user) {
-        onUserCreated(user);
-        BusProvider.getInstance().post(new LoginEvent(user));
+        user.setLoginType(this.getLoginType());
+        ApiClient.getClient(context).createUser(user, new Response.Listener<User>() {
+            @Override
+            public void onResponse(User response) {
+                onUserCreated(response);
+                BusProvider.getInstance().post(new LoginEvent(response));
+            }
+        });
     }
 
     @Override
     public User getUser() {
         User user = new User();
         user.setId(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
+        user.setLoginType(SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_TYPE, ""));
         user.setEmail(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_EMAIL));
         user.setProfilePicture(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_PROFILE_PICTURE));
         user.setName(SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_NAME));
@@ -68,15 +73,13 @@ public abstract class BaseLoginProvider implements LoginProvider {
     @Override
     public boolean isUserLoggedIn() {
         String userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        String loginProvider = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER);
+        String loginProvider = SharedPreferencesHelper.getStringPreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
         return !TextUtils.isEmpty(loginProvider) && !TextUtils.isEmpty(userId);
     }
 
     private void onUserCreated(User user) {
         FlurryWrapper.logEvent(TrackingEvents.UserLoggedIn);
         saveSharedPreferences(user);
-//        hideLoginFragment(activity);
-        presentInvitesScreen();
     }
 
     protected void saveSharedPreferences(User user) {
@@ -86,7 +89,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
         SharedPreferencesHelper.setPreference(Constants.KEY_USERNAME, user.getUsername());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_PROFILE_PICTURE, user.getProfilePicture());
         SharedPreferencesHelper.setPreference(Constants.KEY_USER_COVER_PICTURE, user.getCoverPicture());
-        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_PROVIDER, user.getLoginType());
+        SharedPreferencesHelper.setPreference(Constants.KEY_LOGIN_TYPE, user.getLoginType());
     }
 
     protected void removeSharedPreferences() {
@@ -96,7 +99,8 @@ public abstract class BaseLoginProvider implements LoginProvider {
         SharedPreferencesHelper.removePreference(Constants.KEY_USER_EMAIL);
         SharedPreferencesHelper.removePreference(Constants.KEY_USER_PROFILE_PICTURE);
         SharedPreferencesHelper.removePreference(Constants.KEY_USER_COVER_PICTURE);
-        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER);
+        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_TYPE);
+        SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
     }
 
     private void hideLoginFragment(Context ctx) {
@@ -106,14 +110,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
         if (loginFragment != null) {
             fragmentManager.popBackStack();
         }
-    }
-
-    private void presentInvitesScreen() {
-        ((AppCompatActivity) context).getSupportFragmentManager().popBackStack();
-        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
-                .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
-                .commit();
     }
 
     @Override
