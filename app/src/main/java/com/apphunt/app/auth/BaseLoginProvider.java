@@ -2,8 +2,6 @@ package com.apphunt.app.auth;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.android.volley.Response;
@@ -15,7 +13,6 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
-import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
@@ -41,7 +38,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public void logout() {
         removeSharedPreferences();
         BusProvider.getInstance().post(new LogoutEvent());
-        hideLoginFragment(context);
     }
 
     @Override
@@ -101,15 +97,6 @@ public abstract class BaseLoginProvider implements LoginProvider {
         SharedPreferencesHelper.removePreference(Constants.KEY_USER_COVER_PICTURE);
         SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_TYPE);
         SharedPreferencesHelper.removePreference(Constants.KEY_LOGIN_PROVIDER_CLASS);
-    }
-
-    private void hideLoginFragment(Context ctx) {
-        FragmentManager fragmentManager = ((AppCompatActivity) ctx).getSupportFragmentManager();
-        LoginFragment loginFragment = (LoginFragment) fragmentManager.findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
-
-        if (loginFragment != null) {
-            fragmentManager.popBackStack();
-        }
     }
 
     @Override

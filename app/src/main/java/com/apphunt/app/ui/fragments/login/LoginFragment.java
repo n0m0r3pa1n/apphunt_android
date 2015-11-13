@@ -392,12 +392,6 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
         isTwitterLogin = false;
     }
 
-//    @Subscribe
-//    public void onUserCreated(UserCreatedApiEvent event) {
-//        Log.e(TAG, LoginProviderFactory.get(activity).getName());
-//        LoginProviderFactory.get(activity).login(event.getUser());
-//    }
-
     private void onLoginFailed() {
         if (!isAdded()) {
             return;

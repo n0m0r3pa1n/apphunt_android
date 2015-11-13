@@ -70,11 +70,8 @@ public class AllCollectionsFragment extends BaseFragment {
     }
 
     private void loadMoreCollections(String sortBy) {
-        String userId = null;
         currentPage++;
-        if(LoginProviderFactory.get(getActivity()).isUserLoggedIn()) {
-            userId = LoginProviderFactory.get(getActivity()).getUser().getId();
-        }
+        String userId = LoginProviderFactory.get(getActivity()).getUser().getId();
         ApiClient.getClient(getActivity()).getAllCollections(userId, sortBy, currentPage, Constants.PAGE_SIZE);
     }
 

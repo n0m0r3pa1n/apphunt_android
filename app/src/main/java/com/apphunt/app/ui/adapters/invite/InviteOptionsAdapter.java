@@ -20,7 +20,7 @@ import com.apphunt.app.ui.fragments.invites.SMSInviteFragment;
  */
 public class InviteOptionsAdapter extends FragmentStatePagerAdapter {
 
-    private final String providerName;
+    private final String loginType;
     private AppCompatActivity activity;
     private boolean withProviderInvite = false;
 
@@ -28,7 +28,7 @@ public class InviteOptionsAdapter extends FragmentStatePagerAdapter {
         super(fm);
 
         this.activity = activity;
-        this.providerName = LoginProviderFactory.get(activity).getName();
+        this.loginType = LoginProviderFactory.get(activity).getLoginType();
 
         if (LoginProviderFactory.get(activity).getName().equals(TwitterLoginProvider.PROVIDER_NAME)) {
             withProviderInvite = true;
@@ -74,7 +74,7 @@ public class InviteOptionsAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return providerName;
+                return loginType;
             case 1:
                 return "Email";
             case 2:

@@ -680,6 +680,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
         LoginProviderFactory.setLoginProvider(new AnonymousLoginProvider(this));
+        hideLoginFragment();
     }
 
     @Subscribe
@@ -723,5 +724,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
                 .commit();
+    }
+
+    private void hideLoginFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        LoginFragment loginFragment = (LoginFragment) fragmentManager.findFragmentByTag(Constants.TAG_LOGIN_FRAGMENT);
+
+        if (loginFragment != null) {
+            fragmentManager.popBackStack();
+        }
     }
 }

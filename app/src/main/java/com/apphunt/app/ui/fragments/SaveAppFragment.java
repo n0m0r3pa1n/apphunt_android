@@ -39,7 +39,7 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
-import com.apphunt.app.ui.fragments.base.BackStackFragment;
+import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
@@ -57,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SaveAppFragment extends BackStackFragment implements OnClickListener {
+public class SaveAppFragment extends BaseFragment implements OnClickListener {
 
     private static final String TAG = SaveAppFragment.class.getName();
 
@@ -88,7 +88,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        BusProvider.getInstance().register(this);
         data = getArguments().getParcelable(Constants.KEY_DATA);
         Map<String, String> params = new HashMap<>();
         params.put("appPackage", data.packageName);
@@ -213,7 +213,7 @@ public class SaveAppFragment extends BackStackFragment implements OnClickListene
         super.onDetach();
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         closeKeyboard(desc);
-
+        BusProvider.getInstance().unregister(this);
         ActionBarUtils.getInstance().hideActionBarShadow();
     }
 

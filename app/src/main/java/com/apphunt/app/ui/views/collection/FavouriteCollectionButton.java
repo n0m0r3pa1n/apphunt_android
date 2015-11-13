@@ -8,12 +8,14 @@ import android.widget.ToggleButton;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.collections.FavouriteCollectionApiEvent;
 import com.apphunt.app.event_bus.events.api.collections.UnfavouriteCollectionApiEvent;
 import com.apphunt.app.ui.views.BaseFavouriteButton;
 import com.apphunt.app.utils.FlurryWrapper;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
@@ -70,6 +72,10 @@ public class FavouriteCollectionButton extends BaseFavouriteButton {
 
     @Override
     protected void favourite() {
+        if(!LoginProviderFactory.get(getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(false);
+            return;
+        }
         collection.setIsFavourite(true);
         FlurryWrapper.logEvent(TrackingEvents.UserFavouritedCollection, new HashMap<String, String>(){{
             put("collectionId", collection.getId());
@@ -80,6 +86,10 @@ public class FavouriteCollectionButton extends BaseFavouriteButton {
 
     @Override
     protected void unfavourite() {
+        if(!LoginProviderFactory.get(getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(false);
+            return;
+        }
         collection.setIsFavourite(false);
         FlurryWrapper.logEvent(TrackingEvents.UserUnfavouritedCollection, new HashMap<String, String>(){{
             put("collectionId", collection.getId());

@@ -5,10 +5,12 @@ import android.util.AttributeSet;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.event_bus.events.api.apps.FavouriteAppApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.UnfavouriteAppApiEvent;
 import com.apphunt.app.ui.views.BaseFavouriteButton;
+import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
@@ -38,12 +40,20 @@ import com.squareup.otto.Subscribe;
 
     @Override
     protected void favourite() {
+        if(!LoginProviderFactory.get(getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(false);
+            return;
+        }
         app.setIsFavourite(true);
         ApiClient.getClient(getContext()).favouriteApp(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
 
     @Override
     protected void unfavourite() {
+        if(!LoginProviderFactory.get(getContext()).isUserLoggedIn()) {
+            LoginUtils.showLoginFragment(false);
+            return;
+        }
         app.setIsFavourite(false);
         ApiClient.getClient(getContext()).unfavouriteApp(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
