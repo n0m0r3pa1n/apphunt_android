@@ -54,6 +54,8 @@ public interface AppHuntApi {
 
     void getTopHuntersCollection(String criteria);
 
+    void getTopHuntersForCurrentMonth();
+
     void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize);
 
     void getAppCollection(String collectionId, String userId);

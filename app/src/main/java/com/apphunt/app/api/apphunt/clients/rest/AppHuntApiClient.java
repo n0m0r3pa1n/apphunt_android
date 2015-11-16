@@ -217,6 +217,11 @@ public class AppHuntApiClient implements AppHuntApi {
     }
 
     @Override
+    public void getTopHuntersForCurrentMonth() {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetTopHuntersRequest(listener));
+    }
+
+    @Override
     public void getFavouriteCollections(String favouritedBy, String userId, int page, int pageSize) {
         if(TextUtils.isEmpty(userId)) {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFavouriteCollectionsRequest(favouritedBy, page, pageSize, listener));

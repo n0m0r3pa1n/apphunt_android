@@ -4,8 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.apphunt.app.ui.views.widgets.AHTextView
+        android:id="@+id/topHuntersInfo"
+        android:text="Ranking for the current month is updated every few hours!"
+        android:padding="4dp"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/collection_hunters_list"
+        android:layout_below="@id/topHuntersInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

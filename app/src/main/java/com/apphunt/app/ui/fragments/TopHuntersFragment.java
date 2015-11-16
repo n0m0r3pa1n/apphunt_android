@@ -55,6 +55,7 @@ public class TopHuntersFragment extends BaseFragment {
     private int currentYear = 2015;
     private int nextYear = 2016;
     private int lastAvailableMonthWithTopApps = 4;
+    private boolean isDynamicRequest = true;
 
     private DialogInterface.OnClickListener datePickedListener = new DialogInterface.OnClickListener() {
         @Override
@@ -62,11 +63,16 @@ public class TopHuntersFragment extends BaseFragment {
             FlurryWrapper.logEvent(TrackingEvents.UserViewedPreviousTopHuntersRanking, new HashMap<String, String>(){{
                 put("month", Integer.toString(selectedMonth));
             }});
-            if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
+            if(selectedMonth == Calendar.getInstance().get(Calendar.MONTH) && selectedYear == Calendar.getInstance().get(Calendar.YEAR)) {
+                ApiClient.getClient(activity).getTopHuntersForCurrentMonth();
+                isDynamicRequest = true;
+            } else if(selectedYear == currentYear || (selectedYear == nextYear && selectedMonth < lastAvailableMonthWithTopApps)) {
                 ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false));
+                isDynamicRequest = false;
             } else {
                 ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(selectedMonth, false) +
                         "%20" + StringUtils.getYearStringFromCalendar(selectedYear));
+                isDynamicRequest = false;
             }
         }
     };
@@ -77,6 +83,9 @@ public class TopHuntersFragment extends BaseFragment {
     @InjectView(R.id.vs_no_hunters)
     RelativeLayout noHuntersViewStub;
 
+    @InjectView(R.id.topHuntersInfo)
+    TextView topHuntersInfo;
+
     public TopHuntersFragment() {
         setFragmentTag(Constants.TAG_TOP_HUNTERS_FRAGMENT);
         FlurryWrapper.logEvent(TrackingEvents.UserViewedTopHunters);
@@ -86,11 +95,10 @@ public class TopHuntersFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        selectedMonth = calendar.get(Calendar.MONTH) - 1;
+        selectedMonth = calendar.get(Calendar.MONTH);
         selectedYear = calendar.get(Calendar.YEAR);
 
-        int previousMonth = Calendar.getInstance().get(Calendar.MONTH) - 1;
-        ApiClient.getClient(activity).getTopHuntersCollection(StringUtils.getMonthStringFromCalendar(previousMonth, false));
+        ApiClient.getClient(activity).getTopHuntersForCurrentMonth();
     }
 
     @Override
@@ -148,6 +156,8 @@ public class TopHuntersFragment extends BaseFragment {
         if(event.getHuntersCollections() == null
                 || event.getHuntersCollections().getCollections() == null
                 || event.getHuntersCollections().getCollections().size() == 0) {
+            topHuntersInfo.setVisibility(View.GONE);
+            topHuntersInfo.setVisibility(View.INVISIBLE);
             collectionHuntersList.setVisibility(View.INVISIBLE);
             noHuntersViewStub.setVisibility(View.VISIBLE);
             ((TextView)noHuntersViewStub.findViewById(R.id.score_text)).setText("There is no ranking available for " +
@@ -156,6 +166,12 @@ public class TopHuntersFragment extends BaseFragment {
         } else {
             collectionHuntersList.setVisibility(View.VISIBLE);
             noHuntersViewStub.setVisibility(View.INVISIBLE);
+        }
+
+        if(isDynamicRequest) {
+            topHuntersInfo.setVisibility(View.VISIBLE);
+        } else {
+            topHuntersInfo.setVisibility(View.GONE);
         }
         collectionHuntersList.setItemAnimator(new DefaultItemAnimator());
         collectionHuntersList.setLayoutManager(new LinearLayoutManager(getActivity()));

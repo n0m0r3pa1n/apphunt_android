@@ -7,6 +7,10 @@ import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.collections.GetTopHuntersCollectionApiEvent;
 
 public class GetTopHuntersRequest extends BaseGetRequest<HuntersCollections> {
+    public GetTopHuntersRequest(Response.ErrorListener listener) {
+        super(BASE_URL + "/user-collections/top-hunters/today", listener);
+    }
+
     public GetTopHuntersRequest(String criteria, Response.ErrorListener listener) {
         super(BASE_URL + "/user-collections/search?q=" + criteria, listener);
     }
