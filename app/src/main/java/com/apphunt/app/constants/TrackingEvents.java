@@ -86,6 +86,10 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserViewedFacebookSuggestions = "user.viewed.suggestions.facebook";
     String UserViewedTwitterSuggestions = "user.viewed.suggestions.twitter";
     String UserViewedAddAppToAppHuntNotification = "user.viewed.add.app.to.apphunt.notification";
-    String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
+    String UserViewedCommentAppNotification = "user.viewed.comment.app.notification";
 
+    String UserViewedSaveAppFragmentFromNotification = "user.viewed.save.app.from.notification";
+    String UserViewedCommentAppFromNotification = "user.viewed.comment.app.from.notification";
+    String UserInstalledApp = "user.installed.app";
+    String UserRemovedApp = "user.removed.app";
 }

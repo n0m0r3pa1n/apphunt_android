@@ -3,7 +3,6 @@ package com.apphunt.app.receivers;
 import android.content.Context;
 import android.content.Intent;
 
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.utils.FlurryWrapper;
 
@@ -25,7 +24,7 @@ public class GcmRegistrationUpdateReceiver extends FruityRegistrationIdUpdateRec
 
     @Override
     public void onRegistrationIdRenewed(String regId) {
-        FlurryWrapper.init(context, Constants.FLURRY_API_KEY);
+        FlurryWrapper.init(context);
         FlurryWrapper.logEvent(TrackingEvents.UserReceivedRegistrationIdRenewal);
     }
 

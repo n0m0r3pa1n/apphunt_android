@@ -53,12 +53,7 @@ public class AppHuntApplication extends BranchApp {
         Fabric.with(this, new Twitter(authConfig), new Crashlytics.Builder().core(core).build());
 
         FacebookSdk.sdkInitialize(getApplicationContext(), Constants.FACEBOOK_SIGN_IN);
-
-        if (BuildConfig.DEBUG) {
-            FlurryWrapper.init(this, Constants.FLURRY_DEBUG_API_KEY);
-        } else {
-            FlurryWrapper.init(this, Constants.FLURRY_API_KEY);
-        }
+        FlurryWrapper.init(this);
     }
 
     private void initNetworking() {

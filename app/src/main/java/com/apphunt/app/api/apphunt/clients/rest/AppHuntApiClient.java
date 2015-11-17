@@ -19,6 +19,7 @@ import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetAppsByPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetRandomAppRequest;
@@ -68,6 +69,7 @@ import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
 import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
+import com.google.gson.JsonArray;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -451,6 +453,14 @@ public class AppHuntApiClient implements AppHuntApi {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetFollowingsRequest(profileId, userId, page, pageSize, listener));
         }
 
+    }
+
+    @Override
+    public void getAppsForPackages(List<String> packages, Response.Listener<JsonArray> listener1) {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("packages", packages);
+
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByPackages(map, listener1, listener));
     }
 
     @Override

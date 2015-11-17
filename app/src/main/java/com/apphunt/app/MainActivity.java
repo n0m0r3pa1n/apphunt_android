@@ -46,6 +46,7 @@ import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
+import com.apphunt.app.services.CommentAppService;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     boolean isNetworkChanged = false;
     private int previousPosition = 0;
     private int versionCode;
-    private String query;
     private MenuItem menuItemHistory;
 
     @Override
@@ -116,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         initDeepLinking();
         initNotifications();
         InstallService.setupService(this);
+        CommentAppService.setupService(this);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
-//        SmartRate.init(this, Constants.APP_SPICE_APP_ID);
     }
 
     private void initUI() {
@@ -237,6 +237,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     break;
                 case INSTALL:
                     displaySaveAppFragment();
+                    break;
+                case COMMENT_APP:
+                    displayCommentAppScreen();
                     break;
 
             }
@@ -524,6 +527,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onResume();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
+    }
+
+    private void displayCommentAppScreen() {
+        String appId = getIntent().getStringExtra(Constants.EXTRA_APP_ID);
+        if(!TextUtils.isEmpty(appId)) {
+            FlurryWrapper.logEvent(TrackingEvents.UserViewedCommentAppFromNotification);
+            NavUtils.getInstance(this).presentAppDetailsFragment(appId);
+        }
     }
 
     private void displaySaveAppFragment() {

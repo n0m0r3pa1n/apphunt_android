@@ -12,8 +12,10 @@ import com.apphunt.app.api.apphunt.models.users.FollowingsIdsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants.LoginProviders;
+import com.google.gson.JsonArray;
 
 import java.util.Date;
+import java.util.List;
 
 public interface AppHuntApi {
     void createUser(User user, Response.Listener<User> listener);
@@ -119,4 +121,6 @@ public interface AppHuntApi {
     void getFollowers(String profileId, String userId, int page, int pageSize);
 
     void getFollowings(String profileId, String userId, int page, int pageSize);
+
+    void getAppsForPackages(List<String> packages, Response.Listener<JsonArray> listener);
 }

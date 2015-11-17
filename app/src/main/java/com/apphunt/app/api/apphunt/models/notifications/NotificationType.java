@@ -12,7 +12,8 @@ public enum NotificationType {
     TOP_APPS("topApps"),
     GENERIC("generic"),
     DAILY("daily"),
-    INSTALL("install");
+    INSTALL("install"),
+    COMMENT_APP("comment_app");
 
     public final HashMap<NotificationType, Integer> requestCodes = new HashMap<NotificationType, Integer>() {{
         put(DAILY, 101);

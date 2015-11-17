@@ -75,8 +75,10 @@ public class InstallService extends Service {
         Date tomorrow = new Date(calendar.getTimeInMillis());
 
         dailyInstalledApps = realm.where(InstalledApp.class)
-                .between("dateInstalled", today, tomorrow)
-                .equalTo("hasNotificationShowed", false)
+                .beginGroup()
+                    .equalTo("hasNotificationShowed", false)
+                    .between("dateInstalled", today, tomorrow)
+                .endGroup()
                 .findAll();
 
         if (dailyInstalledApps.size() == 0) {
@@ -153,8 +155,8 @@ public class InstallService extends Service {
             bundle.putString(Constants.EXTRA_APP_PACKAGE, app.getPackageName());
             NotificationsUtils.displayNotification(this, MainActivity.class,
                     bundle,
-                    new Notification("Did you like " + appName + "?",
-                            "Share your opinion with the AppHunt community!", "", NotificationType.INSTALL),
+                    new Notification("Do you like " + appName + "?",
+                            "Share it with the AppHunt community!", "", NotificationType.INSTALL),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         }
     }

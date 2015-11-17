@@ -47,7 +47,7 @@ public class DailyNotificationService extends IntentService {
         if (!TextUtils.isEmpty(userId)) {
             FlurryWrapper.setUserId(userId);
         }
-        FlurryWrapper.init(this, Constants.FLURRY_API_KEY);
+        FlurryWrapper.init(this);
         ApiClient.getClient(this).getNotification("DailyReminder", new Response.Listener<Notification>() {
             @Override
             public void onResponse(Notification response) {

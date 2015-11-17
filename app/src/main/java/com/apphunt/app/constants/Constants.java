@@ -96,19 +96,16 @@ public class Constants {
     public static final int REQUEST_NETWORK_SETTINGS = 3;
     public static final int RC_INSTALL_SERVICE = 123;
     public static final int RC_DAILY_SERVICE = 124;
+    public static final int RC_COMMENT_APP_SERVICE = 125;
 
     //Extras
     public static final String EXTRA_IMAGES = "extra_images";
     public static final String EXTRA_SELECTED_IMAGE = "selected_image";
     public static final String EXTRA_APP_PACKAGE = "app_package";
+    public static final String EXTRA_APP_ID = "app_id";
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
-
-    // Smart Rate
-    public static final String SMART_RATE_LOCATION_APP_SAVED = "SaveApp#appSaved";
-    public static final String SMART_RATE_LOCATION_APP_VOTED = "TrendingApps#appVoted";
-    public static final String APP_SPICE_APP_ID = "54d4a61f6275f00300b032d9";
 
     // Sharing
     public static final String GOOGLE_PLAY_APP_URL = "https://play.google.com/store/apps/details?id=com.apphunt.app";

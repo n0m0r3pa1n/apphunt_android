@@ -108,6 +108,13 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.DeleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".services.DailyNotificationService"
@@ -116,7 +123,7 @@
             android:name=".services.InstallService"
             android:exported="false" />
         <service
-            android:name=".services.CommentService"
+            android:name=".services.CommentAppService"
             android:exported="false" />
         <meta-data
             android:name="com.google.android.gms.version"
