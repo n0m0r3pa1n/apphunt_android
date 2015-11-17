@@ -69,6 +69,7 @@ public class CommentAppService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        clearArrays();
         SharedPreferencesHelper.init(this);
         FlurryWrapper.init(this);
         realmConfiguration = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
@@ -144,6 +145,17 @@ public class CommentAppService extends Service {
         });
 
         return START_FLAG_RETRY;
+    }
+
+    private void clearArrays() {
+        if(appsInstalledAndRemoved != null && appsInstalledAndRemoved.size() > 0) {
+            appsInstalledAndRemoved.clear();
+        }
+
+        if(appsStillInstalled != null && appsStillInstalled.size() > 0) {
+            appsStillInstalled.clear();
+        }
+
     }
 
     private List<InstalledApp> getUserAppsFromAppHunt() {
