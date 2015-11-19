@@ -8,6 +8,8 @@
         android:id="@+id/topHuntersInfo"
         android:text="Ranking for the current month is updated every few hours!"
         android:padding="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:textSize="22sp"
         android:gravity="center"
         android:layout_width="match_parent"
