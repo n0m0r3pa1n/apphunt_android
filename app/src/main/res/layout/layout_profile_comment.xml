@@ -38,31 +38,6 @@
         android:layout_below="@id/app_icon"
         android:layout_marginTop="8dp"
         android:paddingRight="5dp"
-        android:layout_toLeftOf="@+id/votes_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:id="@+id/votes_container"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:src="@drawable/ic_hunter_votes"
-            android:layout_marginRight="5dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-
-        <com.apphunt.app.ui.views.widgets.AHTextView
-            android:id="@+id/comments_votes"
-            android:text="20"
-            android:textSize="18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
 </RelativeLayout>

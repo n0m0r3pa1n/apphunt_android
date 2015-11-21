@@ -61,9 +61,7 @@ public class FavouriteAppsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
         favouritedBy = getArguments().getString(FAVOURITED_BY);
-        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            userId = LoginProviderFactory.get(activity).getUser().getId();
-        }
+        userId = LoginProviderFactory.get(activity).getUser().getId();
 
         getFavouriteApps();
         items.setOnEndReachedListener(new OnEndReachedListener() {

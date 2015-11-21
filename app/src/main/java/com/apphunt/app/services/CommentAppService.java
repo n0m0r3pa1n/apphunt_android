@@ -224,10 +224,8 @@ public class CommentAppService extends Service {
             calendar.add(Calendar.DATE, +1);
         }
 
-//        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_DAY, alarmIntent);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, today.getTimeInMillis(),
-                1000, alarmIntent);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
     @NonNull

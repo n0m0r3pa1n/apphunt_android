@@ -58,9 +58,7 @@ public class AppsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_search_items, container, false);
         ButterKnife.inject(this, view);
         profileId = getArguments().getString(Constants.KEY_USER_PROFILE);
-        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            userId = LoginProviderFactory.get(activity).getUser().getId();
-        }
+        userId = LoginProviderFactory.get(activity).getUser().getId();
 
         getApps();
         items.setOnEndReachedListener(new OnEndReachedListener() {

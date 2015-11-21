@@ -41,7 +41,6 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ProfileComment comment = commentList.get(position);
         holder.commentText.setText(comment.getText());
-        holder.commentVotes.setText(comment.getVotesCount() + "");
         holder.appCategory.setText(comment.getApp().getCategories().get(0));
         holder.appTitle.setText(comment.getApp().getName());
         Picasso.with(context).load(comment.getApp().getIcon()).into(holder.appIcon);
@@ -78,9 +77,6 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
 
         @InjectView(R.id.comment_text)
         TextView commentText;
-
-        @InjectView(R.id.comments_votes)
-        TextView commentVotes;
 
         public ViewHolder(View view) {
             super(view);

@@ -166,7 +166,7 @@ public class AppVoteButton extends LinearLayout {
 
     @Subscribe
     public void onAppVote(AppVoteApiEvent event) {
-        if(baseApp == null || baseApp.getId().equals(event.getVote().getAppId())) {
+        if(baseApp == null || !baseApp.getId().equals(event.getVote().getAppId())) {
             return;
         }
         AppVote voteResult = event.getVote();

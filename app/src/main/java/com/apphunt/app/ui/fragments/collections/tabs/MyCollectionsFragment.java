@@ -78,9 +78,7 @@ public class MyCollectionsFragment extends BaseFragment implements OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlurryWrapper.logEvent(TrackingEvents.UserViewedMyCollections);
         view = inflater.inflate(R.layout.fragment_my_collections, container, false);
-        if(LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            userId = LoginProviderFactory.get(activity).getUser().getId();
-        }
+        userId = LoginProviderFactory.get(activity).getUser().getId();
         initUI();
 
         return view;
