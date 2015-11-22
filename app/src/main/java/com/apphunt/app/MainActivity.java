@@ -132,7 +132,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         boolean isDialogDisplayed = dialog != null && dialog.isAdded();
         if(versionCode >= latestAppVersion) {
             if(isDialogDisplayed) {
-                dialog.dismiss();
+                try {
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    Crashlytics.logException(e);
+                    e.printStackTrace();
+                }
             }
             return;
         }
