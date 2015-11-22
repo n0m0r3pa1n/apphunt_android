@@ -51,6 +51,7 @@ public class Constants {
     public static final String KEY_POP_BACKSTACK = "pop_backstack";
     public static final String KEY_LAST_SEEN_EVENT_ID = "last_seen_event_id";
     public static final String KEY_LAST_SEEN_EVENT_DATE = "last_seen_event_date";
+    public static final String KEY_LATEST_APP_VERSION = "latest_app_version";
 
     public static final String PLATFORM = "Android";
 

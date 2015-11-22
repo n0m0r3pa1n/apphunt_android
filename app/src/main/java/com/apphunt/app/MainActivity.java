@@ -69,6 +69,7 @@ import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.PackagesUtils;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.apphunt.app.utils.ui.NotificationsUtils;
@@ -111,16 +112,40 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         InstallService.setupService(this);
         CommentAppService.setupService(this);
         sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+        ApiClient.getClient(this).getLatestAppVersionCode();
     }
 
     private void checkForTheLatestAppVersion() {
+        int latestAppVersion = SharedPreferencesHelper.getIntPreference(Constants.KEY_LATEST_APP_VERSION, 0);
+        if(latestAppVersion == 0) {
+            return;
+        }
+
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
-            ApiClient.getClient(this).getLatestAppVersionCode();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+            return;
         }
+
+        boolean isDialogDisplayed = dialog != null && dialog.isAdded();
+        if(versionCode >= latestAppVersion) {
+            if(isDialogDisplayed) {
+                dialog.dismiss();
+            }
+            return;
+        }
+
+
+        if(isDialogDisplayed) {
+            return;
+        }
+
+        dialog = UpdateRequiredFragment.newInstance();
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), "UpdateRequired");
     }
 
     private void initUI() {
@@ -525,7 +550,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
     }
 
-    private int i = 0;
     @Override
     protected void onResume() {
         super.onResume();
@@ -717,23 +741,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             return;
         }
 
-        if(versionCode < event.getVersion().getVersionCode()) {
-            if(dialog != null && dialog.isAdded()) {
-                return;
-            }
-
-            if(dialog == null) {
-                dialog = UpdateRequiredFragment.newInstance();
-            }
-
-            FlurryWrapper.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
-            dialog.setCancelable(false);
-            dialog.show(getSupportFragmentManager(), "UpdateRequired");
-        } else {
-            if(dialog != null && dialog.isAdded()) {
-                dialog.dismiss();
-            }
-        }
+        SharedPreferencesHelper.setPreference(Constants.KEY_LATEST_APP_VERSION, event.getVersion().getVersionCode());
+        checkForTheLatestAppVersion();
     }
 
     @Subscribe
