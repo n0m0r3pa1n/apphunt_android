@@ -88,6 +88,7 @@ import io.branch.referral.BranchError;
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    private UpdateRequiredFragment dialog;
     private NavigationDrawerFragment navigationDrawerFragment;
     private RightDrawerFragment rightDrawerFragment;
     private Toolbar toolbar;
@@ -104,6 +105,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setContentView(R.layout.activity_main);
         FlurryWrapper.logEvent(TrackingEvents.UserOpenedApp);
 
+        initUI();
+        initDeepLinking();
+        initNotifications();
+        InstallService.setupService(this);
+        CommentAppService.setupService(this);
+        sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
+    }
+
+    private void checkForTheLatestAppVersion() {
         try {
             versionCode = getPackageManager()
                     .getPackageInfo(getPackageName(), 0).versionCode;
@@ -111,13 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-        initUI();
-        initDeepLinking();
-        initNotifications();
-        InstallService.setupService(this);
-        CommentAppService.setupService(this);
-        sendBroadcast(new Intent(Constants.ACTION_ENABLE_NOTIFICATIONS));
     }
 
     private void initUI() {
@@ -522,11 +525,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
     }
 
+    private int i = 0;
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         BusProvider.getInstance().register(this);
+        checkForTheLatestAppVersion();
     }
 
     private void displayCommentAppScreen() {
@@ -713,10 +718,21 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         }
 
         if(versionCode < event.getVersion().getVersionCode()) {
+            if(dialog != null && dialog.isAdded()) {
+                return;
+            }
+
+            if(dialog == null) {
+                dialog = UpdateRequiredFragment.newInstance();
+            }
+
             FlurryWrapper.logEvent(TrackingEvents.UserViewedUpdateAppDialog);
-            UpdateRequiredFragment dialog = UpdateRequiredFragment.newInstance();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), "UpdateRequired");
+        } else {
+            if(dialog != null && dialog.isAdded()) {
+                dialog.dismiss();
+            }
         }
     }
 
