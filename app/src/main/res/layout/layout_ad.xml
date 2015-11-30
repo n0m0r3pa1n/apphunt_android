@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/transparent"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_more_apps_item_height">
+    android:layout_height="140dp">
 
     <ImageView
-        android:id="@+id/more_apps"
+        android:id="@+id/ad_picture"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/btn_more_apps"/>
+        android:scaleType="fitCenter" />
 </RelativeLayout>

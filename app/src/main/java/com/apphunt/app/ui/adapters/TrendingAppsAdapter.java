@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.models.ads.Ad;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
@@ -28,6 +29,7 @@ import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
+import com.apphunt.app.ui.views.AdView;
 import com.apphunt.app.ui.views.CreatorView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.FlurryWrapper;
@@ -67,7 +69,12 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.recyclerView = recyclerView;
     }
 
+    public void addItem(int position, Item item) {
+        items.add(position, item);
+    }
+
     public void notifyAdapter(AppsList appsList) {
+
         if(appsList.getDate().equals(lastLoadedDate)) {
             displayMoreApps(appsList);
         } else {
@@ -157,6 +164,9 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else if (viewType == Constants.ItemType.SEPARATOR.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_list_header, parent, false);
             viewHolderItem = new ViewHolderSeparator(view);
+        } else if(viewType == Constants.ItemType.AD.getValue()) {
+            view = new AdView(ctx);
+            viewHolderItem = new ViewHolderAd(view);
         }
 
         return viewHolderItem;
@@ -274,14 +284,9 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    static class ViewHolderMoreApps extends RecyclerView.ViewHolder{
-        @InjectView(R.id.more_apps)
-        ImageView moreApps;
-
-        public ViewHolderMoreApps(View view) {
+    static class ViewHolderAd extends RecyclerView.ViewHolder{
+        public ViewHolderAd(View view) {
             super(view);
-            ButterKnife.inject(this, view);
         }
     }
-    //endregion
 }

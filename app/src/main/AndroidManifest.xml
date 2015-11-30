@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"/>
+
     <permission
         android:name="com.apphunt.app.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -70,6 +72,12 @@
             android:label="@string/title_activity_gallery"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".WebviewActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/title_webview"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"

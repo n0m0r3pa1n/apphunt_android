@@ -123,4 +123,6 @@ public interface AppHuntApi {
     void getFollowings(String profileId, String userId, int page, int pageSize);
 
     void getAppsForPackages(List<String> packages, Response.Listener<JsonArray> listener);
+
+    void getAd();
 }

@@ -18,6 +18,7 @@ import com.apphunt.app.api.apphunt.models.users.FollowingsIdsList;
 import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
+import com.apphunt.app.api.apphunt.requests.ads.GetAdRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsByPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
@@ -461,6 +462,11 @@ public class AppHuntApiClient implements AppHuntApi {
         map.put("packages", packages);
 
         VolleyInstance.getInstance(context).addToRequestQueue(new GetAppsByPackages(map, listener1, listener));
+    }
+
+    @Override
+    public void getAd() {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAdRequest(listener));
     }
 
     @Override

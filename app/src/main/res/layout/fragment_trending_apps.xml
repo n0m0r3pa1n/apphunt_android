@@ -29,7 +29,6 @@
             android:id="@+id/trending_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="7dp"
             android:divider="@android:color/transparent"
             android:dividerHeight="@dimen/list_divider_height"
             android:elevation="2dp"

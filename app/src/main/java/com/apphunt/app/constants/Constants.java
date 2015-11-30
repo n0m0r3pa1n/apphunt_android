@@ -7,7 +7,7 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
-    public static final String MAIN_URL = "apphunt.herokuapp.com";
+    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
 //    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
 //    public static final String MAIN_URL = "4eb8e6d8.ngrok.io";
@@ -104,6 +104,7 @@ public class Constants {
     public static final String EXTRA_SELECTED_IMAGE = "selected_image";
     public static final String EXTRA_APP_PACKAGE = "app_package";
     public static final String EXTRA_APP_ID = "app_id";
+    public static final String EXTRA_URL = "extra_url";
 
     // Actions
     public static final String ACTION_ENABLE_NOTIFICATIONS = "com.apphunt.app.action.ENABLE_NOTIFICATIONS";
@@ -152,7 +153,7 @@ public class Constants {
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1),
-        COMMENT(2), SUBCOMMENT(3), COLLECTION(4);
+        COMMENT(2), SUBCOMMENT(3), COLLECTION(4), AD(5);
 
         private int value;
 

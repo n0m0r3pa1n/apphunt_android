@@ -29,6 +29,7 @@ import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
+import com.apphunt.app.ui.listview_items.AdItem;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -119,6 +120,9 @@ public class TrendingAppsFragment extends BaseFragment {
     private void reloadApps() {
         trendingAppsAdapter.resetAdapter();
         endlessRecyclerScrollListener.reset();
+        if(trendingAppsAdapter.getItemCount() == 0) {
+            trendingAppsAdapter.addItem(0, new AdItem());
+        }
         ApiService.resetCalendars();
         ApiService.getInstance(activity).reloadApps();
     }
@@ -187,7 +191,9 @@ public class TrendingAppsFragment extends BaseFragment {
     @Subscribe
     public void onAppsLoaded(LoadAppsApiEvent event) {
         shouldChangeDate = !event.getAppsList().haveMoreApps();
-
+        if(trendingAppsAdapter.getItemCount() == 0) {
+            trendingAppsAdapter.addItem(0, new AdItem());
+        }
         trendingAppsAdapter.notifyAdapter(event.getAppsList());
         if(trendingAppsAdapter.getItemCount() < Constants.MIN_TOTAL_APPS_COUNT) {
             ApiService.getInstance(activity).loadApps(shouldChangeDate);
