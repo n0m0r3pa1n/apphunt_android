@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -166,6 +167,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolderItem = new ViewHolderSeparator(view);
         } else if(viewType == Constants.ItemType.AD.getValue()) {
             view = new AdView(ctx);
+            view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             viewHolderItem = new ViewHolderAd(view);
         }
 

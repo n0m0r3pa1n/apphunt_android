@@ -15,6 +15,14 @@
         app:layout_collapseMode="pin"
         style="@style/ToolBarStyle"/>
 
+    <ProgressBar android:id="@+id/pB1"
+        android:background="@android:color/transparent"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:padding="1dip"></ProgressBar>
+
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -13,12 +13,17 @@ import android.widget.LinearLayout;
 import com.apphunt.app.R;
 import com.apphunt.app.WebviewActivity;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.models.ads.Ad;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ads.GetAdApiEvent;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -111,15 +116,20 @@ public class AdView extends LinearLayout {
             return;
         }
 
+        final Ad ad = event.getAd();
         setVisibility(VISIBLE);
         circularProgressBar.setVisibility(GONE);
         adPicture.setVisibility(VISIBLE);
-        Picasso.with(getContext()).load(event.getAd().getPicture()).into(adPicture);
+        Picasso.with(getContext()).load(ad.getPicture()).into(adPicture);
         adPicture.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String url = ad.getLink();
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedAdd, new HashMap<String, String>() {{
+                    put("url", url);
+                }});
                 Intent intent = new Intent(getContext(), WebviewActivity.class);
-                intent.putExtra(Constants.EXTRA_URL, event.getAd().getLink());
+                intent.putExtra(Constants.EXTRA_URL, url);
                 getContext().startActivity(intent);
             }
         });

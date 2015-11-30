@@ -19,6 +19,9 @@
 
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
         android:id="@+id/loading"
+        android:indeterminate="true"
+        style="@style/CircularThemeProgressBar"
+        android:layout_centerHorizontal="true"
         android:elevation="3dp"
         android:layout_width="50dp"
         android:layout_height="50dp"

@@ -14,6 +14,7 @@ import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.apphunt.app.constants.Constants;
@@ -32,6 +33,9 @@ public class WebviewActivity extends AppCompatActivity {
 
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+
+    @InjectView(R.id.pB1)
+    ProgressBar Pbar;
 
     private String url, title = "";
 
@@ -54,7 +58,13 @@ public class WebviewActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, int progress) {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
-                activity.setProgress(progress * 1000);
+                if(progress < 100 && Pbar.getVisibility() == ProgressBar.GONE){
+                    Pbar.setVisibility(ProgressBar.VISIBLE);
+                }
+                Pbar.setProgress(progress);
+                if(progress == 100) {
+                    Pbar.setVisibility(ProgressBar.GONE);
+                }
             }
 
         });
