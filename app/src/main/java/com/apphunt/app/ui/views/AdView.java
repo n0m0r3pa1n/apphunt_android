@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
  * Created by nmp on 15-11-30.
@@ -32,6 +33,9 @@ public class AdView extends LinearLayout {
 
     @InjectView(R.id.ad_picture)
     ImageView adPicture;
+
+    @InjectView(R.id.loading)
+    CircularProgressBar circularProgressBar;
 
     public AdView(Context context) {
         super(context);
@@ -101,10 +105,15 @@ public class AdView extends LinearLayout {
     @Subscribe
     public void onAdReceived(final GetAdApiEvent event) {
         if(event == null || event.getAd() == null) {
+            setVisibility(GONE);
+            circularProgressBar.setVisibility(GONE);
             adPicture.setVisibility(GONE);
             return;
         }
 
+        setVisibility(VISIBLE);
+        circularProgressBar.setVisibility(GONE);
+        adPicture.setVisibility(VISIBLE);
         Picasso.with(getContext()).load(event.getAd().getPicture()).into(adPicture);
         adPicture.setOnClickListener(new OnClickListener() {
             @Override
