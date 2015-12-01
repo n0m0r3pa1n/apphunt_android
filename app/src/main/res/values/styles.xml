@@ -74,4 +74,28 @@
         <item name="android:textOff"></item>
         <item name="android:textColor">#FF00CC</item>
     </style>
+
+    <style name="AboutItemContainer" >
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="AboutItemTextView" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AboutSeparator">
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/bg_divider</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
 </resources>

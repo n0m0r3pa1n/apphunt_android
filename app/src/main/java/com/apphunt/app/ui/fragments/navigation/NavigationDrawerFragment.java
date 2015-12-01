@@ -32,6 +32,7 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.apphunt.app.constants.Constants.ABOUT;
 import static com.apphunt.app.constants.Constants.COLLECTIONS;
 import static com.apphunt.app.constants.Constants.HELP_ADD_APP;
 import static com.apphunt.app.constants.Constants.HELP_APPS_REQUIREMENTS;
@@ -157,6 +158,8 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
                 return R.drawable.ic_topandroid;
             case COLLECTIONS:
                 return R.drawable.ic_collecton_navigation;
+            case ABOUT - 1:
+                return R.drawable.ic_community;
             case SUGGESTIONS - 1:
                 return R.drawable.ic_feedback;
             case SETTINGS - 1:

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:gravity="center_horizontal"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:paddingLeft="50dp">
+
+        <TextView
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:textSize="18sp"
+            android:id="@+id/title"
+            android:gravity="center"
+            android:text="Choose the best channel for you and join the AppHunt community"/>
+
+        <LinearLayout
+            android:layout_marginTop="24dp"
+            style="@style/AboutItemContainer"
+            android:id="@+id/google_plus_container">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_google"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="Google Plus"/>
+        </LinearLayout>
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/twitter_container">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_twitter"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="Twitter"/>
+        </LinearLayout>
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/facebook_container">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_facebook"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="Facebook page"/>
+        </LinearLayout>
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/you_tube_container">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_youtube"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="YouTube channel"/>
+        </LinearLayout>
+
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/blog_container">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_blog"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="Blog"/>
+        </LinearLayout>
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/website_container">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_website"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="WebSite"/>
+        </LinearLayout>
+
+        <View
+            style="@style/AboutSeparator" />
+
+        <LinearLayout
+            style="@style/AboutItemContainer"
+            android:id="@+id/mail_container">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_about_email"/>
+
+            <TextView
+                style="@style/AboutItemTextView"
+                android:text="Email"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

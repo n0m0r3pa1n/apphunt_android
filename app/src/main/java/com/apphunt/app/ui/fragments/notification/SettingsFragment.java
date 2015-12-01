@@ -83,8 +83,10 @@ public class SettingsFragment extends BaseFragment {
     @OnCheckedChanged(R.id.toggle_daily_notification)
     public void onDailyNotifStateChange(boolean isChecked) {
         if (isChecked) {
+            FlurryWrapper.logEvent(TrackingEvents.UserEnabledDailyNotification);
             NotificationsUtils.setupDailyNotificationService(activity);
         } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserDisabledDailyNotification);
             NotificationsUtils.disableDailyNotificationsService(activity);
         }
     }
@@ -93,6 +95,8 @@ public class SettingsFragment extends BaseFragment {
     public void onInstallNotifStateChange(boolean isChecked) {
         if (!isChecked) {
             FlurryWrapper.logEvent(TrackingEvents.UserDisabledInstalledAppsNotification);
+        } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserEnabledInstalledAppNotification);
         }
         SharedPreferencesHelper.setPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, isChecked);
         InstallService.setupService(activity);

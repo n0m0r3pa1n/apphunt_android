@@ -48,6 +48,7 @@ import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
 import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.CommentAppService;
 import com.apphunt.app.services.InstallService;
+import com.apphunt.app.ui.fragments.AboutFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
@@ -260,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 case USER_COMMENT:
                 case USER_MENTIONED:
                     String appId = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_APP_ID);
+                    NavUtils.getInstance(this).presentAppDetailsFragment(appId);
                     NavUtils.getInstance(this).presentCommentsFragment(appId);
                     break;
                 case TOP_APPS:
@@ -485,6 +487,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             case Constants.COLLECTIONS:
                 fragment = new CollectionsFragment();
                 break;
+            case Constants.ABOUT:
+                fragment = new AboutFragment();
+                break;
             case Constants.SUGGESTIONS:
                 fragment = new SuggestFragment();
                 fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
@@ -688,6 +693,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(menuItemHistory == null) {
+                    return;
+                }
+
                 TextView textView = (TextView) MenuItemCompat.getActionView(menuItemHistory).findViewById(R.id.new_events_count);
                 if (event.getCount() == 0) {
                     eventCount = 0;

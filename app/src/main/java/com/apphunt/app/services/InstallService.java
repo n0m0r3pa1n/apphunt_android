@@ -68,16 +68,21 @@ public class InstallService extends Service {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-
-        Date today = new Date(calendar.getTimeInMillis());
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-
         Date tomorrow = new Date(calendar.getTimeInMillis());
+
+        Calendar yesterdayCalendar = Calendar.getInstance();
+        yesterdayCalendar.set(Calendar.MILLISECOND, 0);
+        yesterdayCalendar.set(Calendar.SECOND, 0);
+        yesterdayCalendar.set(Calendar.MINUTE, 0);
+        yesterdayCalendar.set(Calendar.HOUR_OF_DAY, 20);
+        yesterdayCalendar.add(Calendar.DATE, -1);
+        Date yesterday = new Date(yesterdayCalendar.getTimeInMillis());
 
         dailyInstalledApps = realm.where(InstalledApp.class)
                 .beginGroup()
                     .equalTo("hasNotificationShowed", false)
-                    .between("dateInstalled", today, tomorrow)
+                    .between("dateInstalled", yesterday, tomorrow)
                 .endGroup()
                 .findAll();
 

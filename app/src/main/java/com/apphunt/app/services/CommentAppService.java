@@ -72,32 +72,30 @@ public class CommentAppService extends Service {
         clearArrays();
         SharedPreferencesHelper.init(this);
         FlurryWrapper.init(this);
+
         realmConfiguration = new RealmConfiguration.Builder(this).deleteRealmIfMigrationNeeded().build();
         realm = Realm.getInstance(realmConfiguration);
-        if (!SharedPreferencesHelper.getBooleanPreference(Constants.IS_INSTALL_NOTIFICATION_ENABLED, true)) {
-            return START_FLAG_RETRY;
-        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-
-        Date today = new Date(calendar.getTimeInMillis());
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-
         Date tomorrow = new Date(calendar.getTimeInMillis());
+        calendar.add(Calendar.DATE, -2);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        Date yesterday = new Date(calendar.getTimeInMillis());
 
         appsInstalledToday = realm.where(InstalledApp.class)
                 .beginGroup()
                     .equalTo("hasNotificationShowed", false)
-                    .between("dateInstalled", today, tomorrow)
+                    .between("dateInstalled", yesterday, tomorrow)
                 .endGroup()
                 .findAll();
 
         appsClickedToInstallToday = realm.where(ClickedApp.class)
-                .between("dateClicked", today, tomorrow)
+                .between("dateClicked", yesterday, tomorrow)
                 .findAll();
 
         if (appsInstalledToday.size() == 0 || appsClickedToInstallToday.size() == 0) {

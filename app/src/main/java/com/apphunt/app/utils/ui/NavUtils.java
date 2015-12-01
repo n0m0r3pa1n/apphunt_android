@@ -160,17 +160,8 @@ public class NavUtils {
     }
 
     public void presentCommentsFragment(String appId) {
-
-        AppDetailsFragment detailsFragment = getAppDetailsFragment(appId);
-
-        activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, detailsFragment, Constants.TAG_APP_DETAILS_FRAGMENT)
-                .addToBackStack(Constants.TAG_APP_DETAILS_FRAGMENT)
-                .commitAllowingStateLoss();
-
-
         CommentsFragment commentsFragment = CommentsFragment.newInstance(appId);
-        commentsFragment.setOnCommentEnteredListener(detailsFragment);
+        //commentsFragment.setOnCommentEnteredListener(detailsFragment);
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
                 .addToBackStack(Constants.TAG_COMMENTS)

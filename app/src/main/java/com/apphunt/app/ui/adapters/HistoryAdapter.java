@@ -3,6 +3,7 @@ package com.apphunt.app.ui.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String TAG = HistoryAdapter.class.getSimpleName();
+
     private List<HistoryRowComponent> rows;
     private final Context context;
 
@@ -81,6 +84,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "onClick: ");
                     FlurryWrapper.logEvent(TrackingEvents.UserOpenedHistoryEvent, new HashMap<String, String>(){{
                         put("type", row.getType().name());
                     }});

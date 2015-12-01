@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:text="vote app or comment - 10 points"
+                android:text="vote app or comment - 5 points"
                 app:typefacePath="fonts/OpenSans-Light.ttf"/>
         </LinearLayout>
 

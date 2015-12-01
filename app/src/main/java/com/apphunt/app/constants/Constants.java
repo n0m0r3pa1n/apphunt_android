@@ -138,11 +138,12 @@ public class Constants {
     public static final int TOP_HUNTERS = 2;
     public static final int TOP_APPS = 3;
     public static final int COLLECTIONS = 4;
-    public static final int SUGGESTIONS = 6;
-    public static final int SETTINGS = 7;
-    public static final int HELP_ADD_APP =10;
-    public static final int HELP_APPS_REQUIREMENTS = 11;
-    public static final int HELP_TOP_HUNTERS_POINTS = 12;
+    public static final int ABOUT = 6;
+    public static final int SUGGESTIONS = 7;
+    public static final int SETTINGS = 8;
+    public static final int HELP_ADD_APP =11;
+    public static final int HELP_APPS_REQUIREMENTS = 12;
+    public static final int HELP_TOP_HUNTERS_POINTS = 13;
 
     public static final int MIN_TOTAL_APPS_COUNT = 10;
     public static final int PAGE_SIZE = 5;
