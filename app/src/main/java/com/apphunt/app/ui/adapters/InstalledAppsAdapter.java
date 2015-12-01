@@ -75,6 +75,11 @@ public class InstalledAppsAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public void clear() {
+        appsList.clear();
+        notifyDataSetChanged();
+    }
+
     public void removeApp(String packageName) {
         int positionToRemove = -1;
         for (int i = 0; i < appsList.size(); i++) {

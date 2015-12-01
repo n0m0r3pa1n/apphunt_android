@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -27,6 +31,7 @@ import com.apphunt.app.event_bus.events.api.PackagesFilteredApiEvent;
 import com.apphunt.app.event_bus.events.ui.AppSubmittedEvent;
 import com.apphunt.app.ui.adapters.InstalledAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessScrollListener;
 import com.apphunt.app.utils.FlurryWrapper;
@@ -36,6 +41,7 @@ import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -48,6 +54,7 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     private static final int PAGE_SIZE = 10;
     private int currentPage = 0;
     private int totalPages = -1;
+    private List<ApplicationInfo> appInfos = new ArrayList<>();
 
     @InjectView(R.id.loading)
     CircularProgressBar loader;
@@ -63,15 +70,26 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
     private View view;
     private InstalledAppsAdapter userAppsAdapter;
-    private List<ApplicationInfo> data;
     private AppCompatActivity activity;
+
+    private EndlessScrollListener endlessScrollListener = new EndlessScrollListener(new OnEndReachedListener() {
+        @Override
+        public void onEndReached() {
+            FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownSelectAppsList);
+            filterApps();
+        }
+    });
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        appInfos = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
+        NavigationDrawerFragment.setDrawerIndicatorEnabled(true);
         FlurryWrapper.logEvent(TrackingEvents.UserViewedSelectApp);
         setFragmentTag(Constants.TAG_SELECT_APP_FRAGMENT);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -95,13 +113,6 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         ActionBarUtils.getInstance().hideActionBarShadow();
 
         gridView.setOnItemClickListener(this);
-        gridView.setOnScrollListener(new EndlessScrollListener(new OnEndReachedListener() {
-            @Override
-            public void onEndReached() {
-                FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownSelectAppsList);
-                filterApps();
-            }
-        }));
         filterApps();
 
     }
@@ -136,64 +147,144 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if(userAppsAdapter == null) {
+            return;
+        }
         NavUtils.getInstance(activity).startSaveAppFragment(userAppsAdapter.getItem(position));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_select_app, menu);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search2));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String s) {
+                FlurryWrapper.logEvent(TrackingEvents.UserSearchedAppToAdd, new HashMap<String, String>(){{
+                    put("query", s);
+                }});
+                reset();
+                appInfos = new ArrayList<>();
+                List<ApplicationInfo> apps = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
+                for (ApplicationInfo app : apps) {
+                    String appName = (String) activity.getPackageManager().getApplicationLabel(app);
+                    if (appName.toLowerCase().contains(s.toLowerCase())) {
+                        appInfos.add(app);
+                    }
+                }
+
+                filterApps();
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search2), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (item.getItemId() == R.id.action_search2) {
+                    reset();
+                    appInfos = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
+                    filterApps();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void reset() {
+        userAppsAdapter = null;
+        endlessScrollListener.resetPreviousTotal();
+        currentPage = 0;
+        totalPages = -1;
     }
 
     @Subscribe
     public void onAppSubmitted(AppSubmittedEvent event) {
         userAppsAdapter.removeApp(event.getPackageName());
         if(userAppsAdapter.getCount() == 0) {
-            displayEmptyAppsView();
+            appInfos = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
+            reset();
+            filterApps();
         }
     }
 
     private void displayEmptyAppsView() {
         info.setText("There are no apps you can share with AppHunt at the moment!");
+        gridView.setVisibility(View.GONE);
         noAppsView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmptyView() {
+        gridView.setVisibility(View.VISIBLE);
+        info.setText(R.string.info_select_app);
+        noAppsView.setVisibility(View.GONE);
     }
 
     @Subscribe
     public void onFilteredPackagesReceived(PackagesFilteredApiEvent event) {
-       if(event.getPackages() != null) {
-           List<ApplicationInfo> tempData = new ArrayList<>();
-
-           for (ApplicationInfo info : data) {
-               for (String packageName : event.getPackages().getAvailablePackages()) {
-                   if (info.packageName.equals(packageName)) {
-                       tempData.add(info);
-                   }
-               }
-           }
-
-           if(userAppsAdapter == null) {
-               if(event.getPackages().getAvailablePackages() == null ||
-                       event.getPackages().getAvailablePackages().size() == 0) {
-                   loader.progressiveStop();
-                   displayEmptyAppsView();
-                   return;
-               }
-
-               userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
-               Handler delayHandler = new Handler();
-               delayHandler.postDelayed(new Runnable() {
-                   @Override
-                   public void run() {
-                       loader.progressiveStop();
-                       gridView.setAdapter(userAppsAdapter);
-                   }
-               }, 250);
+        if(event.getPackages() != null) {
+           if(event.getPackages().getAvailablePackages() == null ||
+                   event.getPackages().getAvailablePackages().size() == 0) {
+               loader.progressiveStop();
+               displayEmptyAppsView();
+               return;
            } else {
-               userAppsAdapter.addAll(tempData);
+               hideEmptyView();
            }
-       }
+
+            List<ApplicationInfo> tempData = new ArrayList<>();
+
+            for (ApplicationInfo info : appInfos) {
+                for (String packageName : event.getPackages().getAvailablePackages()) {
+                    if (info.packageName.equals(packageName)) {
+                        tempData.add(info);
+                    }
+                }
+            }
+
+            if(userAppsAdapter == null) {
+                userAppsAdapter = new InstalledAppsAdapter(activity, tempData);
+                endlessScrollListener.resetPreviousTotal();
+                gridView.setAdapter(userAppsAdapter);
+                gridView.setOnScrollListener(endlessScrollListener);
+                loader.progressiveStop();
+            } else {
+                userAppsAdapter.addAll(tempData);
+            }
+        }
     }
 
     private void filterApps() {
+        if(appInfos.size() == 0) {
+            displayEmptyAppsView();
+            return;
+        }
+
         if(currentPage == totalPages) {
             return;
         }
 
         currentPage++;
+        if(totalPages == -1) {
+            if(appInfos.size() % PAGE_SIZE > 0) {
+                totalPages = (appInfos.size() / PAGE_SIZE) + 1;
+            } else {
+                totalPages = (appInfos.size() / PAGE_SIZE);
+            }
+        }
         new LoadInstalledApps().execute();
     }
 
@@ -207,24 +298,17 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         @Override
         protected Packages doInBackground(Void... params) {
             Packages packages = new Packages();
-            data = PackagesUtils.getInstance().getInstalledPackages(activity.getPackageManager());
-            if(totalPages == -1) {
-                if(data.size() % PAGE_SIZE > 0) {
-                    totalPages = (data.size() / PAGE_SIZE) + 1;
-                } else {
-                    totalPages = (data.size() / PAGE_SIZE);
-                }
-            }
+
 
             int totalSize = currentPage * PAGE_SIZE;
-            if(totalSize > data.size()) {
-                totalSize = data.size();
+            if(totalSize > appInfos.size()) {
+                totalSize = appInfos.size();
                 currentPage = totalPages;
             }
 
             final int startPoint = (currentPage - 1) * PAGE_SIZE;
             for (int i = startPoint; i < totalSize; i++) {
-                packages.getPackages().add(data.get(i).packageName);
+                packages.getPackages().add(appInfos.get(i).packageName);
             }
 
             return packages;

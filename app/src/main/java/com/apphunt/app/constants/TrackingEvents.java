@@ -98,4 +98,5 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserEnabledInstalledAppNotification = "user.enabled.installed.app.notification";
     String UserClickedAboutSocialLink = "user.clicked.about.social.link";
     String UserViewedAbout = "user.viewed.about";
+    String UserSearchedAppToAdd = "user.searched.app.to.add";
 }

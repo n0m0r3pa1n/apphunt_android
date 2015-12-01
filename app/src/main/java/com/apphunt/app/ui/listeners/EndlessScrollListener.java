@@ -36,6 +36,14 @@ public class EndlessScrollListener implements AbsListView.OnScrollListener {
     public EndlessScrollListener() {
     }
 
+    public void resetPreviousTotal() {
+        previousTotal = 0;
+    }
+
+    public void setVisibleThreshold(int visibleThreshold) {
+        this.visibleThreshold = visibleThreshold;
+    }
+
     public EndlessScrollListener(OnEndReachedListener listener) {
         this.listener = listener;
     }
