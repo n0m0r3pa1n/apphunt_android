@@ -140,6 +140,7 @@ public class CommentsFragment extends BackStackFragment {
 
     @OnClick(R.id.send)
     public void sendComment() {
+        send.setEnabled(false);
         NewComment comment = new NewComment();
         if (commentBox.getText().length() > 0) {
             if (replyToComment != null) {
@@ -173,6 +174,7 @@ public class CommentsFragment extends BackStackFragment {
             listener.onCommentEntered(comment);
         }
 
+        send.setEnabled(true);
     }
 
     private void closeKeyboard(View v) {
