@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,6 +90,8 @@ public class WebviewActivity extends AppCompatActivity {
             finish();
         } else if(item.getItemId() == R.id.action_share) {
             shareTextUrl();
+        } else if(item.getItemId() == R.id.action_refresh) {
+            webView.reload();
         }
         return super.onOptionsItemSelected(item);
 

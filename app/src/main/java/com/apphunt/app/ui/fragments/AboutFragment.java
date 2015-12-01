@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.WebviewActivity;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
+
+import java.util.HashMap;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,6 +30,7 @@ public class AboutFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         ButterKnife.inject(this, view);
         setHasOptionsMenu(true);
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedAbout);
         return view;
     }
 
@@ -36,30 +41,45 @@ public class AboutFragment extends BaseFragment {
 
     @OnClick(R.id.google_plus_container)
     public void onClickGooglePlus() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "google-plus");
+        }});
         Intent share = new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/105538441962130139197"));
         startActivity(share);
     }
 
     @OnClick(R.id.twitter_container)
     public void onClickTwitter() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "twitter");
+        }});
         Intent share = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/TheAppHunt"));
         startActivity(share);
     }
 
     @OnClick(R.id.facebook_container)
     public void onClickFacebook() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "facebook");
+        }});
         Intent share = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/theapphunt"));
         startActivity(share);
     }
 
     @OnClick(R.id.you_tube_container)
     public void onClickYoutube() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "youtube");
+        }});
         Intent share = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/channel/UCPnLaWyjNC6feTXUuhggJ-w"));
         startActivity(share);
     }
 
     @OnClick(R.id.blog_container)
     public void onClickBlog() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "blog");
+        }});
         Intent share = new Intent(getActivity(), WebviewActivity.class);
         share.putExtra(Constants.EXTRA_URL, "http://blog.theapphunt.com");
         startActivity(share);
@@ -67,6 +87,9 @@ public class AboutFragment extends BaseFragment {
 
     @OnClick(R.id.website_container)
     public void onClickWebsite() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "website");
+        }});
         Intent share = new Intent(getActivity(), WebviewActivity.class);
         share.putExtra(Constants.EXTRA_URL, "http://www.theapphunt.com");
         startActivity(share);
@@ -74,6 +97,9 @@ public class AboutFragment extends BaseFragment {
 
     @OnClick(R.id.mail_container)
     public void onClickEmail() {
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedAboutSocialLink, new HashMap<String, String>(){{
+            put("link", "email");
+        }});
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
         intent.putExtra(Intent.EXTRA_EMAIL, "support@theapphunt.com");

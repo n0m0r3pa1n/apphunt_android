@@ -96,5 +96,6 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserDisabledDailyNotification = "user.disabled.daily.notification";
     String UserEnabledDailyNotification = "user.enabled.daily.notification";
     String UserEnabledInstalledAppNotification = "user.enabled.installed.app.notification";
-    String NoInternetAvailable = "no.internet";
+    String UserClickedAboutSocialLink = "user.clicked.about.social.link";
+    String UserViewedAbout = "user.viewed.about";
 }
