@@ -41,6 +41,7 @@ import com.apphunt.app.event_bus.events.ui.DisplayLoginFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
+import com.apphunt.app.event_bus.events.ui.SelectFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
@@ -774,6 +775,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 .add(R.id.container, loginFragment, Constants.TAG_LOGIN_FRAGMENT)
                 .addToBackStack(Constants.TAG_LOGIN_FRAGMENT)
                 .commit();
+    }
+
+    @Subscribe
+    public void onSelectFragment(SelectFragmentEvent event) {
+        onNavigationDrawerItemSelected(event.getDrawerFragmentIndex());
     }
 
     private void hideLoginFragment() {

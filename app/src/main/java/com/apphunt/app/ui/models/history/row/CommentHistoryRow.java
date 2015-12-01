@@ -16,7 +16,6 @@ public class CommentHistoryRow extends BaseHistoryRow {
     public void openEvent() {
         String appId = event.getParams().get("appId").getAsString();
         NavUtils.getInstance(activity).presentAppDetailsFragment(appId);
-        NavUtils.getInstance(activity).presentCommentsFragment(appId);
     }
 
     @Override
