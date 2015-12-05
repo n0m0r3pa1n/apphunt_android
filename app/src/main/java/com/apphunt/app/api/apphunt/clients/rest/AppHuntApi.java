@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface AppHuntApi {
-    void createUser(User user, Response.Listener<User> listener);
+    void createUser(User user, Response.Listener<User> listener, Response.ErrorListener errorListener);
 
     void updateUser(User user);
 

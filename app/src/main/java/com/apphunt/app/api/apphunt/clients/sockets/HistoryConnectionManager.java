@@ -80,7 +80,11 @@ public class HistoryConnectionManager {
 
     public void emitAddUser(String userId) {
         connectIfNotConnected();
-        socket.emit("add user", userId);
+        try {
+            socket.emit("add user", userId);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
     }
 
 
@@ -95,7 +99,11 @@ public class HistoryConnectionManager {
 
     public void emitLastSeenId(String userId, String eventId, String date) {
         connectIfNotConnected();
-        socket.emit("last seen event", userId, eventId, date);
+        try {
+            socket.emit("last seen event", userId, eventId, date);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
     }
 
     public void addRefreshListener(OnRefreshListener listener) {

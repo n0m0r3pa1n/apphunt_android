@@ -190,7 +190,12 @@ public class TrendingAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppsLoaded(LoadAppsApiEvent event) {
-        shouldChangeDate = !event.getAppsList().haveMoreApps();
+        if(event.getAppsList() == null) {
+            shouldChangeDate = true;
+        } else {
+            shouldChangeDate = !event.getAppsList().haveMoreApps();
+        }
+
         if(trendingAppsAdapter.getItemCount() == 0) {
             trendingAppsAdapter.addItem(0, new AdItem());
         }

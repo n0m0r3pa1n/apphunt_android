@@ -99,8 +99,8 @@ public class AppHuntApiClient implements AppHuntApi {
     };
 
     @Override
-    public void createUser(User user, Response.Listener<User> responseListener) {
-        VolleyInstance.getInstance(context).addToRequestQueue(new PostUserRequest(user, responseListener, listener));
+    public void createUser(User user, Response.Listener<User> responseListener,Response.ErrorListener errorListener) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new PostUserRequest(user, responseListener, errorListener));
     }
 
     @Override

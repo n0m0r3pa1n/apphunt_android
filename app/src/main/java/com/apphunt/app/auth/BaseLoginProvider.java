@@ -3,8 +3,10 @@ package com.apphunt.app.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.auth.models.Friend;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
  * on 2/13/15.
  */
 public abstract class BaseLoginProvider implements LoginProvider {
-
+    public static final String TAG = BaseLoginProvider.class.getSimpleName();
     protected Context context;
 
     public interface OnFriendsResultListener {
@@ -48,6 +50,11 @@ public abstract class BaseLoginProvider implements LoginProvider {
             public void onResponse(User response) {
                 onUserCreated(response);
                 BusProvider.getInstance().post(new LoginEvent(response));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         });
     }

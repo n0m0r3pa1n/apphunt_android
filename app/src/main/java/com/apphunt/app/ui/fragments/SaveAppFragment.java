@@ -195,7 +195,9 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     private void closeKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        if(imm != null && v != null && v.getWindowToken() != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
     }
 
     @Override

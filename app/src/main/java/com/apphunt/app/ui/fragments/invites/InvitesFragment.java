@@ -105,6 +105,8 @@ public class InvitesFragment extends BackStackFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        skipAction.setVisible(false);
+        if(skipAction != null) {
+            skipAction.setVisible(false);
+        }
     }
 }

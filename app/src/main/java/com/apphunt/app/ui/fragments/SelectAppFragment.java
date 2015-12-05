@@ -236,14 +236,23 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     @Subscribe
     public void onFilteredPackagesReceived(PackagesFilteredApiEvent event) {
         if(event.getPackages() != null) {
-           if(event.getPackages().getAvailablePackages() == null ||
-                   event.getPackages().getAvailablePackages().size() == 0) {
-               loader.progressiveStop();
-               displayEmptyAppsView();
-               return;
-           } else {
-               hideEmptyView();
-           }
+            boolean isUserAdapterEmpty = userAppsAdapter == null || userAppsAdapter.getCount() == 0;
+            boolean areThereNoAvailablePackages = event.getPackages().getAvailablePackages() == null ||
+                    event.getPackages().getAvailablePackages().size() == 0;
+
+            if(areThereNoAvailablePackages && currentPage != totalPages) {
+                filterApps();
+                return;
+            }
+
+            if(currentPage == totalPages && isUserAdapterEmpty) {
+                loader.progressiveStop();
+                displayEmptyAppsView();
+                return;
+            }
+            else {
+                hideEmptyView();
+            }
 
             List<ApplicationInfo> tempData = new ArrayList<>();
 
@@ -298,7 +307,6 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
         @Override
         protected Packages doInBackground(Void... params) {
             Packages packages = new Packages();
-
 
             int totalSize = currentPage * PAGE_SIZE;
             if(totalSize > appInfos.size()) {
