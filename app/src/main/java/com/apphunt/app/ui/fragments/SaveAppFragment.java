@@ -29,10 +29,8 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.SaveApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.constants.StatusCode;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.apps.AppSavedApiEvent;
 import com.apphunt.app.event_bus.events.api.tags.TagsSuggestionApiEvent;
 import com.apphunt.app.event_bus.events.ui.AppSubmittedEvent;
 import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
@@ -44,9 +42,7 @@ import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apphunt.app.utils.ui.NotificationsUtils;
 import com.apptentive.android.sdk.Apptentive;
-import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
@@ -189,6 +185,12 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
             }
 
             ApiClient.getClient(getActivity()).saveApp(app);
+
+            FlurryWrapper.logEvent(TrackingEvents.UserAddedApp);
+            BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
+            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false, false));
+            BusProvider.getInstance().post(new AppSubmittedEvent(data.packageName));
+            Apptentive.engage(activity, "user.added.app");
         }
     }
 
@@ -233,35 +235,6 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Subscribe
     public void onUserCreated(LoginEvent event) {
         saveApp(saveButton, event.getUser().getId());
-    }
-
-    @Subscribe
-    public void onAppSaved(AppSavedApiEvent event) {
-        int statusCode = event.getStatusCode();
-        if(!isAdded()) {
-            return;
-        }
-        if (statusCode == StatusCode.SUCCESS.getCode()) {
-            FlurryWrapper.logEvent(TrackingEvents.UserAddedApp);
-            BusProvider.getInstance().post(new HideFragmentEvent(Constants.TAG_SAVE_APP_FRAGMENT));
-            BusProvider.getInstance().post(new ShowNotificationEvent(getString(R.string.saved_successfully), false, false));
-            BusProvider.getInstance().post(new AppSubmittedEvent(data.packageName));
-            Apptentive.engage(activity, "user.added.app");
-        } else {
-            try {
-                activity.getSupportFragmentManager().popBackStack();
-                String message = getString(R.string.not_available_in_the_store);
-                if(statusCode != 404) {
-                    message = getString(R.string.server_error);
-                }
-                NotificationsUtils.showNotificationFragment(activity, message, false, false);
-                saveButton.setEnabled(true);
-                ActionBarUtils.getInstance().setTitle(R.string.title_home);
-            } catch (Exception e) {
-                Crashlytics.logException(e);
-            }
-            FlurryWrapper.logEvent(TrackingEvents.UserAddedUnknownApp);
-        }
     }
 
     @Subscribe

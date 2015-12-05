@@ -237,15 +237,15 @@ public class SelectAppFragment extends BaseFragment implements AdapterView.OnIte
     public void onFilteredPackagesReceived(PackagesFilteredApiEvent event) {
         if(event.getPackages() != null) {
             boolean isUserAdapterEmpty = userAppsAdapter == null || userAppsAdapter.getCount() == 0;
-            boolean areThereNoAvailablePackages = event.getPackages().getAvailablePackages() == null ||
-                    event.getPackages().getAvailablePackages().size() == 0;
+            boolean arePackagesAvailable = event.getPackages().getAvailablePackages() != null &&
+                    event.getPackages().getAvailablePackages().size() > 0;
 
-            if(areThereNoAvailablePackages && currentPage != totalPages) {
+            if(!arePackagesAvailable && currentPage != totalPages) {
                 filterApps();
                 return;
             }
 
-            if(currentPage == totalPages && isUserAdapterEmpty) {
+            if(currentPage == totalPages && isUserAdapterEmpty && !arePackagesAvailable) {
                 loader.progressiveStop();
                 displayEmptyAppsView();
                 return;
