@@ -215,13 +215,15 @@ public class CommentsFragment extends BackStackFragment {
 
         loading.setVisibility(View.GONE);
         commentsList.setVisibility(View.VISIBLE);
-        if(commentsAdapter == null || event.shouldReload()) {
+        if(commentsAdapter == null) {
             commentsAdapter = new CommentsAdapter(getActivity(), event.getComments(), commentsList.getListView(), commentBox);
             commentsList.setAdapter(commentsAdapter, event.getComments().getTotalCount());
         } else {
             commentsAdapter.addItems(comments);
         }
     }
+
+
 
     @Subscribe
     public void onReplyCommentSelected(ReplyToCommentEvent event) {
@@ -233,7 +235,7 @@ public class CommentsFragment extends BackStackFragment {
         this.listener = listener;
     }
 
-    interface OnCommentEnteredListener {
+    public interface OnCommentEnteredListener {
         void onCommentEntered(NewComment comment);
     }
 

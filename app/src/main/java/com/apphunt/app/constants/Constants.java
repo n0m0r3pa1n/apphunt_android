@@ -7,8 +7,8 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
-//    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "apphunt.herokuapp.com";
+    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
+//    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
 //    public static final String MAIN_URL = "4eb8e6d8.ngrok.io";
 
@@ -151,6 +151,7 @@ public class Constants {
     public static final int MIN_COLLECTION_APPS_COUNT = 4;
     public static final int MIN_HISTORY_EVENTS_COUNT = 10;
     public static final int THIRTY_MINS = 30 * 60 * 1000;
+    public static String KEY_BRANCH_APP_ID = "appId";
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1),

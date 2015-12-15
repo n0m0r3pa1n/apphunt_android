@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.SharedPreferencesHelper;
+import com.crashlytics.android.Crashlytics;
 
 import java.lang.reflect.Constructor;
 
@@ -32,6 +33,7 @@ public abstract class LoginProviderFactory {
                 loginProvider = (BaseLoginProvider) constr.newInstance(context);
             } catch (Exception e) {
                 Log.e(TAG, "Cannot create this login provider.");
+                Crashlytics.logException(e);
             }
         }
 

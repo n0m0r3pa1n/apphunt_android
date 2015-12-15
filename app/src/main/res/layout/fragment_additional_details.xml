@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_secondary">
+
+    <RelativeLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.wefika.flowlayout.FlowLayout
+            android:id="@+id/tags_container"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"/>
+
+        <com.apphunt.app.ui.views.gallery.GalleryView
+            android:id="@+id/gallery"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_below="@id/tags_container"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="10dp"
+           />
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

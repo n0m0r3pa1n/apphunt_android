@@ -9,7 +9,7 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.AppDetailsFragment;
+import com.apphunt.app.ui.fragments.details.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.CommentsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;

@@ -647,6 +647,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                             startActivityForResult(intent, Constants.SHOW_INVITE);
                             overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
                         }
+
+                        if (!TextUtils.isEmpty(referringParams.getString(Constants.KEY_BRANCH_APP_ID))) {
+                            FlurryWrapper.logEvent(TrackingEvents.UserViewedAppDetailsFromSharedLink);
+                            NavUtils.getInstance(MainActivity.this)
+                                    .presentAppDetailsFragment(referringParams.getString(Constants.KEY_BRANCH_APP_ID));
+                        }
                     } catch (JSONException e) {
                         Log.e(TAG, e.toString());
                     }
@@ -694,7 +700,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(menuItemHistory == null) {
+                if (menuItemHistory == null) {
                     return;
                 }
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/vs_no_comments"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/bg_secondary">
+        <com.apphunt.app.ui.views.widgets.AHTextView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Be the first to comment! :)"
+            android:textSize="18sp"
+            android:textColor="#69000000"
+            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+    </android.support.v4.widget.NestedScrollView>
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loading"
+        style="@style/CircularThemeProgressBar"
+        android:layout_centerInParent="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"/>
+
+    <com.apphunt.app.ui.views.containers.ScrollRecyclerView
+        android:id="@+id/comments_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </com.apphunt.app.ui.views.containers.ScrollRecyclerView>
+</RelativeLayout>
+
+

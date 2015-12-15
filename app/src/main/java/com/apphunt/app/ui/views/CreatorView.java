@@ -31,6 +31,7 @@ public class CreatorView extends LinearLayout {
     TextView creatorName;
 
     View view;
+    Context context;
 
     public CreatorView(Context context) {
         super(context);
@@ -73,6 +74,7 @@ public class CreatorView extends LinearLayout {
         ViewGroup.LayoutParams params = creator.getLayoutParams();
         params.height = pictureHeight;
         params.width = pictureWidth;
+        this.context = context;
         creator.setLayoutParams(params);
         creatorName.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
@@ -87,9 +89,13 @@ public class CreatorView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 FlurryWrapper.logEvent(TrackingEvents.UserOpenedProfileFromAppDetails);
-                NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
+                NavUtils.getInstance((AppCompatActivity) context).presentUserProfileFragment(userId, name);
             }
         });
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public void setUserWithText(final String userId, String pictureUrl, String postByString, final String name) {
@@ -102,7 +108,7 @@ public class CreatorView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 FlurryWrapper.logEvent(TrackingEvents.UserOpenedProfileFromTrendingOrSearchApps);
-                NavUtils.getInstance((AppCompatActivity) getContext()).presentUserProfileFragment(userId, name);
+                NavUtils.getInstance((AppCompatActivity) context).presentUserProfileFragment(userId, name);
             }
         });
     }
