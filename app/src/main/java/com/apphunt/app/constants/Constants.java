@@ -14,6 +14,7 @@ public class Constants {
 
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
+    public static final String BLOG_URL = "http://blog.theapphunt.com";
 
     // User's Keys
     public static final String KEY_USER_ID = "user_id";

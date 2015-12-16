@@ -122,7 +122,7 @@
     <dimen name="details_box_vote_text">15sp</dimen>
     <dimen name="details_box_desc_height">90dp</dimen>
     <dimen name="details_box_desc_padding_left">15dp</dimen>
-    <dimen name="details_box_desc_padding_top">5dp</dimen>
+    <dimen name="details_box_desc_padding_top">10dp</dimen>
     <dimen name="details_box_desc_icon_size">80dp</dimen>
     <dimen name="details_box_desc_icon_margin">15dp</dimen>
     <dimen name="details_box_desc_app_name_text">20sp</dimen>

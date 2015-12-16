@@ -12,7 +12,9 @@ import com.apphunt.app.utils.GsonInstance;
 public abstract class BaseGsonRequest<T> extends Request<T> {
     public static final String TAG = BaseGsonRequest.class.getSimpleName();
     public static String BASE_URL = Constants.BASE_URL;
+    public static String BLOG_URL = Constants.BLOG_URL;
     private NetworkResponse networkResponse;
+    private String responseString;
 
     public BaseGsonRequest(int method, String url, Response.ErrorListener listener) {
         super(method, encodeUrl(url), listener);

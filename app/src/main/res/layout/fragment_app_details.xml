@@ -188,7 +188,7 @@
                 android:id="@+id/box_desc"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/details_box_desc_height"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/buttons_container"
                 android:paddingLeft="@dimen/details_box_desc_padding_left"
                 android:paddingRight="@dimen/details_box_desc_padding_left"
@@ -199,7 +199,7 @@
                 <com.apphunt.app.ui.views.widgets.AHTextView
                     android:id="@+id/desc"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="@dimen/details_box_desc_text"
                     android:textColor="@android:color/black"

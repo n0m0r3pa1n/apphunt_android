@@ -125,4 +125,6 @@ public interface AppHuntApi {
     void getAppsForPackages(List<String> packages, Response.Listener<JsonArray> listener);
 
     void getAd();
+
+    void getBlogPosts(int page, int pageSize);
 }
