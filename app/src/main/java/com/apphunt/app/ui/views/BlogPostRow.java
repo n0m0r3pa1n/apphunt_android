@@ -91,7 +91,6 @@ public class BlogPostRow extends LinearLayout {
 
     public void setBlogPost(final BlogPost blogPost) {
         title.setText(Html.fromHtml(blogPost.getTitle()));
-        Log.d(TAG, "setBlogPost: " + blogPost.getExcerpt());
         excerpt.setText(Html.fromHtml(blogPost.getExcerpt()).toString());
         date.setText(blogPost.getDate());
         this.postId = blogPost.getId();

@@ -93,7 +93,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mSelectedPosition = position;
             mSelectedView = holder.itemView;
 
-            if (mSelectedPosition == Constants.SETTINGS - 1 || mSelectedPosition == Constants.SUGGESTIONS - 1) {
+            if (mSelectedPosition == Constants.SETTINGS || mSelectedPosition == Constants.SUGGESTIONS) {
                 mSelectedView.setSelected(false);
             } else {
                 mSelectedView.setSelected(true);
