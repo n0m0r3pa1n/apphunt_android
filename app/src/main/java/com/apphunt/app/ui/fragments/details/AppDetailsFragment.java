@@ -2,8 +2,6 @@ package com.apphunt.app.ui.fragments.details;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -46,7 +44,6 @@ import com.apphunt.app.ui.views.app.DownloadButton;
 import com.apphunt.app.ui.views.app.FavouriteAppButton;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.FlurryWrapper;
-import com.apphunt.app.utils.ImageUtils;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -61,6 +58,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.SharingHelper;
+import io.branch.referral.util.LinkProperties;
+import io.branch.referral.util.ShareSheetStyle;
 
 public class AppDetailsFragment extends BackStackFragment {
 
@@ -357,17 +360,63 @@ public class AppDetailsFragment extends BackStackFragment {
 
 
     private void shareWithLocalApps() {
-        final String message = baseApp.getName() + ". " + baseApp.getDescription() + " " + baseApp.getShortUrl();
-        Uri iconUri = ImageUtils.getLocalBitmapUri(icon);
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("*/*");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, iconUri);
-        activity.startActivity(Intent.createChooser(sharingIntent, "Share using"));
+        BranchUniversalObject branchUniversalObject = new BranchUniversalObject()
+                .setCanonicalIdentifier("app/" + baseApp.getId())
+                .setTitle(baseApp.getName())
+                .setContentDescription("Download " + baseApp.getName() + " for free from AppHunt NOW!\n" +
+                    "AppHunt is your daily source of amazing apps! Find the best new useful apps, verified by our team, available in the Play Store!")
+                .setContentImageUrl(baseApp.getIcon())
+                .setContentIndexingMode(BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC)
+                .addContentMetadata(Constants.KEY_BRANCH_APP_ID, baseApp.getId());
+
+        LinkProperties linkProperties = new LinkProperties()
+                .setChannel("facebook")
+                .setFeature("sharing")
+                .addControlParameter("$desktop_url", "http://theapphunt.com/app/" + baseApp.getPackageName())
+                .addControlParameter("$ios_url", "http://theapphunt.com/app/" + baseApp.getPackageName());
+
+        ShareSheetStyle shareSheetStyle = new ShareSheetStyle(activity, baseApp.getName(), "Download " + baseApp.getName() + " for free from AppHunt NOW!\n" +
+                "AppHunt is your daily source of amazing apps! Find the best new useful apps, verified by our team, available in the Play Store!")
+                .setCopyUrlStyle(getResources().getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
+                .setMoreOptionStyle(getResources().getDrawable(android.R.drawable.ic_menu_more), "Show more")
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.WHATS_APP)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.FLICKR)
+                .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
+
+        branchUniversalObject.showShareSheet(activity,
+                linkProperties,
+                shareSheetStyle,
+                new Branch.BranchLinkShareListener() {
+                    @Override
+                    public void onShareLinkDialogLaunched() {
+                    }
+
+                    @Override
+                    public void onShareLinkDialogDismissed() {
+                    }
+
+                    @Override
+                    public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError error) {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("appId", baseApp.getId());
+                        params.put("appPackage", baseApp.getPackageName());
+                        params.put("channel", sharedChannel);
+                        FlurryWrapper.logEvent(TrackingEvents.UserSharedApp, params);
+                    }
+
+                    @Override
+                    public void onChannelSelected(String channelName) {
+                    }
+                });
+
         Map<String, String> params = new HashMap<>();
         params.put("appId", baseApp.getId());
         params.put("appPackage", baseApp.getPackageName());
-        FlurryWrapper.logEvent(TrackingEvents.UserSharedApp, params);
+        FlurryWrapper.logEvent(TrackingEvents.UserClickedShareApp, params);
+
     }
 
     public void sendComment() {
