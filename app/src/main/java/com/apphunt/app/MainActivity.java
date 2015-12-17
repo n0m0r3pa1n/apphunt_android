@@ -729,8 +729,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         NotificationsUtils.updateNotificationIdIfNeeded(this);
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
-        if(!event.getUser().getLoginType().equals(LoginType.Anonymous.toString())) {
+        if(event.getUser().getLoginType().equals(LoginType.Twitter.toString())) {
             presentInvitesScreen();
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
