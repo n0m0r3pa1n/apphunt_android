@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
  * Created by nmp on 15-6-9.
  */
 public class AppsRequirementsFragment extends BaseFragment {
-
+    public static final String TAG = AppsRequirementsFragment.class.getSimpleName();
     public AppsRequirementsFragment() {
         setTitle(R.string.apps_requirements);
         FlurryWrapper.logEvent(TrackingEvents.UserViewedHelpAppsRequirements);

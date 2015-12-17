@@ -169,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="22"
-                        android:maxLength="3"
+                        android:maxLength="4"
                         android:textSize="13sp"
                         app:typefacePath="fonts/OpenSans-Light.ttf" />
 

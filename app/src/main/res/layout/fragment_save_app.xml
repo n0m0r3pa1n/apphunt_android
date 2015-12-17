@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/app_icon"
-            android:layout_above="@+id/save"
+            android:layout_above="@+id/actions_container"
             android:background="#32000000"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
@@ -75,18 +75,38 @@
 
         </RelativeLayout>
 
-        <com.apphunt.app.ui.views.widgets.AHButton
-            android:id="@+id/save"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/save_btn_height"
-            android:layout_centerHorizontal="true"
+        <LinearLayout
+            android:id="@+id/actions_container"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/transparent"
-            android:text="@string/save"
-            android:textSize="@dimen/save_btn_text"
-            android:textColor="@color/save_app_text"
-            android:textAllCaps="true"
-            android:gravity="center"
-            app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.apphunt.app.ui.views.widgets.AHButton
+                android:id="@+id/rules"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/save_btn_height"
+                android:background="@android:color/transparent"
+                android:text="@string/rules"
+                android:textSize="@dimen/save_btn_text"
+                android:textColor="@color/save_app_text"
+                android:textAllCaps="true"
+                android:gravity="center"
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+
+            <com.apphunt.app.ui.views.widgets.AHButton
+                android:id="@+id/save"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/save_btn_height"
+                android:background="@android:color/transparent"
+                android:text="@string/save"
+                android:textSize="@dimen/save_btn_text"
+                android:textColor="@color/save_app_text"
+                android:textAllCaps="true"
+                android:gravity="center"
+                app:typefacePath="fonts/OpenSans-Regular.ttf"/>
+        </LinearLayout>
+
+
         </RelativeLayout>
 </RelativeLayout>

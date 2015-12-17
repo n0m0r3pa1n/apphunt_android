@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ import com.apphunt.app.event_bus.events.ui.LoginSkippedEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
 import com.apphunt.app.ui.views.widgets.TagGroup;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
@@ -89,6 +92,7 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
         Map<String, String> params = new HashMap<>();
         params.put("appPackage", data.packageName);
         FlurryWrapper.logEvent(TrackingEvents.UserViewedSaveApp, params);
+        setHasOptionsMenu(true);
 
         setFragmentTag(Constants.TAG_SAVE_APP_FRAGMENT);
     }
@@ -128,12 +132,28 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.action_search2).setVisible(false);
+    }
+
+    @Override
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.container:
                 closeKeyboard(desc);
                 break;
         }
+    }
+
+    @OnClick(R.id.rules)
+    public void openRules() {
+        AppsRequirementsFragment fragment = new AppsRequirementsFragment();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.container, fragment, AppsRequirementsFragment.TAG)
+                .addToBackStack(AppsRequirementsFragment.TAG)
+                .commit();
     }
 
     @OnClick(R.id.save)
