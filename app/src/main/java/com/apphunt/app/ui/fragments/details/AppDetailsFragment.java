@@ -370,7 +370,7 @@ public class AppDetailsFragment extends BackStackFragment {
                 .addContentMetadata(Constants.KEY_BRANCH_APP_ID, baseApp.getId());
 
         LinkProperties linkProperties = new LinkProperties()
-                .setChannel("facebook")
+                .setChannel("android")
                 .setFeature("sharing")
                 .addControlParameter("$desktop_url", "http://theapphunt.com/app/" + baseApp.getPackageName())
                 .addControlParameter("$ios_url", "http://theapphunt.com/app/" + baseApp.getPackageName());
