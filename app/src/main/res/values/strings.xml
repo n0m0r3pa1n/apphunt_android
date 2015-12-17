@@ -25,6 +25,7 @@
         <item>Top Hunters</item>
         <item>Top Apps</item>
         <item>Collections</item>
+        <item>News</item>
         <item>Community</item>
         <item>Suggestions</item>
         <item>Settings</item>
@@ -213,4 +214,5 @@
     <string name="share">Share</string>
     <string name="about_title">Community</string>
     <string name="refresh">Refresh</string>
+    <string name="news_title">News</string>
 </resources>

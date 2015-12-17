@@ -127,4 +127,6 @@ public interface AppHuntApi {
     void getAd();
 
     void getBlogPosts(int page, int pageSize);
+
+    void getBlogPostFeaturedImage(int postId, int mediaId);
 }

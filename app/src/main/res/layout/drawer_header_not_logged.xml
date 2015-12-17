@@ -5,7 +5,8 @@
     android:id="@+id/drawer_header_content"
     android:layout_width="wrap_content"
     android:layout_height="100dp"
-    android:paddingBottom="20dp"
+    android:paddingBottom="8dp"
+    android:layout_marginBottom="8dp"
     android:background="@drawable/header_bg">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -13,18 +14,19 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/ic_contact_picture"/>
 
     <com.apphunt.app.ui.views.widgets.AHButton
         android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profile_image"
         android:text="Login"
-        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:gravity="left|center_vertical"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:background="@android:color/transparent"

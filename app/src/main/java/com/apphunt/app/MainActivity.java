@@ -67,6 +67,7 @@ import com.apphunt.app.ui.fragments.navigation.RightDrawerFragment;
 import com.apphunt.app.ui.fragments.notification.SettingsFragment;
 import com.apphunt.app.ui.fragments.notification.SuggestFragment;
 import com.apphunt.app.ui.fragments.notification.UpdateRequiredFragment;
+import com.apphunt.app.ui.fragments.posts.NewsFragment;
 import com.apphunt.app.utils.ConnectivityUtils;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
@@ -487,6 +488,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 break;
             case Constants.COLLECTIONS:
                 fragment = new CollectionsFragment();
+                break;
+            case Constants.NEWS:
+                fragment = new NewsFragment();
                 break;
             case Constants.ABOUT:
                 fragment = new AboutFragment();

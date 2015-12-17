@@ -37,6 +37,7 @@ import static com.apphunt.app.constants.Constants.COLLECTIONS;
 import static com.apphunt.app.constants.Constants.HELP_ADD_APP;
 import static com.apphunt.app.constants.Constants.HELP_APPS_REQUIREMENTS;
 import static com.apphunt.app.constants.Constants.HELP_TOP_HUNTERS_POINTS;
+import static com.apphunt.app.constants.Constants.NEWS;
 import static com.apphunt.app.constants.Constants.SETTINGS;
 import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 import static com.apphunt.app.constants.Constants.TOP_APPS;
@@ -158,6 +159,8 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
                 return R.drawable.ic_topandroid;
             case COLLECTIONS:
                 return R.drawable.ic_collecton_navigation;
+            case NEWS - 1:
+                return R.drawable.ic_news;
             case ABOUT - 1:
                 return R.drawable.ic_community;
             case SUGGESTIONS - 1:

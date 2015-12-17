@@ -100,4 +100,6 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserViewedAbout = "user.viewed.about";
     String UserSearchedAppToAdd = "user.searched.app.to.add";
     String UserViewedAppDetailsFromSharedLink = "user.viewed.app.details.from.shared.link";
+    String UserViewedNews = "user.viewed.news";
+    String UserRefreshedNews = "user.refreshed.news";
 }

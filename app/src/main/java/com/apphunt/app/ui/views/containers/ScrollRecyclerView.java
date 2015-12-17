@@ -30,7 +30,7 @@ public class ScrollRecyclerView extends LinearLayout {
     @InjectView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    private int totalItemsCount;
+    private int totalItemsCount = -1;
     private OnEndReachedListener listener;
 
     public ScrollRecyclerView(Context context) {
@@ -87,8 +87,10 @@ public class ScrollRecyclerView extends LinearLayout {
         recyclerView.addOnScrollListener(new EndlessRecyclerScrollListener(new OnEndReachedListener() {
             @Override
             public void onEndReached() {
-                if (ScrollRecyclerView.this.adapter.getItemCount() >= ScrollRecyclerView.this.totalItemsCount) {
-                    return;
+                if(ScrollRecyclerView.this.totalItemsCount != -1) {
+                    if (ScrollRecyclerView.this.adapter.getItemCount() >= ScrollRecyclerView.this.totalItemsCount) {
+                        return;
+                    }
                 }
                 ScrollRecyclerView.this.listener.onEndReached();
             }

@@ -5,4 +5,8 @@ package com.apphunt.app.api.apphunt.models.posts;
  */
 public class Title {
     private String rendered;
+
+    public String getRendered() {
+        return rendered;
+    }
 }

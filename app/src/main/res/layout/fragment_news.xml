@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        style="@style/CircularThemeProgressBar" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/listview_elevation">
+
+        <com.apphunt.app.ui.views.containers.ScrollRecyclerView
+            android:id="@+id/news_list"
+            android:elevation="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.apphunt.app.ui.views.containers.ScrollRecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

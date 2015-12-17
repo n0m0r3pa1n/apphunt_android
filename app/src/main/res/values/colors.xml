@@ -9,7 +9,11 @@
     <color name="primary_pressed">#e1bee7</color>
     <color name="ripple">#ba68c8</color>
     <color name="list_item_bg">#fafafa</color>
-    
+
+    <color name="primary_title">#D9000000</color>
+    <color name="secondary_title">#8C000000</color>
+    <color name="hint">#59000000</color>
+
     <color name="vote_btn_text">#2f90de</color>
     <color name="vote_btn_voted_text">#FFFFFF</color>
 
@@ -39,7 +43,7 @@
 
    <color name="save_collection_color">#43A047</color>
 
-    <color name="percent_20_black">#33000000</color>
+    <color name="percent_20_black">#1B000000</color>
 
     <!-- Details -->
     <color name="bg_box_desc">#1E000000</color>

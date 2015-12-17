@@ -42,14 +42,15 @@
     <fragment
         android:id="@+id/fragment_right_drawer"
         android:name="com.apphunt.app.ui.fragments.navigation.RightDrawerFragment"
-        android:layout_width="@dimen/right_navigation_drawer_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="56dp"
         android:layout_gravity="end"
         app:layout="@layout/fragment_right_drawer"/>
 
     <com.apphunt.app.ui.views.containers.ScrimInsetsFrameLayout
         android:id="@+id/scrimInsetsFrameLayout"
-        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
@@ -59,7 +60,7 @@
         <fragment
             android:id="@+id/fragment_drawer"
             android:name="com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment"
-            android:layout_width="@dimen/navigation_drawer_width"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:layout="@layout/fragment_navigation_drawer"/>

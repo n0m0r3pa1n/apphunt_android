@@ -12,4 +12,8 @@ public class GetBlogPostApiEvent {
     public GetBlogPostApiEvent(List<BlogPost> response) {
         this.response = response;
     }
+
+    public List<BlogPost> getBlogPosts() {
+        return response;
+    }
 }
