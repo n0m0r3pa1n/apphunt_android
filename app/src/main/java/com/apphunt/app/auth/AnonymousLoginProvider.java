@@ -9,6 +9,7 @@ import android.util.Log;
 import com.apphunt.app.api.apphunt.models.users.LoginType;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.tracker.EventTracker;
 import com.apphunt.app.utils.GoogleUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
@@ -35,6 +36,7 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
     @Override
     public void logout() {
         removeSharedPreferences();
+        EventTracker.getInstance().resetActions();
     }
 
     @Override

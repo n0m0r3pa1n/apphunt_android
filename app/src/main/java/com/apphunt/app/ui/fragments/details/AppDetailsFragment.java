@@ -441,11 +441,10 @@ public class AppDetailsFragment extends BackStackFragment {
                         comment.setParentId(replyToComment.getParent());
                     }
                     FlurryWrapper.logEvent(TrackingEvents.UserSentReplyComment);
-                } else {
-                    FlurryWrapper.logEvent(TrackingEvents.UserSentComment);
                 }
             } else {
                 commentEntry.setHint(R.string.comment_entry_hint);
+                FlurryWrapper.logEvent(TrackingEvents.UserSentComment);
             }
 
             comment.setText(commentEntry.getText().toString());

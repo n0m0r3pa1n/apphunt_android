@@ -68,4 +68,12 @@ public class EventTracker {
         BusProvider.getInstance().post(new CallToActionEvent());
         SharedPreferencesHelper.setPreference(Constants.KEY_CALL_TO_ACTION, true);
     }
+
+    public void resetActions() {
+        for(String eventName: trackedEvents) {
+            SharedPreferencesHelper.setPreference(eventName, 0);
+        }
+        SharedPreferencesHelper.setPreference(Constants.KEY_CALL_TO_ACTION, false);
+    }
+
 }

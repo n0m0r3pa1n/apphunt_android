@@ -207,6 +207,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                             @Override
                             public void success(Result<String> result) {
                                 user.setEmail(result.data);
+                                LoginProviderFactory.get(activity).logout();
                                 LoginProviderFactory.setLoginProvider(new TwitterLoginProvider(activity));
                                 LoginProviderFactory.get(activity).login(user);
 
@@ -291,6 +292,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
                         }
 
                         user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
+                        LoginProviderFactory.get(activity).logout();
                         LoginProviderFactory.setLoginProvider(new FacebookLoginProvider(activity));
                         LoginProviderFactory.get(activity).login(user);
 
@@ -376,6 +378,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             if (resultCode == Activity.RESULT_OK) {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 user.setEmail(email);
+                LoginProviderFactory.get(activity).logout();
                 LoginProviderFactory.setLoginProvider(new TwitterLoginProvider(activity));
                 LoginProviderFactory.get(activity).login(user);
                 FlurryWrapper.logEvent(TrackingEvents.UserTwitterLogin);
@@ -422,6 +425,7 @@ public class LoginFragment extends BackStackFragment implements OnConnectionFail
             user.setUsername(currentPerson.hasNickname() ? currentPerson.getNickname() : currentPerson.getDisplayName());
             user.setLocale(String.format("%s-%s", locale.getCountry().toLowerCase(), locale.getLanguage()).toLowerCase());
 
+            LoginProviderFactory.get(activity).logout();
             LoginProviderFactory.setLoginProvider(new GooglePlusLoginProvider(activity));
             LoginProviderFactory.get(activity).login(user);
 

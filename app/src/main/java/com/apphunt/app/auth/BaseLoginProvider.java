@@ -15,6 +15,7 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
+import com.apphunt.app.tracker.EventTracker;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 
@@ -40,6 +41,7 @@ public abstract class BaseLoginProvider implements LoginProvider {
     public void logout() {
         removeSharedPreferences();
         BusProvider.getInstance().post(new LogoutEvent());
+        EventTracker.getInstance().resetActions();
     }
 
     @Override
