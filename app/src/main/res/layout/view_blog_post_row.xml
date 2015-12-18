@@ -31,7 +31,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:cropToPadding="true"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/ic_ah_launcher"
             android:scaleType="centerInside"
             android:id="@+id/picture"
             android:layout_alignParentEnd="true"

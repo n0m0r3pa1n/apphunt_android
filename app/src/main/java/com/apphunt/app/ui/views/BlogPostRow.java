@@ -96,7 +96,7 @@ public class BlogPostRow extends LinearLayout {
         if(!TextUtils.isEmpty(blogPost.getFeaturedImageUrl())) {
             Picasso.with(context).load(blogPost.getFeaturedImageUrl()).into(picture);
         } else {
-            Picasso.with(context).load(R.drawable.ic_launcher).into(picture);
+            Picasso.with(context).load(R.drawable.ic_ah_launcher).into(picture);
         }
         postContainer.setOnClickListener(null);
         postContainer.setOnClickListener(new OnClickListener() {

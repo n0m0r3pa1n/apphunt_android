@@ -162,7 +162,7 @@ public class InstallService extends Service {
                     bundle,
                     new Notification("Do you like " + appName + "?",
                             "Share it with the AppHunt community!", "", NotificationType.INSTALL),
-                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_ah_launcher));
         }
     }
 

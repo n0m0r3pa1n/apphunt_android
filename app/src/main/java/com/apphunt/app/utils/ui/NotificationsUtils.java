@@ -127,7 +127,7 @@ public class NotificationsUtils {
         notifyIntent.putExtras(extras);
 
         if (largeIcon == null) {
-            largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+            largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_ah_launcher);
         }
         try {
             Integer notificationCode = notification.getType().getRequestCode();
