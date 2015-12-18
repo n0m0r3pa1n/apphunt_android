@@ -36,6 +36,7 @@ import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
+import com.apphunt.app.event_bus.events.ui.CallToActionEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
 import com.apphunt.app.event_bus.events.ui.DisplayLoginFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.DrawerStatusEvent;
@@ -54,12 +55,12 @@ import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
+import com.apphunt.app.ui.fragments.actions.CallToActionDialogFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
 import com.apphunt.app.ui.fragments.help.AddAppFragment;
 import com.apphunt.app.ui.fragments.help.AppsRequirementsFragment;
-import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.login.LoginFragment;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerCallbacks;
 import com.apphunt.app.ui.fragments.navigation.NavigationDrawerFragment;
@@ -264,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 case USER_MENTIONED:
                     String appId = getIntent().getStringExtra(Constants.KEY_NOTIFICATION_APP_ID);
                     NavUtils.getInstance(this).presentAppDetailsFragment(appId);
-                    NavUtils.getInstance(this).presentCommentsFragment(appId);
                     break;
                 case TOP_APPS:
                     onNavigationDrawerItemSelected(Constants.TOP_APPS);
@@ -660,9 +660,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     } catch (JSONException e) {
                         Log.e(TAG, e.toString());
                     }
-
-                    // params are the deep linked params associated with the link that the user clicked before showing up
-                    Log.e("BranchConfigTest", "deep link data: " + referringParams.toString());
                 }
             }
         }, this.getIntent().getData(), this);
@@ -730,19 +727,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
         NavUtils.getInstance(this).setOnBackBlocked(false);
         if(event.getUser().getLoginType().equals(LoginType.Twitter.toString())) {
-            presentInvitesScreen();
+            NavUtils.getInstance(this).presentInvitesScreen();
         } else {
             getSupportFragmentManager().popBackStack();
         }
     }
 
-    private void presentInvitesScreen() {
-        getSupportFragmentManager().popBackStack();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
-                .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
-                .commit();
-    }
+
 
     @Subscribe
     public void onUserLogout(LogoutEvent event) {
@@ -792,6 +783,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Subscribe
     public void onSelectFragment(SelectFragmentEvent event) {
         onNavigationDrawerItemSelected(event.getDrawerFragmentIndex());
+    }
+
+    @Subscribe
+    public void onCallToAction(CallToActionEvent event) {
+        CallToActionDialogFragment fragment = new CallToActionDialogFragment();
+        fragment.show(getSupportFragmentManager(), "CallToAction");
     }
 
     private void hideLoginFragment() {

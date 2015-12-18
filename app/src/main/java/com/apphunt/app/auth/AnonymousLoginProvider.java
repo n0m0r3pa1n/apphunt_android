@@ -32,6 +32,26 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
         }
     }
 
+    @Override
+    public void logout() {
+        removeSharedPreferences();
+    }
+
+    @Override
+    public boolean isUserLoggedIn() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return PROVIDER_NAME;
+    }
+
+    @Override
+    public String getLoginType() {
+        return LoginType.Anonymous.toString();
+    }
+
     public void createAnonymousUser() {
         final User anonymousUser = new User();
         anonymousUser.setName("Anonymous");
@@ -126,25 +146,5 @@ public class AnonymousLoginProvider extends BaseLoginProvider {
         }
 
         return result;
-    }
-
-    @Override
-    public void logout() {
-        removeSharedPreferences();
-    }
-
-    @Override
-    public boolean isUserLoggedIn() {
-        return false;
-    }
-
-    @Override
-    public String getName() {
-        return PROVIDER_NAME;
-    }
-
-    @Override
-    public String getLoginType() {
-        return LoginType.Anonymous.toString();
     }
 }

@@ -45,12 +45,19 @@ public class NewsFragment extends BaseFragment {
     @InjectView(R.id.loading)
     CircularProgressBar loading;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.inject(this, view);
         loadNews();
+        FlurryWrapper.logEvent(TrackingEvents.UserViewedNews);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

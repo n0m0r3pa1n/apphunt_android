@@ -20,15 +20,6 @@
         <attr name="pictureHeight" format="float" />
         <attr name="textSize" format="float" />
     </declare-styleable>
-    <declare-styleable name="JHexedPhotoView">
-        <attr name="cellWidth" format="integer"/>
-        <attr name="cellHeight" format="integer"/>
-        <attr name="fieldWidth" format="integer"/>
-        <attr name="fieldHeight" format="integer"/>
-        <attr name="hexBorder" format="color"/>
-        <attr name="hexSelectedBorder" format="color"/>
-        <attr name="hexLineWidth" format="float"/>
-    </declare-styleable>
 
     <declare-styleable name="AHTextView">
         <attr name="typefacePath" format="string"/>

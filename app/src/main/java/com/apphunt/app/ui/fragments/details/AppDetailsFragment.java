@@ -133,7 +133,6 @@ public class AppDetailsFragment extends BackStackFragment {
 
     FavouriteAppButton favouriteAppButton;
 
-    private boolean shouldReload;
     private AppDetailsTabsPagerAdapter pagerAdapter;
     private Comment replyToComment;
 
@@ -174,8 +173,14 @@ public class AppDetailsFragment extends BackStackFragment {
             @Override
             public void onPageSelected(int position) {
                 if (position == PAGE_COMMENTS) {
+                    FlurryWrapper.logEvent(TrackingEvents.UserSwitchedToComments, new HashMap<String, String>() {{
+                        put("appId", appId);
+                    }});
                     commentBox.setVisibility(View.VISIBLE);
                 } else {
+                    FlurryWrapper.logEvent(TrackingEvents.UserSwitchedToGallery, new HashMap<String, String>() {{
+                        put("appId", appId);
+                    }});
                     commentBox.setVisibility(View.INVISIBLE);
                 }
             }

@@ -9,9 +9,9 @@ import com.apphunt.app.api.apphunt.models.users.User;
 public interface LoginProvider {
     void login(User user);
     void logout();
-    User getUser();
+    void loadFriends(BaseLoginProvider.OnFriendsResultListener listener);
     boolean isUserLoggedIn();
     String getName();
     String getLoginType();
-    void loadFriends(BaseLoginProvider.OnFriendsResultListener listener);
+    User getUser();
 }

@@ -9,15 +9,15 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.collections.apps.AppsCollection;
 import com.apphunt.app.constants.Constants;
-import com.apphunt.app.ui.fragments.details.AppDetailsFragment;
-import com.apphunt.app.ui.fragments.CommentsFragment;
 import com.apphunt.app.ui.fragments.SaveAppFragment;
 import com.apphunt.app.ui.fragments.SelectAppFragment;
 import com.apphunt.app.ui.fragments.UserProfileFragment;
 import com.apphunt.app.ui.fragments.collections.CreateCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.SelectCollectionFragment;
 import com.apphunt.app.ui.fragments.collections.ViewCollectionFragment;
+import com.apphunt.app.ui.fragments.details.AppDetailsFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
+import com.apphunt.app.ui.fragments.invites.InvitesFragment;
 import com.apphunt.app.ui.fragments.search.SearchResultsFragment;
 
 import java.util.Random;
@@ -159,19 +159,18 @@ public class NavUtils {
                 .commitAllowingStateLoss();
     }
 
-    public void presentCommentsFragment(String appId) {
-        CommentsFragment commentsFragment = CommentsFragment.newInstance(appId);
-        //commentsFragment.setOnCommentEnteredListener(detailsFragment);
-        activity.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, commentsFragment, Constants.TAG_COMMENTS)
-                .addToBackStack(Constants.TAG_COMMENTS)
-                .commit();
-    }
-
     public void presentFindFriendsFragment() {
         activity.getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new FindFriendsFragment(), Constants.TAG_FIND_FRIENDS_FRAGMENT)
                 .addToBackStack(Constants.TAG_FIND_FRIENDS_FRAGMENT)
+                .commit();
+    }
+
+    public void presentInvitesScreen() {
+        activity.getSupportFragmentManager().popBackStack();
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new InvitesFragment(), Constants.TAG_INVITE_FRAGMENT)
+                .addToBackStack(Constants.TAG_INVITE_FRAGMENT)
                 .commit();
     }
 

@@ -55,7 +55,6 @@ dependencies {
         transitive = true;
     }
     compile files('libs/FlurryAnalytics-6.1.0.jar')
-    compile project(':jhexed')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
@@ -79,5 +78,4 @@ dependencies {
     compile 'com.wefika:flowlayout:0.4.0'
     compile 'io.branch.sdk.android:library:1.+'
     compile 'com.apptentive:apptentive-android:2.0.1@aar'
-    compile files('libs/uxcam-2.1.1.jar')
 }

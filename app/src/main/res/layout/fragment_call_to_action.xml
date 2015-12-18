@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="16dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/notification_text_margin"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textColor="@color/primary_title"
+       />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/title"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:background="@color/bg_primary"
+        android:elevation="0dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/divider"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/desc"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/secondary_title"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/action_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/desc"
+        android:layout_marginTop="20dp"
+        android:text="UPDATE"
+        android:textAllCaps="true"
+        android:elevation="0dp"
+        android:background="@drawable/selector_news"
+        android:textSize="20sp"
+        android:textColor="@color/bg_primary"
+        android:gravity="center"
+       />
+</RelativeLayout>

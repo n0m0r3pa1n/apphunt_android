@@ -7,7 +7,6 @@ import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -104,7 +103,7 @@ public class BlogPostRow extends LinearLayout {
             @Override
             public void onClick(View v) {
                 final String url = blogPost.getLink();
-                FlurryWrapper.logEvent(TrackingEvents.UserViewedNews, new HashMap<String, String>() {{
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedNews, new HashMap<String, String>() {{
                     put("url", url);
                 }});
                 Intent intent = new Intent(getContext(), WebviewActivity.class);

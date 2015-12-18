@@ -7,14 +7,18 @@ import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.apps.FavouriteAppApiEvent;
 import com.apphunt.app.event_bus.events.api.apps.UnfavouriteAppApiEvent;
 import com.apphunt.app.ui.views.BaseFavouriteButton;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.squareup.otto.Subscribe;
 
- public class FavouriteAppButton extends BaseFavouriteButton {
+import java.util.HashMap;
+
+public class FavouriteAppButton extends BaseFavouriteButton {
      private BaseApp app;
      public FavouriteAppButton(Context context) {
         super(context);
@@ -44,6 +48,10 @@ import com.squareup.otto.Subscribe;
             LoginUtils.showLoginFragment(false);
             return;
         }
+        FlurryWrapper.logEvent(TrackingEvents.UserFavouritedApp, new HashMap<String, String>() {{
+            put("appPackage", app.getPackageName());
+            put("appId", app.getId());
+        }});
         app.setIsFavourite(true);
         ApiClient.getClient(getContext()).favouriteApp(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }
@@ -54,6 +62,10 @@ import com.squareup.otto.Subscribe;
             LoginUtils.showLoginFragment(false);
             return;
         }
+        FlurryWrapper.logEvent(TrackingEvents.UserUnfavouritedApp, new HashMap<String, String>() {{
+            put("appPackage", app.getPackageName());
+            put("appId", app.getId());
+        }});
         app.setIsFavourite(false);
         ApiClient.getClient(getContext()).unfavouriteApp(app.getId(), SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID));
     }

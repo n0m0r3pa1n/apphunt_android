@@ -132,6 +132,10 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
     }
 
     public void addComments(List<Comment> comments) {
+        if(comments == null || comments.size() == 0) {
+            return;
+        }
+
         this.comments.addAll(comments);
         populateItems(comments);
         notifyDataSetChanged();
