@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -134,7 +135,10 @@ public class SaveAppFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.findItem(R.id.action_search2).setVisible(false);
+        MenuItem item = menu.findItem(R.id.action_search2);
+        if(item != null)  {
+            item.setVisible(false);
+        }
     }
 
     @Override

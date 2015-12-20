@@ -7,7 +7,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="@dimen/hunter_row_height"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
@@ -27,15 +27,15 @@
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/ic_trapeze"
                 android:gravity="center"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/top_hunters_place_padding"
                 android:textColor="@android:color/white"
-                android:textSize="22sp"
+                android:textSize="@dimen/top_hunters_place_text"
                 app:typefacePath="fonts/OpenSans-Regular.ttf" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/picture"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/top_hunter_avatar"
+                android:layout_height="@dimen/top_hunter_avatar"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/place" />
 
@@ -43,7 +43,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/top_hunters_details_margin"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:layout_marginTop="5dp"
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/top_hunters_details_margin"
                 android:layout_toRightOf="@id/picture"
                 android:textSize="12sp"
                 app:typefacePath="fonts/OpenSans-Regular.ttf" />
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/username"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/top_hunters_details_margin"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/picture"
                 app:typefacePath="fonts/OpenSans-Light.ttf" />
@@ -79,7 +79,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/top_hunters_details_margin"
                 android:layout_toRightOf="@+id/picture">
 
                 <RelativeLayout

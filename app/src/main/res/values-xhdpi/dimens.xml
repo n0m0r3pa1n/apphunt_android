@@ -1,0 +1,185 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="app_item_name_margin">16dp</dimen>
+    
+    <dimen name="ab_elevation">10dp</dimen>
+    <dimen name="ab_shadow_height">10dp</dimen>
+
+    <dimen name="add_btn_margin_top">16dp</dimen>
+    <dimen name="add_btn_margin_bottom">16dp</dimen>
+    <dimen name="add_btn_margin_right">16dp</dimen>
+    <dimen name="add_btn_elevation">5dp</dimen>
+
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="right_navigation_drawer_width">300dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+
+    <dimen name="list_divider_height">0dp</dimen>
+
+    <dimen name="list_header_padding">16dp</dimen>
+    <dimen name="list_header_height">48dp</dimen>
+    <dimen name="list_header_text">18sp</dimen>
+
+    <dimen name="list_item_height">210dp</dimen>
+    <dimen name="list_item_icon_margin_left">7dp</dimen>
+    <dimen name="list_item_icon_margin_right">15dp</dimen>
+    <dimen name="list_item_icon_size">75dp</dimen>
+    <dimen name="list_item_name">17sp</dimen>
+    <dimen name="list_item_category">14sp</dimen>
+    <dimen name="list_item_desc">14sp</dimen>
+    <dimen name="list_item_vote_size">40dp</dimen>
+    <dimen name="list_item_vote_margin">7dp</dimen>
+    <dimen name="list_item_vote_padding">5dp</dimen>
+    <dimen name="list_item_vote_text">15sp</dimen>
+    <dimen name="list_item_add_to_collection_size">20dp</dimen>
+    <dimen name="list_item_add_to_collection_margin_left">8dp</dimen>
+
+    <dimen name="list_more_apps_item_height">60dp</dimen>
+    <dimen name="list_more_apps_button_width">60dp</dimen>
+    <dimen name="list_more_apps_button_height">16dp</dimen>
+
+    <dimen name="save_box_margin">30dp</dimen>
+    <dimen name="save_box_elevation">3dp</dimen>
+    <dimen name="save_box_title_margin_bottom">10dp</dimen>
+    <dimen name="save_box_title_height">60dp</dimen>
+    <dimen name="save_box_title_padding">10dp</dimen>
+    <dimen name="save_box_title_text">25sp</dimen>
+    <dimen name="save_box_icon_size">80dp</dimen>
+    <dimen name="save_box_icon_margin_bottom">20dp</dimen>
+    <dimen name="save_box_desc_height">100dp</dimen>
+    <dimen name="save_box_desc_padding">15dp</dimen>
+    <dimen name="save_box_desc_elevation">0dp</dimen>
+    <dimen name="save_box_desc_text">17sp</dimen>
+    <dimen name="save_btn_height">80dp</dimen>
+    <dimen name="save_btn_margin_bottom">25dp</dimen>
+    <dimen name="save_btn_text">23sp</dimen>
+
+    <!-- Settings fragment -->
+    <dimen name="settings_section_height">20dp</dimen>
+    <dimen name="settings_section_margin_left">20dp</dimen>
+    <dimen name="settings_section_margin_top">15dp</dimen>
+    <dimen name="settings_section_text">17sp</dimen>
+    <dimen name="settings_item_height">48dp</dimen>
+    <dimen name="settings_item_margin_top">10dp</dimen>
+    <dimen name="settings_label_padding_left">20dp</dimen>
+    <dimen name="settings_label_text">14sp</dimen>
+    <dimen name="settings_toggle_size">42dp</dimen>
+    <dimen name="settings_btn_dismiss_margin_top">10dp</dimen>
+    <dimen name="settings_button_dismiss_text">17sp</dimen>
+
+    <dimen name="semi_fragment_layout_height">150dp</dimen>
+    <dimen name="semi_fragment_layout_padding">15dp</dimen>
+    <dimen name="settings_container_padding">20sp</dimen>
+    <dimen name="listview_elevation">2dp</dimen>
+    <dimen name="notification_text">17sp</dimen>
+    <dimen name="notification_text_margin">10dp</dimen>
+    <dimen name="list_view_divider_height">1dp</dimen>
+    <dimen name="list_view_elevation">0dp</dimen>
+
+    <!-- Select App Fragment -->
+    <dimen name="select_apps_box_height">130dp</dimen>
+    <dimen name="select_apps_box_padding">15dp</dimen>
+    <dimen name="select_apps_box_elevation">5dp</dimen>
+    <dimen name="select_apps_app_icon_size">60dp</dimen>
+    <dimen name="select_apps_icon_padding">8dp</dimen>
+    <dimen name="select_apps_app_name_height">35dp</dimen>
+    <dimen name="select_apps_app_name_padding">5dp</dimen>
+    <dimen name="select_apps_app_name_text">12sp</dimen>
+    <dimen name="select_apps_gridview_vertical_spacing">15dp</dimen>
+    <dimen name="select_apps_gridview_horizontal_spacing">10dp</dimen>
+    <dimen name="select_apps_gridview_padding">10dp</dimen>
+    <dimen name="select_apps_gridview_elevation">0dp</dimen>
+    <dimen name="select_apps_info_text">14sp</dimen>
+    <dimen name="select_apps_info_padding">10sp</dimen>
+
+
+    <dimen name="settings_layout_height">220dp</dimen>
+    <dimen name="settings_item_margin">15dp</dimen>
+    <dimen name="notification_button_padding">5dp</dimen>
+
+    <!-- ShowcaseView -->
+    <dimen name="showcase_btn_bottom_right_margin_right">20dp</dimen>
+    <dimen name="showcase_btn_bottom_right_margin_bottom">50dp</dimen>
+    <dimen name="showcase_btn_text">15sp</dimen>
+
+    <!-- Invite -->
+    <dimen name="dimen_invite_text">20sp</dimen>
+    <dimen name="splash_company_text">15sp</dimen>
+    <dimen name="splash_icon_size">250dp</dimen>
+    <dimen name="click_to_reload_text">22sp</dimen>
+    <dimen name="desc_shadow_height">4dp</dimen>
+
+    <!-- App Details -->
+    <dimen name="details_box_name_height">40dp</dimen>
+    <dimen name="details_box_name_margin_bottom">10dp</dimen>
+    <dimen name="details_box_name_padding">15dp</dimen>
+    <dimen name="details_avatar_creator">35dp</dimen>
+    <dimen name="details_box_name_creator_name_margin">10dp</dimen>
+    <dimen name="details_download_text_size">16sp</dimen>
+    <dimen name="details_box_vote_size">55dp</dimen>
+    <dimen name="details_box_vote_text">15sp</dimen>
+    <dimen name="details_box_desc_height">90dp</dimen>
+    <dimen name="details_box_desc_padding_left">15dp</dimen>
+    <dimen name="details_box_desc_padding_top">10dp</dimen>
+    <dimen name="details_box_desc_icon_size">80dp</dimen>
+    <dimen name="details_box_desc_icon_margin">15dp</dimen>
+    <dimen name="details_box_desc_app_name_text">20sp</dimen>
+    <dimen name="details_box_desc_text">15sp</dimen>
+    <dimen name="details_box_desc_ic_download_size">30dp</dimen>
+    <dimen name="details_box_tag_height">25dp</dimen>
+    <dimen name="details_box_tag_margin_left">10dp</dimen>
+    <dimen name="details_box_voters_padding_top">10dp</dimen>
+    <dimen name="details_box_voters_padding_sides">15dp</dimen>
+    <dimen name="details_box_voters_padding_bottom">5dp</dimen>
+    <dimen name="details_voters_avatar_size">25dp</dimen>
+    <dimen name="details_voters_avatar_cell">30dp</dimen>
+    <dimen name="details_box_voters_header_margin">10dp</dimen>
+    <dimen name="voters_gridview_column_width">30dp</dimen>
+    <dimen name="voters_gridview_vertical_spacing">5dp</dimen>
+    <dimen name="header_comments_padding_left">15dp</dimen>
+    <dimen name="header_comments_padding_top">5dp</dimen>
+    <dimen name="comments_arrow_width">20dp</dimen>
+    <dimen name="comments_arrow_height">10dp</dimen>
+    <dimen name="comments_arrow_margin_left">50dp</dimen>
+    <dimen name="comment_entry_min_height">45dp</dimen>
+    <dimen name="comment_entry_padding">5dp</dimen>
+    <dimen name="comment_entry_text">14sp</dimen>
+    <dimen name="send_comment_width">40dp</dimen>
+    <dimen name="send_comment_height">40dp</dimen>
+    <dimen name="dimen_app_list_avatar_creator">20dp</dimen>
+    <dimen name="collection_app_margin">10dp</dimen>
+    <dimen name="collection_app_width">150dp</dimen>
+    <dimen name="collection_app_icon_padding">2dp</dimen>
+
+    <dimen name="zero_elevation">-10dp</dimen>
+    <dimen name="one_elevation">12dp</dimen>
+    <dimen name="login_message_padding">40dp</dimen>
+
+    <dimen name="app_details_hexagon">150dp</dimen>
+    <dimen name="details_buttons_margin">10dp</dimen>
+    <dimen name="collection_creator_image_size">30dp</dimen>
+    <dimen name="collection_banner_height">140dp</dimen>
+    <dimen name="view_collection_height">150dp</dimen>
+
+    <dimen name="login_provider_text">12sp</dimen>
+    <dimen name="comment_app_icon_size">50dp</dimen>
+    <dimen name="header_profile_picture_size">80dp</dimen>
+    <dimen name="header_profile_height">170dp</dimen>
+    <dimen name="profile_banner_height">150dp</dimen>
+    <dimen name="profile_picture_margin">25dp</dimen>
+    <dimen name="profile_user_info_text">17sp</dimen>
+    <dimen name="profile_user_info_label">12sp</dimen>
+
+    <dimen name="top_apps_buttons_text">14sp</dimen>
+    <dimen name="hunter_row_height">110dp</dimen>
+    <dimen name="top_hunters_warning">22sp</dimen>
+    <dimen name="top_hunter_avatar">80dp</dimen>
+    <dimen name="top_hunters_place_padding">20dp</dimen>
+    <dimen name="top_hunters_place_text">22sp</dimen>
+    <dimen name="top_hunters_details_margin">20dp</dimen>
+    <dimen name="news_title">24sp</dimen>
+    <dimen name="buttons_container_height">70dp</dimen>
+    <dimen name="rating_text_size">18sp</dimen>
+</resources>

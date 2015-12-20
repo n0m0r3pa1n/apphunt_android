@@ -1,6 +1,6 @@
 package com.apphunt.app.ui.fragments.details;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +31,7 @@ import butterknife.InjectView;
 /**
  * Created by nmp on 15-12-15.
  */
-public class GalleryDetailsFragment extends BaseFragment {
+public class    GalleryDetailsFragment extends BaseFragment {
 
     @InjectView(R.id.gallery)
     GalleryView gallery;
@@ -53,8 +53,8 @@ public class GalleryDetailsFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         BusProvider.getInstance().register(this);
     }
 

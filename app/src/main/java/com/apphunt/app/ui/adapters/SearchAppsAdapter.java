@@ -1,6 +1,5 @@
 package com.apphunt.app.ui.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +13,6 @@ import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.users.User;
-import com.apphunt.app.auth.LoginProviderFactory;
-import com.apphunt.app.utils.LoginUtils;
 import com.apphunt.app.utils.StringUtils;
 import com.apphunt.app.utils.ui.NavUtils;
 import com.squareup.picasso.Picasso;
@@ -69,16 +66,6 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         viewHolderItem.vote.setBaseApp((App) app);
         viewHolderItem.vote.setTrackingScreen(SearchAppsAdapter.TAG);
 
-        viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                    NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
-                } else {
-                    LoginUtils.showLoginFragment(false, R.string.login_info_add_to_collection);
-                }
-            }
-        });
 
         View.OnClickListener detailsClickListener = new View.OnClickListener() {
             @Override

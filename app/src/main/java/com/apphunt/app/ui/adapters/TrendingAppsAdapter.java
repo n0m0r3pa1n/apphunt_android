@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.models.ads.Ad;
 import com.apphunt.app.api.apphunt.models.apps.App;
 import com.apphunt.app.api.apphunt.models.apps.AppsList;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
@@ -194,17 +193,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             viewHolderItem.vote.setBaseApp((App) app);
             viewHolderItem.vote.setTrackingScreen(TrendingAppsFragment.TAG);
-
-            viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (LoginProviderFactory.get((Activity) ctx).isUserLoggedIn()) {
-                        NavUtils.getInstance((AppCompatActivity) ctx).presentSelectCollectionFragment((App) app);
-                    } else {
-                        LoginUtils.showLoginFragment(false, R.string.login_info_add_to_collection);
-                    }
-                }
-            });
+            viewHolderItem.commentsCount.setText(app.getCommentsCount() + "");
 
             View.OnClickListener detailsClickListener = new View.OnClickListener() {
                 @Override
@@ -267,8 +256,8 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @InjectView(R.id.btn_vote)
         AppVoteButton vote;
 
-        @InjectView(R.id.add_to_collection)
-        Button addToCollection;
+        @InjectView(R.id.comments_count)
+        TextView commentsCount;
 
         public ViewHolderItem(View view) {
             super(view);

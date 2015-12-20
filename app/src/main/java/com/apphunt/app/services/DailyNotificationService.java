@@ -58,6 +58,9 @@ public class DailyNotificationService extends IntentService {
     }
 
     private void saveNotification(Notification notification) {
+        if(notification == null) {
+            return;
+        }
         SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_TITLE, notification.getTitle());
         SharedPreferencesHelper.setPreference(Constants.KEY_NOTIFICATION_MSG, notification.getMessage());
     }

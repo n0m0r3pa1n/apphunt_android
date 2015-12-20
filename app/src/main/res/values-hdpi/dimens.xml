@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_item_height">260dp</dimen>
+    <dimen name="hunter_row_height">130dp</dimen>
+    <dimen name="top_hunters_warning">16sp</dimen>
+    <dimen name="top_hunter_avatar">50dp</dimen>
+    <dimen name="top_hunters_place_padding">10dp</dimen>
+    <dimen name="top_hunters_place_text">16sp</dimen>
+    <dimen name="top_hunters_details_margin">5dp</dimen>
+    <dimen name="news_title">16sp</dimen>
+    <dimen name="details_box_desc_app_name_text">16sp</dimen>
+    <dimen name="details_box_desc_icon_size">60dp</dimen>
+    <dimen name="details_box_vote_size">40dp</dimen>
+    <dimen name="buttons_container_height">60dp</dimen>
+    <dimen name="details_box_desc_text">12sp</dimen>
+    <dimen name="details_avatar_creator">25dp</dimen>
+    <dimen name="rating_text_size">14dp</dimen>
+</resources>
