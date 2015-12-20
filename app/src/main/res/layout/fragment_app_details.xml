@@ -123,7 +123,7 @@
             <LinearLayout
                 android:id="@+id/buttons_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/buttons_container_height"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/divider"
                 android:layout_marginTop="5dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:text="Rating"
-                        android:textSize="11sp"
+                        android:textSize="@dimen/rating_warning_size"
                         app:typefacePath="fonts/OpenSans-Regular.ttf"
                         android:layout_below="@+id/rating"
                         android:layout_centerHorizontal="true" />
@@ -211,7 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/box_desc"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/text_secondary"

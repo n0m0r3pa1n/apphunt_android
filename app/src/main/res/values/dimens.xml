@@ -173,7 +173,6 @@
     <dimen name="profile_user_info_label">12sp</dimen>
 
     <dimen name="top_apps_buttons_text">14sp</dimen>
-    <dimen name="hunter_row_height">110dp</dimen>
     <dimen name="top_hunters_warning">22sp</dimen>
     <dimen name="top_hunter_avatar">80dp</dimen>
     <dimen name="top_hunters_place_padding">20dp</dimen>
@@ -182,4 +181,7 @@
     <dimen name="news_title">24sp</dimen>
     <dimen name="buttons_container_height">70dp</dimen>
     <dimen name="rating_text_size">18sp</dimen>
+    <dimen name="rating_warning_size">11sp</dimen>
+    <dimen name="top_hunter_place_image">50dp</dimen>
+    <dimen name="top_hunters_points_text">13sp</dimen>
 </resources>

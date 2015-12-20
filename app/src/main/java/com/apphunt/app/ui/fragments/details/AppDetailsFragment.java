@@ -426,6 +426,7 @@ public class AppDetailsFragment extends BackStackFragment {
 
     public void sendComment() {
         Log.d(TAG, "sendComment: ");
+        send.setClickable(false);
         send.setEnabled(false);
         NewComment comment = new NewComment();
         if (commentEntry.getText().length() > 0) {
@@ -456,6 +457,7 @@ public class AppDetailsFragment extends BackStackFragment {
         closeKeyboard(send);
         commentEntry.getText().clear();
         send.setEnabled(true);
+        send.setClickable(true);
     }
 
     private void closeKeyboard(View v) {

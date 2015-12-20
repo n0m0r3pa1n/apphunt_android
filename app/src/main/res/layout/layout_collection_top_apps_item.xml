@@ -3,7 +3,7 @@
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     android:layout_width="fill_parent"
-    android:layout_height="@dimen/list_item_height"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
     android:padding="5dp">
@@ -89,7 +89,7 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="8dp"
                 android:layout_below="@+id/app_details_container"
                 android:background="@color/list_item_divider"
                 android:elevation="0dp" />
