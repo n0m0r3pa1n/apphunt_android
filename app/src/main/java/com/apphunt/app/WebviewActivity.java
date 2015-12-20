@@ -2,6 +2,7 @@ package com.apphunt.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -64,12 +65,26 @@ public class WebviewActivity extends AppCompatActivity {
                 if(progress == 100) {
                     Pbar.setVisibility(ProgressBar.GONE);
                 }
+
+
             }
 
         });
         webView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    if(url.contains("bnc.lt")) {
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(i);
+                    } else {
+                        webView.loadUrl(url);
+                    }
+
+                    return true;
             }
 
             @Override
