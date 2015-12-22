@@ -59,13 +59,14 @@ public class TrendingAppsFragment extends BaseFragment {
     }
 
     public TrendingAppsFragment() {
+
     }
 
 
     private OnEndReachedListener onEndReachedListener = new OnEndReachedListener() {
         @Override
         public void onEndReached() {
-            FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownAppList);
+            FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownTrendingAppList);
             loadTrendingApps();
         }
     };

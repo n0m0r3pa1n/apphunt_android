@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 
 import com.apphunt.app.R;
 import com.apphunt.app.constants.Constants;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.adapters.AppsTabsPagerAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
+import com.apphunt.app.utils.FlurryWrapper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -41,6 +43,26 @@ public class AppsFragment extends BaseFragment {
 
         appsTabsPagerAdapter = new AppsTabsPagerAdapter(getChildFragmentManager());
         appsViewPager.setAdapter(appsTabsPagerAdapter);
+        appsViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0) {
+                    FlurryWrapper.logEvent(TrackingEvents.UserSwitchedDailyApps);
+                } else {
+                    FlurryWrapper.logEvent(TrackingEvents.UserSwitchedTrendingApps);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return view;
     }

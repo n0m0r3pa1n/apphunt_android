@@ -106,7 +106,7 @@ public class DailyAppsFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                FlurryWrapper.logEvent(TrackingEvents.UserRefreshedTrendingApps);
+                FlurryWrapper.logEvent(TrackingEvents.UserRefreshedDailyApps);
                 activity.getSupportActionBar().collapseActionView();
                 reloadApps();
                 swipeRefreshLayout.setRefreshing(false);
