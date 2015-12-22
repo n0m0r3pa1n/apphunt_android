@@ -27,7 +27,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 import com.apphunt.app.event_bus.events.api.collections.CollectionsSearchResultEvent;
-import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
+import com.apphunt.app.ui.adapters.DailyAppsAdapter;
 import com.apphunt.app.ui.adapters.collections.CollectionsAdapter;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.layout.CustomLayoutManager;
@@ -97,7 +97,7 @@ public class SearchResultsFragment extends BackStackFragment {
     ViewStub noAppsView;
 
     private CollectionsAdapter collectionsAdapter;
-    private TrendingAppsAdapter trendingAppsAdapter;
+    private DailyAppsAdapter dailyAppsAdapter;
 
     public static SearchResultsFragment newInstance(String query) {
         SearchResultsFragment fragment = new SearchResultsFragment();
@@ -161,7 +161,7 @@ public class SearchResultsFragment extends BackStackFragment {
                 params.put("query", s);
                 FlurryWrapper.logEvent(TrackingEvents.UserSearchedForApp, params);
 
-                if (trendingAppsAdapter != null) trendingAppsAdapter.resetAdapter();
+                if (dailyAppsAdapter != null) dailyAppsAdapter.resetAdapter();
                 if (collectionsAdapter != null) collectionsAdapter.resetAdapter();
 
                 query = s;
@@ -234,9 +234,9 @@ public class SearchResultsFragment extends BackStackFragment {
             noAppsView.setVisibility(View.VISIBLE);
         } else {
             noAppsView.setVisibility(View.GONE);
-            trendingAppsAdapter = new TrendingAppsAdapter(activity, apps);
-            apps.setAdapter(trendingAppsAdapter);
-            trendingAppsAdapter.showSearchResult(event.getApps().getApps());
+            dailyAppsAdapter = new DailyAppsAdapter(activity, apps);
+            apps.setAdapter(dailyAppsAdapter);
+            dailyAppsAdapter.showSearchResult(event.getApps().getApps());
         }
         appsHeader.setText(getResources().getQuantityString(R.plurals.apps, totalCount, totalCount));
         setSearchResults(totalCount, collectionsCount);

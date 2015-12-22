@@ -56,4 +56,7 @@ public class EndlessRecyclerScrollListener extends RecyclerView.OnScrollListener
         previousTotal = 0;
     }
 
+    public void setVisibleThreshold(int visibleThreshold) {
+        this.visibleThreshold = visibleThreshold;
+    }
 }

@@ -10,7 +10,7 @@ public class Constants {
 //    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
     public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
-//    public static final String MAIN_URL = "4eb8e6d8.ngrok.io";
+//    public static final String MAIN_URL = "e77ac3dc.ngrok.io";
 
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";

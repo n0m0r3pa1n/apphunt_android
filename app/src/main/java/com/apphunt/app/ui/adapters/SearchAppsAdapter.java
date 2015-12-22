@@ -40,12 +40,12 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View  view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_item, parent, false);
-        return new TrendingAppsAdapter.ViewHolderItem(view);
+        return new DailyAppsAdapter.ViewHolderItem(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        final TrendingAppsAdapter.ViewHolderItem viewHolderItem = (TrendingAppsAdapter.ViewHolderItem) holder;
+        final DailyAppsAdapter.ViewHolderItem viewHolderItem = (DailyAppsAdapter.ViewHolderItem) holder;
         final BaseApp app = apps.get(position);
 
         int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, ctx.getResources().getDimension(R.dimen.list_item_icon_size), ctx.getResources().getDisplayMetrics());
@@ -63,8 +63,9 @@ public class SearchAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             viewHolderItem.creatorView.setUserWithText(createdBy.getId(), createdBy.getProfilePicture(), "by", createdBy.getName());
         }
-        viewHolderItem.vote.setBaseApp((App) app);
+        viewHolderItem.vote.setApp((App) app);
         viewHolderItem.vote.setTrackingScreen(SearchAppsAdapter.TAG);
+        viewHolderItem.commentsCount.setText(app.getCommentsCount() + "");
 
 
         View.OnClickListener detailsClickListener = new View.OnClickListener() {

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.api.apphunt.models.apps.App;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
 import com.apphunt.app.api.apphunt.models.votes.AppVote;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 
 public class AppVoteButton extends LinearLayout {
     public static final String TAG = AppVoteButton.class.getSimpleName();
-    private App baseApp;
+    private BaseApp baseApp;
     private LayoutInflater inflater;
     private String screen = "";
 
@@ -121,7 +122,7 @@ public class AppVoteButton extends LinearLayout {
         return baseApp.getVotesCount();
     }
 
-    public void setBaseApp(App baseApp) {
+    public void setApp(BaseApp baseApp) {
         this.baseApp = baseApp;
         updateVoteButton();
     }

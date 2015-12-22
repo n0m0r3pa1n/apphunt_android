@@ -329,7 +329,7 @@ public class AppDetailsFragment extends BackStackFragment {
         }
 
         userId = SharedPreferencesHelper.getStringPreference(Constants.KEY_USER_ID);
-        voteBtn.setBaseApp(baseApp);
+        voteBtn.setApp(baseApp);
         appDescription.setText(baseApp.getDescription());
         rating.setText(String.format("%.1f", baseApp.getRating()));
         rating.setOnClickListener(new View.OnClickListener() {

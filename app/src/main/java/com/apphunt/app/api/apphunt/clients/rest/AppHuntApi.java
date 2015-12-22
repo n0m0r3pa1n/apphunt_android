@@ -129,4 +129,6 @@ public interface AppHuntApi {
     void getBlogPosts(int page, int pageSize);
 
     void getBlogPostFeaturedImage(int postId, int mediaId);
+
+    void loadTrendingApps(String userId, int page, int pageSize);
 }

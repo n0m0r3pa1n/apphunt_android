@@ -3,238 +3,137 @@ package com.apphunt.app.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.apphunt.app.MainActivity;
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.clients.rest.ApiService;
-import com.apphunt.app.constants.Constants;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.models.apps.BaseApp;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
-import com.apphunt.app.event_bus.events.api.apps.LoadAppsApiEvent;
-import com.apphunt.app.event_bus.events.api.apps.LoadSearchedAppsApiEvent;
-import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
-import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
-import com.apphunt.app.event_bus.events.ui.SearchStatusEvent;
-import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
+import com.apphunt.app.event_bus.events.api.apps.GetTrendingAppsApiEvent;
 import com.apphunt.app.ui.adapters.TrendingAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
-import com.apphunt.app.ui.listview_items.AdItem;
 import com.apphunt.app.utils.FlurryWrapper;
-import com.apphunt.app.utils.SoundsUtils;
-import com.apphunt.app.utils.ui.ActionBarUtils;
-import com.apptentive.android.sdk.Apptentive;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
+/**
+ * Created by nmp on 15-12-21.
+ */
 public class TrendingAppsFragment extends BaseFragment {
-    public static final String TAG = TrendingAppsFragment.class.getSimpleName();
 
-    private MainActivity activity;
+    public static final String TAG = TrendingAppsFragment.class.getSimpleName();
+    private Activity activity;
     private TrendingAppsAdapter trendingAppsAdapter;
 
-    @InjectView(R.id.trending_list)
-    RecyclerView rvTrendingApps;
+    private int page = 0, pageSize = 30;
+
 
     @InjectView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @InjectView(R.id.add_app)
-    FloatingActionButton btnAddApp;
+    @InjectView(R.id.trending_list)
+    RecyclerView rvTrendingApps;
 
-    @InjectView(R.id.reload)
-    Button btnReload;
-    private LinearLayoutManager layoutManager;
+    @InjectView(R.id.loading)
+    CircularProgressBar loading;
 
-    private boolean shouldChangeDate;
+
+    public static TrendingAppsFragment newInstance() {
+        return new TrendingAppsFragment();
+    }
+
+    public TrendingAppsFragment() {
+    }
+
 
     private OnEndReachedListener onEndReachedListener = new OnEndReachedListener() {
         @Override
         public void onEndReached() {
             FlurryWrapper.logEvent(TrackingEvents.UserScrolledDownAppList);
-            loadApps();
+            loadTrendingApps();
         }
     };
 
-
-    private void loadApps() {
-        ApiService.getInstance(activity).loadApps(shouldChangeDate);
-    }
-
     private EndlessRecyclerScrollListener endlessRecyclerScrollListener;
-
-    public TrendingAppsFragment() {
-        setFragmentTag(Constants.TAG_APPS_LIST_FRAGMENT);
-        FlurryWrapper.logEvent(TrackingEvents.UserViewedTrendingApps);
-    }
+    private LinearLayoutManager layoutManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trending_apps, container, false);
         ButterKnife.inject(this, view);
-        initUi();
-        ApiService.getInstance(activity).reloadApps();
-
-        return view;
-    }
-
-    public void initUi() {
-        ActionBarUtils.getInstance().showActionBarShadow();
         rvTrendingApps.setItemAnimator(new DefaultItemAnimator());
         layoutManager = new LinearLayoutManager(getActivity());
         rvTrendingApps.setLayoutManager(layoutManager);
         rvTrendingApps.setHasFixedSize(true);
 
-        trendingAppsAdapter = new TrendingAppsAdapter(activity, rvTrendingApps);
+
+        trendingAppsAdapter = new TrendingAppsAdapter(activity, new ArrayList<BaseApp>());
         rvTrendingApps.setAdapter(trendingAppsAdapter);
         endlessRecyclerScrollListener = new EndlessRecyclerScrollListener(onEndReachedListener, layoutManager);
+        endlessRecyclerScrollListener.setVisibleThreshold(15);
         rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
 
+
+        loadTrendingApps();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                loading.setVisibility(View.VISIBLE);
+                page = 0;
+                rvTrendingApps.setAdapter(null);
+                endlessRecyclerScrollListener.reset();
+                trendingAppsAdapter.clearItems();
                 FlurryWrapper.logEvent(TrackingEvents.UserRefreshedTrendingApps);
-                activity.getSupportActionBar().collapseActionView();
-                reloadApps();
                 swipeRefreshLayout.setRefreshing(false);
-                swipeRefreshLayout.setVisibility(View.INVISIBLE);
+                loadTrendingApps();
+                rvTrendingApps.setAdapter(trendingAppsAdapter);
             }
         });
 
+        return view;
     }
 
-    private void reloadApps() {
-        trendingAppsAdapter.resetAdapter();
-        endlessRecyclerScrollListener.reset();
-        if(trendingAppsAdapter.getItemCount() == 0) {
-            trendingAppsAdapter.addItem(0, new AdItem());
-        }
-        ApiService.resetCalendars();
-        ApiService.getInstance(activity).reloadApps();
-    }
-
-    @Override
-    public int getTitle() {
-        return R.string.title_home;
-    }
-
-    @OnClick(R.id.reload)
-    public void onReloadApps() {
-        swipeRefreshLayout.setVisibility(View.VISIBLE);
-        btnReload.setVisibility(View.GONE);
-        reloadApps();
-        btnAddApp.setVisibility(View.VISIBLE);
-        rvTrendingApps.setVisibility(View.VISIBLE);
-    }
-
-    @OnClick(R.id.add_app)
-    public void addApp() {
-        startSelectAppFragment();
-        SoundsUtils.performHapticFeedback(btnAddApp);
-        Apptentive.engage(activity, "user.clicked.add.app");
-    }
-
-    private void startSelectAppFragment() {
-        activity.getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.bounce, R.anim.slide_out_top)
-                .add(R.id.container, new SelectAppFragment(), Constants.TAG_SELECT_APP_FRAGMENT)
-                .addToBackStack(Constants.TAG_SELECT_APP_FRAGMENT)
-                .commit();
-
-        activity.getSupportFragmentManager().executePendingTransactions();
+    private void loadTrendingApps() {
+        page++;
+        ApiClient.getClient(activity).loadTrendingApps(LoginProviderFactory.get(activity).getUser().getId(), page, pageSize);
+        Log.d(TAG, "onEndReached: page" + page);
     }
 
     @Override
     public void onAttach(Activity activity) {
-        this.activity = (MainActivity) activity;
         super.onAttach(activity);
+        this.activity = activity;
+        BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusProvider.getInstance().register(this);
-        getActivity().supportInvalidateOptionsMenu();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
         BusProvider.getInstance().unregister(this);
-
     }
 
     @Subscribe
-    public void onUserLogin(LoginEvent event) {
-        reloadApps();
-    }
-
-    @Subscribe
-    public void onAppsLoaded(LoadAppsApiEvent event) {
-        if(event.getAppsList() == null) {
-            shouldChangeDate = true;
-        } else {
-            shouldChangeDate = !event.getAppsList().haveMoreApps();
-        }
-
-        if(trendingAppsAdapter.getItemCount() == 0) {
-            trendingAppsAdapter.addItem(0, new AdItem());
-        }
-        trendingAppsAdapter.notifyAdapter(event.getAppsList());
-        if(trendingAppsAdapter.getItemCount() < Constants.MIN_TOTAL_APPS_COUNT) {
-            ApiService.getInstance(activity).loadApps(shouldChangeDate);
-        } else {
-            swipeRefreshLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Subscribe
-    public void onAppsSearchLoaded(LoadSearchedAppsApiEvent event) {
-        trendingAppsAdapter.showSearchResult(event.getAppsList().getApps());
-    }
-
-    @Subscribe
-    public void onClearSearch(ClearSearchEvent event) {
-        trendingAppsAdapter.clearSearch();
-        rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
-    }
-
-    @Subscribe
-    public void onSearchStatusChanged(SearchStatusEvent event) {
-        if(event.isSearching()) {
-            rvTrendingApps.removeOnScrollListener(endlessRecyclerScrollListener);
-        } else {
-            rvTrendingApps.addOnScrollListener(endlessRecyclerScrollListener);
-        }
-    }
-
-    @Subscribe
-    public void onNetworkStatus(NetworkStatusChangeEvent event) {
-        if(event.isNetworkAvailable() && btnReload.getVisibility() == View.GONE) {
-            btnReload.setVisibility(View.VISIBLE);
-            rvTrendingApps.setVisibility(View.GONE);
-            swipeRefreshLayout.setVisibility(View.GONE);
-        } else {
-            reloadApps();
-        }
+    public void onTrendingAppsReceived(GetTrendingAppsApiEvent event) {
+        loading.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        Log.d(TAG, "onTrendingAppsReceived: " + event.getAppList().getPage());
+        trendingAppsAdapter.addAll(event.getAppList().getApps());
     }
 }

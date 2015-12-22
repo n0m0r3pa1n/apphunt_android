@@ -51,10 +51,10 @@ import com.apphunt.app.event_bus.events.ui.votes.AppVoteEvent;
 import com.apphunt.app.services.CommentAppService;
 import com.apphunt.app.services.InstallService;
 import com.apphunt.app.ui.fragments.AboutFragment;
+import com.apphunt.app.ui.fragments.AppsFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
-import com.apphunt.app.ui.fragments.TrendingAppsFragment;
 import com.apphunt.app.ui.fragments.actions.CallToActionDialogFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         boolean addToBackStack = false;
         switch (position) {
             case Constants.TRENDING_APPS:
-                fragment = new TrendingAppsFragment();
+                fragment = new AppsFragment();
                 break;
             case Constants.TOP_APPS:
                 fragment = new TopAppsFragment();

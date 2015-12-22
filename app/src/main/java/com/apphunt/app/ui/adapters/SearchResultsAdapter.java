@@ -118,7 +118,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .placeholder(R.drawable.placeholder_avatar)
                     .into(viewHolderItem.creatorImageView);
             viewHolderItem.creatorUsername.setText("by " + app.getCreatedBy().getUsername());
-            viewHolderItem.vote.setBaseApp((App) app);
+            viewHolderItem.vote.setApp((App) app);
             viewHolderItem.vote.setTrackingScreen(SearchResultsFragment.TAG);
 
             viewHolderItem.addToCollection.setOnClickListener(new View.OnClickListener() {

@@ -97,6 +97,27 @@ public class ScrollRecyclerView extends LinearLayout {
         }, layoutManager));
     }
 
+    public void setAdapter(RecyclerView.Adapter adapter, int totalItemsCount, int visibleThreshold) {
+        this.adapter = adapter;
+        recyclerView.setAdapter(adapter);
+        this.totalItemsCount = totalItemsCount;
+
+        final EndlessRecyclerScrollListener listener = new EndlessRecyclerScrollListener(new OnEndReachedListener() {
+            @Override
+            public void onEndReached() {
+                if (ScrollRecyclerView.this.totalItemsCount != -1) {
+                    if (ScrollRecyclerView.this.adapter.getItemCount() >= ScrollRecyclerView.this.totalItemsCount) {
+                        return;
+                    }
+                }
+                ScrollRecyclerView.this.listener.onEndReached();
+            }
+        }, layoutManager);
+
+        listener.setVisibleThreshold(visibleThreshold);
+        recyclerView.addOnScrollListener(listener);
+    }
+
     public RecyclerView getRecyclerView() {
         return recyclerView;
     }

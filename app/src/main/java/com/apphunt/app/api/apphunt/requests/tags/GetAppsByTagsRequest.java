@@ -15,12 +15,12 @@ import com.apphunt.app.event_bus.events.api.apps.AppsSearchResultEvent;
 public class GetAppsByTagsRequest extends BaseGetRequest<AppsList> {
 
     public GetAppsByTagsRequest(String tags, int page, int pageSize, Response.ErrorListener errorListener) {
-        super(BASE_URL + "/apps/tags" + tags + "&page=" + page + "&pageSize=" + pageSize,
+        super(BASE_URL + "/apps/tags" + tags + "page=" + page + "&pageSize=" + pageSize,
                 errorListener);
     }
 
     public GetAppsByTagsRequest(String tags, int page, int pageSize, String userId, Response.ErrorListener errorListener) {
-        super(BASE_URL + "/apps/tags" + tags + "&page=" + page + "&pageSize=" + pageSize +
+        super(BASE_URL + "/apps/tags" + tags + "page=" + page + "&pageSize=" + pageSize +
                 "&userId=" + userId, errorListener);
     }
 

@@ -25,6 +25,7 @@ import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetFilteredAppPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetRandomAppRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetSearchedAppsRequest;
+import com.apphunt.app.api.apphunt.requests.apps.GetTrendingAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetUserAppsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.PostAppRequest;
 import com.apphunt.app.api.apphunt.requests.apps.favourite.FavouriteAppRequest;
@@ -479,6 +480,15 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getBlogPostFeaturedImage(int postId, int mediaId) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetBlogPostFeaturedImageRequest(postId, mediaId, listener));
+    }
+
+    @Override
+    public void loadTrendingApps(String userId, int page, int pageSize) {
+        if(TextUtils.isEmpty(userId)) {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetTrendingAppsRequest(page, pageSize, listener));
+        } else {
+            VolleyInstance.getInstance(context).addToRequestQueue(new GetTrendingAppsRequest(userId, page, pageSize, listener));
+        }
     }
 
     @Override
