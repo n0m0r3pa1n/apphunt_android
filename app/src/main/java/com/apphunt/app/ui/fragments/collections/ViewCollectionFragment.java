@@ -178,8 +178,10 @@ public class ViewCollectionFragment extends BackStackFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem deleteCollectionAction = menu.findItem(R.id.action_delete_collection);
-        if(appsCollection != null && appsCollection.isOwnedByCurrentUser(activity)) {
+        if(appsCollection != null && appsCollection.isOwnedByCurrentUser(activity) && activity.getSupportFragmentManager().getBackStackEntryCount() == 1) {
             deleteCollectionAction.setVisible(true);
+        } else {
+            deleteCollectionAction.setVisible(false);
         }
     }
 

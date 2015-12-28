@@ -10,7 +10,7 @@ public class Constants {
 //    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
     public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
-//    public static final String MAIN_URL = "e77ac3dc.ngrok.io";
+//    public static final String MAIN_URL = "12fe4f95.ngrok.io";
 
     public static final String BASE_SOCKET_URL = "http://" + MAIN_URL + "";
     public static final String BASE_URL = "http://" + MAIN_URL + "";
@@ -149,7 +149,7 @@ public class Constants {
     public static final int HELP_TOP_HUNTERS_POINTS = 14;
 
     public static final int MIN_TOTAL_APPS_COUNT = 10;
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGE_SIZE = 10;
     public static final int COMMENTS_PAGE_SIZE = 10;
     public static final int MIN_COLLECTION_APPS_COUNT = 4;
     public static final int MIN_HISTORY_EVENTS_COUNT = 10;

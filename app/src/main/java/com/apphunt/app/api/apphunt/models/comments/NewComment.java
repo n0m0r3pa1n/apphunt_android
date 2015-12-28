@@ -2,10 +2,11 @@ package com.apphunt.app.api.apphunt.models.comments;
 
 public class NewComment {
 
-    private String appId;
     private String userId;
     private String text;
     private String parentId;
+    private String appId;
+    private String mentionedUserId;
 
     public String getAppId() {
         return appId;
@@ -37,5 +38,9 @@ public class NewComment {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public void setMentionedUserId(String mentionedUserId) {
+        this.mentionedUserId = mentionedUserId;
     }
 }

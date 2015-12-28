@@ -58,7 +58,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<TrendingAppsAdapte
 
         Picasso.with(context).load(app.getIcon()).resize(size, size).into(holder.icon);
 
-        holder.title.setText(StringUtils.htmlDecodeString(app.getName()));
+        holder.title.setText(position  + 1 + ". " + StringUtils.htmlDecodeString(app.getName()));
         if(!app.getCategories().isEmpty()) {
             holder.category.setText(app.getCategories().get(0));
         }
