@@ -29,7 +29,8 @@ import com.apphunt.app.ui.adapters.DailyAppsAdapter;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.interfaces.OnEndReachedListener;
 import com.apphunt.app.ui.listeners.EndlessRecyclerScrollListener;
-import com.apphunt.app.ui.listview_items.AdItem;
+import com.apphunt.app.ui.listview_items.AppHuntAdItem;
+import com.apphunt.app.ui.listview_items.PaidAdItem;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.SoundsUtils;
 import com.apphunt.app.utils.ui.ActionBarUtils;
@@ -68,6 +69,7 @@ public class DailyAppsFragment extends BaseFragment {
             loadApps();
         }
     };
+    private int appsLoadedEventCount = 0;
 
 
     private void loadApps() {
@@ -117,10 +119,11 @@ public class DailyAppsFragment extends BaseFragment {
     }
 
     private void reloadApps() {
+        appsLoadedEventCount = 0;
         dailyAppsAdapter.resetAdapter();
         endlessRecyclerScrollListener.reset();
         if(dailyAppsAdapter.getItemCount() == 0) {
-            dailyAppsAdapter.addItem(0, new AdItem());
+            dailyAppsAdapter.addItem(0, new AppHuntAdItem());
         }
         ApiService.resetCalendars();
         ApiService.getInstance(activity).reloadApps();
@@ -196,8 +199,13 @@ public class DailyAppsFragment extends BaseFragment {
         }
 
         if(dailyAppsAdapter.getItemCount() == 0) {
-            dailyAppsAdapter.addItem(0, new AdItem());
+            dailyAppsAdapter.addItem(0, new AppHuntAdItem());
         }
+
+        if(appsLoadedEventCount % 2 == 0) {
+            dailyAppsAdapter.addItem(new PaidAdItem());
+        }
+
         dailyAppsAdapter.notifyAdapter(event.getAppsList());
         if(dailyAppsAdapter.getItemCount() < Constants.MIN_TOTAL_APPS_COUNT) {
             ApiService.getInstance(activity).loadApps(shouldChangeDate);

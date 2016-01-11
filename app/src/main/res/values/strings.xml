@@ -216,4 +216,7 @@
     <string name="refresh">Refresh</string>
     <string name="news_title">News</string>
     <string name="rules">Rules</string>
+
+    <string name="banner_TEST_ad_unit">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9519778957198712/8104477783</string>
 </resources>

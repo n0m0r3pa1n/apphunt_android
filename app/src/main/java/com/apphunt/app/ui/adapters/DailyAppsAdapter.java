@@ -26,8 +26,9 @@ import com.apphunt.app.ui.fragments.DailyAppsFragment;
 import com.apphunt.app.ui.listview_items.AppItem;
 import com.apphunt.app.ui.listview_items.Item;
 import com.apphunt.app.ui.listview_items.SeparatorItem;
-import com.apphunt.app.ui.views.AdView;
+import com.apphunt.app.ui.views.ads.AppHuntAdView;
 import com.apphunt.app.ui.views.CreatorView;
+import com.apphunt.app.ui.views.ads.PaidAdView;
 import com.apphunt.app.ui.views.vote.AppVoteButton;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.StringUtils;
@@ -67,6 +68,10 @@ public class DailyAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void addItem(int position, Item item) {
         items.add(position, item);
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
     }
 
     public void notifyAdapter(AppsList appsList) {
@@ -160,10 +165,14 @@ public class DailyAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (viewType == Constants.ItemType.SEPARATOR.getValue()) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_app_list_header, parent, false);
             viewHolderItem = new ViewHolderSeparator(view);
-        } else if(viewType == Constants.ItemType.AD.getValue()) {
-            view = new AdView(ctx);
+        } else if(viewType == Constants.ItemType.APPHUNT_AD.getValue()) {
+            view = new AppHuntAdView(ctx);
             view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             viewHolderItem = new ViewHolderAd(view);
+        } else if(viewType == Constants.ItemType.PAID_AD.getValue()) {
+            view = new PaidAdView(ctx);
+            view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+            viewHolderItem = new ViewHolderPaidAd(view);
         }
 
         return viewHolderItem;
@@ -209,6 +218,9 @@ public class DailyAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (getItemViewType(position) == Constants.ItemType.SEPARATOR.getValue()) {
             ViewHolderSeparator viewHolderSeparator = (ViewHolderSeparator) holder;
             viewHolderSeparator.header.setText(((SeparatorItem) getItem(position)).getData());
+        } else if(getItemViewType(position) == Constants.ItemType.PAID_AD.getValue()) {
+            ViewHolderPaidAd viewHolderAd = (ViewHolderPaidAd) holder;
+            viewHolderAd.paidAdView.loadAd();
         }
     }
 
@@ -268,6 +280,16 @@ public class DailyAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public ViewHolderSeparator(View view) {
             super(view);
             ButterKnife.inject(this, view);
+        }
+    }
+
+    static class ViewHolderPaidAd extends RecyclerView.ViewHolder{
+
+        PaidAdView paidAdView;
+
+        public ViewHolderPaidAd(View view) {
+            super(view);
+            paidAdView = (PaidAdView) view;
         }
     }
 

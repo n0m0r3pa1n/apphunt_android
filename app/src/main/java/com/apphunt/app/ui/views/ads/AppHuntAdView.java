@@ -1,4 +1,4 @@
-package com.apphunt.app.ui.views;
+package com.apphunt.app.ui.views.ads;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -32,7 +32,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 /**
  * Created by nmp on 15-11-30.
  */
-public class AdView extends LinearLayout {
+public class AppHuntAdView extends LinearLayout {
 
     private LayoutInflater inflater;
 
@@ -42,21 +42,21 @@ public class AdView extends LinearLayout {
     @InjectView(R.id.loading)
     CircularProgressBar circularProgressBar;
 
-    public AdView(Context context) {
+    public AppHuntAdView(Context context) {
         super(context);
         if(!isInEditMode()) {
             init(context);
         }
     }
 
-    public AdView(Context context, AttributeSet attrs) {
+    public AppHuntAdView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if(!isInEditMode()) {
             init(context);
         }
     }
 
-    public AdView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AppHuntAdView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if(!isInEditMode()) {
             init(context);
@@ -64,7 +64,7 @@ public class AdView extends LinearLayout {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public AdView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public AppHuntAdView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         if(!isInEditMode()) {
             init(context);
@@ -102,7 +102,7 @@ public class AdView extends LinearLayout {
     }
 
     private void init(Context context) {
-        View view = getLayoutInflater().inflate(R.layout.layout_ad, this, true);
+        View view = getLayoutInflater().inflate(R.layout.layout_apphunt_ad, this, true);
         ButterKnife.inject(this, view);
         ApiClient.getClient(context).getAd();
     }

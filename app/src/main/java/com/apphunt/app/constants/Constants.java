@@ -149,7 +149,7 @@ public class Constants {
     public static final int HELP_TOP_HUNTERS_POINTS = 14;
 
     public static final int MIN_TOTAL_APPS_COUNT = 10;
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGE_SIZE = 15;
     public static final int COMMENTS_PAGE_SIZE = 10;
     public static final int MIN_COLLECTION_APPS_COUNT = 4;
     public static final int MIN_HISTORY_EVENTS_COUNT = 10;
@@ -158,7 +158,7 @@ public class Constants {
 
     public enum ItemType {
         SEPARATOR(0), ITEM(1),
-        COMMENT(2), SUBCOMMENT(3), COLLECTION(4), AD(5);
+        COMMENT(2), SUBCOMMENT(3), COLLECTION(4), APPHUNT_AD(5), PAID_AD(6);
 
         private int value;
 
