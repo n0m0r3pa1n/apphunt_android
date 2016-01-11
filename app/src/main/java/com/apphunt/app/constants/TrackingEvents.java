@@ -110,4 +110,10 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserUnfavouritedApp = "user.unfavourited.app";
     String UserSwitchedToComments = "user.switched.to.comments";
     String UserSwitchedToGallery = "user.switched.to.gallery";
+    String UserSwitchedDailyApps = "user.switched.daily.apps";
+    String UserSwitchedTrendingApps = "user.switched.trending.apps";
+    String UserRefreshedDailyApps = "user.refreshed.daily.apps";
+    String UserScrolledDownTrendingAppList = "user.scrolled.down.trending.app.list";
+    String UserOpenedAppDetailsFromTrendingApps = "user.opened.app.from.trending.apps";
+    String UserOpenedAppFromDailyApps = "user.opened.app.from.daily.apps";
 }

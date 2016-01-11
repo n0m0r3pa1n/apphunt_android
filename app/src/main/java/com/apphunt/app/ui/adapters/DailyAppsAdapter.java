@@ -204,6 +204,7 @@ public class DailyAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     try {
+                        FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppFromDailyApps);
                         NavUtils.getInstance((AppCompatActivity) ctx).presentAppDetailsFragment(app.getId());
                     } catch (Exception e) {
                         Log.e(TAG, "Couldn't get the shortUrl");

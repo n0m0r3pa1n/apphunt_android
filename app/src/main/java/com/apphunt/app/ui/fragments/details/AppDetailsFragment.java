@@ -425,7 +425,6 @@ public class AppDetailsFragment extends BackStackFragment {
     }
 
     public void sendComment() {
-        Log.d(TAG, "sendComment: ");
         send.setClickable(false);
         send.setEnabled(false);
         NewComment comment = new NewComment();
@@ -441,6 +440,7 @@ public class AppDetailsFragment extends BackStackFragment {
                     } else {
                         comment.setParentId(replyToComment.getParent());
                     }
+                    comment.setMentionedUserId(replyToComment.getUser().getId());
                     FlurryWrapper.logEvent(TrackingEvents.UserSentReplyComment);
                 }
             } else {

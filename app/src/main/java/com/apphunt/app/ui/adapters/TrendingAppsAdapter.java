@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.models.apps.BaseApp;
-import com.apphunt.app.api.apphunt.models.posts.BlogPost;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.ui.fragments.TrendingAppsFragment;
@@ -59,7 +58,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<TrendingAppsAdapte
 
         Picasso.with(context).load(app.getIcon()).resize(size, size).into(holder.icon);
 
-        holder.title.setText(StringUtils.htmlDecodeString(app.getName()));
+        holder.title.setText(position  + 1 + ". " + StringUtils.htmlDecodeString(app.getName()));
         if(!app.getCategories().isEmpty()) {
             holder.category.setText(app.getCategories().get(0));
         }
@@ -75,7 +74,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<TrendingAppsAdapte
             @Override
             public void onClick(View v) {
                 try {
-                    NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
+                    openAppDetailsFragment(app);
                 } catch (Exception e) {
                     Log.e(TAG, "Couldn't get the shortUrl");
                     e.printStackTrace();
@@ -89,7 +88,7 @@ public class TrendingAppsAdapter extends RecyclerView.Adapter<TrendingAppsAdapte
     }
 
     private void openAppDetailsFragment(BaseApp app) {
-        FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppDetailsFromTopApps);
+        FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppDetailsFromTrendingApps);
         NavUtils.getInstance((AppCompatActivity) context).presentAppDetailsFragment(app.getId());
     }
 
