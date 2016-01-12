@@ -37,7 +37,7 @@ public class WebviewActivity extends AppCompatActivity {
     @InjectView(R.id.pB1)
     ProgressBar Pbar;
 
-    private String url, title = "";
+    private String pageUrl, title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class WebviewActivity extends AppCompatActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
 
-        url = getIntent().getStringExtra(Constants.EXTRA_URL);
-        toolbar.setSubtitle(url);
+        pageUrl = getIntent().getStringExtra(Constants.EXTRA_URL);
+        toolbar.setSubtitle(pageUrl);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Activity activity = this;
@@ -96,7 +96,7 @@ public class WebviewActivity extends AppCompatActivity {
             }
         });
 
-        webView.loadUrl(url);
+        webView.loadUrl(pageUrl);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class WebviewActivity extends AppCompatActivity {
         // Add data to the intent, the receiving app will decide
         // what to do with it.
         share.putExtra(Intent.EXTRA_SUBJECT, title);
-        share.putExtra(Intent.EXTRA_TEXT, url);
+        share.putExtra(Intent.EXTRA_TEXT, pageUrl);
 
         startActivity(Intent.createChooser(share, "Share link with:"));
     }

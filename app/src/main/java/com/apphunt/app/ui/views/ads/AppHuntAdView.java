@@ -1,8 +1,11 @@
 package com.apphunt.app.ui.views.ads;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -128,6 +131,18 @@ public class AppHuntAdView extends LinearLayout {
                 FlurryWrapper.logEvent(TrackingEvents.UserOpenedAdd, new HashMap<String, String>() {{
                     put("url", url);
                 }});
+                if (url.contains("play.google.com/store/apps/details?id=")) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        Activity host = (Activity) view.getContext();
+                        host.startActivity(intent);
+                        return;
+                    } catch (ActivityNotFoundException e) {
+                        Crashlytics.logException(e);
+                    }
+                }
+
                 Intent intent = new Intent(getContext(), WebviewActivity.class);
                 intent.putExtra(Constants.EXTRA_URL, url);
                 getContext().startActivity(intent);
