@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.utils.FlurryWrapper;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -88,6 +90,12 @@ public class PaidAdView extends LinearLayout {
                 super.onAdLoaded();
                 isAdLoaded = true;
                 Log.d(TAG, "onAdLoaded: ");
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedPaidAdd);
             }
         });
         adView.loadAd(adRequest);

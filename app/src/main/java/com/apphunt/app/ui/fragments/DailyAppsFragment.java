@@ -192,6 +192,7 @@ public class DailyAppsFragment extends BaseFragment {
 
     @Subscribe
     public void onAppsLoaded(LoadAppsApiEvent event) {
+        appsLoadedEventCount++;
         if(event.getAppsList() == null) {
             shouldChangeDate = true;
         } else {
@@ -202,7 +203,7 @@ public class DailyAppsFragment extends BaseFragment {
             dailyAppsAdapter.addItem(0, new AppHuntAdItem());
         }
 
-        if(appsLoadedEventCount % 2 == 0) {
+        if(appsLoadedEventCount == 2 || appsLoadedEventCount % 4 == 0) {
             dailyAppsAdapter.addItem(new PaidAdItem());
         }
 
