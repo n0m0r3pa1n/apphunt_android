@@ -94,6 +94,8 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserRemovedApp = "user.removed.app";
     String UserOpenedAdd = "user.opened.add";
     String UserOpenedPaidAdd = "user.opened.paid.ad";
+    String UserOpenedPaidInterstitialAd = "user.opened.paid.interstitial.ad";
+    String UserViewedPaidInterstitialAd = "user.viewed.paid.interstitial.ad";
     String UserDisabledDailyNotification = "user.disabled.daily.notification";
     String UserEnabledDailyNotification = "user.enabled.daily.notification";
     String UserEnabledInstalledAppNotification = "user.enabled.installed.app.notification";

@@ -19,6 +19,7 @@ import com.apphunt.app.api.apphunt.models.users.NamesList;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.ads.GetAdRequest;
+import com.apphunt.app.api.apphunt.requests.ads.GetAdStatusRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsByPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
@@ -70,9 +71,12 @@ import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
+import com.apphunt.app.auth.LoginProviderFactory;
+import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.ApiErrorEvent;
+import com.apphunt.app.utils.SharedPreferencesHelper;
 import com.google.gson.JsonArray;
 
 import java.text.SimpleDateFormat;
@@ -489,6 +493,14 @@ public class AppHuntApiClient implements AppHuntApi {
         } else {
             VolleyInstance.getInstance(context).addToRequestQueue(new GetTrendingAppsRequest(userId, page, pageSize, listener));
         }
+    }
+
+    @Override
+    public void getAdStatus(String userId, String appPackage) {
+        int adLoadNumber = SharedPreferencesHelper.getIntPreference(Constants.KEY_AD_LOAD_NUMBER, 0);
+        adLoadNumber++;
+        SharedPreferencesHelper.setPreference(Constants.KEY_AD_LOAD_NUMBER, adLoadNumber);
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetAdStatusRequest(userId, adLoadNumber, appPackage));
     }
 
     @Override

@@ -1,2 +1,3 @@
 1. Change url to production server
 2. Change build gradle version and versionCode
+3. Update interstitial ad production code from strings.xml

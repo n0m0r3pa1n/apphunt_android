@@ -7,8 +7,8 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
-//    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "apphunt.herokuapp.com";
+    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
+//    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
 //    public static final String MAIN_URL = "12fe4f95.ngrok.io";
 
@@ -54,6 +54,7 @@ public class Constants {
     public static final String KEY_LAST_SEEN_EVENT_DATE = "last_seen_event_date";
     public static final String KEY_LATEST_APP_VERSION = "latest_app_version";
     public static final String KEY_CALL_TO_ACTION = "call_to_action_displayed";
+    public static final String KEY_AD_LOAD_NUMBER = "ad_number";
 
     public static final String PLATFORM = "Android";
 

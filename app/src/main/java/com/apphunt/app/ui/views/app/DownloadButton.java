@@ -15,10 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apphunt.app.R;
+import com.apphunt.app.api.apphunt.VolleyInstance;
+import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.clients.rest.AppHuntApiClient;
+import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.db.models.ClickedApp;
+import com.apphunt.app.event_bus.BusProvider;
+import com.apphunt.app.event_bus.events.api.ads.AdStatusApiEvent;
+import com.apphunt.app.event_bus.events.api.ads.AdStatusErrorApiEvent;
 import com.apphunt.app.utils.FlurryWrapper;
 import com.apphunt.app.utils.PackagesUtils;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.squareup.otto.Subscribe;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +39,10 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class DownloadButton extends LinearLayout {
+    public static final String TAG = DownloadButton.class.getSimpleName();
+
+    private InterstitialAd interstitialAd;
+
     private TextView textView;
 
     private String appPackage;
@@ -67,6 +82,26 @@ public class DownloadButton extends LinearLayout {
     }
 
     private void init(final Context context, AttributeSet attrs) {
+        interstitialAd = new InterstitialAd(context);
+        interstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_TEST_ad_unit));
+
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                FlurryWrapper.logEvent(TrackingEvents.UserOpenedPaidInterstitialAd);
+            }
+
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                openApp();
+            }
+        });
+
+        requestNewInterstitial();
+
+
         View view = LayoutInflater.from(context).inflate(R.layout.view_flat_blue_button, this, true);
         textView = (TextView) view.findViewById(R.id.tv_download);
 
@@ -88,22 +123,75 @@ public class DownloadButton extends LinearLayout {
                     return;
                 }
 
-                Map<String, String> params = new HashMap<>();
-                params.put("appPackage", appPackage);
-                params.put("screen", screen);
-
-                if (PackagesUtils.isPackageInstalled(appPackage, getContext())) {
-                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
-                    Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackage);
-                    getContext().startActivity(intent);
-                } else {
-                    FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
-                    PackagesUtils.openInMarket(getContext(), appPackage);
-
-                    updateOrCreateClickedAppObject();
+                if(TextUtils.isEmpty(LoginProviderFactory.get(context).getUser().getId())) {
+                    if(interstitialAd.isLoaded()) {
+                        FlurryWrapper.logEvent(TrackingEvents.UserViewedPaidInterstitialAd);
+                        interstitialAd.show();
+                    } else {
+                        openApp();
+                    }
+                    return;
                 }
+
+                ApiClient.getClient(context).getAdStatus(LoginProviderFactory.get(context).getUser().getId(), appPackage);
             }
         });
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        BusProvider.getInstance().register(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void onAdStatusReceived(AdStatusApiEvent event) {
+        if(!event.getAppPackage().equals(appPackage)) {
+            return;
+        }
+
+        if(event.getAdStatus().shouldShowAd()) {
+            if(interstitialAd.isLoaded()) {
+                FlurryWrapper.logEvent(TrackingEvents.UserViewedPaidInterstitialAd);
+                interstitialAd.show();
+            } else {
+                openApp();
+            }
+        } else {
+            openApp();
+        }
+    }
+
+    @Subscribe
+    public void onAdStatusError(AdStatusErrorApiEvent event) {
+        if(!event.getAppPackage().equals(appPackage)) {
+            return;
+        }
+
+        openApp();
+    }
+
+    private void openApp() {
+        Map<String, String> params = new HashMap<>();
+        params.put("appPackage", appPackage);
+        params.put("screen", screen);
+
+        if (PackagesUtils.isPackageInstalled(appPackage, getContext())) {
+            FlurryWrapper.logEvent(TrackingEvents.UserOpenedInstalledApp, params);
+            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(appPackage);
+            getContext().startActivity(intent);
+        } else {
+            FlurryWrapper.logEvent(TrackingEvents.UserOpenedAppInMarket, params);
+            PackagesUtils.openInMarket(getContext(), appPackage);
+
+            updateOrCreateClickedAppObject();
+        }
     }
 
     private void updateOrCreateClickedAppObject() {
@@ -132,4 +220,13 @@ public class DownloadButton extends LinearLayout {
         }
 
     }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(TAG)
+                .build();
+
+        interstitialAd.loadAd(adRequest);
+    }
+
 }
