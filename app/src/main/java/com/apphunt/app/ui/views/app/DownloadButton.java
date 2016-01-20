@@ -83,7 +83,7 @@ public class DownloadButton extends LinearLayout {
 
     private void init(final Context context, AttributeSet attrs) {
         interstitialAd = new InterstitialAd(context);
-        interstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_TEST_ad_unit));
+        interstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
 
         interstitialAd.setAdListener(new AdListener() {
             @Override

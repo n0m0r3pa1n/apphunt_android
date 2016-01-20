@@ -20,6 +20,7 @@ import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.api.apphunt.requests.GetNotificationRequest;
 import com.apphunt.app.api.apphunt.requests.ads.GetAdRequest;
 import com.apphunt.app.api.apphunt.requests.ads.GetAdStatusRequest;
+import com.apphunt.app.api.apphunt.requests.ads.GetUserAdStatusRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppDetailsRequest;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsByPackages;
 import com.apphunt.app.api.apphunt.requests.apps.GetAppsRequest;
@@ -501,6 +502,11 @@ public class AppHuntApiClient implements AppHuntApi {
         adLoadNumber++;
         SharedPreferencesHelper.setPreference(Constants.KEY_AD_LOAD_NUMBER, adLoadNumber);
         VolleyInstance.getInstance(context).addToRequestQueue(new GetAdStatusRequest(userId, adLoadNumber, appPackage));
+    }
+
+    @Override
+    public void getUserAdStatus(String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserAdStatusRequest(userId, listener));
     }
 
     @Override

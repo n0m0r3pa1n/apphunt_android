@@ -51,15 +51,6 @@
         />
 
     <item
-        android:id="@+id/action_ad_status"
-        android:title="@string/action_history"
-        android:actionLayout="@layout/action_history"
-        app:actionLayout="@layout/action_history"
-        app:showAsAction="ifRoom"
-        android:showAsAction="ifRoom"
-        />
-
-    <item
         android:id="@+id/action_history"
         android:title="@string/action_history"
         android:actionLayout="@layout/action_history"

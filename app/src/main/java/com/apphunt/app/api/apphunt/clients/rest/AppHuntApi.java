@@ -133,4 +133,6 @@ public interface AppHuntApi {
     void loadTrendingApps(String userId, int page, int pageSize);
 
     void getAdStatus(String userId, String appPackage);
+
+    void getUserAdStatus(String userId);
 }

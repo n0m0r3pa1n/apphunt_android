@@ -119,4 +119,5 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserScrolledDownTrendingAppList = "user.scrolled.down.trending.app.list";
     String UserOpenedAppDetailsFromTrendingApps = "user.opened.app.from.trending.apps";
     String UserOpenedAppFromDailyApps = "user.opened.app.from.daily.apps";
+    String UserViewedAdStatusDialog = "user.viewed.ad.status.dialog";
 }

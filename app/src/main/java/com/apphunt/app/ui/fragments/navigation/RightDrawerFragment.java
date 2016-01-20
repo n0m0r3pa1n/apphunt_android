@@ -127,7 +127,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
                     adapter = new HistoryAdapter(activity, rows);
                     historyEventsList.setAdapter(adapter);
                 } else {
-                    if (adapter.getRow(0).getDate().equals(event.getCreatedAt()) == false) {
+                    if (adapter.getRow(0) != null && adapter.getRow(0).getDate().equals(event.getCreatedAt()) == false) {
                         adapter.addRow(0, new HeaderHistoryRow(event.getCreatedAt()));
                     }
                     adapter.addRow(1, row);

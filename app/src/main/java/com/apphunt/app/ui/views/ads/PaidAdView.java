@@ -83,7 +83,7 @@ public class PaidAdView extends LinearLayout {
             return;
         }
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("028F5B0702B89166E8DA7A28A19F31B6").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
