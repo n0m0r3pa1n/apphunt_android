@@ -1,13 +1,10 @@
 package com.apphunt.app.api.apphunt.clients.sockets;
 
-import android.util.Log;
-
+import com.apphunt.app.api.apphunt.clients.sockets.SocketConnectionManager.OnRefreshListener;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
-import com.apphunt.app.constants.Constants;
 import com.apphunt.app.utils.GsonInstance;
 import com.crashlytics.android.Crashlytics;
 import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.reflect.TypeToken;
 
@@ -15,29 +12,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryConnectionManager {
-    public static final String TAG = HistoryConnectionManager.class.getSimpleName();
-
-    private static HistoryConnectionManager historyConnectionManager;
-
+/**
+ * Created by nmp on 16-1-27.
+ */
+public class HistoryConnectionManager extends BaseConnectionManager {
     private List<OnRefreshListener> listeners = new ArrayList<>();
-
-    private Socket socket;
-    private boolean isConnecting = false;
-
-    {
-        try {
-            socket = IO.socket(Constants.BASE_SOCKET_URL);
-        } catch (URISyntaxException e) {
-            Log.d(TAG, "instance initializer " + e);
-            Crashlytics.logException(e);
-            e.printStackTrace();
-        }
-    }
 
     private Emitter.Listener onRefresh = new Emitter.Listener() {
         @Override
@@ -68,48 +50,17 @@ public class HistoryConnectionManager {
         }
     };
 
-    private HistoryConnectionManager() {}
-
-    public static HistoryConnectionManager getInstance() {
-        if(historyConnectionManager == null) {
-            historyConnectionManager = new HistoryConnectionManager();
-        }
-
-        return historyConnectionManager;
-    }
-
-    public void emitAddUser(String userId) {
-        connectIfNotConnected();
-        try {
-            socket.emit("add user", userId);
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-        }
-    }
-
-
-    private void connectIfNotConnected() {
-        if(socket != null && !socket.connected() && !isConnecting) {
-            isConnecting = true;
-            socket.on("refresh", onRefresh);
-            socket.on("unseen events", onUnseenEvents);
-            socket.connect();
-        }
-    }
-
-    public void emitLastSeenId(String userId, String eventId, String date) {
-        connectIfNotConnected();
-        try {
-            socket.emit("last seen event", userId, eventId, date);
-        } catch (Exception e) {
-            Crashlytics.logException(e);
-        }
+    public HistoryConnectionManager(Socket socket) {
+        super(socket);
+        socket.on("refresh", onRefresh);
+        socket.on("unseen events", onUnseenEvents);
     }
 
     public void addRefreshListener(OnRefreshListener listener) {
         connectIfNotConnected();
         listeners.add(listener);
     }
+
 
     public void removeRefreshListener(OnRefreshListener listener) {
         listeners.remove(listener);
@@ -127,15 +78,27 @@ public class HistoryConnectionManager {
         }
     }
 
+    public void emitAddUserToHistory(String userId) {
+        connectIfNotConnected();
+        try {
+            socket.emit("add user", userId);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
+    }
+
+    public void emitLastSeenEventId(String userId, String eventId, String date) {
+        connectIfNotConnected();
+        try {
+            socket.emit("last seen event", userId, eventId, date);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        }
+    }
+
     public void notifyListenersForUnseenEvents(List<String> ids) {
         for(int i=0; i < listeners.size(); i++) {
             listeners.get(i).onUnseenEvents(ids);
         }
-    }
-
-
-    public interface OnRefreshListener {
-        void onRefresh(HistoryEvent event);
-        void onUnseenEvents(List<String> ids);
     }
 }

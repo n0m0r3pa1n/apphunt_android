@@ -43,6 +43,7 @@ import static com.apphunt.app.constants.Constants.SUGGESTIONS;
 import static com.apphunt.app.constants.Constants.TOP_APPS;
 import static com.apphunt.app.constants.Constants.TOP_HUNTERS;
 import static com.apphunt.app.constants.Constants.TRENDING_APPS;
+import static com.apphunt.app.constants.Constants.CHAT;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -165,6 +166,8 @@ public class NavigationDrawerFragment extends Fragment implements OnItemClickLis
                 return R.drawable.ic_community;
             case SUGGESTIONS - 1:
                 return R.drawable.ic_feedback;
+            case CHAT - 1:
+                return R.drawable.ic_comment_multiple_outline;
             case SETTINGS - 1:
                 return R.drawable.ic_settings;
             case HELP_ADD_APP - 2:

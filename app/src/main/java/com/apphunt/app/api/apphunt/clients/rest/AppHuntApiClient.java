@@ -59,6 +59,7 @@ import com.apphunt.app.api.apphunt.requests.users.GetFilterFriendsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFollowersRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetFollowingsRequest;
 import com.apphunt.app.api.apphunt.requests.users.GetUserHistoryRequest;
+import com.apphunt.app.api.apphunt.requests.users.GetUserHunterStatus;
 import com.apphunt.app.api.apphunt.requests.users.GetUserProfileRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUserRequest;
 import com.apphunt.app.api.apphunt.requests.users.PostFollowUsersRequest;
@@ -72,7 +73,6 @@ import com.apphunt.app.api.apphunt.requests.votes.DeleteCommentVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostAppVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCollectionVoteRequest;
 import com.apphunt.app.api.apphunt.requests.votes.PostCommentVoteRequest;
-import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.Constants.LoginProviders;
 import com.apphunt.app.event_bus.BusProvider;
@@ -512,6 +512,11 @@ public class AppHuntApiClient implements AppHuntApi {
     @Override
     public void getUserHistory(String userId, Date date) {
         VolleyInstance.getInstance(context).addToRequestQueue(new GetUserHistoryRequest(userId, dateFormat.format(date), listener));
+    }
+
+    @Override
+    public void getUserHunterStatus(String userId) {
+        VolleyInstance.getInstance(context).addToRequestQueue(new GetUserHunterStatus(userId, listener));
     }
 
     private String getFormattedQuery(String q) {

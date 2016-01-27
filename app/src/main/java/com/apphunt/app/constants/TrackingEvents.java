@@ -36,6 +36,7 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserDisabledSound = "user.disabled.sound";
     String UserEnabledSound = "user.enabled.sound";
     String UserViewedSettings = "user.viewed.settings";
+    String UserViewedTopHuntersStatus = "user.viewed.top.hunter.status";
     String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
     String UserOpenedAppDetailsFromTopApps = "user.opened.apps.details.from.top.apps";
     String UserOpenedProfileFromComment = "user.opened.profile.from.comment";

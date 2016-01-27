@@ -135,4 +135,6 @@ public interface AppHuntApi {
     void getAdStatus(String userId, String appPackage);
 
     void getUserAdStatus(String userId);
+
+    void getUserHunterStatus(String userId);
 }

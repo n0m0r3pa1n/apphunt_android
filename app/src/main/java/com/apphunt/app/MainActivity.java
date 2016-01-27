@@ -504,6 +504,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
                 addToBackStack = true;
                 break;
+            case Constants.CHAT:
+                Intent i = new Intent(this, ChatActivity.class);
+                startActivity(i);
+                navigationDrawerFragment.markSelectedPosition(Constants.TRENDING_APPS);
+                return;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
