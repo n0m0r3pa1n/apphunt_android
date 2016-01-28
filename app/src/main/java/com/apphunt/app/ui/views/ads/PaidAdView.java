@@ -7,22 +7,17 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.apphunt.app.R;
-import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
 import com.apphunt.app.constants.TrackingEvents;
-import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.utils.FlurryWrapper;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
  * Created by nmp on 15-11-30.
@@ -83,7 +78,7 @@ public class PaidAdView extends LinearLayout {
             return;
         }
 
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("028F5B0702B89166E8DA7A28A19F31B6").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
