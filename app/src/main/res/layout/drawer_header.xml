@@ -51,9 +51,19 @@
             android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
             android:paddingTop="2dp"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             app:typefacePath="fonts/OpenSans-Light.ttf"/>
+
+        <com.apphunt.app.ui.views.ads.AdStatusView
+            android:id="@+id/ad_status_button"
+            android:background="@drawable/ic_adb_on"
+            android:layout_toLeftOf="@+id/logout_button"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/logout_button"

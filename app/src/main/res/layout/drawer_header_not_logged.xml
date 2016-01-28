@@ -31,4 +31,13 @@
         android:textSize="18sp"
         android:background="@android:color/transparent"
         app:typefacePath="fonts/OpenSans-Bold.ttf"/>
+
+    <com.apphunt.app.ui.views.ads.AdStatusView
+        android:id="@+id/ad_status_button"
+        android:background="@drawable/ic_adb_on"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

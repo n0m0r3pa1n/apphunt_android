@@ -7,8 +7,8 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.apphunt.app";
 
     //TODO: use production url before release
-//    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
-    public static final String MAIN_URL = "apphunt.herokuapp.com";
+    public static final String MAIN_URL = "apphunt-dev.herokuapp.com";
+//    public static final String MAIN_URL = "apphunt.herokuapp.com";
 //    public static final String MAIN_URL = "10.0.3.2:8080";
 //    public static final String MAIN_URL = "12fe4f95.ngrok.io";
 
@@ -54,6 +54,7 @@ public class Constants {
     public static final String KEY_LAST_SEEN_EVENT_DATE = "last_seen_event_date";
     public static final String KEY_LATEST_APP_VERSION = "latest_app_version";
     public static final String KEY_CALL_TO_ACTION = "call_to_action_displayed";
+    public static final String KEY_AD_LOAD_NUMBER = "ad_number";
 
     public static final String PLATFORM = "Android";
 
@@ -72,6 +73,7 @@ public class Constants {
     public static final String TAG_SELECT_APP_FRAGMENT = "add_app_fragment";
     public static final String TAG_SAVE_APP_FRAGMENT = "add_save_fragment";
     public static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
+    public static final String TAG_TOP_HUNTERS_STATUS_FRAGMENT = "top_hunters_status_fragment";
     public static final String TAG_NOTIFICATION_FRAGMENT = "notification_fragment";
     public static final String TAG_SUGGEST_FRAGMENT = "suggest_fragment";
     public static final String TAG_APP_DETAILS_FRAGMENT = "app_details_fragment";
@@ -142,11 +144,12 @@ public class Constants {
     public static final int COLLECTIONS = 4;
     public static final int NEWS = 6;
     public static final int ABOUT = 7;
-    public static final int SUGGESTIONS = 8;
-    public static final int SETTINGS = 9;
-    public static final int HELP_ADD_APP =12;
-    public static final int HELP_APPS_REQUIREMENTS = 13;
-    public static final int HELP_TOP_HUNTERS_POINTS = 14;
+    public static final int CHAT = 8;
+    public static final int SUGGESTIONS = 9;
+    public static final int SETTINGS = 10;
+    public static final int HELP_ADD_APP = 13;
+    public static final int HELP_APPS_REQUIREMENTS = 14;
+    public static final int HELP_TOP_HUNTERS_POINTS = 15;
 
     public static final int MIN_TOTAL_APPS_COUNT = 10;
     public static final int PAGE_SIZE = 15;

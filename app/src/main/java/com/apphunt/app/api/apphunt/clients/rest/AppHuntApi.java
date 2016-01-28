@@ -131,4 +131,10 @@ public interface AppHuntApi {
     void getBlogPostFeaturedImage(int postId, int mediaId);
 
     void loadTrendingApps(String userId, int page, int pageSize);
+
+    void getAdStatus(String userId, String appPackage);
+
+    void getUserAdStatus(String userId);
+
+    void getUserHunterStatus(String userId);
 }

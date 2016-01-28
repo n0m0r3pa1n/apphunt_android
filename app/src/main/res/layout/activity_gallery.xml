@@ -1,8 +1,8 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.apphunt.app.ui.views.gallery.GalleryActivity">
 
     <android.support.v7.widget.Toolbar
@@ -12,7 +12,7 @@
         android:minHeight="@dimen/abc_action_bar_default_height_material"
         android:background="?attr/colorPrimary"
         android:elevation="0dp"
-        tools:layout_collapseMode="pin"
+        app:layout_collapseMode="pin"
         style="@style/ToolBarStyle"/>
 
     <android.support.v4.view.ViewPager

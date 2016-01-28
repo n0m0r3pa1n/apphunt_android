@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.rest.ApiService;
-import com.apphunt.app.api.apphunt.clients.sockets.HistoryConnectionManager;
+import com.apphunt.app.api.apphunt.clients.sockets.SocketConnectionManager;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.constants.Constants;
@@ -43,7 +43,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class RightDrawerFragment extends Fragment implements HistoryConnectionManager.OnRefreshListener {
+public class RightDrawerFragment extends Fragment implements SocketConnectionManager.OnRefreshListener {
     public static final String TAG = RightDrawerFragment.class.getSimpleName();
 
     @InjectView(R.id.history_events_list)
@@ -66,8 +66,8 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         BusProvider.getInstance().register(this);
         if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
             ApiService.getInstance(activity).loadHistoryForToday();
-            HistoryConnectionManager.getInstance().addRefreshListener(this);
-            HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
+            SocketConnectionManager.getInstance().addRefreshListener(this);
+            SocketConnectionManager.getInstance().emitAddUserToHistory(LoginProviderFactory.get(activity).getUser().getId());
         }
     }
 
@@ -97,7 +97,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
         super.onDestroy();
         BusProvider.getInstance().unregister(this);
         if (LoginProviderFactory.get(activity).isUserLoggedIn()) {
-            HistoryConnectionManager.getInstance().removeRefreshListener(this);
+            SocketConnectionManager.getInstance().removeRefreshListener(this);
         }
     }
 
@@ -127,7 +127,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
                     adapter = new HistoryAdapter(activity, rows);
                     historyEventsList.setAdapter(adapter);
                 } else {
-                    if (adapter.getRow(0).getDate().equals(event.getCreatedAt()) == false) {
+                    if (adapter.getRow(0) != null && adapter.getRow(0).getDate().equals(event.getCreatedAt()) == false) {
                         adapter.addRow(0, new HeaderHistoryRow(event.getCreatedAt()));
                     }
                     adapter.addRow(1, row);
@@ -152,8 +152,8 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
 
     @Subscribe
     public void onUserLogin(LoginEvent loginEvent) {
-        HistoryConnectionManager.getInstance().addRefreshListener(this);
-        HistoryConnectionManager.getInstance().emitAddUser(LoginProviderFactory.get(activity).getUser().getId());
+        SocketConnectionManager.getInstance().addRefreshListener(this);
+        SocketConnectionManager.getInstance().emitAddUserToHistory(LoginProviderFactory.get(activity).getUser().getId());
         ApiService.getInstance(activity).loadHistoryForToday();
     }
 
@@ -163,7 +163,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
             adapter.reset();
         }
         noHistoryView.setVisibility(View.VISIBLE);
-        HistoryConnectionManager.getInstance().removeRefreshListener(this);
+        SocketConnectionManager.getInstance().removeRefreshListener(this);
     }
 
 
@@ -196,7 +196,7 @@ public class RightDrawerFragment extends Fragment implements HistoryConnectionMa
             String lastSeenEventDate = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_DATE);
             String lastSeenEventId = SharedPreferencesHelper.getStringPreference(Constants.KEY_LAST_SEEN_EVENT_ID);
             if (lastSeenEventDate != null && lastSeenEventId != null) {
-                HistoryConnectionManager.getInstance().emitLastSeenId(LoginProviderFactory.get(activity).getUser().getId(), lastSeenEventId, lastSeenEventDate);
+                SocketConnectionManager.getInstance().emitLastSeenEventId(LoginProviderFactory.get(activity).getUser().getId(), lastSeenEventId, lastSeenEventDate);
             }
         } else {
             adapter.addRows(rows);

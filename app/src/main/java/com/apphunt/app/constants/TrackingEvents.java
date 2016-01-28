@@ -36,6 +36,7 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserDisabledSound = "user.disabled.sound";
     String UserEnabledSound = "user.enabled.sound";
     String UserViewedSettings = "user.viewed.settings";
+    String UserViewedTopHuntersStatus = "user.viewed.top.hunter.status";
     String UserDisabledInstalledAppsNotification = "user.disabled.installed.apps.notification";
     String UserOpenedAppDetailsFromTopApps = "user.opened.apps.details.from.top.apps";
     String UserOpenedProfileFromComment = "user.opened.profile.from.comment";
@@ -94,6 +95,8 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserRemovedApp = "user.removed.app";
     String UserOpenedAdd = "user.opened.add";
     String UserOpenedPaidAdd = "user.opened.paid.ad";
+    String UserOpenedPaidInterstitialAd = "user.opened.paid.interstitial.ad";
+    String UserViewedPaidInterstitialAd = "user.viewed.paid.interstitial.ad";
     String UserDisabledDailyNotification = "user.disabled.daily.notification";
     String UserEnabledDailyNotification = "user.enabled.daily.notification";
     String UserEnabledInstalledAppNotification = "user.enabled.installed.app.notification";
@@ -117,4 +120,5 @@ public interface TrackingEvents extends LoginEvents, TrendingAppsEvents, History
     String UserScrolledDownTrendingAppList = "user.scrolled.down.trending.app.list";
     String UserOpenedAppDetailsFromTrendingApps = "user.opened.app.from.trending.apps";
     String UserOpenedAppFromDailyApps = "user.opened.app.from.daily.apps";
+    String UserViewedAdStatusDialog = "user.viewed.ad.status.dialog";
 }

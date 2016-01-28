@@ -3,7 +3,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="app_item_name_margin">16dp</dimen>
-    
+
     <dimen name="ab_elevation">10dp</dimen>
     <dimen name="ab_shadow_height">10dp</dimen>
 
@@ -184,4 +184,5 @@
     <dimen name="rating_warning_size">11sp</dimen>
     <dimen name="top_hunter_place_image">50dp</dimen>
     <dimen name="top_hunters_points_text">13sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

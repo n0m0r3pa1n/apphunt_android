@@ -44,6 +44,8 @@ import com.apphunt.app.event_bus.events.ui.HideFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.NetworkStatusChangeEvent;
 import com.apphunt.app.event_bus.events.ui.SelectFragmentEvent;
 import com.apphunt.app.event_bus.events.ui.ShowNotificationEvent;
+import com.apphunt.app.event_bus.events.ui.ads.DisplayAdStatusDialogEvent;
+import com.apphunt.app.event_bus.events.ui.ads.UpdateAdStatusEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LoginEvent;
 import com.apphunt.app.event_bus.events.ui.auth.LogoutEvent;
 import com.apphunt.app.event_bus.events.ui.history.UnseenHistoryEvent;
@@ -55,6 +57,7 @@ import com.apphunt.app.ui.fragments.AppsFragment;
 import com.apphunt.app.ui.fragments.CollectionsFragment;
 import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
+import com.apphunt.app.ui.fragments.actions.AdStatusDialogFragment;
 import com.apphunt.app.ui.fragments.actions.CallToActionDialogFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
@@ -236,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 if (backStackEntryCount == 0) {
                     if (!navigationDrawerFragment.isDrawerOpen()) {
                         navigationDrawerFragment.openDrawer();
+                        BusProvider.getInstance().post(new UpdateAdStatusEvent());
                     } else {
                         navigationDrawerFragment.closeDrawer();
                     }
@@ -500,6 +504,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
                 addToBackStack = true;
                 break;
+            case Constants.CHAT:
+                Intent i = new Intent(this, ChatActivity.class);
+                startActivity(i);
+                navigationDrawerFragment.markSelectedPosition(Constants.TRENDING_APPS);
+                return;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
                 fragment.setPreviousTitle(toolbar.getTitle() != null ? toolbar.getTitle().toString() : "");
@@ -783,6 +792,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     @Subscribe
     public void onSelectFragment(SelectFragmentEvent event) {
         onNavigationDrawerItemSelected(event.getDrawerFragmentIndex());
+    }
+
+    @Subscribe
+    public void onDisplayAdStatusDialog(DisplayAdStatusDialogEvent event) {
+        AdStatusDialogFragment fragment = new AdStatusDialogFragment();
+        fragment.setAdStatus(event.getUserAdStatus());
+        fragment.show(getSupportFragmentManager(), "AdStatusDialog");
     }
 
     @Subscribe
