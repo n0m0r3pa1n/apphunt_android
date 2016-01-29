@@ -113,21 +113,4 @@ public class User implements Serializable{
         this.advertisingId = advertisingId;
         SharedPreferencesHelper.setPreference(Constants.KEY_ADVERTISING_ID, advertisingId);
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", advertisingId='" + advertisingId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", profilePicture='" + profilePicture + '\'' +
-                ", loginType='" + loginType + '\'' +
-                ", locale='" + locale + '\'' +
-                ", username='" + username + '\'' +
-                ", notificationId='" + notificationId + '\'' +
-                ", coverPicture='" + coverPicture + '\'' +
-                ", isFollowing=" + isFollowing +
-                '}';
-    }
 }

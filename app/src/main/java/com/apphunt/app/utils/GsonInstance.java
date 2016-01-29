@@ -44,6 +44,7 @@ public class GsonInstance {
         try {
             return sGson.fromJson(json, typeOfT);
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             return null;
         }
     }

@@ -6,12 +6,20 @@
     android:background="@color/bg_secondary"
     tools:context="com.apphunt.app.ui.fragments.chat.RoomMembersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:textSize="22sp"
+        android:id="@+id/tv_users_count22"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="0 users"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+        android:textSize="22sp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_users"
+        android:layout_below="@id/tv_users_count22"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.apphunt.app.api.apphunt.clients.sockets;
 import android.util.Log;
 
 import com.apphunt.app.api.apphunt.models.chat.ChatMessage;
+import com.apphunt.app.api.apphunt.models.chat.ChatUser;
 import com.apphunt.app.api.apphunt.models.users.HistoryEvent;
 import com.apphunt.app.api.apphunt.models.users.User;
 import com.apphunt.app.constants.Constants;
@@ -81,6 +82,6 @@ public class SocketConnectionManager {
 
     public interface OnChatListener {
         void onNewMessage(ChatMessage message);
-        void onUsersList(List<User> users);
+        void onUsersList(List<ChatUser> users);
     }
 }

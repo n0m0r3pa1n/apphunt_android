@@ -35,6 +35,7 @@ import com.apphunt.app.constants.Constants;
 import com.apphunt.app.constants.TrackingEvents;
 import com.apphunt.app.event_bus.BusProvider;
 import com.apphunt.app.event_bus.events.api.apps.GetRandomAppApiEvent;
+import com.apphunt.app.event_bus.events.api.users.UserHunterStatusApiEvent;
 import com.apphunt.app.event_bus.events.api.version.GetAppVersionApiEvent;
 import com.apphunt.app.event_bus.events.ui.CallToActionEvent;
 import com.apphunt.app.event_bus.events.ui.ClearSearchEvent;
@@ -59,6 +60,7 @@ import com.apphunt.app.ui.fragments.TopAppsFragment;
 import com.apphunt.app.ui.fragments.TopHuntersFragment;
 import com.apphunt.app.ui.fragments.actions.AdStatusDialogFragment;
 import com.apphunt.app.ui.fragments.actions.CallToActionDialogFragment;
+import com.apphunt.app.ui.fragments.actions.HunterStatusDialogFragment;
 import com.apphunt.app.ui.fragments.base.BackStackFragment;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 import com.apphunt.app.ui.fragments.friends.FindFriendsFragment;
@@ -505,9 +507,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 addToBackStack = true;
                 break;
             case Constants.CHAT:
-                Intent i = new Intent(this, ChatActivity.class);
-                startActivity(i);
-                navigationDrawerFragment.markSelectedPosition(Constants.TRENDING_APPS);
+                ApiClient.getClient(this).getUserHunterStatus(LoginProviderFactory.get(this).getUser().getId());
                 return;
             case Constants.SETTINGS:
                 fragment = new SettingsFragment();
@@ -802,6 +802,19 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     }
 
     @Subscribe
+    public void onUserHunterStatusReceived(UserHunterStatusApiEvent event) {
+        if(event.getUserHunterStatus().isTopHunter()) {
+            Intent i = new Intent(this, ChatActivity.class);
+            startActivity(i);
+            navigationDrawerFragment.markSelectedPosition(Constants.TRENDING_APPS);
+        } else {
+            HunterStatusDialogFragment dialog = new HunterStatusDialogFragment();
+            dialog.show(getSupportFragmentManager(), HunterStatusDialogFragment.TAG);
+            navigationDrawerFragment.markSelectedPosition(previousPosition);
+        }
+    }
+
+    @Subscribe
     public void onCallToAction(CallToActionEvent event) {
         CallToActionDialogFragment fragment = new CallToActionDialogFragment();
         fragment.show(getSupportFragmentManager(), "CallToAction");
@@ -815,4 +828,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             fragmentManager.popBackStack();
         }
     }
+
+
 }

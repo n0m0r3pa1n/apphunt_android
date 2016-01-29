@@ -31,4 +31,9 @@
         <item quantity="one">1 following</item>
         <item quantity="other">%d following</item>
     </plurals>
+    <plurals
+        name="user">
+        <item quantity="one">1 user</item>
+        <item quantity="other">%d users</item>
+    </plurals>
 </resources>

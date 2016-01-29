@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.apphunt.app.R;
 import com.apphunt.app.api.apphunt.clients.sockets.SocketConnectionManager;
 import com.apphunt.app.api.apphunt.models.chat.ChatMessage;
-import com.apphunt.app.api.apphunt.models.users.User;
+import com.apphunt.app.api.apphunt.models.chat.ChatUser;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.ui.fragments.base.BaseFragment;
 
@@ -61,7 +61,7 @@ public class ChatFragment extends BaseFragment implements SocketConnectionManage
     }
 
     @Override
-    public void onUsersList(List<User> users) {
+    public void onUsersList(List<ChatUser> users) {
 
     }
 }
