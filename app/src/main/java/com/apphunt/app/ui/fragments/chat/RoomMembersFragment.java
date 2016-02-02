@@ -26,7 +26,7 @@ public class RoomMembersFragment extends Fragment implements SocketConnectionMan
 
     private Activity activity;
 
-    @InjectView(R.id.tv_users_count22)
+    @InjectView(R.id.tv_users_count)
     TextView tvUsersCount;
 
     @InjectView(R.id.rv_users)
@@ -87,8 +87,8 @@ public class RoomMembersFragment extends Fragment implements SocketConnectionMan
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvUsersCount.setText(getResources().getQuantityString(R.plurals.user, users.size(), users.size()));
-                rvUsers.setAdapter(new UsersListAdapter(users));
+                tvUsersCount.setText(getResources().getQuantityString(R.plurals.user, users.size(), users.size()) + " online");
+                rvUsers.setAdapter(new UsersListAdapter(activity, users));
             }
         });
     }

@@ -24,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class HunterStatusDialogFragment extends DialogFragment {
     public static final String TAG = HunterStatusDialogFragment.class.getSimpleName();
+
     @InjectView(R.id.title)
     TextView titleView;
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.RelativeLayout;
 
 import com.apphunt.app.api.apphunt.clients.rest.ApiClient;
+import com.apphunt.app.api.apphunt.clients.sockets.SocketConnectionManager;
 import com.apphunt.app.auth.LoginProviderFactory;
 import com.apphunt.app.event_bus.BusProvider;
 
@@ -43,5 +44,6 @@ public class ChatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         BusProvider.getInstance().unregister(this);
+        SocketConnectionManager.getInstance().leaveTopHuntersRoom();
     }
 }

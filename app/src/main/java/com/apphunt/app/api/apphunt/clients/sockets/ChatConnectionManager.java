@@ -73,11 +73,15 @@ public class ChatConnectionManager extends BaseConnectionManager {
     }
 
     public void emitAddUserToTopHuntersChat(User user) {
-        socket.emit("add user to top hunters chat", GsonInstance.toJson(user));
+        socket.emit("add user to top hunters chat", user);
     }
 
     public void emitNewMessage(String message, String userId) {
         socket.emit("new top hunters message", message, userId);
+    }
+
+    public void leaveTopHuntersRoom() {
+        socket.emit("leave top hunters room");
     }
 
     public void notifyUserListeners(List<ChatUser> users) {

@@ -54,4 +54,8 @@ public class ChatUser {
     public String getProfilePicture() {
         return profilePicture;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }

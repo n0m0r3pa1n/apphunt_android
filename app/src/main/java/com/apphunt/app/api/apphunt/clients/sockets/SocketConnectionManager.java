@@ -80,6 +80,10 @@ public class SocketConnectionManager {
         chatConnectionManager.emitNewMessage(message, userId);
     }
 
+    public void leaveTopHuntersRoom() {
+        chatConnectionManager.leaveTopHuntersRoom();
+    }
+
     public interface OnChatListener {
         void onNewMessage(ChatMessage message);
         void onUsersList(List<ChatUser> users);
