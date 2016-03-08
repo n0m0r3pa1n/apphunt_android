@@ -1,7 +1,7 @@
 # What is this about?
 
 This is the main repository of the AppHunt Android app - [LINK](https://play.google.com/store/apps/details?id=com.apphunt.app).
-The project is almost abandoned. It had a great success story but our time split up so now the maintaining part is really 
+The project is almost abandoned. It had a great success story but our team split up so now the maintaining part is really 
 taking too much time for a single person to handle.
 
 # What functionality it includes?
